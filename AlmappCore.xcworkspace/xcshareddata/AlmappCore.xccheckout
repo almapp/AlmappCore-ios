@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>FE1CA68E-4598-4DCF-8C2A-4F124CAFA885</string>
+	<key>IDESourceControlProjectName</key>
+	<string>AlmappCore</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>D4C3FEFA265FDA99EC92F8C07D7F2D3619BAC822</key>
+		<string>https://github.com/almapp/AlmappCore-ios.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>AlmappCore.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>D4C3FEFA265FDA99EC92F8C07D7F2D3619BAC822</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/almapp/AlmappCore-ios.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>D4C3FEFA265FDA99EC92F8C07D7F2D3619BAC822</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D4C3FEFA265FDA99EC92F8C07D7F2D3619BAC822</string>
+			<key>IDESourceControlWCCName</key>
+			<string>AlmappCore-ios</string>
+		</dict>
+	</array>
+</dict>
+</plist>
