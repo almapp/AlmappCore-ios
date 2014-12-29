@@ -10,6 +10,6 @@
 
 @implementation ALMTestsConstants
 
-NSString * const ALMBaseURL = @"http://patiwi-mcburger-pro.local:3000";
+NSString * const ALMBaseURL = @"http://patiwi-mcburger-pro.local:3000/api/v1";
 
 @end

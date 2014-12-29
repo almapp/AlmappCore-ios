@@ -19,6 +19,8 @@
 
 @interface AlmappCore : NSObject <ALMControllerDelegate>
 
+@property (assign, nonatomic) BOOL inTestingEnvironment;
+
 + (AlmappCore*)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL;
 
 + (AlmappCore*)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString*)baseURLString;

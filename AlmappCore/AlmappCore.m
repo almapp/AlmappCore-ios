@@ -28,6 +28,7 @@
     if (self) {
         _coreDelegate = delegate;
         _baseURL = baseURL;
+        _inTestingEnvironment = NO;
     }
     return self;
 }
@@ -82,7 +83,13 @@ static dispatch_once_t once_token;
 
 #pragma mark - Exposed attributes
 
+-(NSString *)baseURL {
+    return [_baseURL absoluteString];
+}
 
+-(BOOL)inTestingEnvironment {
+    return _inTestingEnvironment;
+}
 
 #pragma mark - Controller Delegate Implementation
 

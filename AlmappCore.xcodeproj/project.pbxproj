@@ -27,11 +27,14 @@
 		F65DD4A91A50405D006BCAF0 /* libAlmappCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F65DD49D1A50405D006BCAF0 /* libAlmappCore.a */; };
 		F65DD4B91A505478006BCAF0 /* CoreSingletonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4B81A505478006BCAF0 /* CoreSingletonTests.m */; };
 		F65DD4BF1A505C6E006BCAF0 /* ALMUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4BE1A505C6E006BCAF0 /* ALMUtil.m */; };
-		F65DD4C21A505E5C006BCAF0 /* ALMDummyCoreDelegated.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4C11A505E5C006BCAF0 /* ALMDummyCoreDelegated.m */; };
 		F65DD4DA1A509153006BCAF0 /* ALMController.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4D91A509153006BCAF0 /* ALMController.m */; };
 		F65DD4DD1A509182006BCAF0 /* ALMUsersController.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4DC1A509182006BCAF0 /* ALMUsersController.m */; };
 		F6D19BD41A518E6000FD4715 /* ALMOrganizationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BD31A518E6000FD4715 /* ALMOrganizationsController.m */; };
-		F6D19BDB1A519B2500FD4715 /* ALMTestsConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BDA1A519B2500FD4715 /* ALMTestsConstants.m */; };
+		F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BDE1A51B02800FD4715 /* ALMUser.m */; };
+		F6D19BE61A51B2C500FD4715 /* ALMDummyCoreDelegated.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BE31A51B2C500FD4715 /* ALMDummyCoreDelegated.m */; };
+		F6D19BE71A51B2C500FD4715 /* ALMTestsConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BE51A51B2C500FD4715 /* ALMTestsConstants.m */; };
+		F6D19BE91A51B30E00FD4715 /* APITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BE81A51B30E00FD4715 /* APITests.m */; };
+		F6D19BED1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BEC1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,21 +69,26 @@
 		F65DD4A21A50405D006BCAF0 /* AlmappCore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AlmappCore.m; sourceTree = "<group>"; };
 		F65DD4A81A50405D006BCAF0 /* AlmappCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlmappCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F65DD4AE1A50405D006BCAF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F65DD4B71A5051AD006BCAF0 /* ALMCoreDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCoreDelegate.h; sourceTree = "<group>"; };
 		F65DD4B81A505478006BCAF0 /* CoreSingletonTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreSingletonTests.m; sourceTree = "<group>"; };
 		F65DD4BD1A505C6E006BCAF0 /* ALMUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUtil.h; sourceTree = "<group>"; };
 		F65DD4BE1A505C6E006BCAF0 /* ALMUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUtil.m; sourceTree = "<group>"; };
-		F65DD4C01A505E5C006BCAF0 /* ALMDummyCoreDelegated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMDummyCoreDelegated.h; sourceTree = "<group>"; };
-		F65DD4C11A505E5C006BCAF0 /* ALMDummyCoreDelegated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMDummyCoreDelegated.m; sourceTree = "<group>"; };
 		F65DD4D81A509153006BCAF0 /* ALMController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMController.h; sourceTree = "<group>"; };
 		F65DD4D91A509153006BCAF0 /* ALMController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMController.m; sourceTree = "<group>"; };
 		F65DD4DB1A509182006BCAF0 /* ALMUsersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUsersController.h; sourceTree = "<group>"; };
 		F65DD4DC1A509182006BCAF0 /* ALMUsersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUsersController.m; sourceTree = "<group>"; };
-		F65DD4E61A509402006BCAF0 /* ALMControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMControllerDelegate.h; sourceTree = "<group>"; };
 		F6D19BD21A518E6000FD4715 /* ALMOrganizationsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMOrganizationsController.h; sourceTree = "<group>"; };
 		F6D19BD31A518E6000FD4715 /* ALMOrganizationsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMOrganizationsController.m; sourceTree = "<group>"; };
-		F6D19BD91A519B2500FD4715 /* ALMTestsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMTestsConstants.h; sourceTree = "<group>"; };
-		F6D19BDA1A519B2500FD4715 /* ALMTestsConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMTestsConstants.m; sourceTree = "<group>"; };
+		F6D19BDD1A51B02800FD4715 /* ALMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUser.h; sourceTree = "<group>"; };
+		F6D19BDE1A51B02800FD4715 /* ALMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUser.m; sourceTree = "<group>"; };
+		F6D19BE21A51B2C500FD4715 /* ALMDummyCoreDelegated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMDummyCoreDelegated.h; sourceTree = "<group>"; };
+		F6D19BE31A51B2C500FD4715 /* ALMDummyCoreDelegated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMDummyCoreDelegated.m; sourceTree = "<group>"; };
+		F6D19BE41A51B2C500FD4715 /* ALMTestsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMTestsConstants.h; sourceTree = "<group>"; };
+		F6D19BE51A51B2C500FD4715 /* ALMTestsConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMTestsConstants.m; sourceTree = "<group>"; };
+		F6D19BE81A51B30E00FD4715 /* APITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APITests.m; sourceTree = "<group>"; };
+		F6D19BEB1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCJSONNonNullStringTransformer.h; sourceTree = "<group>"; };
+		F6D19BEC1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCJSONNonNullStringTransformer.m; sourceTree = "<group>"; };
+		F6D19BEF1A51D81200FD4715 /* ALMCoreDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCoreDelegate.h; sourceTree = "<group>"; };
+		F6D19BF01A51D82500FD4715 /* ALMControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMControllerDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,10 +151,12 @@
 		F65DD49F1A50405D006BCAF0 /* AlmappCore */ = {
 			isa = PBXGroup;
 			children = (
+				F6D19BEE1A51D81200FD4715 /* Delegates */,
+				F6D19BEA1A51CF3800FD4715 /* Support */,
+				F6D19BDC1A51B01100FD4715 /* Models */,
 				F65DD4D71A509130006BCAF0 /* APIControllers */,
 				F65DD4A01A50405D006BCAF0 /* AlmappCore.h */,
 				F65DD4A21A50405D006BCAF0 /* AlmappCore.m */,
-				F65DD4B71A5051AD006BCAF0 /* ALMCoreDelegate.h */,
 				F65DD4BD1A505C6E006BCAF0 /* ALMUtil.h */,
 				F65DD4BE1A505C6E006BCAF0 /* ALMUtil.m */,
 			);
@@ -156,12 +166,10 @@
 		F65DD4AC1A50405D006BCAF0 /* AlmappCoreTests */ = {
 			isa = PBXGroup;
 			children = (
+				F6D19BE11A51B2C500FD4715 /* TestHelpers */,
 				F65DD4AD1A50405D006BCAF0 /* Supporting Files */,
 				F65DD4B81A505478006BCAF0 /* CoreSingletonTests.m */,
-				F65DD4C01A505E5C006BCAF0 /* ALMDummyCoreDelegated.h */,
-				F65DD4C11A505E5C006BCAF0 /* ALMDummyCoreDelegated.m */,
-				F6D19BD91A519B2500FD4715 /* ALMTestsConstants.h */,
-				F6D19BDA1A519B2500FD4715 /* ALMTestsConstants.m */,
+				F6D19BE81A51B30E00FD4715 /* APITests.m */,
 			);
 			path = AlmappCoreTests;
 			sourceTree = "<group>";
@@ -177,7 +185,6 @@
 		F65DD4D71A509130006BCAF0 /* APIControllers */ = {
 			isa = PBXGroup;
 			children = (
-				F65DD4E51A5093EA006BCAF0 /* Delegates */,
 				F65DD4D81A509153006BCAF0 /* ALMController.h */,
 				F65DD4D91A509153006BCAF0 /* ALMController.m */,
 				F65DD4DB1A509182006BCAF0 /* ALMUsersController.h */,
@@ -188,10 +195,40 @@
 			path = APIControllers;
 			sourceTree = "<group>";
 		};
-		F65DD4E51A5093EA006BCAF0 /* Delegates */ = {
+		F6D19BDC1A51B01100FD4715 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F65DD4E61A509402006BCAF0 /* ALMControllerDelegate.h */,
+				F6D19BDD1A51B02800FD4715 /* ALMUser.h */,
+				F6D19BDE1A51B02800FD4715 /* ALMUser.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F6D19BE11A51B2C500FD4715 /* TestHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				F6D19BE21A51B2C500FD4715 /* ALMDummyCoreDelegated.h */,
+				F6D19BE31A51B2C500FD4715 /* ALMDummyCoreDelegated.m */,
+				F6D19BE41A51B2C500FD4715 /* ALMTestsConstants.h */,
+				F6D19BE51A51B2C500FD4715 /* ALMTestsConstants.m */,
+			);
+			path = TestHelpers;
+			sourceTree = "<group>";
+		};
+		F6D19BEA1A51CF3800FD4715 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				F6D19BEB1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.h */,
+				F6D19BEC1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.m */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		F6D19BEE1A51D81200FD4715 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				F6D19BEF1A51D81200FD4715 /* ALMCoreDelegate.h */,
+				F6D19BF01A51D82500FD4715 /* ALMControllerDelegate.h */,
 			);
 			path = Delegates;
 			sourceTree = "<group>";
@@ -337,8 +374,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F65DD4DA1A509153006BCAF0 /* ALMController.m in Sources */,
+				F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */,
 				F65DD4DD1A509182006BCAF0 /* ALMUsersController.m in Sources */,
 				F6D19BD41A518E6000FD4715 /* ALMOrganizationsController.m in Sources */,
+				F6D19BED1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.m in Sources */,
 				F65DD4BF1A505C6E006BCAF0 /* ALMUtil.m in Sources */,
 				F65DD4A31A50405D006BCAF0 /* AlmappCore.m in Sources */,
 			);
@@ -348,8 +387,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F6D19BDB1A519B2500FD4715 /* ALMTestsConstants.m in Sources */,
-				F65DD4C21A505E5C006BCAF0 /* ALMDummyCoreDelegated.m in Sources */,
+				F6D19BE71A51B2C500FD4715 /* ALMTestsConstants.m in Sources */,
+				F6D19BE61A51B2C500FD4715 /* ALMDummyCoreDelegated.m in Sources */,
+				F6D19BE91A51B30E00FD4715 /* APITests.m in Sources */,
 				F65DD4B91A505478006BCAF0 /* CoreSingletonTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

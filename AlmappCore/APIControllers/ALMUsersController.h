@@ -7,6 +7,7 @@
 //
 
 #import "ALMController.h"
+#import "ALMUser.h"
 
 @interface ALMUsersController : ALMController
 

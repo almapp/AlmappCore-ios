@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Pods-AlmappCore-AFNetworking.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-AlmappCore-Realm+JSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -22,17 +27,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>6D715D6D0AFCF832D5C57A73</key>
+		<key>59CB1EA306200D75B5284A9C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D0DAE293B027A881B300221A</key>
+		<key>671F3953F970C0EC9A9D9965</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EA329975C77A6DC332B3D2F9</key>
+		<key>8B7369269FDB38F5937EC69E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A1A899862F8D6A0EA500DCEB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
