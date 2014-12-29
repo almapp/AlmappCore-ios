@@ -12,6 +12,7 @@
 #import "ALMCoreDelegate.h"
 #import "ALMUtil.h"
 #import "ALMDummyCoreDelegated.h"
+#import "ALMTestsConstants.h"
 
 @interface CoreSingletonTests : XCTestCase
 
@@ -21,8 +22,6 @@
 @end
 
 @implementation CoreSingletonTests
-
-NSString* const TESTING_BASE_URL = @"http://patiwi-mcburger-pro.local:3000/api/v1/";
 
 - (void)setUp {
     // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -35,14 +34,14 @@ NSString* const TESTING_BASE_URL = @"http://patiwi-mcburger-pro.local:3000/api/v
         _core = [AlmappCore initInstanceWithDelegate:_dummy baseURL:nil];
         XCTAssertNil(_core, @"Cannot create singleton with invalid params");
         
-        _core = [AlmappCore initInstanceWithDelegate:_dummy baseURL:[NSURL URLWithString:TESTING_BASE_URL]];
+        _core = [AlmappCore initInstanceWithDelegate:_dummy baseURL:[NSURL URLWithString:ALMBaseURL]];
         XCTAssertNotNil(_core, @"Cannot find AlmappCore instance for valid params");
         
         _core = nil;
         [AlmappCore setSharedInstance:nil];
         XCTAssertNil([AlmappCore sharedInstance], @"Singleton must not exist");
         
-        _core = [AlmappCore initInstanceWithDelegate:_dummy baseURLString:TESTING_BASE_URL];
+        _core = [AlmappCore initInstanceWithDelegate:_dummy baseURLString:ALMBaseURL];
         XCTAssertNotNil(_core, @"Cannot find AlmappCore instance for valid params with URL string");
     }
 }
