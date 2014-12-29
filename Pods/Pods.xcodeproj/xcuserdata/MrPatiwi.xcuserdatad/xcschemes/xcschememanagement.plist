@@ -14,12 +14,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-AlmappCore-RKValueTransformers.xcscheme</key>
+		<key>Pods-AlmappCore-MagicalRecord.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-AlmappCore-Realm.xcscheme</key>
+		<key>Pods-AlmappCore-RKValueTransformers.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -47,42 +47,42 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1EB3E15CCF7B83473F211F38</key>
+		<key>16334774A8E9B05055087152</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>208E3984D86055A19AAAFE5B</key>
+		<key>5D5E68BFCC89F536F1FA40B0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>20B46BDA7711C1065E2D091D</key>
+		<key>6E5322D0AB3FA5F9168B45A0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A412DB9E3B6FBE491BA1E15C</key>
+		<key>7DE8946BF763FCFAAAC11454</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C1AC9A68155F91D591DA8D5D</key>
+		<key>89FA4925EAD71EAA26F4AB56</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C3F5CE6FC41E110323A56CC9</key>
+		<key>9C673140D84432B9DB9933D1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D4BE1A47E43543655EA8118F</key>
+		<key>A952D7D9F3B965A032F03A4B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>FA4C603EFD0A8D8C76CF17B7</key>
+		<key>F651D36B78E673122D0829C1</key>
 		<dict>
 			<key>primary</key>
 			<true/>

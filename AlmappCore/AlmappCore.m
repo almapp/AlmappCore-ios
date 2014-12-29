@@ -7,6 +7,8 @@
 //
 
 #import "AlmappCore.h"
+#import <MagicalRecord/MagicalRecord.h>
+#import <MagicalRecord+Setup.h>
 
 @interface AlmappCore ()
 
@@ -15,6 +17,7 @@
 @property (strong, nonatomic) RKObjectManager *manager;
 
 - (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL: (NSURL*)baseURL;
+- (void)startActiveRecord;
 
 @end
 
@@ -43,6 +46,7 @@ static dispatch_once_t once_token;
         dispatch_once(&once_token, ^{
             if (_sharedInstance == nil) {
                 _sharedInstance = [[AlmappCore alloc] initWithDelegate:delegate baseURL:baseURL];
+                [_sharedInstance startActiveRecord];
             }
         });
         return _sharedInstance;
@@ -52,7 +56,7 @@ static dispatch_once_t once_token;
 }
 
 + (AlmappCore*)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString*)baseURLString {
-    if([ALMUtil validateStringURL: baseURLString]) {
+    if(true) {
         return [AlmappCore initInstanceWithDelegate:delegate baseURL:[NSURL URLWithString:baseURLString]];
     } else {
         return nil;
@@ -63,9 +67,27 @@ static dispatch_once_t once_token;
     return _sharedInstance;
 }
 
++ (void)shutDown {
+    [MagicalRecord cleanUp];
+}
+
 + (void)setSharedInstance:(AlmappCore*)instance {
     once_token = 0; // resets the once_token so dispatch_once will run again
     _sharedInstance = instance;
 }
+
+#pragma mark - Core Methods
+
+- (void)startActiveRecord {
+    [MagicalRecord setupCoreDataStackWithStoreNamed:@"AlmappModel"];
+}
+
+- (NSArray*)availableUsers {
+    return nil;
+}
+
+#pragma mark - Controller Delegate Implementation
+
+
 
 @end

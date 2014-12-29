@@ -18,23 +18,23 @@
 #define COCOAPODS_VERSION_MINOR_ISO8601DateFormatterValueTransformer 6
 #define COCOAPODS_VERSION_PATCH_ISO8601DateFormatterValueTransformer 0
 
+// MagicalRecord
+#define COCOAPODS_POD_AVAILABLE_MagicalRecord
+#define COCOAPODS_VERSION_MAJOR_MagicalRecord 2
+#define COCOAPODS_VERSION_MINOR_MagicalRecord 2
+#define COCOAPODS_VERSION_PATCH_MagicalRecord 0
+
+// MagicalRecord/Core
+#define COCOAPODS_POD_AVAILABLE_MagicalRecord_Core
+#define COCOAPODS_VERSION_MAJOR_MagicalRecord_Core 2
+#define COCOAPODS_VERSION_MINOR_MagicalRecord_Core 2
+#define COCOAPODS_VERSION_PATCH_MagicalRecord_Core 0
+
 // RKValueTransformers
 #define COCOAPODS_POD_AVAILABLE_RKValueTransformers
 #define COCOAPODS_VERSION_MAJOR_RKValueTransformers 1
 #define COCOAPODS_VERSION_MINOR_RKValueTransformers 1
 #define COCOAPODS_VERSION_PATCH_RKValueTransformers 1
-
-// Realm
-#define COCOAPODS_POD_AVAILABLE_Realm
-#define COCOAPODS_VERSION_MAJOR_Realm 0
-#define COCOAPODS_VERSION_MINOR_Realm 89
-#define COCOAPODS_VERSION_PATCH_Realm 1
-
-// Realm/Headers
-#define COCOAPODS_POD_AVAILABLE_Realm_Headers
-#define COCOAPODS_VERSION_MAJOR_Realm_Headers 0
-#define COCOAPODS_VERSION_MINOR_Realm_Headers 89
-#define COCOAPODS_VERSION_PATCH_Realm_Headers 1
 
 // RestKit
 #define COCOAPODS_POD_AVAILABLE_RestKit

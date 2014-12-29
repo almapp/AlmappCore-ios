@@ -16,6 +16,7 @@
 @interface CoreSingletonTests : XCTestCase
 
 @property (strong, nonatomic) ALMDummyCoreDelegated *dummy;
+@property (strong) AlmappCore *core;
 
 @end
 
@@ -27,37 +28,32 @@ NSString* const TESTING_BASE_URL = @"http://patiwi-mcburger-pro.local:3000/api/v
     // Put setup code here. This method is called before the invocation of each test method in the class.
     [super setUp];
     _dummy = [[ALMDummyCoreDelegated alloc] init];
+    if(_core == nil) {
+        _core = [AlmappCore initInstanceWithDelegate:nil baseURL:nil];
+        XCTAssertNil(_core, @"Cannot create singleton with invalid params");
+        
+        _core = [AlmappCore initInstanceWithDelegate:_dummy baseURL:nil];
+        XCTAssertNil(_core, @"Cannot create singleton with invalid params");
+        
+        _core = [AlmappCore initInstanceWithDelegate:_dummy baseURL:[NSURL URLWithString:TESTING_BASE_URL]];
+        XCTAssertNotNil(_core, @"Cannot find AlmappCore instance for valid params");
+        
+        _core = nil;
+        [AlmappCore setSharedInstance:nil];
+        XCTAssertNil([AlmappCore sharedInstance], @"Singleton must not exist");
+        
+        _core = [AlmappCore initInstanceWithDelegate:_dummy baseURLString:TESTING_BASE_URL];
+        XCTAssertNotNil(_core, @"Cannot find AlmappCore instance for valid params with URL string");
+    }
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
-    _dummy = nil;
 }
 
-- (void)testSingletonInit {
-    AlmappCore *app = nil;
-    
-    app = [AlmappCore initInstanceWithDelegate:nil baseURL:nil];
-    XCTAssertNil(app, @"Cannot create singleton with invalid params");
-    
-    app = [AlmappCore initInstanceWithDelegate:_dummy baseURL:nil];
-    XCTAssertNil(app, @"Cannot create singleton with invalid params");
-    
-    app = [AlmappCore initInstanceWithDelegate:_dummy baseURL:[NSURL URLWithString:TESTING_BASE_URL]];
-    XCTAssertNotNil(app, @"Cannot find AlmappCore instance for valid params");
-
-    app = nil;
-    [AlmappCore setSharedInstance:nil];
-    XCTAssertNil([AlmappCore sharedInstance], @"Singleton must not exist");
-    
-    [AlmappCore initInstanceWithDelegate:_dummy baseURLString:TESTING_BASE_URL];
-    XCTAssertNotNil([AlmappCore sharedInstance], @"Singleton not found for corrent init with string URL");
-}
-
-- (void)testExample {
-    // This is an example of a functional test case.
-    XCTAssert(YES, @"Pass");
+- (void)testGetAllOwnedUsers {
+    XCTAssertNotNil([_core availableUsers], @"Must not be nil");
 }
 
 - (void)testPerformanceExample {
