@@ -7,14 +7,11 @@
 //
 
 #import "AlmappCore.h"
-#import <MagicalRecord/MagicalRecord.h>
-#import <MagicalRecord+Setup.h>
 
 @interface AlmappCore ()
 
 @property (strong, nonatomic) id<ALMCoreDelegate> coreDelegate;
 @property (strong, nonatomic) NSURL* baseURL;
-@property (strong, nonatomic) RKObjectManager *manager;
 
 - (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL: (NSURL*)baseURL;
 - (void)startActiveRecord;
@@ -31,7 +28,6 @@
     if (self) {
         _coreDelegate = delegate;
         _baseURL = baseURL;
-        _manager = [RKObjectManager managerWithBaseURL:baseURL];
     }
     return self;
 }
@@ -68,7 +64,6 @@ static dispatch_once_t once_token;
 }
 
 + (void)shutDown {
-    [MagicalRecord cleanUp];
 }
 
 + (void)setSharedInstance:(AlmappCore*)instance {
@@ -79,7 +74,6 @@ static dispatch_once_t once_token;
 #pragma mark - Core Methods
 
 - (void)startActiveRecord {
-    [MagicalRecord setupCoreDataStackWithStoreNamed:@"AlmappModel"];
 }
 
 - (NSArray*)availableUsers {
@@ -88,9 +82,7 @@ static dispatch_once_t once_token;
 
 #pragma mark - Exposed attributes
 
-- (RKObjectManager *)objectManager {
-    return _manager;
-}
+
 
 #pragma mark - Controller Delegate Implementation
 

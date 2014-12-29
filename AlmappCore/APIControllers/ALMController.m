@@ -19,17 +19,5 @@
     return self;
 }
 
-- (NSArray *)loadDescriptors {
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                   reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
-                                 userInfo:nil];
-}
-
-- (RKObjectManager*)objectManager {
-    if(_controllerDelegate == nil) {
-        return nil;
-    }
-    return nil;
-}
 
 @end
