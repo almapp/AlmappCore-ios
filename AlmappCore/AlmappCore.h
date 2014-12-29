@@ -20,6 +20,8 @@
 
 @interface AlmappCore : NSObject <ALMControllerDelegate>
 
+@property (readonly) RKObjectManager *objectManager;
+
 + (AlmappCore*)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL;
 
 + (AlmappCore*)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString*)baseURLString;

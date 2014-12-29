@@ -10,4 +10,27 @@
 
 @implementation ALMUsersController
 
+- (void)asd{
+    ALMUser *user = [[ALMUser alloc] init];
+}
+
+- (NSArray *)loadDescriptors {
+    RKObjectMapping *mapping = [RKObjectMapping mappingForClass:[ALMUser class]];
+    
+    // JSON : Model
+    [mapping addAttributeMappingsFromDictionary:@{@"name": @"name",
+                                                  @"email": @"email",
+                                                  @"username": @"username"
+                                                  //@"publication_date": @"publicationDate"
+                                                  }];
+    
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:mapping
+                                                                                            method:RKRequestMethodGET
+                                                                                       pathPattern:@"users"
+                                                                                           keyPath:nil
+                                                                                       statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)];
+    
+    return @[responseDescriptor];
+}
+
 @end

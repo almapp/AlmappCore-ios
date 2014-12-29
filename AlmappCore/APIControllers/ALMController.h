@@ -16,4 +16,9 @@
 
 - (id)initWithDelegate:(id<ALMControllerDelegate>)controllerDelegate;
 
+/*
+ Must override in subclases
+ */
+- (NSArray*)loadDescriptors;
+
 @end

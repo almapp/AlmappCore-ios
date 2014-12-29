@@ -86,6 +86,12 @@ static dispatch_once_t once_token;
     return nil;
 }
 
+#pragma mark - Exposed attributes
+
+- (RKObjectManager *)objectManager {
+    return _manager;
+}
+
 #pragma mark - Controller Delegate Implementation
 
 
