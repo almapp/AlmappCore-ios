@@ -51,10 +51,6 @@
     [super tearDown];
 }
 
-- (void)testGetAllOwnedUsers {
-    XCTAssertNotNil([_core availableUsers], @"Must not be nil");
-}
-
 - (void)testPerformanceExample {
     // This is an example of a performance test case.
     [self measureBlock:^{
