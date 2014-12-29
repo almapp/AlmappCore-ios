@@ -4,101 +4,25 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Pods-AlmappCore-AFNetworking.xcscheme</key>
+		<key>Pods-AlmappCore-Mantle.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>2</integer>
-		</dict>
-		<key>Pods-AlmappCore-ISO8601DateFormatterValueTransformer.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>3</integer>
-		</dict>
-		<key>Pods-AlmappCore-MagicalRecord.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>4</integer>
-		</dict>
-		<key>Pods-AlmappCore-RKValueTransformers.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>6</integer>
-		</dict>
-		<key>Pods-AlmappCore-RestKit.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>5</integer>
-		</dict>
-		<key>Pods-AlmappCore-SOCKit.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>7</integer>
-		</dict>
-		<key>Pods-AlmappCore-TransitionKit.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>8</integer>
 		</dict>
 		<key>Pods-AlmappCore.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>16334774A8E9B05055087152</key>
+		<key>7363629EB6F2B9CC5E018519</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5D5E68BFCC89F536F1FA40B0</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>6E5322D0AB3FA5F9168B45A0</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>7DE8946BF763FCFAAAC11454</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>89FA4925EAD71EAA26F4AB56</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>9C673140D84432B9DB9933D1</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>A952D7D9F3B965A032F03A4B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F651D36B78E673122D0829C1</key>
+		<key>78C217C7057202D15CC41629</key>
 		<dict>
 			<key>primary</key>
 			<true/>

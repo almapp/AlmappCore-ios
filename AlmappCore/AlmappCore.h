@@ -13,14 +13,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <RestKit/RestKit.h>
 #import "ALMCoreDelegate.h"
 #import "ALMUtil.h"
 #import "ALMControllerDelegate.h"
 
 @interface AlmappCore : NSObject <ALMControllerDelegate>
-
-@property (readonly) RKObjectManager *objectManager;
 
 + (AlmappCore*)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL;
 

@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <RestKit/RestKit.h>
 #import "ALMControllerDelegate.h"
 
 @interface ALMController : NSObject
@@ -16,9 +15,6 @@
 
 - (id)initWithDelegate:(id<ALMControllerDelegate>)controllerDelegate;
 
-/*
- Must override in subclases
- */
-- (NSArray*)loadDescriptors;
+
 
 @end
