@@ -11,3 +11,4 @@ Thumbs.db
 *.xcuserdatad
 .DS_Store
 *.xcuserstate
+xcuserdata/
