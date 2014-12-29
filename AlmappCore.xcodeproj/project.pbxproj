@@ -15,6 +15,9 @@
 		F65DD4BF1A505C6E006BCAF0 /* ALMUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4BE1A505C6E006BCAF0 /* ALMUtil.m */; };
 		F65DD4C21A505E5C006BCAF0 /* ALMDummyCoreDelegated.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4C11A505E5C006BCAF0 /* ALMDummyCoreDelegated.m */; };
 		F65DD4C41A507A62006BCAF0 /* RestfulAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4C31A507A62006BCAF0 /* RestfulAPITests.m */; };
+		F65DD4DA1A509153006BCAF0 /* ALMController.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4D91A509153006BCAF0 /* ALMController.m */; };
+		F65DD4DD1A509182006BCAF0 /* ALMUsersController.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4DC1A509182006BCAF0 /* ALMUsersController.m */; };
+		F6A592961A50BB0400C03585 /* AlmappModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F6A592941A50BB0400C03585 /* AlmappModel.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +59,13 @@
 		F65DD4C01A505E5C006BCAF0 /* ALMDummyCoreDelegated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMDummyCoreDelegated.h; sourceTree = "<group>"; };
 		F65DD4C11A505E5C006BCAF0 /* ALMDummyCoreDelegated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMDummyCoreDelegated.m; sourceTree = "<group>"; };
 		F65DD4C31A507A62006BCAF0 /* RestfulAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RestfulAPITests.m; sourceTree = "<group>"; };
+		F65DD4D11A507F27006BCAF0 /* ALMMapable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMMapable.h; sourceTree = "<group>"; };
+		F65DD4D81A509153006BCAF0 /* ALMController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMController.h; sourceTree = "<group>"; };
+		F65DD4D91A509153006BCAF0 /* ALMController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMController.m; sourceTree = "<group>"; };
+		F65DD4DB1A509182006BCAF0 /* ALMUsersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUsersController.h; sourceTree = "<group>"; };
+		F65DD4DC1A509182006BCAF0 /* ALMUsersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUsersController.m; sourceTree = "<group>"; };
+		F65DD4E61A509402006BCAF0 /* ALMControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMControllerDelegate.h; sourceTree = "<group>"; };
+		F6A592951A50BB0400C03585 /* AlmappModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AlmappModel.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,11 +128,14 @@
 		F65DD49F1A50405D006BCAF0 /* AlmappCore */ = {
 			isa = PBXGroup;
 			children = (
+				F65DD4D71A509130006BCAF0 /* APIControllers */,
+				F65DD4C51A507B4E006BCAF0 /* Models */,
 				F65DD4A01A50405D006BCAF0 /* AlmappCore.h */,
 				F65DD4A21A50405D006BCAF0 /* AlmappCore.m */,
 				F65DD4B71A5051AD006BCAF0 /* ALMCoreDelegate.h */,
 				F65DD4BD1A505C6E006BCAF0 /* ALMUtil.h */,
 				F65DD4BE1A505C6E006BCAF0 /* ALMUtil.m */,
+				F6A592941A50BB0400C03585 /* AlmappModel.xcdatamodeld */,
 			);
 			path = AlmappCore;
 			sourceTree = "<group>";
@@ -145,6 +158,42 @@
 				F65DD4AE1A50405D006BCAF0 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F65DD4C51A507B4E006BCAF0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F65DD4D01A507F11006BCAF0 /* Concerns */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F65DD4D01A507F11006BCAF0 /* Concerns */ = {
+			isa = PBXGroup;
+			children = (
+				F65DD4D11A507F27006BCAF0 /* ALMMapable.h */,
+			);
+			path = Concerns;
+			sourceTree = "<group>";
+		};
+		F65DD4D71A509130006BCAF0 /* APIControllers */ = {
+			isa = PBXGroup;
+			children = (
+				F65DD4E51A5093EA006BCAF0 /* Delegates */,
+				F65DD4D81A509153006BCAF0 /* ALMController.h */,
+				F65DD4D91A509153006BCAF0 /* ALMController.m */,
+				F65DD4DB1A509182006BCAF0 /* ALMUsersController.h */,
+				F65DD4DC1A509182006BCAF0 /* ALMUsersController.m */,
+			);
+			path = APIControllers;
+			sourceTree = "<group>";
+		};
+		F65DD4E51A5093EA006BCAF0 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				F65DD4E61A509402006BCAF0 /* ALMControllerDelegate.h */,
+			);
+			path = Delegates;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -270,6 +319,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F65DD4DA1A509153006BCAF0 /* ALMController.m in Sources */,
+				F65DD4DD1A509182006BCAF0 /* ALMUsersController.m in Sources */,
+				F6A592961A50BB0400C03585 /* AlmappModel.xcdatamodeld in Sources */,
 				F65DD4BF1A505C6E006BCAF0 /* ALMUtil.m in Sources */,
 				F65DD4A31A50405D006BCAF0 /* AlmappCore.m in Sources */,
 			);
@@ -452,6 +504,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F6A592941A50BB0400C03585 /* AlmappModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F6A592951A50BB0400C03585 /* AlmappModel.xcdatamodel */,
+			);
+			currentVersion = F6A592951A50BB0400C03585 /* AlmappModel.xcdatamodel */;
+			path = AlmappModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F65DD4951A50405D006BCAF0 /* Project object */;
 }

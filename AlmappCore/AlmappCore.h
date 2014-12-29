@@ -16,8 +16,9 @@
 #import <RestKit/RestKit.h>
 #import "ALMCoreDelegate.h"
 #import "ALMUtil.h"
+#import "ALMControllerDelegate.h"
 
-@interface AlmappCore : NSObject
+@interface AlmappCore : NSObject <ALMControllerDelegate>
 
 + (AlmappCore*)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL;
 
@@ -25,6 +26,10 @@
 
 + (AlmappCore*)sharedInstance;
 
++ (void)shutDown;
+
 + (void)setSharedInstance:(AlmappCore*)instance;
+
+- (NSArray*)availableUsers;
 
 @end
