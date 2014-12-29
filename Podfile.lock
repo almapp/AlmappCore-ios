@@ -1,12 +1,15 @@
 PODS:
-  - Mantle (1.5.1):
-    - Mantle/extobjc (= 1.5.1)
-  - Mantle/extobjc (1.5.1)
+  - Realm (0.89.1):
+    - Realm/Headers (= 0.89.1)
+  - Realm+JSON (0.2.4):
+    - Realm (~> 0.89)
+  - Realm/Headers (0.89.1)
 
 DEPENDENCIES:
-  - Mantle
+  - Realm+JSON (~> 0.2)
 
 SPEC CHECKSUMS:
-  Mantle: d7c5ac734579ec751c58fecbf56189853056c58c
+  Realm: 20b0bd13983d64fd22afeb47489729fd71b6b5c6
+  Realm+JSON: 1f920f9fff2a1f6cf221f61d80f55ed2b6d5dcd5
 
 COCOAPODS: 0.35.0
