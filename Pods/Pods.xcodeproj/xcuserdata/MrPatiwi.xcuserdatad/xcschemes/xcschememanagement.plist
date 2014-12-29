@@ -4,7 +4,12 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Pods-AlmappCore-Mantle.xcscheme</key>
+		<key>Pods-AlmappCore-Realm+JSON.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-AlmappCore-Realm.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -17,12 +22,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>7363629EB6F2B9CC5E018519</key>
+		<key>6D715D6D0AFCF832D5C57A73</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>78C217C7057202D15CC41629</key>
+		<key>D0DAE293B027A881B300221A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EA329975C77A6DC332B3D2F9</key>
 		<dict>
 			<key>primary</key>
 			<true/>

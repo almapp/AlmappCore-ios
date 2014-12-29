@@ -1,1 +1,0 @@
-PODS_ALMAPPCORE_MANTLE_OTHER_LDFLAGS = -framework "Foundation"
