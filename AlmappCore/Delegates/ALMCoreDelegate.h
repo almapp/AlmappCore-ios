@@ -10,6 +10,7 @@
 
 @protocol ALMCoreDelegate <NSObject>
 
-
+- (void)startPerformingNetworkTask;
+- (void)stopPerformingNetworkTask;
 
 @end

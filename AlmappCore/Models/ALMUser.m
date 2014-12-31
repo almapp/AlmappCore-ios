@@ -29,12 +29,12 @@
 
 + (NSDictionary *)defaultPropertyValues {
     return @{
-             @"name": @""
+             @"name": @"ASD"
              };
 }
 
-+ (NSValueTransformer *)nameJSONTransformer {
-    return [MCJSONNonNullStringTransformer valueTransformer];
-}
+//+ (NSValueTransformer *)nameJSONTransformer {
+//    return [MCJSONNonNullStringTransformer valueTransformer];
+//}
 
 @end

@@ -7,11 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AFNetworking/AFNetworking.h>
+#import <Realm/Realm.h>
 
 @protocol ALMControllerDelegate <NSObject>
 
 @required
 - (NSString*)baseURL;
-- (BOOL)inTestingEnvironment;
+- (AFHTTPRequestOperationManager*)requestManager;
+- (RLMRealm*)requestRealm;
+- (RLMRealm*)requestTemporalRealm;
 
 @end

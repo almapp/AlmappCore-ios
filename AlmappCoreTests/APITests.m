@@ -26,7 +26,7 @@
 
 - (void)setUp {
     [super setUp];
-    [AlmappCore initInstanceWithDelegate:[[ALMDummyCoreDelegated alloc] init] baseURL:[NSURL URLWithString:ALMBaseURL]].inTestingEnvironment = YES;
+    [ALMCore initInstanceWithDelegate:[[ALMDummyCoreDelegated alloc] init] baseURL:[NSURL URLWithString:ALMBaseURL]];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
@@ -36,53 +36,42 @@
 }
 
 - (void)testUserController {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"validGet"];
+    XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:@"validGetSingleResource"];
+    XCTestExpectation *multipleResourcesExpectation = [self expectationWithDescription:@"validGetMultipleResources"];
     
     ALMUsersController* controller = [[ALMUsersController alloc] init];
-    AFHTTPRequestOperation* op = [controller resource:1 parameters:nil onSuccess:^(RLMObject *result) {
-        [expectation fulfill];
-        
+    controller.saveToPersistenceStore = NO;
+    
+    AFHTTPRequestOperation* op1 = [controller resource:1 parameters:nil onSuccess:^(RLMObject *result) {
+        [singleResourceExpectation fulfill];
         NSLog(@"result: %@", result);
         XCTAssertNotNil(result, @"Must rertun obejct");
+        
+        ALMUser* user = (ALMUser*)result;
+        NSLog(@"%@", user.email);
+        NSLog(@"Nombre %@", user.name);
+        
     } onFailure:^(NSError *error) {
         NSLog(@"Error: %@", error);
         XCTFail(@"Error performing request.");
-        [expectation fulfill];
+        [singleResourceExpectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1 handler:^(NSError *error) {
-        [op cancel];
-    }];
-}
-
-- (void)testExample {
-    XCTestExpectation *expectation = [self expectationWithDescription:@"validGet"];
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    AFHTTPRequestOperation *op = [manager GET:@"http://patiwi-mcburger-pro.local:3000/api/v1/users" parameters:nil success: ^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSArray *array = responseObject;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            RLMRealm *realm = [RLMRealm defaultRealm];
-            
-            [realm beginWriteTransaction];
-            [[RLMRealm defaultRealm] deleteAllObjects];
-            NSArray *result = [ALMUser createOrUpdateInRealm:realm withJSONArray:array];
-            [realm commitWriteTransaction];
-            
-            [expectation fulfill];
-            
-            NSLog(@"result: %@", result);
-            XCTAssertNotNil(result, @"Must return an array");
-            
-        });
-    } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
+    AFHTTPRequestOperation* op2 = [controller resourcesFromPath:nil parameters:nil onSuccess:^(NSArray *response) {
+        [multipleResourcesExpectation fulfill];
+        NSLog(@"result: %@", response);
+        XCTAssertNotNil(response, @"Must rerturn a collection.");
+        XCTAssertTrue(response.count != 0, @"Must contain at least one value");
+        
+    } onFailure:^(NSError *error) {
         NSLog(@"Error: %@", error);
         XCTFail(@"Error performing request.");
-        [expectation fulfill];
+        [multipleResourcesExpectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1 handler:^(NSError *error) {
-        [op cancel];
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
+        [op1 cancel];
+        [op2 cancel];
     }];
 }
 

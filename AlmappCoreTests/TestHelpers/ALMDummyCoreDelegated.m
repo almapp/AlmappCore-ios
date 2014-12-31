@@ -10,4 +10,12 @@
 
 @implementation ALMDummyCoreDelegated
 
+-(void)startPerformingNetworkTask {
+    
+}
+
+-(void)stopPerformingNetworkTask {
+    
+}
+
 @end
