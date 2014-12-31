@@ -10,7 +10,12 @@
 
 @interface ALMResource : RLMObject
 
+@property NSInteger resourceID;
+//@property NSDate *updatedAt;
+//@property NSDate *createdAt;
+
 + (NSString*)pluralForm;
 + (NSString*)singleForm;
-
++ (NSString*)jsonRoot;
++ (NSString*)jatt:(NSString*)attribute;
 @end

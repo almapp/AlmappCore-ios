@@ -28,33 +28,20 @@
              };
 }
 
-
-+ (NSString *)primaryKey {
-    return @"resourceID";
++ (NSDictionary *)defaultPropertyValues {
+    return @{
+             @"address": @"",
+             @"email": @"",
+             @"url": @"",
+             @"facebookUrl": @"",
+             @"twitterUrl": @"",
+             @"phoneString": @"",
+             @"information": @""
+             };
 }
 
-+ (NSValueTransformer *)patoJSONTransformer {
-    return [MCJSONNonNullStringTransformer valueTransformer];
++ (NSString *)pluralForm {
+    return @"campuses";
 }
 
-+ (NSValueTransformer *)addressJSONTransformer {
-    return [MCJSONNonNullStringTransformer valueTransformer];
-}
-
-+ (NSValueTransformer *)emailJSONTransformer {
-    return [MCJSONNonNullStringTransformer valueTransformer];
-}
-
-+ (NSValueTransformer *)urlJSONTransformer {
-    return [MCJSONNonNullStringTransformer valueTransformer];
-}
-+ (NSValueTransformer *)facebookUrlJSONTransformer {
-    return [MCJSONNonNullStringTransformer valueTransformer];
-}
-+ (NSValueTransformer *)twitterUrlJSONTransformer {
-    return [MCJSONNonNullStringTransformer valueTransformer];
-}
-+ (NSValueTransformer *)informationJSONTransformer {
-    return [MCJSONNonNullStringTransformer valueTransformer];
-}
 @end

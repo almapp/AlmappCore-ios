@@ -10,6 +10,7 @@
 #import <XCTest/XCTest.h>
 #import "ALMTestsConstants.h"
 #import "ALMUser.h"
+#import "ALMCampus.h"
 #import "AlmappCore.h"
 
 #import <Realm/Realm.h>
@@ -45,7 +46,11 @@
     XCTAssertNil(op, @"Should not return an operation for invalid class input");
 }
 
-- (void)testRelectionAPIRequest {
+- (void)testRelectionAPIRequestOnCampuses {
+    [self reflectionApiForCollectionOf:[ALMCampus class] path:nil params:nil];
+}
+
+- (void)testRelectionAPIRequestOnUsers {
     XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:@"validGetSingleResource"];
     XCTestExpectation *multipleResourcesExpectation = [self expectationWithDescription:@"validGetMultipleResources"];
 
@@ -82,6 +87,53 @@
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
         [op1 cancel];
+        [op2 cancel];
+    }];
+}
+
+- (void)reflectionApiForSingle:(Class)rClass resourceID:(NSUInteger)resourceID path:(NSString*)path params:(id)params {
+    XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:[NSString stringWithFormat:@"validSingle_%@", rClass]];
+    
+    ALMController* controller = [ALMCore controller];
+    controller.saveToPersistenceStore = NO;
+    
+    AFHTTPRequestOperation *op1 = [controller resourceForClass:rClass id:resourceID parameters:params onSuccess:^(id result) {
+        ALMResource *resource = result;
+        [singleResourceExpectation fulfill];
+        NSLog(@"Resource Class: %@ | result: %@", rClass, resource);
+        XCTAssertNotNil(resource, @"Must not return nil from a valid request");
+        
+    } onFailure:^(NSError *error) {
+        NSLog(@"Error: %@", error);
+        XCTFail(@"Error performing request.");
+        [singleResourceExpectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
+        [op1 cancel];
+    }];
+}
+- (void)reflectionApiForCollectionOf:(Class)rClass path:(NSString*)path params:(id)params {
+    XCTestExpectation *multipleResourcesExpectation = [self expectationWithDescription:[NSString stringWithFormat:@"validCollection_%@", rClass]];
+    
+    ALMController* controller = [ALMCore controller];
+    controller.saveToPersistenceStore = NO;
+    
+    AFHTTPRequestOperation* op2 = [controller resourceCollectionForClass:rClass parameters:params onSuccess:^(NSArray *result) {
+        
+        [multipleResourcesExpectation fulfill];
+        NSLog(@"result: %@", result);
+        XCTAssertNotNil(result, @"Must rerturn a collection.");
+        XCTAssertTrue(result.count != 0, @"Must contain at least one value");
+        
+    } onFailure:^(NSError *error) {
+        
+        NSLog(@"Error: %@", error);
+        XCTFail(@"Error performing request.");
+        [multipleResourcesExpectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
         [op2 cancel];
     }];
 }
