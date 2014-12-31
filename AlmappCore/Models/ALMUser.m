@@ -7,18 +7,16 @@
 //
 
 #import "ALMUser.h"
-#import "RLMObject+JSON.h"
-#import "MCJSONNonNullStringTransformer.h"
 
 @implementation ALMUser
 
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
-             @"user.id": @"resourceID",
-             @"user.name": @"name",
-             @"user.username": @"username",
-             @"user.email": @"email",
-             @"user.male": @"male",
+             [self jatt:@"id"]: @"resourceID",
+             [self jatt:@"name"]: @"name",
+             [self jatt:@"username"]: @"username",
+             [self jatt:@"email"]: @"email",
+             [self jatt:@"male"]: @"male",
              [self jatt:@"student_id"]: @"studentId",
              [self jatt:@"country"]: @"country",
              [self jatt:@"findeable"]: @"findeable",

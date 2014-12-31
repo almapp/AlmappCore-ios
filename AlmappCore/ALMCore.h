@@ -39,6 +39,11 @@
 
 - (NSArray*)availableUsers;
 
+#pragma mark - Persistence
+
 - (void)setPersistenceStoreNameToDefault;
+- (void)dropDatabaseInMemory;
+- (void)dropDatabaseNamed:(NSString*)databaseName;
+- (void)dropDatabaseDefault;
 
 @end
