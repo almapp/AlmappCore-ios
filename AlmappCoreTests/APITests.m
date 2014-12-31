@@ -35,21 +35,29 @@
     [super tearDown];
 }
 
-- (void)testUserController {
+- (void)testInvalidClassRequest {
+    ALMController* controller = [ALMCore controller];
+    AFHTTPRequestOperation *op = [controller resourceForClass:[NSString class] id:1 parameters:nil onSuccess:^(id result) {
+        
+    } onFailure:^(NSError *error) {
+        
+    }];
+    XCTAssertNil(op, @"Should not return an operation for invalid class input");
+}
+
+- (void)testRelectionAPIRequest {
     XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:@"validGetSingleResource"];
     XCTestExpectation *multipleResourcesExpectation = [self expectationWithDescription:@"validGetMultipleResources"];
-    
-    ALMUsersController* controller = [[ALMUsersController alloc] init];
+
+    ALMController* controller = [ALMCore controller];
     controller.saveToPersistenceStore = NO;
     
-    AFHTTPRequestOperation* op1 = [controller resource:1 parameters:nil onSuccess:^(RLMObject *result) {
+    
+    AFHTTPRequestOperation *op1 = [controller resourceForClass:[ALMUser class] id:1 parameters:nil onSuccess:^(id result) {
+        ALMUser *user = result;
         [singleResourceExpectation fulfill];
-        NSLog(@"result: %@", result);
-        XCTAssertNotNil(result, @"Must rertun obejct");
-        
-        ALMUser* user = (ALMUser*)result;
-        NSLog(@"%@", user.email);
-        NSLog(@"Nombre %@", user.name);
+        NSLog(@"result: %@", user);
+        XCTAssertNotNil(user, @"Must rertun obejct");
         
     } onFailure:^(NSError *error) {
         NSLog(@"Error: %@", error);
@@ -57,13 +65,16 @@
         [singleResourceExpectation fulfill];
     }];
     
-    AFHTTPRequestOperation* op2 = [controller resourcesFromPath:nil parameters:nil onSuccess:^(NSArray *response) {
+    
+    AFHTTPRequestOperation* op2 = [controller resourceCollectionForClass:[ALMUser class] parameters:nil onSuccess:^(NSArray *result) {
+        
         [multipleResourcesExpectation fulfill];
-        NSLog(@"result: %@", response);
-        XCTAssertNotNil(response, @"Must rerturn a collection.");
-        XCTAssertTrue(response.count != 0, @"Must contain at least one value");
+        NSLog(@"result: %@", result);
+        XCTAssertNotNil(result, @"Must rerturn a collection.");
+        XCTAssertTrue(result.count != 0, @"Must contain at least one value");
         
     } onFailure:^(NSError *error) {
+        
         NSLog(@"Error: %@", error);
         XCTFail(@"Error performing request.");
         [multipleResourcesExpectation fulfill];

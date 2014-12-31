@@ -7,23 +7,35 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import "ALMCoreDelegate.h"
 #import "ALMUtil.h"
 #import "ALMControllerDelegate.h"
+#import "ALMController.h"
 
 @interface ALMCore : NSObject <ALMControllerDelegate>
 
 @property (strong, nonatomic) NSString* persistenceStoreName;
 
+#pragma mark - Public constructors
+
 + (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL;
 
 + (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString*)baseURLString;
+
+#pragma mark - Singleton methods
 
 + (instancetype)sharedInstance;
 
 + (void)shutDown;
 
 + (void)setSharedInstance:(ALMCore*)instance;
+
+#pragma mark - Core methods
+
++ (id)controller:(Class)controller;
+
++ (id)controller;
 
 - (NSArray*)availableUsers;
 

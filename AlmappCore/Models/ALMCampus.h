@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 almapp. All rights reserved.
 //
 
-#import "RLMObject.h"
+#import "ALMResource.h"
 
-@interface ALMCampus : RLMObject
+@interface ALMCampus : ALMResource
 
 @property NSInteger resourceID;
 @property NSString *name;

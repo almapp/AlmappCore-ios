@@ -10,34 +10,34 @@
 
 @interface ALMController ()
 
+- (id)initWithDelegate:(id<ALMControllerDelegate>)controllerDelegate;
+
 - (AFHTTPRequestOperationManager*)requestManager;
 - (RLMRealm*)requestRealm;
 - (RLMRealm*)requestTemporalRealm;
+- (RLMRealm*)requestDefaultRealm;
 
 @end
 
 @implementation ALMController
 
+
 #pragma mark - Constructors
 
-- (id)init {
++ (instancetype)controllerWithDelegate:(id<ALMControllerDelegate>)controllerDelegate {
+    return [[ALMController alloc] initWithDelegate:controllerDelegate];
+}
+
+
+- (id)initWithDelegate:(id<ALMControllerDelegate>)controllerDelegate {
     self = [super init];
-    if (self)
-    {
-        _controllerDelegate = [ALMCore sharedInstance];
+    if (self) {
+        _controllerDelegate = controllerDelegate;
         _saveToPersistenceStore = YES;
     }
     return self;
 }
 
-- (id)initWithDelegate:(id<ALMControllerDelegate>)controllerDelegate {
-    self = [super init];
-    if (self)
-    {
-        _controllerDelegate = controllerDelegate;
-    }
-    return self;
-}
 
 #pragma mark - Managers
 
@@ -45,13 +45,21 @@
     return [_controllerDelegate requestManager];
 }
 
-- (RLMRealm *)requestRealm {
+
+- (RLMRealm *)requestDefaultRealm {
     return [_controllerDelegate requestRealm];
 }
+
 
 - (RLMRealm *)requestTemporalRealm {
     return [_controllerDelegate requestTemporalRealm];
 }
+
+
+- (RLMRealm *)requestRealm {
+    return (_saveToPersistenceStore) ? [self requestRealm] : [self requestTemporalRealm];
+}
+
 
 #pragma mark - URL
 
@@ -59,51 +67,63 @@
     return [[self buildUrlWithPath:path] stringByAppendingString:[NSString stringWithFormat:@"/%ld", resourceID]];
 }
 
+
 - (NSString *)buildUrlWithPath:(NSString *)path {
-    if(path != nil) {
-        return [NSString stringWithFormat:@"%@/%@", [_controllerDelegate baseURL], path];
-    }
-    else {
-        return [NSString stringWithFormat:@"%@/%@", [_controllerDelegate baseURL], [self resourcePluralName]];
-    }
+    return [NSString stringWithFormat:@"%@/%@", [_controllerDelegate baseURL], path];
 }
 
-- (NSString *)buildUrl {
-    return [self buildUrlWithPath:[self resourcePluralName]];
-}
-
-- (NSString *)buildUrlForResource:(NSUInteger)resourceID {
-    return [[self buildUrl] stringByAppendingString:[NSString stringWithFormat:@"/%ld", resourceID]];
-}
 
 #pragma mark - Requests operations
 
-- (AFHTTPRequestOperation *)resource:(long)resourceID parameters:(id)parameters onSuccess:(void (^)(RLMObject *result))onSuccess onFailure:(void (^)(NSError *error))onFailure {
+-(AFHTTPRequestOperation *)resourceForClass:(Class)rClass inPath:(NSString *)resourcePath id:(long)resourceID parameters:(id)parameters onSuccess:(void (^)(id))onSuccess onFailure:(void (^)(NSError *))onFailure {
     
-    NSString* requestString = [self buildUrlForResource:resourceID];
+    if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
+        return nil;
+    }
+    
+    NSString* requestString = [self buildUrlWithPath:resourcePath resourceID:resourceID];
     
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
     
     AFHTTPRequestOperation *op = [[self requestManager] GET:requestString
                                                  parameters:parameters
                                                     success: ^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        NSDictionary *dicc = responseObject;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            onSuccess([self commitResource:dicc]);
-        });
                                                         
-    } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        onFailure(error);
-    }];
+                                                        NSDictionary *dicc = responseObject;
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            onSuccess([self commitResource:rClass data:dicc]);
+                                                        });
+                                                        
+                                                    } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                        NSLog(@"Error: %@", error);
+                                                        onFailure(error);
+                                                    }];
     
     return op;
+
 }
 
-- (AFHTTPRequestOperation *)resourcesFromPath:(NSString *)path parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
+- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass id:(long)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure {
     
-    NSString* requestString = [self buildUrlWithPath:path];
+    if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
+        return nil;
+    }
+    
+    NSString* resourcePath = [rClass performSelector:@selector(pluralForm)];
+    
+    return [self resourceForClass:rClass inPath:resourcePath id:resourceID parameters:parameters onSuccess:onSuccess onFailure:onFailure];
+}
+
+
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass inPath:(NSString *)resourcesPath parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
+    
+    if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
+        return nil;
+    }
+    
+    NSString* requestString = [self buildUrlWithPath:resourcesPath];
+
+    //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
     
     AFHTTPRequestOperation *op = [[self requestManager] GET:requestString
                                                  parameters:parameters
@@ -111,7 +131,7 @@
                                                         
                                                         NSArray *array = responseObject;
                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                            onSuccess([self commitResources:array]);
+                                                            onSuccess([self commitResourceCollection:rClass collectionOfData:array]);
                                                         });
                                                         
                                                     } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -122,56 +142,48 @@
     return op;
 }
 
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
+    
+    if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
+        return nil;
+    }
+    
+    NSString* resourcesPath = [rClass performSelector:@selector(pluralForm)];
+    
+    return [self resourceCollectionForClass:rClass inPath:resourcesPath parameters:parameters onSuccess:onSuccess onFailure:onFailure];
+}
+
+
 #pragma mark - Persistence
 
--(RLMObject*)commitResource:(NSDictionary*)resource {
-    RLMRealm *realm = (_saveToPersistenceStore) ? [self requestRealm] : [self requestTemporalRealm];
+-(id)commitResource:(Class)resource data:(NSDictionary*)data {
+    RLMRealm *realm = [self requestRealm];
 
     [realm beginWriteTransaction];
-    RLMObject* result = [self updateInRealm:realm resource:resource];
+    id result = [resource performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:data];
     [realm commitWriteTransaction];
+    
     return result;
 }
 
--(NSArray*)commitResources:(NSArray*)resources {
-    RLMRealm *realm = (_saveToPersistenceStore) ? [self requestRealm] : [self requestTemporalRealm];
+
+-(NSArray*)commitResourceCollection:(Class)resource collectionOfData:(NSArray*)collectionData {
+    RLMRealm *realm = [self requestRealm];
     
     [realm beginWriteTransaction];
-    NSArray* result = [self updateInRealm:realm resources:resources];
+    NSArray* collection = [resource performSelector:@selector(createOrUpdateInRealm:withJSONArray:) withObject:realm withObject:collectionData];
     [realm commitWriteTransaction];
-    return result;
+    
+    return collection;
 }
 
--(RLMObject*)updateInRealm:(RLMRealm*)realm resource:(NSDictionary *)resource {
-    [NSException raise:@"Invoked abstract method" format:@"Invoked abstract method"];
-    //[ALMUser createOrUpdateInRealm:realm withJSONDictionary:resource];
+
+#pragma mark - Subclasses methods
+
++ (Class)resourceType {
+    [NSException raise:@"Invoked abstract method, must be overriden" format:@"Invoked abstract method"];
     return nil;
 }
 
--(NSArray*)updateInRealm:(RLMRealm*)realm resources:(NSArray *)resources {
-    [NSException raise:@"Invoked abstract method" format:@"Invoked abstract method"];
-    //[ALMUser createOrUpdateInRealm:realm withJSONArray:array];
-    return @[];
-}
-
-#pragma mark - Resource paths (names)
-
-- (NSString*)resourceSingleName {
-    return @"";
-}
-
-- (NSString*)resourcePluralName {
-    BOOL ios = YES;
-    if(ios) {
-        NSString *controllerName = NSStringFromClass([self class]);
-        //unsigned long lenght = controllerName.length - 3 - 9;
-        //return [controllerName substringWithRange:[NSMakeRange(3, lenght)];
-        
-        controllerName = [controllerName stringByReplacingOccurrencesOfString:@"ALM" withString:@""];
-        return [[controllerName stringByReplacingOccurrencesOfString:@"Controller" withString:@""] lowercaseString];
-    }
-    [NSException raise:@"Invoked abstract method" format:@"Invoked abstract method"];
-    return nil;
-}
 
 @end
