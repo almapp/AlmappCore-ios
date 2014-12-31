@@ -63,13 +63,29 @@
 
 #pragma mark - URL
 
+- (NSString*)cleanUrl:(NSString*)dirtyUrl {
+    return dirtyUrl;
+}
+
 - (NSString *)buildUrlWithPath:(NSString *)path resourceID:(NSUInteger)resourceID {
-    return [[self buildUrlWithPath:path] stringByAppendingString:[NSString stringWithFormat:@"/%ld", resourceID]];
+    NSString* cleanedPath = [self cleanUrl:path];
+    if (cleanedPath != nil) {
+        return [[self buildUrlWithPath:path] stringByAppendingString:[NSString stringWithFormat:@"/%ld", resourceID]];
+    }
+    else {
+        return nil;
+    }
 }
 
 
 - (NSString *)buildUrlWithPath:(NSString *)path {
-    return [NSString stringWithFormat:@"%@/%@", [_controllerDelegate baseURL], path];
+    NSString* cleanedPath = [self cleanUrl:path];
+    if (cleanedPath != nil) {
+        return [NSString stringWithFormat:@"%@/%@", [_controllerDelegate baseURL], path];
+    }
+    else {
+        return nil;
+    }
 }
 
 
@@ -82,6 +98,9 @@
     }
     
     NSString* requestString = [self buildUrlWithPath:resourcePath resourceID:resourceID];
+    if (requestString == nil) {
+        return nil;
+    }
     
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
     
@@ -122,6 +141,9 @@
     }
     
     NSString* requestString = [self buildUrlWithPath:resourcesPath];
+    if (requestString == nil) {
+        return nil;
+    }
 
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
     

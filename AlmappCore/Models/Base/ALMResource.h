@@ -7,6 +7,7 @@
 //
 
 #import "RLMObject.h"
+#import "RLMObject+JSON.h"
 
 @interface ALMResource : RLMObject
 
@@ -18,4 +19,7 @@
 + (NSString*)singleForm;
 + (NSString*)jsonRoot;
 + (NSString*)jatt:(NSString*)attribute;
+
+
+
 @end

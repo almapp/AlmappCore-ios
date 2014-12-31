@@ -93,9 +93,31 @@ static dispatch_once_t once_token;
     return nil;
 }
 
+#pragma mark - Persistence
+
 - (void)setPersistenceStoreNameToDefault {
     _persistenceStoreName = DEFAULT_PERSISTENCE_STORE;
 }
+
+- (void)dropDatabaseDefault {
+    [self dropRealm:[self requestRealm]];
+}
+
+- (void)dropDatabaseInMemory {
+    [self dropRealm:[self requestTemporalRealm]];
+}
+
+- (void)dropDatabaseNamed:(NSString *)databaseName {
+    [self dropRealm:[RLMRealm realmWithPath:databaseName]];
+    
+}
+
+- (void)dropRealm:(RLMRealm*)realm {
+    [realm beginWriteTransaction];
+    [realm deleteAllObjects];
+    [realm commitWriteTransaction];
+}
+
 
 #pragma mark - Exposed attributes
 

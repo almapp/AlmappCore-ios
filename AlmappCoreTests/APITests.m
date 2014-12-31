@@ -12,12 +12,14 @@
 #import "ALMUser.h"
 #import "ALMCampus.h"
 #import "AlmappCore.h"
+#import "ALMPlace.h"
 
 #import <Realm/Realm.h>
 #import <Realm+JSON/RLMObject+JSON.h>
 #import <AFNetworking/AFNetworking.h>
 #import "ALMUsersController.h"
 #import "ALMDummyCoreDelegated.h"
+#import "ALMFaculty.h"
 
 @interface APITests : XCTestCase
 
@@ -27,7 +29,9 @@
 
 - (void)setUp {
     [super setUp];
-    [ALMCore initInstanceWithDelegate:[[ALMDummyCoreDelegated alloc] init] baseURL:[NSURL URLWithString:ALMBaseURL]];
+    ALMCore *c = [ALMCore initInstanceWithDelegate:[[ALMDummyCoreDelegated alloc] init] baseURL:[NSURL URLWithString:ALMBaseURL]];
+    [c dropDatabaseInMemory];
+    [c dropDatabaseDefault];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
@@ -47,7 +51,25 @@
 }
 
 - (void)testRelectionAPIRequestOnCampuses {
+    [self reflectionApiForSingle:[ALMCampus class] resourceID:1 path:nil params:nil];
     [self reflectionApiForCollectionOf:[ALMCampus class] path:nil params:nil];
+    
+    RLMRealm *realm = [[ALMCore sharedInstance] requestTemporalRealm];
+    
+    RLMResults* a = [ALMCampus allObjectsInRealm:realm];
+    for(int i = 0 ; i < a.count; i++) {
+        ALMCampus *campus = [a objectAtIndex:i];
+        NSLog(@"Index: %d: %@", i, campus.name);
+    }
+}
+
+- (void)testRelectionAPIRequestOnPlaces {
+    [self reflectionApiForSingle:[ALMPlace class] resourceID:30 path:nil params:nil];
+    [self reflectionApiForCollectionOf:[ALMCampus class] path:@"campuses/2/places" params:nil];
+}
+
+- (void)testRelectionAPIRequestOnFaculties {
+    [self reflectionApiForCollectionOf:[ALMFaculty class] path:nil params:nil];
 }
 
 - (void)testRelectionAPIRequestOnUsers {

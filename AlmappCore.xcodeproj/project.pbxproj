@@ -31,6 +31,9 @@
 		F6A058A91A543E27001A1E45 /* ALMCore.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058A81A543E27001A1E45 /* ALMCore.m */; };
 		F6A058AC1A54523C001A1E45 /* ALMCampus.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058AB1A54523C001A1E45 /* ALMCampus.m */; };
 		F6A058B01A545E5D001A1E45 /* ALMResource.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058AF1A545E5D001A1E45 /* ALMResource.m */; };
+		F6A058B31A5480C8001A1E45 /* ALMFaculty.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058B21A5480C8001A1E45 /* ALMFaculty.m */; };
+		F6A058B61A5481B6001A1E45 /* ALMArea.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058B51A5481B6001A1E45 /* ALMArea.m */; };
+		F6A058B91A548588001A1E45 /* ALMPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058B81A548588001A1E45 /* ALMPlace.m */; };
 		F6D19BD41A518E6000FD4715 /* ALMOrganizationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BD31A518E6000FD4715 /* ALMOrganizationsController.m */; };
 		F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BDE1A51B02800FD4715 /* ALMUser.m */; };
 		F6D19BE61A51B2C500FD4715 /* ALMDummyCoreDelegated.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BE31A51B2C500FD4715 /* ALMDummyCoreDelegated.m */; };
@@ -83,6 +86,12 @@
 		F6A058AB1A54523C001A1E45 /* ALMCampus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCampus.m; sourceTree = "<group>"; };
 		F6A058AE1A545E5D001A1E45 /* ALMResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMResource.h; sourceTree = "<group>"; };
 		F6A058AF1A545E5D001A1E45 /* ALMResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMResource.m; sourceTree = "<group>"; };
+		F6A058B11A5480C8001A1E45 /* ALMFaculty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMFaculty.h; sourceTree = "<group>"; };
+		F6A058B21A5480C8001A1E45 /* ALMFaculty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMFaculty.m; sourceTree = "<group>"; };
+		F6A058B41A5481B6001A1E45 /* ALMArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMArea.h; sourceTree = "<group>"; };
+		F6A058B51A5481B6001A1E45 /* ALMArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMArea.m; sourceTree = "<group>"; };
+		F6A058B71A548588001A1E45 /* ALMPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMPlace.h; sourceTree = "<group>"; };
+		F6A058B81A548588001A1E45 /* ALMPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMPlace.m; sourceTree = "<group>"; };
 		F6D19BD21A518E6000FD4715 /* ALMOrganizationsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMOrganizationsController.h; sourceTree = "<group>"; };
 		F6D19BD31A518E6000FD4715 /* ALMOrganizationsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMOrganizationsController.m; sourceTree = "<group>"; };
 		F6D19BDD1A51B02800FD4715 /* ALMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUser.h; sourceTree = "<group>"; };
@@ -220,6 +229,12 @@
 				F6D19BDE1A51B02800FD4715 /* ALMUser.m */,
 				F6A058AA1A54523C001A1E45 /* ALMCampus.h */,
 				F6A058AB1A54523C001A1E45 /* ALMCampus.m */,
+				F6A058B11A5480C8001A1E45 /* ALMFaculty.h */,
+				F6A058B21A5480C8001A1E45 /* ALMFaculty.m */,
+				F6A058B41A5481B6001A1E45 /* ALMArea.h */,
+				F6A058B51A5481B6001A1E45 /* ALMArea.m */,
+				F6A058B71A548588001A1E45 /* ALMPlace.h */,
+				F6A058B81A548588001A1E45 /* ALMPlace.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -393,9 +408,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6A058B91A548588001A1E45 /* ALMPlace.m in Sources */,
 				F65DD4DA1A509153006BCAF0 /* ALMController.m in Sources */,
+				F6A058B31A5480C8001A1E45 /* ALMFaculty.m in Sources */,
 				F6A058AC1A54523C001A1E45 /* ALMCampus.m in Sources */,
 				F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */,
+				F6A058B61A5481B6001A1E45 /* ALMArea.m in Sources */,
 				F65DD4DD1A509182006BCAF0 /* ALMUsersController.m in Sources */,
 				F6D19BD41A518E6000FD4715 /* ALMOrganizationsController.m in Sources */,
 				F6D19BED1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.m in Sources */,

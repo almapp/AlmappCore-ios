@@ -28,7 +28,7 @@
 }
 
 + (NSString*)jatt:(NSString*)attribute {
-    return [self.jsonRoot stringByAppendingString:attribute];
+    return [NSString stringWithFormat:@"%@.%@", self.jsonRoot, attribute];
 }
 
 @end

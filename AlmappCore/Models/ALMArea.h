@@ -1,5 +1,5 @@
 //
-//  ALMCampus.h
+//  ALMArea.h
 //  AlmappCore
 //
 //  Created by Patricio López on 31-12-14.
@@ -8,7 +8,7 @@
 
 #import "ALMResource.h"
 
-@interface ALMCampus : ALMResource
+@interface ALMArea : ALMResource
 
 @property NSString *name;
 @property NSString *shortName;
@@ -21,5 +21,7 @@
 @property NSString *phoneString;
 @property NSString *information;
 
++ (NSDictionary*)additionalAttributes;
+
 @end
-RLM_ARRAY_TYPE(ALMCampus)
+RLM_ARRAY_TYPE(ALMArea)
