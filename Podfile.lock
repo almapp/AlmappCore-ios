@@ -28,11 +28,21 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
-  - Realm+JSON (~> 0.2)
+  - Realm+JSON (from `https://github.com/mrpatiwi/Realm-JSON.git`, branch `master`)
+
+EXTERNAL SOURCES:
+  Realm+JSON:
+    :branch: master
+    :git: https://github.com/mrpatiwi/Realm-JSON.git
+
+CHECKOUT OPTIONS:
+  Realm+JSON:
+    :commit: 52b5f87b6e7b5dda13c6810d5186e1245075d465
+    :git: https://github.com/mrpatiwi/Realm-JSON.git
 
 SPEC CHECKSUMS:
   AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
   Realm: 20b0bd13983d64fd22afeb47489729fd71b6b5c6
-  Realm+JSON: 1f920f9fff2a1f6cf221f61d80f55ed2b6d5dcd5
+  Realm+JSON: 2f6fe3e758bc765512b82e953137cf7c52a296bc
 
 COCOAPODS: 0.35.0
