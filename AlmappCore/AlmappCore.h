@@ -20,4 +20,8 @@
 #import "ALMController.h"
 
 #import "ALMUser.h"
+#import "ALMArea.h"
+#import "ALMCampus.h"
+#import "ALMFaculty.h"
+#import "ALMPlace.h"
 #import "ALMUsersController.h"
