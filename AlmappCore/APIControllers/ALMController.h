@@ -11,7 +11,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import <Realm/Realm.h>
 #import <Realm+JSON/RLMObject+JSON.h>
-#import "AlmappCore.h"
+#import "ALMCore.h"
 
 @interface ALMController : NSObject
 
@@ -20,22 +20,26 @@
 @property (strong, nonatomic, readonly) NSString* resourceSingleName;
 @property (strong, nonatomic, readonly) NSString* resourcePluralName;
 
+/* Default is YES, change to NO if you want to keep the store on the memory. */
+@property (assign) BOOL saveToPersistenceStore;
+
 - (id)initWithDelegate:(id<ALMControllerDelegate>)controllerDelegate;
 
--(AFHTTPRequestOperation *)resource:(long)resourceID
+- (NSString*)buildUrl;
+- (NSString*)buildUrlForResource:(NSUInteger)resourceID;
+- (NSString*)buildUrlWithPath:(NSString*)path resourceID:(NSUInteger)resourceID;
+- (NSString*)buildUrlWithPath:(NSString*)path;
+
+- (AFHTTPRequestOperation *)resource:(long)resourceID
                          parameters:(id)parameters
                           onSuccess:(void (^)(RLMObject *result))onSuccess
                           onFailure:(void (^)(NSError *error))onFailure;
 
-- (AFHTTPRequestOperation *)resourcesWithParameters:(id)parameters
-                                            success:(void (^)(RLMObject *response))success
-                                            failure:(void (^)(NSError *error))failure;
+- (AFHTTPRequestOperation *)resourcesFromPath:(NSString*)path
+                               parameters:(id)parameters
+                                onSuccess:(void (^)(NSArray *response))onSuccess
+                                onFailure:(void (^)(NSError *error))onFailure;
 
-- (AFHTTPRequestOperation *)subResourcesFor:(NSInteger *)resourceID
-                            subResourceType:(NSString*)subResourceType
-                                 parameters:(id)parameters
-                                    success:(void (^)(RLMObject *response))success
-                                    failure:(void (^)(NSError *error))failure;
 
 -(RLMObject*)updateInRealm:(RLMRealm*)realm resource:(NSDictionary *)resource;
 -(NSArray*)updateInRealm:(RLMRealm*)realm resources:(NSArray *)resources;

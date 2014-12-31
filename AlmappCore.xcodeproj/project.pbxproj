@@ -23,12 +23,13 @@
 /* Begin PBXBuildFile section */
 		74FC4BF9C2617FB8AB8D09A5 /* libPods-AlmappCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0875CE0C44FECE477E86A560 /* libPods-AlmappCore.a */; };
 		F65DD4A11A50405D006BCAF0 /* AlmappCore.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = F65DD4A01A50405D006BCAF0 /* AlmappCore.h */; };
-		F65DD4A31A50405D006BCAF0 /* AlmappCore.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4A21A50405D006BCAF0 /* AlmappCore.m */; };
 		F65DD4A91A50405D006BCAF0 /* libAlmappCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F65DD49D1A50405D006BCAF0 /* libAlmappCore.a */; };
 		F65DD4B91A505478006BCAF0 /* CoreSingletonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4B81A505478006BCAF0 /* CoreSingletonTests.m */; };
 		F65DD4BF1A505C6E006BCAF0 /* ALMUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4BE1A505C6E006BCAF0 /* ALMUtil.m */; };
 		F65DD4DA1A509153006BCAF0 /* ALMController.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4D91A509153006BCAF0 /* ALMController.m */; };
 		F65DD4DD1A509182006BCAF0 /* ALMUsersController.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4DC1A509182006BCAF0 /* ALMUsersController.m */; };
+		F6A058A91A543E27001A1E45 /* ALMCore.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058A81A543E27001A1E45 /* ALMCore.m */; };
+		F6A058AC1A54523C001A1E45 /* ALMCampus.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058AB1A54523C001A1E45 /* ALMCampus.m */; };
 		F6D19BD41A518E6000FD4715 /* ALMOrganizationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BD31A518E6000FD4715 /* ALMOrganizationsController.m */; };
 		F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BDE1A51B02800FD4715 /* ALMUser.m */; };
 		F6D19BE61A51B2C500FD4715 /* ALMDummyCoreDelegated.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BE31A51B2C500FD4715 /* ALMDummyCoreDelegated.m */; };
@@ -66,7 +67,6 @@
 		DD0BF90281DBEFD3783C76BC /* Pods-AlmappCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlmappCore.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AlmappCore/Pods-AlmappCore.debug.xcconfig"; sourceTree = "<group>"; };
 		F65DD49D1A50405D006BCAF0 /* libAlmappCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAlmappCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F65DD4A01A50405D006BCAF0 /* AlmappCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlmappCore.h; sourceTree = "<group>"; };
-		F65DD4A21A50405D006BCAF0 /* AlmappCore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AlmappCore.m; sourceTree = "<group>"; };
 		F65DD4A81A50405D006BCAF0 /* AlmappCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlmappCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F65DD4AE1A50405D006BCAF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F65DD4B81A505478006BCAF0 /* CoreSingletonTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreSingletonTests.m; sourceTree = "<group>"; };
@@ -76,6 +76,10 @@
 		F65DD4D91A509153006BCAF0 /* ALMController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMController.m; sourceTree = "<group>"; };
 		F65DD4DB1A509182006BCAF0 /* ALMUsersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUsersController.h; sourceTree = "<group>"; };
 		F65DD4DC1A509182006BCAF0 /* ALMUsersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUsersController.m; sourceTree = "<group>"; };
+		F6A058A71A543E27001A1E45 /* ALMCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCore.h; sourceTree = "<group>"; };
+		F6A058A81A543E27001A1E45 /* ALMCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCore.m; sourceTree = "<group>"; };
+		F6A058AA1A54523C001A1E45 /* ALMCampus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCampus.h; sourceTree = "<group>"; };
+		F6A058AB1A54523C001A1E45 /* ALMCampus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCampus.m; sourceTree = "<group>"; };
 		F6D19BD21A518E6000FD4715 /* ALMOrganizationsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMOrganizationsController.h; sourceTree = "<group>"; };
 		F6D19BD31A518E6000FD4715 /* ALMOrganizationsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMOrganizationsController.m; sourceTree = "<group>"; };
 		F6D19BDD1A51B02800FD4715 /* ALMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUser.h; sourceTree = "<group>"; };
@@ -156,9 +160,10 @@
 				F6D19BDC1A51B01100FD4715 /* Models */,
 				F65DD4D71A509130006BCAF0 /* APIControllers */,
 				F65DD4A01A50405D006BCAF0 /* AlmappCore.h */,
-				F65DD4A21A50405D006BCAF0 /* AlmappCore.m */,
 				F65DD4BD1A505C6E006BCAF0 /* ALMUtil.h */,
 				F65DD4BE1A505C6E006BCAF0 /* ALMUtil.m */,
+				F6A058A71A543E27001A1E45 /* ALMCore.h */,
+				F6A058A81A543E27001A1E45 /* ALMCore.m */,
 			);
 			path = AlmappCore;
 			sourceTree = "<group>";
@@ -200,6 +205,8 @@
 			children = (
 				F6D19BDD1A51B02800FD4715 /* ALMUser.h */,
 				F6D19BDE1A51B02800FD4715 /* ALMUser.m */,
+				F6A058AA1A54523C001A1E45 /* ALMCampus.h */,
+				F6A058AB1A54523C001A1E45 /* ALMCampus.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -374,12 +381,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				F65DD4DA1A509153006BCAF0 /* ALMController.m in Sources */,
+				F6A058AC1A54523C001A1E45 /* ALMCampus.m in Sources */,
 				F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */,
 				F65DD4DD1A509182006BCAF0 /* ALMUsersController.m in Sources */,
 				F6D19BD41A518E6000FD4715 /* ALMOrganizationsController.m in Sources */,
 				F6D19BED1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.m in Sources */,
 				F65DD4BF1A505C6E006BCAF0 /* ALMUtil.m in Sources */,
-				F65DD4A31A50405D006BCAF0 /* AlmappCore.m in Sources */,
+				F6A058A91A543E27001A1E45 /* ALMCore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,7 +446,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -472,7 +480,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

@@ -14,8 +14,12 @@
     return [ALMUser createOrUpdateInRealm:realm withJSONDictionary:resource];
 }
 
--(NSString *)resourceSingleName {
-    return @"user";
+-(NSArray *)updateInRealm:(RLMRealm *)realm resources:(NSArray *)resources {
+    return [ALMUser createOrUpdateInRealm:realm withJSONArray:resources];
 }
+
+//-(NSString *)resourceSingleName {
+//    return @"user";
+//}
 
 @end

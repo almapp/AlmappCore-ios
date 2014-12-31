@@ -12,16 +12,20 @@
 
 - (AFHTTPRequestOperationManager*)requestManager;
 - (RLMRealm*)requestRealm;
+- (RLMRealm*)requestTemporalRealm;
 
 @end
 
 @implementation ALMController
 
+#pragma mark - Constructors
+
 - (id)init {
     self = [super init];
     if (self)
     {
-        _controllerDelegate = [AlmappCore sharedInstance];
+        _controllerDelegate = [ALMCore sharedInstance];
+        _saveToPersistenceStore = YES;
     }
     return self;
 }
@@ -35,37 +39,58 @@
     return self;
 }
 
+#pragma mark - Managers
+
 - (AFHTTPRequestOperationManager*)requestManager {
-    return [AFHTTPRequestOperationManager manager];
+    return [_controllerDelegate requestManager];
 }
 
--(RLMRealm *)requestRealm {
-    if([_controllerDelegate inTestingEnvironment]) {
-        return [RLMRealm inMemoryRealmWithIdentifier:(@"TestingRealm")];
-    } else {
-        return [RLMRealm defaultRealm];
+- (RLMRealm *)requestRealm {
+    return [_controllerDelegate requestRealm];
+}
+
+- (RLMRealm *)requestTemporalRealm {
+    return [_controllerDelegate requestTemporalRealm];
+}
+
+#pragma mark - URL
+
+- (NSString *)buildUrlWithPath:(NSString *)path resourceID:(NSUInteger)resourceID {
+    return [[self buildUrlWithPath:path] stringByAppendingString:[NSString stringWithFormat:@"/%ld", resourceID]];
+}
+
+- (NSString *)buildUrlWithPath:(NSString *)path {
+    if(path != nil) {
+        return [NSString stringWithFormat:@"%@/%@", [_controllerDelegate baseURL], path];
+    }
+    else {
+        return [NSString stringWithFormat:@"%@/%@", [_controllerDelegate baseURL], [self resourcePluralName]];
     }
 }
 
+- (NSString *)buildUrl {
+    return [self buildUrlWithPath:[self resourcePluralName]];
+}
+
+- (NSString *)buildUrlForResource:(NSUInteger)resourceID {
+    return [[self buildUrl] stringByAppendingString:[NSString stringWithFormat:@"/%ld", resourceID]];
+}
+
+#pragma mark - Requests operations
+
 - (AFHTTPRequestOperation *)resource:(long)resourceID parameters:(id)parameters onSuccess:(void (^)(RLMObject *result))onSuccess onFailure:(void (^)(NSError *error))onFailure {
     
-    NSString* requestString = [NSString stringWithFormat:@"%@/%@/%ld", [_controllerDelegate baseURL], [self resourcePluralName], resourceID];
+    NSString* requestString = [self buildUrlForResource:resourceID];
     
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
     
     AFHTTPRequestOperation *op = [[self requestManager] GET:requestString
-                                                 parameters:nil
+                                                 parameters:parameters
                                                     success: ^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSDictionary *dicc = responseObject;
         dispatch_async(dispatch_get_main_queue(), ^{
-            
-            RLMRealm *realm = [self requestRealm];
-        
-            [realm beginWriteTransaction];
-            RLMObject* result = [self updateInRealm:realm resource:dicc];
-            [realm commitWriteTransaction];
-            onSuccess(result);
+            onSuccess([self commitResource:dicc]);
         });
                                                         
     } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -76,12 +101,45 @@
     return op;
 }
 
-- (AFHTTPRequestOperation *)resourcesWithParameters:(id)parameters success:(void (^)(RLMObject *))success failure:(void (^)(NSError *))failure {
-    return nil;
+- (AFHTTPRequestOperation *)resourcesFromPath:(NSString *)path parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
+    
+    NSString* requestString = [self buildUrlWithPath:path];
+    
+    AFHTTPRequestOperation *op = [[self requestManager] GET:requestString
+                                                 parameters:parameters
+                                                    success: ^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                        
+                                                        NSArray *array = responseObject;
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            onSuccess([self commitResources:array]);
+                                                        });
+                                                        
+                                                    } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                        NSLog(@"Error: %@", error);
+                                                        onFailure(error);
+                                                    }];
+    
+    return op;
 }
 
-- (AFHTTPRequestOperation *)subResourcesFor:(NSInteger *)resourceID subResourceType:(NSString *)subResourceType parameters:(id)parameters success:(void (^)(RLMObject *))success failure:(void (^)(NSError *))failure {
-    return nil;
+#pragma mark - Persistence
+
+-(RLMObject*)commitResource:(NSDictionary*)resource {
+    RLMRealm *realm = (_saveToPersistenceStore) ? [self requestRealm] : [self requestTemporalRealm];
+
+    [realm beginWriteTransaction];
+    RLMObject* result = [self updateInRealm:realm resource:resource];
+    [realm commitWriteTransaction];
+    return result;
+}
+
+-(NSArray*)commitResources:(NSArray*)resources {
+    RLMRealm *realm = (_saveToPersistenceStore) ? [self requestRealm] : [self requestTemporalRealm];
+    
+    [realm beginWriteTransaction];
+    NSArray* result = [self updateInRealm:realm resources:resources];
+    [realm commitWriteTransaction];
+    return result;
 }
 
 -(RLMObject*)updateInRealm:(RLMRealm*)realm resource:(NSDictionary *)resource {
@@ -96,13 +154,24 @@
     return @[];
 }
 
+#pragma mark - Resource paths (names)
+
 - (NSString*)resourceSingleName {
-    [NSException raise:@"Invoked abstract method" format:@"Invoked abstract method"];
-    return nil;
+    return @"";
 }
 
 - (NSString*)resourcePluralName {
-    return [NSString stringWithFormat:@"%@s", [self resourceSingleName]];
+    BOOL ios = YES;
+    if(ios) {
+        NSString *controllerName = NSStringFromClass([self class]);
+        //unsigned long lenght = controllerName.length - 3 - 9;
+        //return [controllerName substringWithRange:[NSMakeRange(3, lenght)];
+        
+        controllerName = [controllerName stringByReplacingOccurrencesOfString:@"ALM" withString:@""];
+        return [[controllerName stringByReplacingOccurrencesOfString:@"Controller" withString:@""] lowercaseString];
+    }
+    [NSException raise:@"Invoked abstract method" format:@"Invoked abstract method"];
+    return nil;
 }
 
 @end

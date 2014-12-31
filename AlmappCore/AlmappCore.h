@@ -13,24 +13,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ALMCoreDelegate.h"
-#import "ALMUtil.h"
-#import "ALMControllerDelegate.h"
-
-@interface AlmappCore : NSObject <ALMControllerDelegate>
-
-@property (assign, nonatomic) BOOL inTestingEnvironment;
-
-+ (AlmappCore*)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL;
-
-+ (AlmappCore*)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString*)baseURLString;
-
-+ (AlmappCore*)sharedInstance;
-
-+ (void)shutDown;
-
-+ (void)setSharedInstance:(AlmappCore*)instance;
-
-- (NSArray*)availableUsers;
-
-@end
+#import "ALMController.h"
+#import "ALMUser.h"
+#import "ALMUsersController.h"
+#import "ALMCore.h"

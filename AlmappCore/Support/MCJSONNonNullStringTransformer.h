@@ -1,9 +1,7 @@
 //
 //  MCJSONNonNullStringTransformer.h
-//  AlmappCore
-//
-//  Created by Patricio López on 29-12-14.
-//  Copyright (c) 2014 almapp. All rights reserved.
+//  From: https://github.com/matthewcheok/Realm-JSON/issues/12
+//  Author: https://github.com/johanforssell
 //
 
 #import <Foundation/Foundation.h>

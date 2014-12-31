@@ -17,7 +17,7 @@
 @interface CoreSingletonTests : XCTestCase
 
 @property (strong, nonatomic) ALMDummyCoreDelegated *dummy;
-@property (strong) AlmappCore *core;
+@property (strong) ALMCore *core;
 
 @end
 
@@ -28,20 +28,20 @@
     [super setUp];
     _dummy = [[ALMDummyCoreDelegated alloc] init];
     if(_core == nil) {
-        _core = [AlmappCore initInstanceWithDelegate:nil baseURL:nil];
+        _core = [ALMCore initInstanceWithDelegate:nil baseURL:nil];
         XCTAssertNil(_core, @"Cannot create singleton with invalid params");
         
-        _core = [AlmappCore initInstanceWithDelegate:_dummy baseURL:nil];
+        _core = [ALMCore initInstanceWithDelegate:_dummy baseURL:nil];
         XCTAssertNil(_core, @"Cannot create singleton with invalid params");
         
-        _core = [AlmappCore initInstanceWithDelegate:_dummy baseURL:[NSURL URLWithString:ALMBaseURL]];
+        _core = [ALMCore initInstanceWithDelegate:_dummy baseURL:[NSURL URLWithString:ALMBaseURL]];
         XCTAssertNotNil(_core, @"Cannot find AlmappCore instance for valid params");
         
         _core = nil;
-        [AlmappCore setSharedInstance:nil];
-        XCTAssertNil([AlmappCore sharedInstance], @"Singleton must not exist");
+        [ALMCore setSharedInstance:nil];
+        XCTAssertNil([ALMCore sharedInstance], @"Singleton must not exist");
         
-        _core = [AlmappCore initInstanceWithDelegate:_dummy baseURLString:ALMBaseURL];
+        _core = [ALMCore initInstanceWithDelegate:_dummy baseURLString:ALMBaseURL];
         XCTAssertNotNil(_core, @"Cannot find AlmappCore instance for valid params with URL string");
     }
 }
