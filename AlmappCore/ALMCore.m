@@ -75,6 +75,20 @@ static dispatch_once_t once_token;
 
 #pragma mark - Core Methods
 
++ (id)controller {
+    return [ALMCore controller:[ALMController class]];
+}
+
++ (id)controller:(Class)controller {
+    if([controller isSubclassOfClass:[ALMController class]] && [ALMCore sharedInstance] != nil) {
+        // controllerWithDelegate:(id<ALMControllerDelegate>)controllerDelegate
+        return [controller performSelector:@selector(controllerWithDelegate:) withObject:[ALMCore sharedInstance]];
+    }
+    else {
+        return nil;
+    }
+}
+
 - (NSArray*)availableUsers {
     return nil;
 }
