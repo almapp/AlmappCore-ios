@@ -10,7 +10,6 @@
 
 @interface ALMCampus : ALMResource
 
-@property NSInteger resourceID;
 @property NSString *name;
 @property NSString *shortName;
 @property NSString *abbreviation;
@@ -21,8 +20,6 @@
 @property NSString *twitterUrl;
 @property NSString *phoneString;
 @property NSString *information;
-//@property NSDate *updatedAt;
-//@property NSDate *createdAt;
 
 @end
 RLM_ARRAY_TYPE(ALMCampus)

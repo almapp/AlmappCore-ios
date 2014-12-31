@@ -18,18 +18,22 @@
              @"user.name": @"name",
              @"user.username": @"username",
              @"user.email": @"email",
-             @"user.male": @"male"
+             @"user.male": @"male",
+             [self jatt:@"student_id"]: @"studentId",
+             [self jatt:@"country"]: @"country",
+             [self jatt:@"findeable"]: @"findeable",
+             [self jatt:@"last_sign_in_at"]: @"lastSeen"
              };
-}
-
-
-+ (NSString *)primaryKey {
-    return @"resourceID";
 }
 
 + (NSDictionary *)defaultPropertyValues {
     return @{
-             @"name": @"ASD"
+             @"name": @"",
+             @"male": @YES,
+             @"studentId": @"",
+             @"country": @"",
+             @"findeable": @YES,
+             @"lastSeen": [NSDate distantPast]
              };
 }
 

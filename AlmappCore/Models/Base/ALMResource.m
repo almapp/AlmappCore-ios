@@ -19,4 +19,16 @@
     return [[className stringByReplacingOccurrencesOfString:@"ALM" withString:@""] lowercaseString];
 }
 
++ (NSString *)primaryKey {
+    return @"resourceID";
+}
+
++ (NSString *)jsonRoot {
+    return self.singleForm;
+}
+
++ (NSString*)jatt:(NSString*)attribute {
+    return [self.jsonRoot stringByAppendingString:attribute];
+}
+
 @end
