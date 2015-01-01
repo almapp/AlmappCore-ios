@@ -15,8 +15,6 @@
 
 @interface ALMCore : NSObject <ALMControllerDelegate>
 
-@property (strong, nonatomic) NSString* persistenceStoreName;
-
 #pragma mark - Public constructors
 
 + (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL;
@@ -41,9 +39,7 @@
 
 #pragma mark - Persistence
 
-- (void)setPersistenceStoreNameToDefault;
 - (void)dropDatabaseInMemory;
-- (void)dropDatabaseNamed:(NSString*)databaseName;
 - (void)dropDatabaseDefault;
 
 @end
