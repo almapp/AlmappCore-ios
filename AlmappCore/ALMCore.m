@@ -9,7 +9,6 @@
 #import "ALMCore.h"
 
 static NSString *const MEMORY_REALM_PATH = @"TemporalRealm";
-static NSString *const DEFAULT_PERSISTENCE_STORE = @"DefaultPersistenceStore";
 
 @interface ALMCore ()
 
@@ -30,7 +29,6 @@ static NSString *const DEFAULT_PERSISTENCE_STORE = @"DefaultPersistenceStore";
     if (self) {
         _coreDelegate = delegate;
         _baseURL = baseURL;
-        [self setPersistenceStoreNameToDefault];
     }
     return self;
 }
@@ -95,21 +93,12 @@ static dispatch_once_t once_token;
 
 #pragma mark - Persistence
 
-- (void)setPersistenceStoreNameToDefault {
-    _persistenceStoreName = DEFAULT_PERSISTENCE_STORE;
-}
-
 - (void)dropDatabaseDefault {
     [self dropRealm:[self requestRealm]];
 }
 
 - (void)dropDatabaseInMemory {
     [self dropRealm:[self requestTemporalRealm]];
-}
-
-- (void)dropDatabaseNamed:(NSString *)databaseName {
-    [self dropRealm:[RLMRealm realmWithPath:databaseName]];
-    
 }
 
 - (void)dropRealm:(RLMRealm*)realm {
@@ -134,7 +123,7 @@ static dispatch_once_t once_token;
 }
 
 - (RLMRealm *)requestRealm {
-    return [RLMRealm realmWithPath:_persistenceStoreName];
+    return [RLMRealm defaultRealm];
 }
 
 - (RLMRealm *)requestTemporalRealm {

@@ -57,7 +57,7 @@
 
 
 - (RLMRealm *)requestRealm {
-    return (_saveToPersistenceStore) ? [self requestRealm] : [self requestTemporalRealm];
+    return (_saveToPersistenceStore) ? [self requestDefaultRealm] : [self requestTemporalRealm];
 }
 
 
