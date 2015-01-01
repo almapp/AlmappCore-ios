@@ -13,6 +13,7 @@
 @property NSString *name;
 @property NSString *identifier;
 @property BOOL isService;
+@property (readonly) NSArray *areas;
 @property float zoom;
 @property float angle;
 @property float tilt;

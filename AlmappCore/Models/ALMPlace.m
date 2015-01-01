@@ -34,6 +34,10 @@
              };
 }
 
+- (NSArray *)areas {
+    return [self linkingObjectsOfClass:@"ALMArea" forProperty:@"places"];
+}
+
 //+ (NSValueTransformer *)nameJSONTransformer {
 //    return [MCJSONNonNullStringTransformer valueTransformer];
 //}
