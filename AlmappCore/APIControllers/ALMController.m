@@ -94,11 +94,13 @@
 -(AFHTTPRequestOperation *)resourceForClass:(Class)rClass inPath:(NSString *)resourcePath id:(long)resourceID parameters:(id)parameters onSuccess:(void (^)(id))onSuccess onFailure:(void (^)(NSError *))onFailure {
     
     if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
+        onFailure([ALMController errorForInvalidClass:rClass]);
         return nil;
     }
     
     NSString* requestString = [self buildUrlWithPath:resourcePath resourceID:resourceID];
     if (requestString == nil) {
+        onFailure([ALMController errorForInvalidPath:resourcePath]);
         return nil;
     }
     
@@ -140,14 +142,16 @@
 - (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass inPath:(NSString *)resourcesPath parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
     
     if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
+        onFailure([ALMController errorForInvalidClass:rClass]);
         return nil;
     }
     
     NSString* requestString = [self buildUrlWithPath:resourcesPath];
     if (requestString == nil) {
+        onFailure([ALMController errorForInvalidPath:resourcesPath]);
         return nil;
     }
-
+    
     ALMController * __weak weakSelf = self;
     
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
@@ -205,6 +209,19 @@
     };
 }
 
+#pragma mark - Errors 
+
++ (NSError*)errorForInvalidClass:(Class)invalidClass {
+    return [NSError errorWithDomain:@"API Controller" code:100 userInfo:@{
+                                                              NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%@ is not subclass of RLMResource", invalidClass]
+                                                              }];
+}
+
++ (NSError*)errorForInvalidPath:(NSString*)invalidPath {
+    return [NSError errorWithDomain:@"API Controller" code:101 userInfo:@{
+                                                                         NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%@ is not a valid URL path.", invalidPath]
+                                                                         }];
+}
 
 #pragma mark - Subclasses methods
 

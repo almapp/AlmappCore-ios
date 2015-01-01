@@ -30,7 +30,13 @@
     return @{
              @"name": @"",
              @"information": @"",
+             @"isService": @NO,
              @"floor": @"?",
+             @"zoom" : @0.0f,
+             @"tilt" : @0.0f,
+             @"angle" : @0.0f,
+             @"latitude" : @0.0f,
+             @"longitude" : @0.0f
              };
 }
 

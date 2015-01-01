@@ -14,10 +14,12 @@
 - (ALMCommitResourceOperation)commitResource {
     return (id)^(RLMRealm *realm, Class resourceClass, NSDictionary *data) {
         
-        // TODO
+        NSDictionary* localization = [self extractLocalizationAsPlaceDictionaryFrom:data];
         
         [realm beginWriteTransaction];
-        id result = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:data];
+        ALMArea* result = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:data];
+        ALMPlace* place = [ALMPlace createOrUpdateInRealm:realm withJSONDictionary:localization];
+        [result setLocalization:place];
         [realm commitWriteTransaction];
         
         return result;
@@ -27,14 +29,28 @@
 - (ALMCommitResourcesOperation)commitResources {
     return  ^(RLMRealm *realm, Class resourceClass, NSArray *data) {
         
-        // TODO
+        NSMutableArray *collection = [NSMutableArray arrayWithCapacity:data.count];
         
         [realm beginWriteTransaction];
-        NSArray* collection = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONArray:) withObject:realm withObject:data];
+        
+        for (NSDictionary* area in data) {
+            NSDictionary* localization = [self extractLocalizationAsPlaceDictionaryFrom:area];
+            ALMArea* result = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:area];
+            ALMPlace* place = [ALMPlace createOrUpdateInRealm:realm withJSONDictionary:localization];
+            [result setLocalization:place];
+            
+            [collection addObject:result];
+        }
         [realm commitWriteTransaction];
         
         return collection;
     };
+}
+
+- (NSDictionary*)extractLocalizationAsPlaceDictionaryFrom:(NSDictionary*)singleArea {
+    NSDictionary* body = [[singleArea allValues] firstObject]; // We know that it has a root (dictionary with one tuple).
+    NSDictionary* localizationBody = [body objectForKey:@"localization"];
+    return @{ @"place" : localizationBody };
 }
 
 @end

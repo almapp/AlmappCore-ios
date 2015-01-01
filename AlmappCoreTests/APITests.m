@@ -23,33 +23,43 @@
 #import "ALMFaculty.h"
 
 @interface APITests : XCTestCase
-
+@property (nonatomic, strong) ALMCore *core;
 @end
 
 @implementation APITests
 
 - (void)setUp {
     [super setUp];
-    ALMCore *c = [ALMCore initInstanceWithDelegate:[[ALMDummyCoreDelegated alloc] init] baseURL:[NSURL URLWithString:ALMBaseURL]];
-    [c dropDatabaseInMemory];
-    [c dropDatabaseDefault];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    _core = [ALMCore initInstanceWithDelegate:[[ALMDummyCoreDelegated alloc] init] baseURL:[NSURL URLWithString:ALMBaseURL]];
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+    [_core dropDatabaseInMemory];
+    [_core dropDatabaseDefault];
 }
+
 
 - (void)testInvalidClassRequest {
     ALMController* controller = [ALMCore controller];
     AFHTTPRequestOperation *op = [controller resourceForClass:[NSString class] id:1 parameters:nil onSuccess:^(id result) {
-        
+        XCTFail(@"This not should be executed");
     } onFailure:^(NSError *error) {
-        
+        NSLog(@"%@", error);
+        XCTAssertNotNil(error, @"Must return an error");
+    }];
+    XCTAssertNil(op, @"Should not return an operation for invalid class input");
+    
+    op = [controller resourceCollectionForClass:[NSString class] parameters:nil onSuccess:^(NSArray *result) {
+        XCTFail(@"This not should be executed");
+    } onFailure:^(NSError *error) {
+        NSLog(@"%@", error);
+        XCTAssertNotNil(error, @"Must return an error");
     }];
     XCTAssertNil(op, @"Should not return an operation for invalid class input");
 }
+
 
 - (void)testRelectionAPIRequestOnCampuses {
     [self reflectionApiForSingle:[ALMCampus class] resourceID:1 path:nil params:nil];
@@ -65,12 +75,16 @@
 }
 
 - (void)testRelectionAPIRequestOnPlaces {
-    [self reflectionApiForSingle:[ALMPlace class] resourceID:30 path:nil params:nil withController:[ALMAreasController class]];
-    //[self reflectionApiForCollectionOf:[ALMCampus class] path:@"campuses/2/places" params:nil];
+    [self reflectionApiForSingle:[ALMPlace class] resourceID:30 path:nil params:nil];
+    [self reflectionApiForCollectionOf:[ALMCampus class] path:@"campuses/2/places" params:nil];
 }
 
 - (void)testRelectionAPIRequestOnFaculties {
-    [self reflectionApiForCollectionOf:[ALMFaculty class] path:nil params:nil];
+    [self reflectionApiForSingle:[ALMFaculty class] resourceID:1 path:nil params:nil withController:[ALMAreasController class]];
+    
+    
+    
+    //[self reflectionApiForCollectionOf:[ALMFaculty class] path:nil params:nil ];
 }
 
 - (void)testRelectionAPIRequestOnUsers {
