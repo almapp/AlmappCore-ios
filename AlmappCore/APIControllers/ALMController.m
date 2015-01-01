@@ -24,8 +24,8 @@
 
 #pragma mark - Constructors
 
-+ (instancetype)controllerWithDelegate:(id<ALMControllerDelegate>)controllerDelegate {
-    return [[ALMController alloc] initWithDelegate:controllerDelegate];
++ (id)controllerWithDelegate:(id<ALMControllerDelegate>)controllerDelegate {
+    return [[self alloc] initWithDelegate:controllerDelegate];
 }
 
 
@@ -104,13 +104,16 @@
     
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
     
+    ALMController * __weak weakSelf = self;
+    
     AFHTTPRequestOperation *op = [[self requestManager] GET:requestString
                                                  parameters:parameters
                                                     success: ^(AFHTTPRequestOperation *operation, id responseObject) {
                                                         
                                                         NSDictionary *dicc = responseObject;
                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                            onSuccess([self commitResource:rClass data:dicc]);
+                                                            id result = weakSelf.commitResource(weakSelf.requestRealm, rClass, dicc);
+                                                            onSuccess(result);
                                                         });
                                                         
                                                     } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -145,6 +148,8 @@
         return nil;
     }
 
+    ALMController * __weak weakSelf = self;
+    
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
     
     AFHTTPRequestOperation *op = [[self requestManager] GET:requestString
@@ -153,7 +158,8 @@
                                                         
                                                         NSArray *array = responseObject;
                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                            onSuccess([self commitResourceCollection:rClass collectionOfData:array]);
+                                                            NSArray *result = weakSelf.commitResources(weakSelf.requestRealm, rClass, array);
+                                                            onSuccess(result);
                                                         });
                                                         
                                                     } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -178,25 +184,25 @@
 
 #pragma mark - Persistence
 
--(id)commitResource:(Class)resource data:(NSDictionary*)data {
-    RLMRealm *realm = [self requestRealm];
-
-    [realm beginWriteTransaction];
-    id result = [resource performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:data];
-    [realm commitWriteTransaction];
-    
-    return result;
+- (ALMCommitResourceOperation)commitResource {
+    return (id)^(RLMRealm *realm, Class resourceClass, NSDictionary *data) {
+        
+        [realm beginWriteTransaction];
+        id result = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:data];
+        [realm commitWriteTransaction];
+        
+        return result;
+    };
 }
 
-
--(NSArray*)commitResourceCollection:(Class)resource collectionOfData:(NSArray*)collectionData {
-    RLMRealm *realm = [self requestRealm];
-    
-    [realm beginWriteTransaction];
-    NSArray* collection = [resource performSelector:@selector(createOrUpdateInRealm:withJSONArray:) withObject:realm withObject:collectionData];
-    [realm commitWriteTransaction];
-    
-    return collection;
+- (ALMCommitResourcesOperation)commitResources {
+    return  ^(RLMRealm *realm, Class resourceClass, NSArray *data) {
+        [realm beginWriteTransaction];
+        NSArray* collection = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONArray:) withObject:realm withObject:data];
+        [realm commitWriteTransaction];
+        
+        return collection;
+    };
 }
 
 

@@ -7,6 +7,7 @@
 //
 
 #import "ALMResource.h"
+#import "ALMPlace.h"
 
 @interface ALMArea : ALMResource
 
@@ -14,6 +15,8 @@
 @property NSString *shortName;
 @property NSString *abbreviation;
 @property NSString *address;
+@property ALMPlace *localization;
+@property RLMArray<ALMPlace> *places;
 @property NSString *email;
 @property NSString *url;
 @property NSString *facebookUrl;

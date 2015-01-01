@@ -13,6 +13,7 @@
 #import "ALMCampus.h"
 #import "AlmappCore.h"
 #import "ALMPlace.h"
+#import "ALMAreasController.h"
 
 #import <Realm/Realm.h>
 #import <Realm+JSON/RLMObject+JSON.h>
@@ -64,8 +65,8 @@
 }
 
 - (void)testRelectionAPIRequestOnPlaces {
-    [self reflectionApiForSingle:[ALMPlace class] resourceID:30 path:nil params:nil];
-    [self reflectionApiForCollectionOf:[ALMCampus class] path:@"campuses/2/places" params:nil];
+    [self reflectionApiForSingle:[ALMPlace class] resourceID:30 path:nil params:nil withController:[ALMAreasController class]];
+    //[self reflectionApiForCollectionOf:[ALMCampus class] path:@"campuses/2/places" params:nil];
 }
 
 - (void)testRelectionAPIRequestOnFaculties {
@@ -114,10 +115,15 @@
 }
 
 - (void)reflectionApiForSingle:(Class)rClass resourceID:(NSUInteger)resourceID path:(NSString*)path params:(id)params {
+    [self reflectionApiForSingle:rClass resourceID:resourceID path:path params:params withController:[ALMController class]];
+}
+
+- (void)reflectionApiForSingle:(Class)rClass resourceID:(NSUInteger)resourceID path:(NSString*)path params:(id)params withController:(Class)controllerClass {
     XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:[NSString stringWithFormat:@"validSingle_%@", rClass]];
     
-    ALMController* controller = [ALMCore controller];
+    ALMController* controller = [ALMCore controller:controllerClass];
     controller.saveToPersistenceStore = NO;
+
     
     AFHTTPRequestOperation *op1 = [controller resourceForClass:rClass id:resourceID parameters:params onSuccess:^(id result) {
         ALMResource *resource = result;

@@ -14,6 +14,9 @@
 #import "ALMControllerDelegate.h"
 #import "ALMResource.h"
 
+typedef id (^ALMCommitResourceOperation)(RLMRealm*, Class, NSDictionary*);
+typedef NSArray*(^ALMCommitResourcesOperation)(RLMRealm*, Class, NSArray*);
+
 @interface ALMController : NSObject
 
 @property (weak, nonatomic) id<ALMControllerDelegate> controllerDelegate;
@@ -23,7 +26,10 @@
 
 - (instancetype) init __attribute__((unavailable("Instanciate through ALMCore class")));
 
-+ (instancetype)controllerWithDelegate:(id<ALMControllerDelegate>)controllerDelegate;
++ (id)controllerWithDelegate:(id<ALMControllerDelegate>)controllerDelegate;
+
+- (AFHTTPRequestOperationManager*)requestManager;
+- (RLMRealm*)requestRealm;
 
 - (NSString*)buildUrlWithPath:(NSString*)path resourceID:(NSUInteger)resourceID;
 - (NSString*)buildUrlWithPath:(NSString*)path;
@@ -34,7 +40,11 @@
 
 - (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass inPath:(NSString*)resourcesPath parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure ;
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure ;
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure;
+
+- (ALMCommitResourceOperation)commitResource;
+
+- (ALMCommitResourcesOperation)commitResources;
 
 + (Class)resourceType;
 
