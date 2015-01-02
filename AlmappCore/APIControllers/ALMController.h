@@ -47,10 +47,16 @@ typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, NS
 
 - (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnClass:(Class)parentClass withID:(NSUInteger)parentID parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure;
 
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnParent:(ALMResource*)parent parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure;
+
 - (ALMCommitResourceOperation)commitResource;
 
 - (ALMCommitResourcesOperation)commitResources;
 
 + (Class)resourceType;
+
+- (id)resourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID;
+- (id)resourceInTemporalRealmOfClass:(Class)resourceClass withID:(NSUInteger)resourceID;
+
 
 @end
