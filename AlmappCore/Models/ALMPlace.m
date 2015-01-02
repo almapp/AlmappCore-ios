@@ -54,7 +54,7 @@ static NSString *const DEFAULT_AREA_TYPE = @"NONE";
     NSLog(@"%@", self.areaType);
     Class areaClass = NSClassFromString(self.areaType);
     
-    id key = [NSNumber numberWithInteger:self.areaID];
+    id key = [NSNumber numberWithUnsignedLong:self.areaID];
     return [areaClass performSelector:@selector(objectInRealm:forPrimaryKey:) withObject:[self realm] withObject:key];
 }
 

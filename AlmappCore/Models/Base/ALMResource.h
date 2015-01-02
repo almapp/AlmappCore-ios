@@ -19,7 +19,6 @@
 + (NSString*)singleForm;
 + (NSString*)jsonRoot;
 + (NSString*)jatt:(NSString*)attribute;
-
-
++ (id)objectInRealm:(RLMRealm *)realm ofType:(Class)resourceClass withID:(NSUInteger)resourceID;
 
 @end
