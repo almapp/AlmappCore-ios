@@ -35,6 +35,10 @@
 
 + (id)controller;
 
+- (id)controller:(Class)controller;
+
+- (id)controller;
+
 - (NSArray*)availableUsers;
 
 #pragma mark - Persistence

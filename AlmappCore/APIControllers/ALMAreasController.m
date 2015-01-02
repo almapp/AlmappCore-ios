@@ -8,8 +8,33 @@
 
 #import "ALMAreasController.h"
 
-
 @implementation ALMAreasController
+
+- (NSArray *)placesForArea:(ALMArea *)area {
+    return area.places;
+}
+
+- (AFHTTPRequestOperation *)updatePlacesForArea:(ALMArea *)area parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
+    NSString* path = [NSString stringWithFormat:@"%@/%ld/places", [ALMController resourcePathFor:area.class], (long)area.resourceID];
+    
+    ALMArea * __block weakArea = area;
+    ALMAreasController * __weak weakSelf = self;
+    
+    AFHTTPRequestOperation *op = [super resourceCollectionForClass:[ALMPlace class] inPath:path parameters:nil onSuccess:^(NSArray *result) {
+        
+        RLMRealm* realm = [weakSelf requestRealm];
+        [realm beginWriteTransaction];
+        [weakArea.places addObjects:result];
+        [realm commitWriteTransaction];
+        
+        onSuccess(weakArea.places);
+        
+    } onFailure:^(NSError *error) {
+        NSLog(@"%@", error);
+        onFailure(error);
+    }];
+    return op;
+}
 
 - (ALMCommitResourceOperation)commitResource {
     return (id)^(RLMRealm *realm, Class resourceClass, NSDictionary *data) {
