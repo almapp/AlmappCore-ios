@@ -41,6 +41,10 @@
              };
 }
 
+-(NSString *)areaClassType {
+    return [NSString stringWithFormat:@"%@", [self class]];
+}
+
 + (NSDictionary *)additionalAttributes {
     return [NSDictionary dictionary];
 }

@@ -25,6 +25,7 @@
 @property NSString *information;
 
 + (NSDictionary*)additionalAttributes;
+- (NSString*)areaClassType;
 
 @end
 RLM_ARRAY_TYPE(ALMArea)

@@ -63,6 +63,10 @@
 
 #pragma mark - URL
 
++ (NSString*)resourcePathFor:(Class)resourceClass {
+    return [resourceClass performSelector:@selector(pluralForm)];
+}
+
 - (NSString*)cleanUrl:(NSString*)dirtyUrl {
     return dirtyUrl;
 }
@@ -98,7 +102,13 @@
         return nil;
     }
     
-    NSString* requestString = [self buildUrlWithPath:resourcePath resourceID:resourceID];
+    NSString* requestString = resourcePath;
+    if(requestString == nil) {
+        requestString = [ALMController resourcePathFor:rClass];
+    }
+    
+    requestString = [self buildUrlWithPath:requestString resourceID:resourceID];
+    NSLog(@"%@", requestString);
     if (requestString == nil) {
         onFailure([ALMController errorForInvalidPath:resourcePath]);
         return nil;
@@ -129,13 +139,7 @@
 
 - (AFHTTPRequestOperation *)resourceForClass:(Class)rClass id:(long)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure {
     
-    if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
-        return nil;
-    }
-    
-    NSString* resourcePath = [rClass performSelector:@selector(pluralForm)];
-    
-    return [self resourceForClass:rClass inPath:resourcePath id:resourceID parameters:parameters onSuccess:onSuccess onFailure:onFailure];
+    return [self resourceForClass:rClass inPath:nil id:resourceID parameters:parameters onSuccess:onSuccess onFailure:onFailure];
 }
 
 
@@ -146,7 +150,13 @@
         return nil;
     }
     
-    NSString* requestString = [self buildUrlWithPath:resourcesPath];
+    NSString* requestString = resourcesPath;
+    if(requestString == nil) {
+        requestString = [ALMController resourcePathFor:rClass];
+    }
+    
+    requestString = [self buildUrlWithPath:requestString];
+    NSLog(@"%@", requestString);
     if (requestString == nil) {
         onFailure([ALMController errorForInvalidPath:resourcesPath]);
         return nil;
@@ -176,13 +186,7 @@
 
 - (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
     
-    if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
-        return nil;
-    }
-    
-    NSString* resourcesPath = [rClass performSelector:@selector(pluralForm)];
-    
-    return [self resourceCollectionForClass:rClass inPath:resourcesPath parameters:parameters onSuccess:onSuccess onFailure:onFailure];
+    return [self resourceCollectionForClass:rClass inPath:nil parameters:parameters onSuccess:onSuccess onFailure:onFailure];
 }
 
 

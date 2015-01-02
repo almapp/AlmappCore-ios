@@ -14,4 +14,8 @@
     return @"faculties";
 }
 
+-(NSString *)areaClassType {
+    return @"ALMFaculty";
+}
+
 @end
