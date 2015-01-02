@@ -14,6 +14,7 @@
 #import "AlmappCore.h"
 #import "ALMPlace.h"
 #import "ALMAreasController.h"
+#import "ALMOrganization.h"
 
 #import <Realm/Realm.h>
 #import <Realm+JSON/RLMObject+JSON.h>
@@ -136,6 +137,10 @@
     [self resourcesForClass:[ALMPlace class] path:@"campuses/2/places" params:nil];
 }
 
+- (void)testOrganizations {
+    [self resourceForClass:[ALMOrganization class] resourceID:1 path:nil params:nil withController:[ALMAreasController class]];
+}
+
 - (void)testCampuses {
     RLMRealm *realm = [[ALMCore sharedInstance] requestTemporalRealm];
     
@@ -211,8 +216,6 @@
     //ALMAreasController* controller = [_core controller:[ALMAreasController class]];
     ALMController* controller = [_core controller];
     controller.saveToPersistenceStore = NO;
-    
- 
     
     AFHTTPRequestOperation *op = [controller resourceForClass:[ALMCampus class] id:3 parameters:nil onSuccess:^(id result) {
         ALMCampus *campus = result;
