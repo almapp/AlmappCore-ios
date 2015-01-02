@@ -7,6 +7,9 @@
 //
 
 #import "ALMPlace.h"
+#import "ALMArea.h"
+
+static NSString *const DEFAULT_AREA_TYPE = @"NONE";
 
 @implementation ALMPlace
 
@@ -31,6 +34,8 @@
              @"name": @"",
              @"information": @"",
              @"isService": @NO,
+             @"areaType": DEFAULT_AREA_TYPE,
+             @"areaID": @0,
              @"floor": @"?",
              @"zoom" : @0.0f,
              @"tilt" : @0.0f,
@@ -40,8 +45,17 @@
              };
 }
 
-- (NSArray *)areas {
-    return [self linkingObjectsOfClass:@"ALMArea" forProperty:@"places"];
+- (void)setArea:(ALMArea *)area {
+    [self setAreaID:area.resourceID];
+    [self setAreaType:area.areaClassType];
+}
+
+- (ALMArea *)area {
+    NSLog(@"%@", self.areaType);
+    Class areaClass = NSClassFromString(self.areaType);
+    
+    id key = [NSNumber numberWithInteger:self.areaID];
+    return [areaClass performSelector:@selector(objectInRealm:forPrimaryKey:) withObject:[self realm] withObject:key];
 }
 
 //+ (NSValueTransformer *)nameJSONTransformer {

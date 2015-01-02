@@ -8,12 +8,15 @@
 
 #import "ALMResource.h"
 
+@class ALMArea;
+
 @interface ALMPlace : ALMResource
 
 @property NSString *name;
 @property NSString *identifier;
 @property BOOL isService;
-@property (readonly) NSArray *areas;
+@property NSString *areaType; // Owner type
+@property NSInteger areaID;   // Owner ID (no polymorhpic assosiations)
 @property float zoom;
 @property float angle;
 @property float tilt;
@@ -21,6 +24,9 @@
 @property float longitude;
 @property NSString *floor;
 @property NSString *information;
+
+- (void)setArea:(ALMArea*)area;
+- (ALMArea*)area;
 
 @end
 RLM_ARRAY_TYPE(ALMPlace)

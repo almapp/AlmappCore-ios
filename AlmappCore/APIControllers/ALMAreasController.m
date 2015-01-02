@@ -18,8 +18,11 @@
         
         [realm beginWriteTransaction];
         ALMArea* result = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:data];
-        ALMPlace* place = [ALMPlace createOrUpdateInRealm:realm withJSONDictionary:localization];
-        [result setLocalization:place];
+        if(localization != nil) {
+            ALMPlace* place = [ALMPlace createOrUpdateInRealm:realm withJSONDictionary:localization];
+            [result setLocalization:place];
+            [place setArea:result];
+        }
         [realm commitWriteTransaction];
         
         return result;
@@ -36,9 +39,12 @@
         for (NSDictionary* area in data) {
             NSDictionary* localization = [self extractLocalizationAsPlaceDictionaryFrom:area];
             ALMArea* result = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:area];
-            ALMPlace* place = [ALMPlace createOrUpdateInRealm:realm withJSONDictionary:localization];
-            [result setLocalization:place];
-            
+            if(localization != nil) {
+                ALMPlace* place = [ALMPlace createOrUpdateInRealm:realm withJSONDictionary:localization];
+                [result setLocalization:place];
+                [place setArea:result];
+            }
+    
             [collection addObject:result];
         }
         [realm commitWriteTransaction];
@@ -49,8 +55,13 @@
 
 - (NSDictionary*)extractLocalizationAsPlaceDictionaryFrom:(NSDictionary*)singleArea {
     NSDictionary* body = [[singleArea allValues] firstObject]; // We know that it has a root (dictionary with one tuple).
-    NSDictionary* localizationBody = [body objectForKey:@"localization"];
-    return @{ @"place" : localizationBody };
+    NSObject* localizationBody = [body objectForKey:@"localization"];
+    if(localizationBody == nil ||[localizationBody isKindOfClass:[NSNull class]]) {
+        return nil;
+    }
+    else {
+        return @{ @"place" : (NSDictionary*)localizationBody };
+    }
 }
 
 @end
