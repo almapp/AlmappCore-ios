@@ -16,6 +16,7 @@
 
 typedef id (^ALMCommitResourceOperation)(RLMRealm*, Class, NSDictionary*);
 typedef NSArray*(^ALMCommitResourcesOperation)(RLMRealm*, Class, NSArray*);
+typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, NSUInteger, NSArray*);
 
 @interface ALMController : NSObject
 
@@ -31,18 +32,20 @@ typedef NSArray*(^ALMCommitResourcesOperation)(RLMRealm*, Class, NSArray*);
 - (AFHTTPRequestOperationManager*)requestManager;
 - (RLMRealm*)requestRealm;
 
-+ (NSString*)resourcePathFor:(Class)resourceClass;
-
+- (NSString*)resourcePathFor:(Class)resourceClass;
+- (NSString*)resourcePathFor:(Class)resourceClass nestedInClass:(Class)parentClass withID:(NSUInteger)parentID;
 - (NSString*)buildUrlWithPath:(NSString*)path resourceID:(NSUInteger)resourceID;
 - (NSString*)buildUrlWithPath:(NSString*)path;
 
-- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass id:(long)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure ;
+- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass id:(NSUInteger)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure ;
 
-- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass inPath:(NSString*)resourcePath id:(long)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure ;
+- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass inPath:(NSString*)resourcePath id:(NSUInteger)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure ;
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass inPath:(NSString*)resourcesPath parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure ;
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass inPath:(NSString*)resourcesPath parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure;
 
 - (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure;
+
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnClass:(Class)parentClass withID:(NSUInteger)parentID parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure;
 
 - (ALMCommitResourceOperation)commitResource;
 

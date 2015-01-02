@@ -208,30 +208,37 @@
     
     RLMRealm *realm = [[ALMCore sharedInstance] requestTemporalRealm];
     
-    ALMAreasController* controller = [_core controller:[ALMAreasController class]];
+    //ALMAreasController* controller = [_core controller:[ALMAreasController class]];
+    ALMController* controller = [_core controller];
     controller.saveToPersistenceStore = NO;
     
-     AFHTTPRequestOperation *op = [controller resourceForClass:[ALMCampus class] id:3 parameters:nil onSuccess:^(id result) {
-        
-
+ 
+    
+    AFHTTPRequestOperation *op = [controller resourceForClass:[ALMCampus class] id:3 parameters:nil onSuccess:^(id result) {
         ALMCampus *campus = result;
+        
         // ALMCampus *campus = [ALMCampus objectInRealm:realm forPrimaryKey:@3];
-        NSArray* places = [controller placesForArea:campus];
+        RLMArray* places = campus.places;
         XCTAssertTrue(places.count == 0, @"Must not have entities");
-        [controller updatePlacesForArea:campus parameters:nil onSuccess:^(NSArray *result2) {
+        [controller resourceCollectionForClass:[ALMPlace class] nestedOnClass:[ALMCampus class] withID:3 parameters:nil onSuccess:^(NSArray *result2) {
+            
             [multipleResourcesExpectation fulfill];
             
             NSLog(@"%@", result2);
             ALMCampus *campusReloaded = [ALMCampus objectInRealm:realm forPrimaryKey:@3];
+            NSLog(@"%lu", (unsigned long)campusReloaded.places.count);
             XCTAssertFalse(campusReloaded.places.count == 0, @"Must have entities");
+            XCTAssertEqual(campusReloaded.places.count, result2.count, @"Not coherent results");
+            NSLog(@"%lu", campus.places.count);
             
         } onFailure:^(NSError *error) {
             [multipleResourcesExpectation fulfill];
             
             NSLog(@"Error: %@", error);
             XCTFail(@"Error performing request.");
+
         }];
-         
+       
     } onFailure:^(NSError *error) {
         [multipleResourcesExpectation fulfill];
         
