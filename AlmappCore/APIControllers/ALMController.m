@@ -16,6 +16,8 @@
 - (RLMRealm*)requestRealm;
 - (RLMRealm*)requestTemporalRealm;
 - (RLMRealm*)requestDefaultRealm;
+- (NSError*)errorForInvalidClass:(Class)invalidClass;
+- (NSError*)errorForInvalidPath:(NSString*)invalidPath;
 
 @end
 
@@ -63,8 +65,15 @@
 
 #pragma mark - URL
 
-+ (NSString*)resourcePathFor:(Class)resourceClass {
+- (NSString*)resourcePathFor:(Class)resourceClass {
     return [resourceClass performSelector:@selector(pluralForm)];
+}
+
+- (NSString*)resourcePathFor:(Class)resourceClass nestedInClass:(Class)parentClass withID:(NSUInteger)parentID {
+    NSString* parentPath = [self resourcePathFor:parentClass];
+    NSString* childPath = [self resourcePathFor:resourceClass];
+    NSString* fullPath = [NSString stringWithFormat:@"%@/%lu/%@", parentPath, (unsigned long)parentID, childPath];
+    return [self buildUrlWithPath:fullPath];
 }
 
 - (NSString*)cleanUrl:(NSString*)dirtyUrl {
@@ -95,28 +104,29 @@
 
 #pragma mark - Requests operations
 
--(AFHTTPRequestOperation *)resourceForClass:(Class)rClass inPath:(NSString *)resourcePath id:(long)resourceID parameters:(id)parameters onSuccess:(void (^)(id))onSuccess onFailure:(void (^)(NSError *))onFailure {
+-(AFHTTPRequestOperation *)resourceForClass:(Class)rClass inPath:(NSString *)resourcePath id:(NSUInteger)resourceID parameters:(id)parameters onSuccess:(void (^)(id))onSuccess onFailure:(void (^)(NSError *))onFailure {
     
     if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
-        onFailure([ALMController errorForInvalidClass:rClass]);
+        onFailure([self errorForInvalidClass:rClass]);
         return nil;
     }
     
     NSString* requestString = resourcePath;
     if(requestString == nil) {
-        requestString = [ALMController resourcePathFor:rClass];
+        requestString = [self resourcePathFor:rClass];
     }
     
     requestString = [self buildUrlWithPath:requestString resourceID:resourceID];
     NSLog(@"%@", requestString);
     if (requestString == nil) {
-        onFailure([ALMController errorForInvalidPath:resourcePath]);
+        onFailure([self errorForInvalidPath:resourcePath]);
         return nil;
     }
     
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
     
     ALMController * __weak weakSelf = self;
+    Class __block blockResourceClass = rClass;
     
     AFHTTPRequestOperation *op = [[self requestManager] GET:requestString
                                                  parameters:parameters
@@ -124,7 +134,7 @@
                                                         
                                                         NSDictionary *dicc = responseObject;
                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                            id result = weakSelf.commitResource(weakSelf.requestRealm, rClass, dicc);
+                                                            id result = weakSelf.commitResource(weakSelf.requestRealm, blockResourceClass, dicc);
                                                             onSuccess(result);
                                                         });
                                                         
@@ -137,7 +147,7 @@
 
 }
 
-- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass id:(long)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure {
+- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass id:(NSUInteger)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure {
     
     return [self resourceForClass:rClass inPath:nil id:resourceID parameters:parameters onSuccess:onSuccess onFailure:onFailure];
 }
@@ -146,23 +156,24 @@
 - (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass inPath:(NSString *)resourcesPath parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
     
     if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
-        onFailure([ALMController errorForInvalidClass:rClass]);
+        onFailure([self errorForInvalidClass:rClass]);
         return nil;
     }
     
     NSString* requestString = resourcesPath;
     if(requestString == nil) {
-        requestString = [ALMController resourcePathFor:rClass];
+        requestString = [self resourcePathFor:rClass];
     }
     
     requestString = [self buildUrlWithPath:requestString];
     NSLog(@"%@", requestString);
     if (requestString == nil) {
-        onFailure([ALMController errorForInvalidPath:resourcesPath]);
+        onFailure([self errorForInvalidPath:resourcesPath]);
         return nil;
     }
     
     ALMController * __weak weakSelf = self;
+    Class __block blockResourceClass = rClass;
     
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
     
@@ -172,7 +183,7 @@
                                                         
                                                         NSArray *array = responseObject;
                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                            NSArray *result = weakSelf.commitResources(weakSelf.requestRealm, rClass, array);
+                                                            NSArray *result = weakSelf.commitResources(weakSelf.requestRealm, blockResourceClass, array);
                                                             onSuccess(result);
                                                         });
                                                         
@@ -189,11 +200,52 @@
     return [self resourceCollectionForClass:rClass inPath:nil parameters:parameters onSuccess:onSuccess onFailure:onFailure];
 }
 
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnClass:(Class)parentClass withID:(NSUInteger)parentID parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
+    
+    if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
+        onFailure([self errorForInvalidClass:rClass]);
+        return nil;
+    }
+    
+    if ([parentClass isSubclassOfClass:[ALMResource class]] == NO) {
+        onFailure([self errorForInvalidClass:parentClass]);
+        return nil;
+    }
+    
+    NSString* requestString = [self resourcePathFor:rClass nestedInClass:parentClass withID:parentID];
+    NSLog(@"%@", requestString);
+    
+    ALMController * __weak weakSelf = self;
+    Class __block blockResourceClass = rClass;
+    Class __block blockParentClass = parentClass;
+    NSUInteger __block blockParentID = parentID;
+    
+    //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
+    
+    AFHTTPRequestOperation *op = [[self requestManager] GET:requestString
+                                                 parameters:parameters
+                                                    success: ^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                        
+                                                        NSArray *array = responseObject;
+                                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                                            NSArray *result = weakSelf.commitNestedResources(weakSelf.requestRealm, blockResourceClass, blockParentClass, blockParentID, array);
+                                                            onSuccess(result);
+                                                        });
+                                                        
+                                                    } failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                        NSLog(@"Error: %@", error);
+                                                        onFailure(error);
+                                                    }];
+    
+    return op;
+
+}
+
 
 #pragma mark - Persistence
 
 - (ALMCommitResourceOperation)commitResource {
-    return (id)^(RLMRealm *realm, Class resourceClass, NSDictionary *data) {
+    return ^(RLMRealm *realm, Class resourceClass, NSDictionary *data) {
         
         [realm beginWriteTransaction];
         id result = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:data];
@@ -213,15 +265,38 @@
     };
 }
 
+- (ALMCommitNestedResourcesOperation)commitNestedResources {
+    return ^(RLMRealm* realm, Class resourceClass, Class parentClass, NSUInteger parentID, NSArray* data) {
+        //ALMResource* parent = [parentClass perfo]
+        //[ALMResource objectInRealm:(RLMRealm *) forPrimaryKey:(id)]
+        ALMResource* parent = [parentClass performSelector:@selector(objectInRealm:forPrimaryKey:) withObject:realm withObject:[NSNumber numberWithUnsignedLong:parentID]];
+        
+        NSString* nestedCollectionName = [resourceClass performSelector:@selector(pluralForm)];
+        
+        // http://stackoverflow.com/questions/7017281/performselector-may-cause-a-leak-because-its-selector-is-unknown
+        SEL collectionSelector = NSSelectorFromString([NSString stringWithFormat:@"%@", nestedCollectionName]);
+        IMP imp = [parent methodForSelector:collectionSelector];
+        RLMArray* (*func)(id, SEL) = (void*)imp;
+        RLMArray *parentNestedResourcecollection = func(parent, collectionSelector);
+        
+        [realm beginWriteTransaction];
+        NSArray* collection = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONArray:) withObject:realm withObject:data];
+        [parentNestedResourcecollection addObjects:collection];
+        [realm commitWriteTransaction];
+        
+        return collection;
+    };
+}
+
 #pragma mark - Errors 
 
-+ (NSError*)errorForInvalidClass:(Class)invalidClass {
+- (NSError*)errorForInvalidClass:(Class)invalidClass {
     return [NSError errorWithDomain:@"API Controller" code:100 userInfo:@{
                                                               NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%@ is not subclass of RLMResource", invalidClass]
                                                               }];
 }
 
-+ (NSError*)errorForInvalidPath:(NSString*)invalidPath {
+- (NSError*)errorForInvalidPath:(NSString*)invalidPath {
     return [NSError errorWithDomain:@"API Controller" code:101 userInfo:@{
                                                                          NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%@ is not a valid URL path.", invalidPath]
                                                                          }];

@@ -11,8 +11,4 @@
 
 @interface ALMAreasController : ALMController
 
-- (NSArray*)placesForArea:(ALMArea*)area;
-- (AFHTTPRequestOperation*)updatePlacesForArea:(ALMArea*)area parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure;
-
-
 @end

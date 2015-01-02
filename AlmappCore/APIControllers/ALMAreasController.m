@@ -10,12 +10,10 @@
 
 @implementation ALMAreasController
 
-- (NSArray *)placesForArea:(ALMArea *)area {
-    return area.places;
-}
 
+/*
 - (AFHTTPRequestOperation *)updatePlacesForArea:(ALMArea *)area parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
-    NSString* path = [NSString stringWithFormat:@"%@/%ld/places", [ALMController resourcePathFor:area.class], (long)area.resourceID];
+    NSString* path = [NSString stringWithFormat:@"%@/%ld/places", [self resourcePathFor:area.class], (long)area.resourceID];
     
     ALMArea * __block weakArea = area;
     ALMAreasController * __weak weakSelf = self;
@@ -26,7 +24,7 @@
         [realm beginWriteTransaction];
         [weakArea.places addObjects:result];
         [realm commitWriteTransaction];
-        
+ 
         onSuccess(weakArea.places);
         
     } onFailure:^(NSError *error) {
@@ -35,6 +33,7 @@
     }];
     return op;
 }
+ */
 
 - (ALMCommitResourceOperation)commitResource {
     return (id)^(RLMRealm *realm, Class resourceClass, NSDictionary *data) {
