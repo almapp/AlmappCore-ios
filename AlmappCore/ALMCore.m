@@ -78,13 +78,25 @@ static dispatch_once_t once_token;
 }
 
 + (id)controller:(Class)controller {
-    if([controller isSubclassOfClass:[ALMController class]] && [ALMCore sharedInstance] != nil) {
-        // controllerWithDelegate:(id<ALMControllerDelegate>)controllerDelegate
-        return [controller performSelector:@selector(controllerWithDelegate:) withObject:[ALMCore sharedInstance]];
+    if ([ALMCore sharedInstance] != nil) {
+        return [[ALMCore sharedInstance] controller:controller];
     }
     else {
         return nil;
     }
+}
+
+- (id)controller:(Class)controller {
+    if([controller isSubclassOfClass:[ALMController class]]) {
+        return [controller performSelector:@selector(controllerWithDelegate:) withObject:self];
+    }
+    else {
+        return nil;
+    }
+}
+
+- (id)controller {
+    return [self controller:[ALMController class]];
 }
 
 - (NSArray*)availableUsers {

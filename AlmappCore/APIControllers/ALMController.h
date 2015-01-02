@@ -31,6 +31,8 @@ typedef NSArray*(^ALMCommitResourcesOperation)(RLMRealm*, Class, NSArray*);
 - (AFHTTPRequestOperationManager*)requestManager;
 - (RLMRealm*)requestRealm;
 
++ (NSString*)resourcePathFor:(Class)resourceClass;
+
 - (NSString*)buildUrlWithPath:(NSString*)path resourceID:(NSUInteger)resourceID;
 - (NSString*)buildUrlWithPath:(NSString*)path;
 

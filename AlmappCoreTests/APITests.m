@@ -97,6 +97,19 @@
 
 - (void)testNilControllerClass {
     XCTAssertNil([ALMCore controller:nil], @"Must return nill for invalid input");
+    XCTAssertNil([_core controller:nil], @"Must return nill for invalid input");
+    
+    XCTAssertNotNil([ALMCore controller], @"must not be nil");
+    XCTAssertNotNil([_core controller], @"must not be nil");
+    
+    XCTAssertTrue([[[ALMCore controller:[ALMController class]] class] isSubclassOfClass:[ALMController class]], @"Must return a valid controller");
+    XCTAssertTrue([[[_core controller:[ALMController class]] class] isSubclassOfClass:[ALMController class]], @"Must return a valid controller");
+    
+    XCTAssertTrue([[[ALMCore controller:[ALMAreasController class]] class] isSubclassOfClass:[ALMAreasController class]], @"Must return a valid controller");
+    XCTAssertTrue([[[_core controller:[ALMAreasController class]] class] isSubclassOfClass:[ALMAreasController class]], @"Must return a valid controller");
+    
+    XCTAssertTrue([[[ALMCore controller:[ALMAreasController class]] class] isSubclassOfClass:[ALMController class]], @"Must return a valid controller");
+    XCTAssertTrue([[[_core controller:[ALMAreasController class]] class] isSubclassOfClass:[ALMController class]], @"Must return a valid controller");
 }
 
 - (void)testInvalidClassRequest {
@@ -188,6 +201,50 @@
             XCTAssertTrue(c.localization.area.resourceID == c.resourceID, @"Must be related");
         }
     }
+}
+
+- (void)testPlacesForArea {
+    XCTestExpectation *multipleResourcesExpectation = [self expectationWithDescription:[NSString stringWithFormat:@"validCollection_%@", [ALMCampus class]]];
+    
+    RLMRealm *realm = [[ALMCore sharedInstance] requestTemporalRealm];
+    
+    ALMAreasController* controller = [_core controller:[ALMAreasController class]];
+    controller.saveToPersistenceStore = NO;
+    
+     AFHTTPRequestOperation *op = [controller resourceForClass:[ALMCampus class] id:3 parameters:nil onSuccess:^(id result) {
+        
+
+        ALMCampus *campus = result;
+        // ALMCampus *campus = [ALMCampus objectInRealm:realm forPrimaryKey:@3];
+        NSArray* places = [controller placesForArea:campus];
+        XCTAssertTrue(places.count == 0, @"Must not have entities");
+        [controller updatePlacesForArea:campus parameters:nil onSuccess:^(NSArray *result2) {
+            [multipleResourcesExpectation fulfill];
+            
+            NSLog(@"%@", result2);
+            ALMCampus *campusReloaded = [ALMCampus objectInRealm:realm forPrimaryKey:@3];
+            XCTAssertFalse(campusReloaded.places.count == 0, @"Must have entities");
+            
+        } onFailure:^(NSError *error) {
+            [multipleResourcesExpectation fulfill];
+            
+            NSLog(@"Error: %@", error);
+            XCTFail(@"Error performing request.");
+        }];
+         
+    } onFailure:^(NSError *error) {
+        [multipleResourcesExpectation fulfill];
+        
+        NSLog(@"Error: %@", error);
+        XCTFail(@"Error performing request.");
+
+    }];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
+        [op cancel];
+    }];
+
+    
 }
 
 - (void)testPerformanceExample {
