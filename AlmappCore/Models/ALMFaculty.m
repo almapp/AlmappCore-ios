@@ -10,11 +10,11 @@
 
 @implementation ALMFaculty
 
-+(NSString *)pluralForm {
++ (NSString *)pluralForm {
     return @"faculties";
 }
 
--(NSString *)areaClassType {
+- (NSString *)areaClassType {
     return @"ALMFaculty";
 }
 

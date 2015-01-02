@@ -133,8 +133,8 @@
                                                     success: ^(AFHTTPRequestOperation *operation, id responseObject) {
                                                         
                                                         NSDictionary *dicc = responseObject;
+                                                        id result = weakSelf.commitResource(weakSelf.requestRealm, blockResourceClass, dicc);
                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                            id result = weakSelf.commitResource(weakSelf.requestRealm, blockResourceClass, dicc);
                                                             onSuccess(result);
                                                         });
                                                         
@@ -182,8 +182,8 @@
                                                     success: ^(AFHTTPRequestOperation *operation, id responseObject) {
                                                         
                                                         NSArray *array = responseObject;
+                                                        NSArray *result = weakSelf.commitResources(weakSelf.requestRealm, blockResourceClass, array);
                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                            NSArray *result = weakSelf.commitResources(weakSelf.requestRealm, blockResourceClass, array);
                                                             onSuccess(result);
                                                         });
                                                         
@@ -227,8 +227,8 @@
                                                     success: ^(AFHTTPRequestOperation *operation, id responseObject) {
                                                         
                                                         NSArray *array = responseObject;
+                                                        NSArray *result = weakSelf.commitNestedResources(weakSelf.requestRealm, blockResourceClass, blockParentClass, blockParentID, array);
                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                            NSArray *result = weakSelf.commitNestedResources(weakSelf.requestRealm, blockResourceClass, blockParentClass, blockParentID, array);
                                                             onSuccess(result);
                                                         });
                                                         
