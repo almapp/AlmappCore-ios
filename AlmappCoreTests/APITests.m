@@ -139,6 +139,10 @@
 
 - (void)testOrganizations {
     [self resourceForClass:[ALMOrganization class] resourceID:1 path:nil params:nil withController:[ALMAreasController class]];
+    ALMController* controller = [ALMCore controller];
+    ALMOrganization *o = [controller resourceInTemporalRealmOfClass:[ALMOrganization class] withID:1];
+    NSLog(@"%@",[o areaClassType]);
+    
 }
 
 - (void)testCampuses {

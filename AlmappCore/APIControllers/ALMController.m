@@ -241,6 +241,9 @@
 
 }
 
+-(AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnParent:(ALMResource *)parent parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
+    return [self resourceCollectionForClass:rClass nestedOnClass:[parent class] withID:parent.resourceID parameters:nil onSuccess:onSuccess onFailure:onFailure];
+}
 
 #pragma mark - Persistence
 
@@ -269,7 +272,7 @@
     return ^(RLMRealm* realm, Class resourceClass, Class parentClass, NSUInteger parentID, NSArray* data) {
         //ALMResource* parent = [parentClass perfo]
         //[ALMResource objectInRealm:(RLMRealm *) forPrimaryKey:(id)]
-        ALMResource* parent = [parentClass performSelector:@selector(objectInRealm:forPrimaryKey:) withObject:realm withObject:[NSNumber numberWithUnsignedLong:parentID]];
+        ALMResource* parent = [ALMResource objectInRealm:realm ofType:parentClass withID:parentID];
         
         NSString* nestedCollectionName = [resourceClass performSelector:@selector(pluralForm)];
         
@@ -300,6 +303,20 @@
     return [NSError errorWithDomain:@"API Controller" code:101 userInfo:@{
                                                                          NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%@ is not a valid URL path.", invalidPath]
                                                                          }];
+}
+
+#pragma mark - Getting resources
+
+- (id)resourceInTemporalRealmOfClass:(Class)resourceClass withID:(NSUInteger)resourceID {
+    return [self resourceOfClass:resourceClass withID:resourceID inRealm:[self requestTemporalRealm]];
+}
+
+- (id)resourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID {
+    return [self resourceOfClass:resourceClass withID:resourceID inRealm:[self requestDefaultRealm]];
+}
+
+- (id)resourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID inRealm:(RLMRealm*)realm {
+    return [ALMResource objectInRealm:realm ofType:resourceClass withID:resourceID];
 }
 
 #pragma mark - Subclasses methods
