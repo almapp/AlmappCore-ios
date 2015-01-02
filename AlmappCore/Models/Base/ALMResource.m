@@ -31,4 +31,8 @@
     return [NSString stringWithFormat:@"%@.%@", self.jsonRoot, attribute];
 }
 
++ (id)objectInRealm:(RLMRealm *)realm ofType:(Class)resourceClass withID:(NSUInteger)resourceID {
+    return [resourceClass performSelector:@selector(objectInRealm:forPrimaryKey:) withObject:realm withObject:[NSNumber numberWithUnsignedLong:resourceID]];
+}
+
 @end

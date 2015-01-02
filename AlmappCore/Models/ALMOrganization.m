@@ -10,8 +10,10 @@
 
 @implementation ALMOrganization
 
+
 - (NSString *)areaClassType {
     return @"ALMOrganization";
 }
+ 
 
 @end

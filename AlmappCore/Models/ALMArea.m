@@ -41,7 +41,7 @@
              };
 }
 
--(NSString *)areaClassType {
+- (NSString *)areaClassType {
     return [NSString stringWithFormat:@"%@", [self class]];
 }
 
