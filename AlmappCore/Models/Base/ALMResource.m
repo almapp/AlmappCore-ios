@@ -7,6 +7,7 @@
 //
 
 #import "ALMResource.h"
+#import "ALMResourceConstants.h"
 
 @implementation NSDictionary (ALMResource)
 
@@ -57,7 +58,7 @@
 }
 
 + (NSString *)primaryKey {
-    return @"resourceID";
+    return kRResourceID;
 }
 
 + (NSString *)jsonRoot {

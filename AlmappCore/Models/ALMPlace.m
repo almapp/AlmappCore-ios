@@ -8,44 +8,43 @@
 
 #import "ALMPlace.h"
 #import "ALMArea.h"
-
-static NSString *const DEFAULT_AREA_TYPE = @"NONE";
+#import "ALMResourceConstants.h"
 
 @implementation ALMPlace
 
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
-             [self jatt:@"id"]: @"resourceID",
-             [self jatt:@"name"]: @"name",
-             [self jatt:@"identifier"]: @"identifier",
-             [self jatt:@"service"]: @"isService",
-             [self jatt:@"zoom"]: @"zoom",
-             [self jatt:@"angle"]: @"angle",
-             [self jatt:@"tilt"]: @"tilt",
-             [self jatt:@"latitude"]: @"latitude",
-             [self jatt:@"longitude"]: @"longitude",
-             [self jatt:@"floor"]: @"floor",
-             [self jatt:@"information"]: @"information",
-             [self jatt:@"updated_at"] : @"updatedAt",
-             [self jatt:@"created_at"] : @"createdAt"
+             [self jatt:kAResourceID]   : kRResourceID,
+             [self jatt:kAName]         : kRName,
+             [self jatt:kAIdentifier]   : kRIdentifier,
+             [self jatt:kAIsService]    : kRIsService,
+             [self jatt:kAZoom]         : kRZoom,
+             [self jatt:kAAngle]        : kRAngle,
+             [self jatt:kATilt]         : kRTilt,
+             [self jatt:kALatitude]     : kRLatitude,
+             [self jatt:kALongitude]    : kRLongitude,
+             [self jatt:kAFloor]        : kRFloor,
+             [self jatt:kAInformation]  : kRInformation,
+             [self jatt:kAUpdatedAt]    : kRUpdatedAt,
+             [self jatt:kACreatedAt]    : kRCreatedAt
              };
 }
 
 + (NSDictionary *)defaultPropertyValues {
     return @{
-             @"name": @"",
-             @"information": @"",
-             @"isService": @NO,
-             @"areaType": DEFAULT_AREA_TYPE,
-             @"areaID": @0,
-             @"floor": @"?",
-             @"zoom" : @0.0f,
-             @"tilt" : @0.0f,
-             @"angle" : @0.0f,
-             @"latitude" : @0.0f,
-             @"longitude" : @0.0f,
-             @"updatedAt": [NSDate distantPast],
-             @"createdAt": [NSDate distantPast]
+             kRName                     : kRDefaultNullString,
+             kRInformation              : kRDefaultNullString,
+             kRIsService                : @NO,
+             kRPolymorphicAreaType      : kRDefaultPolymorphicType,
+             kRPolymorphicAreaID        : @0,
+             kRFloor                    : @"?",
+             kRZoom                     : @0.0f,
+             kRTilt                     : @0.0f,
+             kRAngle                    : @0.0f,
+             kRLatitude                 : @0.0f,
+             kRLongitude                : @0.0f,
+             kRUpdatedAt                : [NSDate distantPast],
+             kRCreatedAt                : [NSDate distantPast]
              };
 }
 
