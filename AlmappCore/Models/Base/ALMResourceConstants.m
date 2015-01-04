@@ -15,11 +15,17 @@ NSString *const kRDefaultPolymorphicType = @"NONE";
 
 #pragma mark - Polymorphic
 
+NSString *const kRPolymorphicArea = @"area";
 NSString *const kRPolymorphicAreaType = @"areaType";
 NSString *const kRPolymorphicAreaID = @"areaID";
 
+NSString *const kRPolymorphicHost = @"host";
 NSString *const kRPolymorphicHostType = @"hostType";
 NSString *const kRPolymorphicHostID = @"hostID";
+
+NSString *const kRPolymorphicCommentable = @"commentable";
+NSString *const kRPolymorphicCommentableType = @"commentableType";
+NSString *const kRPolymorphicCommentableID = @"commentableID";
 
 #pragma mark - Basics
 
@@ -124,6 +130,17 @@ NSString *const kRFromDate = @"fromDate";
 
 NSString *const kAToDate = @"to_date";
 NSString *const kRToDate = @"toDate";
+
+#pragma mark - Social
+
+NSString *const kAComment = @"comment";
+NSString *const kRComment = @"comment";
+
+NSString *const kAIsHidden = @"hidden";
+NSString *const kRIsHidden = @"isHidden";
+
+NSString *const kAIsAnonymous = @"anonymous";
+NSString *const kRIsAnonymous = @"isAnonymous";
 
 #pragma mark - Academic
 
