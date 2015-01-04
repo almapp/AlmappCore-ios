@@ -8,6 +8,7 @@
 
 #import "ALMAcademicUnity.h"
 #import "ALMFaculty.h"
+#import "ALMResourceConstants.h"
 
 @implementation ALMAcademicUnity
 

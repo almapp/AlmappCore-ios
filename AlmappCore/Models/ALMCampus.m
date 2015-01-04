@@ -8,6 +8,7 @@
 
 #import "ALMCampus.h"
 #import "ALMOrganization.h"
+#import "ALMResourceConstants.h"
 
 @implementation ALMCampus
 

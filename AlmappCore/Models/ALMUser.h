@@ -13,10 +13,10 @@
 @property NSString *name;
 @property NSString *username;
 @property NSString *email;
-@property NSString *studentId;
+@property NSString *studentID;
 @property NSString *country;
-@property BOOL findeable;
-@property BOOL male;
+@property BOOL isFindeable;
+@property BOOL isMale;
 @property NSDate *lastSeen;
 
 @property NSDate *updatedAt;

@@ -7,35 +7,36 @@
 //
 
 #import "ALMUser.h"
+#import "ALMResourceConstants.h"
 
 @implementation ALMUser
 
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
-             [self jatt:@"id"]: @"resourceID",
-             [self jatt:@"name"]: @"name",
-             [self jatt:@"username"]: @"username",
-             [self jatt:@"email"]: @"email",
-             [self jatt:@"male"]: @"male",
-             [self jatt:@"student_id"]: @"studentId",
-             [self jatt:@"country"]: @"country",
-             [self jatt:@"findeable"]: @"findeable",
-             [self jatt:@"last_sign_in_at"]: @"lastSeen",
-             [self jatt:@"updated_at"] : @"updatedAt",
-             [self jatt:@"created_at"] : @"createdAt"
+             [self jatt:kAResourceID]     : kRResourceID,
+             [self jatt:kAName]           : kRName,
+             [self jatt:kAUsername]       : kRUsername,
+             [self jatt:kAEmail]          : kREmail,
+             [self jatt:kAMale]           : kRMale,
+             [self jatt:kAStudentID]      : kRStudentID,
+             [self jatt:kACountry]        : kRCountry,
+             [self jatt:kAFindeable]      : kRFindeable,
+             [self jatt:kALastSeen]       : kRLastSeen,
+             [self jatt:kAUpdatedAt]      : kRUpdatedAt,
+             [self jatt:kACreatedAt]      : kRCreatedAt
              };
 }
 
 + (NSDictionary *)defaultPropertyValues {
     return @{
-             @"name": @"",
-             @"male": @YES,
-             @"studentId": @"",
-             @"country": @"",
-             @"findeable": @YES,
-             @"lastSeen": [NSDate distantPast],
-             @"updatedAt": [NSDate distantPast],
-             @"createdAt": [NSDate distantPast]
+             kRName                       : kRDefaultNullString,
+             kRMale                       : @YES,
+             kRStudentID                  : kRDefaultNullString,
+             kRCountry                    : kRDefaultNullString,
+             kRFindeable                  : @YES,
+             kRLastSeen                   : [NSDate distantPast],
+             kRUpdatedAt                  : [NSDate distantPast],
+             kRCreatedAt                  : [NSDate distantPast]
              };
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import "ALMOrganization.h"
+#import "ALMResourceConstants.h"
 
 @implementation ALMOrganization
 
