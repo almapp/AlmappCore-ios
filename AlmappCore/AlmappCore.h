@@ -29,3 +29,6 @@
 #import "ALMAcademicUnity.h"
 #import "ALMPlace.h"
 
+#import "ALMEvent.h"
+#import "ALMCareer.h"
+
