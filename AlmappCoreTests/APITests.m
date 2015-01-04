@@ -158,6 +158,10 @@
         NSLog(@"%lu", org.campuses.count);
         XCTAssertFalse(org.campuses.count == 0, @"Must have entities");
         
+        ALMCampus* campus = org.campuses.firstObject;
+        
+        XCTAssertEqual(campus.organization.resourceID, org.resourceID, @"Must be related and coherent");
+        
     } onFailure:^(NSError *error) {
         [multipleResourcesExpectation fulfill];
         
