@@ -19,5 +19,8 @@
 @property BOOL male;
 @property NSDate *lastSeen;
 
+@property NSDate *updatedAt;
+@property NSDate *createdAt;
+
 @end
 RLM_ARRAY_TYPE(ALMUser)

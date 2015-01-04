@@ -7,8 +7,14 @@
 //
 
 #import "ALMArea.h"
+#import "ALMAcademicUnity.h"
+
+@class ALMCampus;
 
 @interface ALMFaculty : ALMArea
+
+@property RLMArray<ALMAcademicUnity> *academicUnities;
+@property ALMCampus *campus;
 
 @end
 RLM_ARRAY_TYPE(ALMFaculty)

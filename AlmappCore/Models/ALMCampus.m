@@ -7,6 +7,7 @@
 //
 
 #import "ALMCampus.h"
+#import "ALMOrganization.h"
 
 @implementation ALMCampus
 
@@ -14,8 +15,12 @@
     return @"campuses";
 }
 
-- (NSString *)areaClassType {
-    return @"ALMCampus";
++ (NSString *)apiPluralForm {
+    return [self pluralForm];
+}
+
++ (NSString *)realmPluralForm {
+    return [self pluralForm];
 }
 
 @end

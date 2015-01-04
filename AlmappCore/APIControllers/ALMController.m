@@ -66,7 +66,7 @@
 #pragma mark - URL
 
 - (NSString*)resourcePathFor:(Class)resourceClass {
-    return [resourceClass performSelector:@selector(pluralForm)];
+    return [resourceClass performSelector:@selector(apiPluralForm)];
 }
 
 - (NSString*)resourcePathFor:(Class)resourceClass nestedInClass:(Class)parentClass withID:(NSUInteger)parentID {
@@ -270,11 +270,10 @@
 
 - (ALMCommitNestedResourcesOperation)commitNestedResources {
     return ^(RLMRealm* realm, Class resourceClass, Class parentClass, NSUInteger parentID, NSArray* data) {
-        //ALMResource* parent = [parentClass perfo]
-        //[ALMResource objectInRealm:(RLMRealm *) forPrimaryKey:(id)]
+
         ALMResource* parent = [ALMResource objectInRealm:realm ofType:parentClass withID:parentID];
         
-        NSString* nestedCollectionName = [resourceClass performSelector:@selector(pluralForm)];
+        NSString* nestedCollectionName = [resourceClass performSelector:@selector(realmPluralForm)];
         
         // http://stackoverflow.com/questions/7017281/performselector-may-cause-a-leak-because-its-selector-is-unknown
         SEL collectionSelector = NSSelectorFromString([NSString stringWithFormat:@"%@", nestedCollectionName]);
@@ -318,13 +317,5 @@
 - (id)resourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID inRealm:(RLMRealm*)realm {
     return [ALMResource objectInRealm:realm ofType:resourceClass withID:resourceID];
 }
-
-#pragma mark - Subclasses methods
-
-+ (Class)resourceType {
-    [NSException raise:@"Invoked abstract method, must be overriden" format:@"Invoked abstract method"];
-    return nil;
-}
-
 
 @end
