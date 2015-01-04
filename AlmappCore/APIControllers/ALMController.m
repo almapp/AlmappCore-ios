@@ -273,17 +273,34 @@
 
         ALMResource* parent = [ALMResource objectInRealm:realm ofType:parentClass withID:parentID];
         
-        NSString* nestedCollectionName = [resourceClass performSelector:@selector(realmPluralForm)];
+        NSString *nestedCollectionName = [resourceClass performSelector:@selector(realmPluralForm)];
+        NSString *resourceParentName = [parentClass performSelector:@selector(realmSingleForm)];
         
         // http://stackoverflow.com/questions/7017281/performselector-may-cause-a-leak-because-its-selector-is-unknown
         SEL collectionSelector = NSSelectorFromString([NSString stringWithFormat:@"%@", nestedCollectionName]);
-        IMP imp = [parent methodForSelector:collectionSelector];
-        RLMArray* (*func)(id, SEL) = (void*)imp;
-        RLMArray *parentNestedResourcecollection = func(parent, collectionSelector);
+        SEL parentSelector = NSSelectorFromString([NSString stringWithFormat:@"set%@:", [resourceParentName capitalizedString]]);
         
         [realm beginWriteTransaction];
+        
         NSArray* collection = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONArray:) withObject:realm withObject:data];
-        [parentNestedResourcecollection addObjects:collection];
+        
+        if ([parent respondsToSelector:collectionSelector]) {
+            IMP imp = [parent methodForSelector:collectionSelector];
+            RLMArray* (*func)(id, SEL) = (void*)imp;
+            RLMArray *parentNestedResourcecollection = func(parent, collectionSelector);
+            [parentNestedResourcecollection addObjects:collection];
+        }
+        
+        
+        for (ALMResource *resource in collection) {
+            if([resource respondsToSelector:parentSelector]) {
+                IMP imp = [resource methodForSelector:parentSelector];
+                void (*func)(id, SEL, ALMResource*) = (void*)imp;
+                func(resource, parentSelector, parent);
+            }
+            
+        }
+        
         [realm commitWriteTransaction];
         
         return collection;
