@@ -24,6 +24,7 @@
 		74FC4BF9C2617FB8AB8D09A5 /* libPods-AlmappCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0875CE0C44FECE477E86A560 /* libPods-AlmappCore.a */; };
 		F609D1D21A55E6A6008417FA /* PersistenceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F609D1D11A55E6A6008417FA /* PersistenceTests.m */; };
 		F609D1D51A55EC65008417FA /* ALMAreasController.m in Sources */ = {isa = PBXBuildFile; fileRef = F609D1D41A55EC65008417FA /* ALMAreasController.m */; };
+		F60F90771A5969F2002EF807 /* ALMComment.m in Sources */ = {isa = PBXBuildFile; fileRef = F60F90761A5969F2002EF807 /* ALMComment.m */; };
 		F63683061A58C8D000DBCC6A /* ALMEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = F63683051A58C8D000DBCC6A /* ALMEvent.m */; };
 		F64478131A58ECB60078FB29 /* ALMCareer.m in Sources */ = {isa = PBXBuildFile; fileRef = F64478121A58ECB60078FB29 /* ALMCareer.m */; };
 		F64478171A58EE820078FB29 /* ALMResourceConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F64478161A58EE820078FB29 /* ALMResourceConstants.m */; };
@@ -79,6 +80,9 @@
 		F609D1D11A55E6A6008417FA /* PersistenceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersistenceTests.m; sourceTree = "<group>"; };
 		F609D1D31A55EC65008417FA /* ALMAreasController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMAreasController.h; sourceTree = "<group>"; };
 		F609D1D41A55EC65008417FA /* ALMAreasController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMAreasController.m; sourceTree = "<group>"; };
+		F60F90751A5969F2002EF807 /* ALMComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMComment.h; sourceTree = "<group>"; };
+		F60F90761A5969F2002EF807 /* ALMComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMComment.m; sourceTree = "<group>"; };
+		F60F90791A596EC6002EF807 /* ALMCommentable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCommentable.h; sourceTree = "<group>"; };
 		F63683041A58C8D000DBCC6A /* ALMEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMEvent.h; sourceTree = "<group>"; };
 		F63683051A58C8D000DBCC6A /* ALMEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEvent.m; sourceTree = "<group>"; };
 		F64478111A58ECB60078FB29 /* ALMCareer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCareer.h; sourceTree = "<group>"; };
@@ -162,6 +166,14 @@
 				0875CE0C44FECE477E86A560 /* libPods-AlmappCore.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F60F90781A596EA6002EF807 /* Concerns */ = {
+			isa = PBXGroup;
+			children = (
+				F60F90791A596EC6002EF807 /* ALMCommentable.h */,
+			);
+			path = Concerns;
 			sourceTree = "<group>";
 		};
 		F65DD4941A50405D006BCAF0 = {
@@ -249,6 +261,7 @@
 		F6D19BDC1A51B01100FD4715 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F60F90781A596EA6002EF807 /* Concerns */,
 				F6A058AD1A545E50001A1E45 /* Base */,
 				F6D19BDD1A51B02800FD4715 /* ALMUser.h */,
 				F6D19BDE1A51B02800FD4715 /* ALMUser.m */,
@@ -268,6 +281,8 @@
 				F63683051A58C8D000DBCC6A /* ALMEvent.m */,
 				F64478111A58ECB60078FB29 /* ALMCareer.h */,
 				F64478121A58ECB60078FB29 /* ALMCareer.m */,
+				F60F90751A5969F2002EF807 /* ALMComment.h */,
+				F60F90761A5969F2002EF807 /* ALMComment.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -456,6 +471,7 @@
 				F609D1D51A55EC65008417FA /* ALMAreasController.m in Sources */,
 				F65DD4BF1A505C6E006BCAF0 /* ALMUtil.m in Sources */,
 				F64478171A58EE820078FB29 /* ALMResourceConstants.m in Sources */,
+				F60F90771A5969F2002EF807 /* ALMComment.m in Sources */,
 				F6A058B01A545E5D001A1E45 /* ALMResource.m in Sources */,
 				F650A8311A58A69A000C41B4 /* ALMAcademicUnity.m in Sources */,
 				F6A058A91A543E27001A1E45 /* ALMCore.m in Sources */,

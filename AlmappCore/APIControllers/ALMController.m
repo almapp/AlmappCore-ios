@@ -126,14 +126,13 @@
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
     
     ALMController * __weak weakSelf = self;
-    Class __block blockResourceClass = rClass;
     
     AFHTTPRequestOperation *op = [[self requestManager] GET:requestString
                                                  parameters:parameters
                                                     success: ^(AFHTTPRequestOperation *operation, id responseObject) {
                                                         
                                                         NSDictionary *dicc = responseObject;
-                                                        id result = weakSelf.commitResource(weakSelf.requestRealm, blockResourceClass, dicc);
+                                                        id result = weakSelf.commitResource(weakSelf.requestRealm, rClass, dicc);
                                                         dispatch_async(dispatch_get_main_queue(), ^{
                                                             onSuccess(result);
                                                         });
@@ -173,7 +172,6 @@
     }
     
     ALMController * __weak weakSelf = self;
-    Class __block blockResourceClass = rClass;
     
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
     
@@ -182,7 +180,7 @@
                                                     success: ^(AFHTTPRequestOperation *operation, id responseObject) {
                                                         
                                                         NSArray *array = responseObject;
-                                                        NSArray *result = weakSelf.commitResources(weakSelf.requestRealm, blockResourceClass, array);
+                                                        NSArray *result = weakSelf.commitResources(weakSelf.requestRealm, rClass, array);
                                                         dispatch_async(dispatch_get_main_queue(), ^{
                                                             onSuccess(result);
                                                         });
@@ -200,7 +198,7 @@
     return [self resourceCollectionForClass:rClass inPath:nil parameters:parameters onSuccess:onSuccess onFailure:onFailure];
 }
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnClass:(Class)parentClass withID:(NSUInteger)parentID parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnExistentClass:(Class)parentClass withID:(NSUInteger)parentID parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
     
     if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
         onFailure([self errorForInvalidClass:rClass]);
@@ -216,9 +214,6 @@
     NSLog(@"%@", requestString);
     
     ALMController * __weak weakSelf = self;
-    Class __block blockResourceClass = rClass;
-    Class __block blockParentClass = parentClass;
-    NSUInteger __block blockParentID = parentID;
     
     //dispatch_queue_t backgroundQueue = dispatch_queue_create("com.almapp.requestsbgqueue", NULL);
     
@@ -227,7 +222,7 @@
                                                     success: ^(AFHTTPRequestOperation *operation, id responseObject) {
                                                         
                                                         NSArray *array = responseObject;
-                                                        NSArray *result = weakSelf.commitNestedResources(weakSelf.requestRealm, blockResourceClass, blockParentClass, blockParentID, array);
+                                                        NSArray *result = weakSelf.commitNestedResources(weakSelf.requestRealm, rClass, parentClass, parentID, array);
                                                         dispatch_async(dispatch_get_main_queue(), ^{
                                                             onSuccess(result);
                                                         });
@@ -238,11 +233,32 @@
                                                     }];
     
     return op;
+}
 
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnClass:(Class)parentClass withID:(NSUInteger)parentID parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
+    
+    ALMResource *parent = [ALMResource objectInRealm:self.requestRealm ofType:parentClass withID:parentID];
+    
+    if(parent != nil) {
+        return [self resourceCollectionForClass:rClass nestedOnExistentClass:parentClass withID:parentID parameters:parameters onSuccess:onSuccess onFailure:onFailure];
+    }
+    else {
+        ALMController __weak *weakSelf = self;
+
+        AFHTTPRequestOperation *parentFetch = [self resourceForClass:parentClass id:parentID parameters:nil onSuccess:^(id result) {
+            
+            [weakSelf resourceCollectionForClass:rClass nestedOnExistentClass:parentClass withID:parentID parameters:parameters onSuccess:onSuccess onFailure:onFailure];
+            
+        } onFailure:^(NSError *error) {
+            onFailure(error);
+        }];
+        return parentFetch;
+    }
 }
 
 -(AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnParent:(ALMResource *)parent parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
-    return [self resourceCollectionForClass:rClass nestedOnClass:[parent class] withID:parent.resourceID parameters:nil onSuccess:onSuccess onFailure:onFailure];
+    
+    return [self resourceCollectionForClass:rClass nestedOnExistentClass:[parent class] withID:parent.resourceID parameters:nil onSuccess:onSuccess onFailure:onFailure];
 }
 
 #pragma mark - Persistence
