@@ -25,6 +25,9 @@
 @property NSString *floor;
 @property NSString *information;
 
+@property NSDate *updatedAt;
+@property NSDate *createdAt;
+
 - (void)setArea:(ALMArea*)area;
 - (ALMArea*)area;
 

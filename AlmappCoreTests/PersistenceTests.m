@@ -52,7 +52,7 @@
         [singleResourceExpectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
+    [self waitForExpectationsWithTimeout:7 handler:^(NSError *error) {
         [op1 cancel];
     }];
 

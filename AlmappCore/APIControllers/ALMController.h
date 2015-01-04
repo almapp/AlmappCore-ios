@@ -14,28 +14,40 @@
 #import "ALMControllerDelegate.h"
 #import "ALMResource.h"
 
+#pragma mark - Definitions
+
 typedef id (^ALMCommitResourceOperation)(RLMRealm*, Class, NSDictionary*);
 typedef NSArray*(^ALMCommitResourcesOperation)(RLMRealm*, Class, NSArray*);
 typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, NSUInteger, NSArray*);
 
 @interface ALMController : NSObject
 
+#pragma mark - Properties
+
 @property (weak, nonatomic) id<ALMControllerDelegate> controllerDelegate;
 
 /* Default is YES, change to NO if you want to keep the store on the memory. */
 @property (assign) BOOL saveToPersistenceStore;
 
+# pragma mark - Constructors
+
 - (instancetype) init __attribute__((unavailable("Instanciate through ALMCore class")));
 
 + (id)controllerWithDelegate:(id<ALMControllerDelegate>)controllerDelegate;
 
+#pragma mark - Managers
+
 - (AFHTTPRequestOperationManager*)requestManager;
 - (RLMRealm*)requestRealm;
+
+#pragma mark - Paths & URLs
 
 - (NSString*)resourcePathFor:(Class)resourceClass;
 - (NSString*)resourcePathFor:(Class)resourceClass nestedInClass:(Class)parentClass withID:(NSUInteger)parentID;
 - (NSString*)buildUrlWithPath:(NSString*)path resourceID:(NSUInteger)resourceID;
 - (NSString*)buildUrlWithPath:(NSString*)path;
+
+#pragma mark - Fetch methods
 
 - (AFHTTPRequestOperation *)resourceForClass:(Class)rClass id:(NSUInteger)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure ;
 
@@ -49,14 +61,15 @@ typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, NS
 
 - (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnParent:(ALMResource*)parent parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure;
 
+#pragma mark - Persistence: commit operations
+
 - (ALMCommitResourceOperation)commitResource;
-
 - (ALMCommitResourcesOperation)commitResources;
+- (ALMCommitNestedResourcesOperation)commitNestedResources;
 
-+ (Class)resourceType;
+#pragma mark - Persistence: load resources
 
 - (id)resourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID;
 - (id)resourceInTemporalRealmOfClass:(Class)resourceClass withID:(NSUInteger)resourceID;
-
 
 @end

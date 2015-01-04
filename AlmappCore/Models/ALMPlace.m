@@ -25,7 +25,9 @@ static NSString *const DEFAULT_AREA_TYPE = @"NONE";
              [self jatt:@"latitude"]: @"latitude",
              [self jatt:@"longitude"]: @"longitude",
              [self jatt:@"floor"]: @"floor",
-             [self jatt:@"information"]: @"information"
+             [self jatt:@"information"]: @"information",
+             [self jatt:@"updated_at"] : @"updatedAt",
+             [self jatt:@"created_at"] : @"createdAt"
              };
 }
 
@@ -41,21 +43,20 @@ static NSString *const DEFAULT_AREA_TYPE = @"NONE";
              @"tilt" : @0.0f,
              @"angle" : @0.0f,
              @"latitude" : @0.0f,
-             @"longitude" : @0.0f
+             @"longitude" : @0.0f,
+             @"updatedAt": [NSDate distantPast],
+             @"createdAt": [NSDate distantPast]
              };
 }
 
 - (void)setArea:(ALMArea *)area {
     [self setAreaID:area.resourceID];
-    [self setAreaType:area.areaClassType];
+    [self setAreaType:area.className];
 }
 
 - (ALMArea *)area {
-    NSLog(@"%@", self.areaType);
     Class areaClass = NSClassFromString(self.areaType);
-    
-    id key = [NSNumber numberWithUnsignedLong:self.areaID];
-    return [areaClass performSelector:@selector(objectInRealm:forPrimaryKey:) withObject:[self realm] withObject:key];
+    return [ALMResource objectInRealm:[self realm] ofType:areaClass withID:self.areaID];
 }
 
 //+ (NSValueTransformer *)nameJSONTransformer {

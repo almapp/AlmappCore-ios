@@ -11,7 +11,7 @@
 @implementation ALMArea
 
 + (NSDictionary *)JSONInboundMappingDictionary {
-    NSDictionary* common = @{
+    return @{
              [self jatt:@"id"]: @"resourceID",
              [self jatt:@"name"]: @"name",
              [self jatt:@"short_name"]: @"shortName",
@@ -22,11 +22,10 @@
              [self jatt:@"facebook"]: @"facebookUrl",
              [self jatt:@"twitter"]: @"twitterUrl",
              [self jatt:@"phone"]: @"phoneString",
-             [self jatt:@"information"]: @"information"
+             [self jatt:@"information"]: @"information",
+             [self jatt:@"updated_at"] : @"updatedAt",
+             [self jatt:@"created_at"] : @"createdAt"
              };
-    NSMutableDictionary* total = [NSMutableDictionary dictionaryWithDictionary:common];
-    [total addEntriesFromDictionary: self.additionalAttributes];
-    return total;
 }
 
 + (NSDictionary *)defaultPropertyValues {
@@ -37,12 +36,10 @@
              @"facebookUrl": @"",
              @"twitterUrl": @"",
              @"phoneString": @"",
-             @"information": @""
+             @"information": @"",
+             @"updatedAt": [NSDate distantPast],
+             @"createdAt": [NSDate distantPast]
              };
-}
-
-- (NSString *)areaClassType {
-    return [NSString stringWithFormat:@"%@", [self class]];
 }
 
 + (NSDictionary *)additionalAttributes {

@@ -24,8 +24,8 @@
 @property NSString *phoneString;
 @property NSString *information;
 
-+ (NSDictionary*)additionalAttributes;
-- (NSString*)areaClassType;
+@property NSDate *updatedAt;
+@property NSDate *createdAt;
 
 @end
 RLM_ARRAY_TYPE(ALMArea)

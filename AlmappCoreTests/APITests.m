@@ -96,6 +96,11 @@
     }];
 }
 
+- (void)testClassName {
+    NSString* className = [ALMUser className];
+    XCTAssertTrue([className isEqualToString:@"ALMUser"]);
+}
+
 - (void)testNilControllerClass {
     XCTAssertNil([ALMCore controller:nil], @"Must return nill for invalid input");
     XCTAssertNil([_core controller:nil], @"Must return nill for invalid input");
@@ -141,8 +146,28 @@
     [self resourceForClass:[ALMOrganization class] resourceID:1 path:nil params:nil withController:[ALMAreasController class]];
     ALMController* controller = [ALMCore controller];
     ALMOrganization *o = [controller resourceInTemporalRealmOfClass:[ALMOrganization class] withID:1];
-    NSLog(@"%@",[o areaClassType]);
+    NSLog(@"%@",[o className]);
     
+    XCTestExpectation *multipleResourcesExpectation = [self expectationWithDescription:[NSString stringWithFormat:@"validCollection_%@", [ALMCampus class]]];
+
+    controller.saveToPersistenceStore = NO;
+    
+    AFHTTPRequestOperation *op = [controller resourceCollectionForClass:[ALMCampus class] nestedOnParent:o parameters:nil onSuccess:^(NSArray *result) {
+        [multipleResourcesExpectation fulfill];
+        ALMOrganization *org = [controller resourceInTemporalRealmOfClass:[ALMOrganization class] withID:1];
+        NSLog(@"%lu", org.campuses.count);
+        XCTAssertFalse(org.campuses.count == 0, @"Must have entities");
+        
+    } onFailure:^(NSError *error) {
+        [multipleResourcesExpectation fulfill];
+        
+        NSLog(@"Error: %@", error);
+        XCTFail(@"Error performing request.");
+    }];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
+        [op cancel];
+    }];
 }
 
 - (void)testCampuses {
@@ -257,8 +282,6 @@
     [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
         [op cancel];
     }];
-
-    
 }
 
 - (void)testPerformanceExample {

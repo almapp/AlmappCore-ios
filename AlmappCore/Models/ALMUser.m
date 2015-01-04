@@ -20,7 +20,9 @@
              [self jatt:@"student_id"]: @"studentId",
              [self jatt:@"country"]: @"country",
              [self jatt:@"findeable"]: @"findeable",
-             [self jatt:@"last_sign_in_at"]: @"lastSeen"
+             [self jatt:@"last_sign_in_at"]: @"lastSeen",
+             [self jatt:@"updated_at"] : @"updatedAt",
+             [self jatt:@"created_at"] : @"createdAt"
              };
 }
 
@@ -31,7 +33,9 @@
              @"studentId": @"",
              @"country": @"",
              @"findeable": @YES,
-             @"lastSeen": [NSDate distantPast]
+             @"lastSeen": [NSDate distantPast],
+             @"updatedAt": [NSDate distantPast],
+             @"createdAt": [NSDate distantPast]
              };
 }
 

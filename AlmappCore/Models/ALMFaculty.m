@@ -7,15 +7,8 @@
 //
 
 #import "ALMFaculty.h"
+#import "ALMCampus.h"
 
 @implementation ALMFaculty
-
-+ (NSString *)pluralForm {
-    return @"faculties";
-}
-
-- (NSString *)areaClassType {
-    return @"ALMFaculty";
-}
 
 @end
