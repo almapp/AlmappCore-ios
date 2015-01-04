@@ -7,10 +7,12 @@
 //
 
 #import "ALMResource.h"
+#import "ALMCommentable.h"
+#import "ALMLikeable.h"
 
 @class ALMAcademicUnity;
 
-@interface ALMCareer : ALMResource
+@interface ALMCareer : ALMResource <ALMLikeable, ALMCommentable>
 
 @property NSString *name;
 @property NSString *url;
@@ -22,3 +24,4 @@
 @property NSDate *createdAt;
 
 @end
+RLM_ARRAY_TYPE(ALMCareer)

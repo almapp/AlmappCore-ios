@@ -12,6 +12,8 @@
 
 @implementation ALMComment
 
+@synthesize likes = _likes;
+
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
              [self jatt:kAResourceID]       : kRResourceID,
@@ -35,7 +37,7 @@
              };
 }
 
--(void)setCommentable:(ALMResource *)commentable {
+-(void)setCommentable:(ALMResource<ALMCommentable>*)commentable {
     [self setCommentableID:commentable.resourceID];
     [self setCommentableType:commentable.className];
 }
@@ -43,6 +45,14 @@
 - (id)commentable {
     Class commentableClass = NSClassFromString(self.commentableType);
     return [ALMResource objectInRealm:[self realm] ofType:commentableClass withID:self.commentableID];
+}
+
+- (NSUInteger)positiveLikeCount {
+    return [ALMLike positiveLikeCountFor:self];
+}
+
+- (NSUInteger)negativeLikeCount {
+    return [ALMLike negativeLikeCountFor:self];
 }
 
 @end

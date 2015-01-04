@@ -9,8 +9,10 @@
 #import "ALMResource.h"
 #import "ALMPlace.h"
 #import "ALMUser.h"
+#import "ALMCommentable.h"
+#import "ALMLikeable.h"
 
-@interface ALMEvent : ALMResource
+@interface ALMEvent : ALMResource <ALMLikeable, ALMCommentable>
 
 @property NSString *title;
 @property BOOL isPrivate;

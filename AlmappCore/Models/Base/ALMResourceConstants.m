@@ -27,6 +27,10 @@ NSString *const kRPolymorphicCommentable = @"commentable";
 NSString *const kRPolymorphicCommentableType = @"commentableType";
 NSString *const kRPolymorphicCommentableID = @"commentableID";
 
+NSString *const kRPolymorphicLikeable = @"likeable";
+NSString *const kRPolymorphicLikeableType = @"likeableType";
+NSString *const kRPolymorphicLikeableID = @"likeableID";
+
 #pragma mark - Basics
 
 NSString *const kAResourceID = @"id";
@@ -141,6 +145,9 @@ NSString *const kRIsHidden = @"isHidden";
 
 NSString *const kAIsAnonymous = @"anonymous";
 NSString *const kRIsAnonymous = @"isAnonymous";
+
+NSString *const kAValuation = @"valuation";
+NSString *const kRValuation = @"valuation";
 
 #pragma mark - Academic
 
