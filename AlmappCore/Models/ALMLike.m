@@ -37,6 +37,9 @@
     return [ALMResource objectInRealm:[self realm] ofType:likeableClass withID:self.likeableID];
 }
 
++ (ALMPersistMode)persistMode {
+    return ALMPersistModeNone;
+}
 
 #pragma mark - Like helpers
 

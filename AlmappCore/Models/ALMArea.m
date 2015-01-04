@@ -45,6 +45,10 @@
              };
 }
 
++ (ALMPersistMode)persistMode {
+    return ALMPersistModeForever;
+}
+
 - (NSUInteger)positiveLikeCount {
     return [ALMLike positiveLikeCountFor:self];
 }

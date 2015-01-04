@@ -47,6 +47,10 @@
     return [ALMResource objectInRealm:[self realm] ofType:commentableClass withID:self.commentableID];
 }
 
++ (ALMPersistMode)persistMode {
+    return ALMPersistModeDuringSession;
+}
+
 - (NSUInteger)positiveLikeCount {
     return [ALMLike positiveLikeCountFor:self];
 }
