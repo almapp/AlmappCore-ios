@@ -15,7 +15,7 @@
 @property ALMUser *user;
 @property NSString *commentableType;
 @property NSInteger commentableID;
-@property NSString *commment;
+@property NSString *comment;
 @property BOOL isHidden;
 @property BOOL isAnonymous;
 

@@ -241,6 +241,32 @@
     }
 }
 
+- (void)testCommentsWithAutoFetchParent {
+    XCTestExpectation *multipleResourcesExpectation = [self expectationWithDescription:[NSString stringWithFormat:@"validCollection_%@", [ALMComment class]]];
+    
+    ALMController* controller = [_core controller];
+    controller.saveToPersistenceStore = NO;
+    
+    AFHTTPRequestOperation *op = [controller resourceCollectionForClass:[ALMComment class] nestedOnClass:[ALMCampus class] withID:5 parameters:nil onSuccess:^(NSArray *result) {
+        [multipleResourcesExpectation fulfill];
+        
+        ALMCampus *campus = [controller resourceInTemporalRealmOfClass:[ALMCampus class] withID:5];
+        XCTAssertNotNil(campus, @"This should be fetched inside the operation");
+        NSLog(@"%@", result);
+        XCTAssertEqual(campus.comments.count, result.count, @"Must be coherent");
+        
+    } onFailure:^(NSError *error) {
+        [multipleResourcesExpectation fulfill];
+        NSLog(@"Error: %@", error);
+        XCTFail(@"Error performing request.");
+    }];
+        
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
+        [op cancel];
+    }];
+
+}
+
 - (void)testPlacesForArea {
     XCTestExpectation *multipleResourcesExpectation = [self expectationWithDescription:[NSString stringWithFormat:@"validCollection_%@", [ALMCampus class]]];
     
