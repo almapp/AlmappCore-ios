@@ -9,6 +9,10 @@
 #import "ALMResource.h"
 #import "ALMResourceConstants.h"
 
+ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
+
+#pragma mark - Dictionary Category
+
 @implementation NSDictionary (ALMResource)
 
 + (NSDictionary *)merge:(NSDictionary *)dictionary1 with:(NSDictionary *)dictionary2 {
@@ -18,6 +22,8 @@
 }
 
 @end
+
+#pragma mark - String Category
 
 @implementation NSString (ALMResource)
 
@@ -35,7 +41,15 @@
 
 @end
 
+#pragma mark - Resource body
+
 @implementation ALMResource
+
+- (NSString *)className {
+    return NSStringFromClass([self class]);
+}
+
+#pragma mark - Attributes helpers
 
 + (NSString*)apiSingleForm {
     return [self singleForm];
@@ -61,6 +75,8 @@
     return [[[self className] stringByReplacingOccurrencesOfString:@"ALM" withString:@""] lowercaseString];
 }
 
+#pragma mark - JSON helpers
+
 + (NSString *)primaryKey {
     return kRResourceID;
 }
@@ -69,12 +85,14 @@
     return [self apiSingleForm];
 }
 
-- (NSString *)className {
-    return NSStringFromClass([self class]);
-}
-
 + (NSString*)jatt:(NSString*)attribute {
     return [NSString stringWithFormat:@"%@.%@", [self jsonRoot], attribute];
+}
+
+#pragma mark - Persistence
+
++ (ALMPersistMode)persistMode {
+    return kPersistModeDefault;
 }
 
 + (id)objectInRealm:(RLMRealm *)realm ofType:(Class)resourceClass withID:(NSUInteger)resourceID {

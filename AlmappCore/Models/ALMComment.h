@@ -7,10 +7,12 @@
 //
 
 #import "ALMResource.h"
+#import "ALMLikeable.h"
 
 @class ALMUser;
+@protocol ALMCommentable;
 
-@interface ALMComment : ALMResource
+@interface ALMComment : ALMResource <ALMLikeable>
 
 @property ALMUser *user;
 @property NSString *commentableType;
@@ -22,7 +24,7 @@
 @property NSDate *updatedAt;
 @property NSDate *createdAt;
 
-- (void)setCommentable:(ALMResource*)commmentable;
+- (void)setCommentable:(ALMResource<ALMCommentable>*)commmentable;
 - (id)commentable;
 
 @end

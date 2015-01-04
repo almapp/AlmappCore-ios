@@ -12,8 +12,6 @@
 
 @implementation ALMCampus
 
-@synthesize comments = _comments;
-
 + (NSString *)pluralForm {
     return @"campuses";
 }

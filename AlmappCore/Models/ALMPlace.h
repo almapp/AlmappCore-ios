@@ -7,10 +7,12 @@
 //
 
 #import "ALMResource.h"
+#import "ALMCommentable.h"
+#import "ALMLikeable.h"
 
 @class ALMArea;
 
-@interface ALMPlace : ALMResource
+@interface ALMPlace : ALMResource  <ALMLikeable, ALMCommentable>
 
 @property NSString *name;
 @property NSString *identifier;

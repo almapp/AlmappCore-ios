@@ -8,8 +8,10 @@
 
 #import "ALMResource.h"
 #import "ALMPlace.h"
+#import "ALMCommentable.h"
+#import "ALMLikeable.h"
 
-@interface ALMArea : ALMResource
+@interface ALMArea : ALMResource <ALMLikeable, ALMCommentable>
 
 @property NSString *name;
 @property NSString *shortName;

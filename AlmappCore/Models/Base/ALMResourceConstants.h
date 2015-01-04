@@ -27,6 +27,10 @@ extern NSString *const kRPolymorphicCommentable;
 extern NSString *const kRPolymorphicCommentableType;
 extern NSString *const kRPolymorphicCommentableID;
 
+extern NSString *const kRPolymorphicLikeable;
+extern NSString *const kRPolymorphicLikeableType;
+extern NSString *const kRPolymorphicLikeableID;
+
 #pragma mark - Basics
 
 extern NSString *const kAResourceID;
@@ -141,6 +145,9 @@ extern NSString *const kRIsHidden;
 
 extern NSString *const kAIsAnonymous;
 extern NSString *const kRIsAnonymous;
+
+extern NSString *const kAValuation;
+extern NSString *const kRValuation;
 
 #pragma mark - Academic
 

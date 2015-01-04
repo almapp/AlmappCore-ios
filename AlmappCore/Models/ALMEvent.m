@@ -11,6 +11,8 @@
 
 @implementation ALMEvent
 
+@synthesize comments = _comments, likes = _likes;
+
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
              [self jatt:kAResourceID]   : kRResourceID,
@@ -52,6 +54,14 @@
 - (id)host {
     Class hostClass = NSClassFromString(self.hostType);
     return [ALMResource objectInRealm:[self realm] ofType:hostClass withID:self.hostID];
+}
+
+- (NSUInteger)positiveLikeCount {
+    return [ALMLike positiveLikeCountFor:self];
+}
+
+- (NSUInteger)negativeLikeCount {
+    return [ALMLike negativeLikeCountFor:self];
 }
 
 @end
