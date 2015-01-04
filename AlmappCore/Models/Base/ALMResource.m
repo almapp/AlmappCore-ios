@@ -19,26 +19,30 @@
 
 @end
 
-@implementation ALMResource
+@implementation NSString (ALMResource)
 
-+ (NSString *)pluralize:(NSString *)sentence {
-    NSString* singleForm = sentence;
+- (NSString *)pluralize {
+    NSString* singleForm = self;
     char lastChar = [singleForm characterAtIndex:singleForm.length - 1];
     if (lastChar == 'y' || lastChar == 'Y') {
         singleForm = [singleForm substringToIndex: (singleForm.length - 1)];
         return [singleForm stringByAppendingString:@"ies"];
     }
     else {
-        return [self.singleForm stringByAppendingString:@"s"];
+        return [singleForm stringByAppendingString:@"s"];
     }
 }
+
+@end
+
+@implementation ALMResource
 
 + (NSString*)apiSingleForm {
     return [self singleForm];
 }
 
 + (NSString*)apiPluralForm {
-    return [self pluralize:[self apiSingleForm]];
+    return [[self apiSingleForm] pluralize];
 }
 
 + (NSString*)realmSingleForm {
@@ -46,11 +50,11 @@
 }
 
 + (NSString*)realmPluralForm {
-    return [self pluralize:[self realmSingleForm]];
+    return [[self realmSingleForm] pluralize];
 }
 
 + (NSString*)pluralForm {
-    return [self pluralize:[self singleForm]];
+    return [[self singleForm] pluralize];
 }
 
 + (NSString*)singleForm {

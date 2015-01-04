@@ -15,6 +15,12 @@
 
 @end
 
+@interface NSString (ALMResource)
+
+- (NSString*)pluralize;
+
+@end
+
 @interface ALMResource : RLMObject
 
 @property NSInteger resourceID;
@@ -30,8 +36,6 @@
 + (NSString*)jsonRoot;
 
 - (NSString *)className;
-
-+ (NSString*)pluralize:(NSString*)sentence;
 
 + (NSString*)jatt:(NSString*)attribute;
 
