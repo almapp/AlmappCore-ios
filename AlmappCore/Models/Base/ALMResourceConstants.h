@@ -12,6 +12,7 @@
 
 extern NSString *const kRDefaultNullString;
 extern NSString *const kRDefaultPolymorphicType;
+extern NSString *const kRDefaultUnknownFloor;
 
 #pragma mark - Polymorphic
 

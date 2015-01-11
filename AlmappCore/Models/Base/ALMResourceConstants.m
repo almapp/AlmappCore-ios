@@ -12,6 +12,7 @@
 
 NSString *const kRDefaultNullString = @"";
 NSString *const kRDefaultPolymorphicType = @"NONE";
+NSString *const kRDefaultUnknownFloor = @"?";
 
 #pragma mark - Polymorphic
 
