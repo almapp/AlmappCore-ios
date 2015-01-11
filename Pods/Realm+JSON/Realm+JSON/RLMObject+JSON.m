@@ -147,7 +147,6 @@ static NSString *MCTypeStringFromPropertyKey(Class class, NSString *key) {
 		NSString *objectKeyPath = mapping[dictionaryKeyPath];
 
 		id value = [dictionary valueForKeyPath:dictionaryKeyPath];
-		// if (value) {
         if (value && ![value isKindOfClass:[NSNull class]]) {
 			Class propertyClass = [modelClass mc_classForPropertyKey:objectKeyPath];
 
