@@ -31,6 +31,7 @@
 #import "ALMOrganization.h"
 #import "ALMCampus.h"
 #import "ALMFaculty.h"
+#import "ALMBuilding.h"
 #import "ALMAcademicUnity.h"
 #import "ALMPlace.h"
 

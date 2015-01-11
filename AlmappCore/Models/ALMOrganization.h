@@ -15,6 +15,7 @@
 
 @property RLMArray<ALMCampus> *campuses;
 @property RLMArray<ALMFaculty> *faculties;
+@property RLMArray<ALMBuilding> *buildings;
 @property RLMArray<ALMAcademicUnity> * academicUnities;
 
 @end
