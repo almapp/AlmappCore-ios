@@ -39,7 +39,7 @@
              kRIsService                : @NO,
              kRPolymorphicAreaType      : kRDefaultPolymorphicType,
              kRPolymorphicAreaID        : @0,
-             kRFloor                    : @"?",
+             kRFloor                    : kRDefaultUnknownFloor,
              kRZoom                     : @0.0f,
              kRTilt                     : @0.0f,
              kRAngle                    : @0.0f,
