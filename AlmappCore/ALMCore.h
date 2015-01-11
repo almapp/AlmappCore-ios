@@ -45,5 +45,7 @@
 
 - (void)dropDatabaseInMemory;
 - (void)dropDatabaseDefault;
+- (void)deleteDatabaseInMemory;
+- (void)deleteDatabaseDefault;
 
 @end

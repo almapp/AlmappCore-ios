@@ -18,6 +18,9 @@ static NSString *const MEMORY_REALM_PATH = @"TemporalRealm";
 
 - (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL: (NSURL*)baseURL;
 
+- (void)dropRealm:(RLMRealm*)realm;
+- (void)deleteRealm:(RLMRealm*)realm;
+
 @end
 
 @implementation ALMCore
@@ -113,10 +116,23 @@ static dispatch_once_t once_token;
     [self dropRealm:[self requestTemporalRealm]];
 }
 
+- (void)deleteDatabaseDefault {
+    [self deleteRealm:[self requestRealm]];
+}
+
+- (void)deleteDatabaseInMemory {
+    [self deleteRealm:[self requestTemporalRealm]];
+}
+
 - (void)dropRealm:(RLMRealm*)realm {
+    NSLog(@"%@", realm.path);
     [realm beginWriteTransaction];
     [realm deleteAllObjects];
     [realm commitWriteTransaction];
+}
+
+- (void)deleteRealm:(RLMRealm*)realm {
+    [[NSFileManager defaultManager] removeItemAtPath:realm.path error:nil];
 }
 
 

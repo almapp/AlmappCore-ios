@@ -23,7 +23,7 @@
     return @{
              kRValuation                    : @0,
              kRPolymorphicLikeableType      : kRDefaultPolymorphicType,
-             kRPolymorphicLikeableID        : @0
+             kRPolymorphicLikeableID        : kRDefaultPolymorphicID
              };
 }
 
