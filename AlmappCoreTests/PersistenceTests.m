@@ -39,7 +39,7 @@
         ALMUser *user = result;
         [singleResourceExpectation fulfill];
         NSLog(@"result: %@", user);
-        XCTAssertNotNil(user, @"Must rertun obejct");
+        XCTAssertNotNil(user, @"Must return object");
         
         XCTAssert([ALMUser allObjects].count > 0, @"Must have at least one object");
         
