@@ -13,10 +13,13 @@
 #import <Foundation/Foundation.h>
 
 #import "ALMCore.h"
+
+#import "ALMCoreDelegate.h"
 #import "ALMControllerDelegate.h"
 
 #import "ALMController.h"
 #import "ALMUsersController.h"
+#import "ALMAreasController.h"
 
 #import "ALMResource.h"
 #import "ALMLikeable.h"
@@ -33,6 +36,7 @@
 
 #import "ALMEvent.h"
 #import "ALMCareer.h"
+
 #import "ALMComment.h"
 #import "ALMLike.h"
 
