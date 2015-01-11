@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "AlmappCore"
-  s.version      = "0.0.3"
+  s.version      = "0.0.3.1"
   s.summary      = "Mobile backend for Almapp REST API."
 
   s.description  = <<-DESC
