@@ -8,10 +8,18 @@
 
 #import "ALMResourceConstants.h"
 
+#pragma mark - Initializer
+
+__attribute__((constructor))
+static void InitGlobalNumber() {
+    kRDefaultPolymorphicID = [NSNumber numberWithInteger:0];
+}
+
 #pragma mark - Defaults
 
 NSString *const kRDefaultNullString = @"";
 NSString *const kRDefaultPolymorphicType = @"NONE";
+NSNumber *kRDefaultPolymorphicID;
 NSString *const kRDefaultUnknownFloor = @"?";
 
 #pragma mark - Polymorphic

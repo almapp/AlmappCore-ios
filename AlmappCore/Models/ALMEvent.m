@@ -38,7 +38,7 @@
              kRFromDate                 : [NSDate distantPast],
              kRToDate                   : [NSDate distantPast],
              kRPolymorphicHostType      : kRDefaultPolymorphicType,
-             kRPolymorphicHostID        : @0,
+             kRPolymorphicHostID        : kRDefaultPolymorphicID,
              kRFacebookURL              : kRDefaultNullString,
              kRURL                      : kRDefaultNullString,
              kRUpdatedAt                : [NSDate distantPast],

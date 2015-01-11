@@ -31,7 +31,7 @@
              kRIsHidden                     : @NO,
              kRIsAnonymous                  : @NO,
              kRPolymorphicCommentableType   : kRDefaultPolymorphicType,
-             kRPolymorphicCommentableID     : @0,
+             kRPolymorphicCommentableID     : kRDefaultPolymorphicID,
              kRUpdatedAt                    : [NSDate distantPast],
              kRCreatedAt                    : [NSDate distantPast]
              };
