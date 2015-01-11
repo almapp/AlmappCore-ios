@@ -9,12 +9,14 @@
 #import "ALMArea.h"
 #import "ALMFaculty.h"
 #import "ALMAcademicUnity.h"
+#import "ALMBuilding.h"
 
 @class ALMOrganization;
 
 @interface ALMCampus : ALMArea
 
 @property RLMArray<ALMFaculty> *faculties;
+@property RLMArray<ALMBuilding> *buildings;
 @property RLMArray<ALMAcademicUnity> *academicUnities;
 @property ALMOrganization *organization;
 

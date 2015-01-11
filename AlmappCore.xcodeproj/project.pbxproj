@@ -49,6 +49,7 @@
 		F6D19BE71A51B2C500FD4715 /* ALMTestsConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BE51A51B2C500FD4715 /* ALMTestsConstants.m */; };
 		F6D19BE91A51B30E00FD4715 /* APITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BE81A51B30E00FD4715 /* APITests.m */; };
 		F6D19BED1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BEC1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.m */; };
+		F6DCAF741A62CC2D008274D7 /* ALMBuilding.m in Sources */ = {isa = PBXBuildFile; fileRef = F6DCAF731A62CC2D008274D7 /* ALMBuilding.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +134,8 @@
 		F6D19BEC1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCJSONNonNullStringTransformer.m; sourceTree = "<group>"; };
 		F6D19BEF1A51D81200FD4715 /* ALMCoreDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCoreDelegate.h; sourceTree = "<group>"; };
 		F6D19BF01A51D82500FD4715 /* ALMControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMControllerDelegate.h; sourceTree = "<group>"; };
+		F6DCAF721A62CC2D008274D7 /* ALMBuilding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMBuilding.h; sourceTree = "<group>"; };
+		F6DCAF731A62CC2D008274D7 /* ALMBuilding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMBuilding.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,6 +277,8 @@
 				F6A058AB1A54523C001A1E45 /* ALMCampus.m */,
 				F6A058B11A5480C8001A1E45 /* ALMFaculty.h */,
 				F6A058B21A5480C8001A1E45 /* ALMFaculty.m */,
+				F6DCAF721A62CC2D008274D7 /* ALMBuilding.h */,
+				F6DCAF731A62CC2D008274D7 /* ALMBuilding.m */,
 				F6A058B41A5481B6001A1E45 /* ALMArea.h */,
 				F6A058B51A5481B6001A1E45 /* ALMArea.m */,
 				F6A058B71A548588001A1E45 /* ALMPlace.h */,
@@ -480,6 +485,7 @@
 				F65DD4BF1A505C6E006BCAF0 /* ALMUtil.m in Sources */,
 				F64478171A58EE820078FB29 /* ALMResourceConstants.m in Sources */,
 				F60F90771A5969F2002EF807 /* ALMComment.m in Sources */,
+				F6DCAF741A62CC2D008274D7 /* ALMBuilding.m in Sources */,
 				F6A058B01A545E5D001A1E45 /* ALMResource.m in Sources */,
 				F650A8311A58A69A000C41B4 /* ALMAcademicUnity.m in Sources */,
 				F6A058A91A543E27001A1E45 /* ALMCore.m in Sources */,
