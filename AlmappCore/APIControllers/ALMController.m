@@ -304,6 +304,8 @@
             IMP imp = [parent methodForSelector:collectionSelector];
             RLMArray* (*func)(id, SEL) = (void*)imp;
             RLMArray *parentNestedResourcecollection = func(parent, collectionSelector);
+            
+            [parentNestedResourcecollection removeAllObjects];
             [parentNestedResourcecollection addObjects:collection];
         }
         
@@ -314,7 +316,6 @@
                 void (*func)(id, SEL, ALMResource*) = (void*)imp;
                 func(resource, parentSelector, parent);
             }
-            
         }
         
         [realm commitWriteTransaction];

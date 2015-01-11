@@ -35,18 +35,32 @@
 }
  */
 
+- (id)commit:(NSDictionary*)data ofClass:(Class)resourceClass inRealm:(RLMRealm*)realm  {
+    NSDictionary* localization = [self extractLocalizationAsPlaceDictionaryFrom:data];
+    
+    ALMArea* result = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:data];
+    if(localization != nil) {
+        ALMPlace* place = [ALMPlace createOrUpdateInRealm:realm withJSONDictionary:localization];
+        [result setLocalization:place];
+        [place setArea:result];
+    }
+    return result;
+}
+
+- (NSArray*)commitCollection:(NSArray*)data ofClass:(Class)resourceClass inRealm:(RLMRealm *)realm {
+    NSMutableArray *collection = [NSMutableArray arrayWithCapacity:data.count];
+    for (NSDictionary* area in data) {
+        ALMArea* result = [self commit:area ofClass:resourceClass inRealm:realm];
+        [collection addObject:result];
+    }
+    return collection;
+}
+
 - (ALMCommitResourceOperation)commitResource {
     return (id)^(RLMRealm *realm, Class resourceClass, NSDictionary *data) {
         
-        NSDictionary* localization = [self extractLocalizationAsPlaceDictionaryFrom:data];
-        
         [realm beginWriteTransaction];
-        ALMArea* result = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:data];
-        if(localization != nil) {
-            ALMPlace* place = [ALMPlace createOrUpdateInRealm:realm withJSONDictionary:localization];
-            [result setLocalization:place];
-            [place setArea:result];
-        }
+        id result = [self commit:data ofClass:resourceClass inRealm:realm];
         [realm commitWriteTransaction];
         
         return result;
@@ -56,21 +70,47 @@
 - (ALMCommitResourcesOperation)commitResources {
     return  ^(RLMRealm *realm, Class resourceClass, NSArray *data) {
         
-        NSMutableArray *collection = [NSMutableArray arrayWithCapacity:data.count];
+        [realm beginWriteTransaction];
+        NSArray* collection = [self commitCollection:data ofClass:resourceClass inRealm:realm];
+        [realm commitWriteTransaction];
+        
+        return collection;
+    };
+}
+
+- (ALMCommitNestedResourcesOperation)commitNestedResources {
+    return ^(RLMRealm* realm, Class resourceClass, Class parentClass, NSUInteger parentID, NSArray* data) {
+        
+        ALMResource* parent = [ALMResource objectInRealm:realm ofType:parentClass withID:parentID];
+        
+        NSString *nestedCollectionName = [resourceClass performSelector:@selector(realmPluralForm)];
+        NSString *resourceParentName = [parentClass performSelector:@selector(realmSingleForm)];
+        
+        // http://stackoverflow.com/questions/7017281/performselector-may-cause-a-leak-because-its-selector-is-unknown
+        SEL collectionSelector = NSSelectorFromString([NSString stringWithFormat:@"%@", nestedCollectionName]);
+        SEL parentSelector = NSSelectorFromString([NSString stringWithFormat:@"set%@:", [resourceParentName capitalizedString]]);
         
         [realm beginWriteTransaction];
         
-        for (NSDictionary* area in data) {
-            NSDictionary* localization = [self extractLocalizationAsPlaceDictionaryFrom:area];
-            ALMArea* result = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:area];
-            if(localization != nil) {
-                ALMPlace* place = [ALMPlace createOrUpdateInRealm:realm withJSONDictionary:localization];
-                [result setLocalization:place];
-                [place setArea:result];
-            }
-    
-            [collection addObject:result];
+        NSArray* collection = [self commitCollection:data ofClass:resourceClass inRealm:realm];
+        
+        if ([parent respondsToSelector:collectionSelector]) {
+            IMP imp = [parent methodForSelector:collectionSelector];
+            RLMArray* (*func)(id, SEL) = (void*)imp;
+            RLMArray *parentNestedResourcecollection = func(parent, collectionSelector);
+            
+            [parentNestedResourcecollection removeAllObjects];
+            [parentNestedResourcecollection addObjects:collection];
         }
+        
+        for (ALMResource *resource in collection) {
+            if([resource respondsToSelector:parentSelector]) {
+                IMP imp = [resource methodForSelector:parentSelector];
+                void (*func)(id, SEL, ALMResource*) = (void*)imp;
+                func(resource, parentSelector, parent);
+            }
+        }
+        
         [realm commitWriteTransaction];
         
         return collection;
