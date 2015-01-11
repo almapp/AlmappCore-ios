@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "AlmappCore"
-  s.version      = "0.0.2"
+  s.version      = "0.0.3"
   s.summary      = "Mobile backend for Almapp REST API."
 
   s.description  = <<-DESC
@@ -78,7 +78,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/almapp/AlmappCore-ios.git", :tag => "0.0.2" }
+  s.source       = { :git => "https://github.com/almapp/AlmappCore-ios.git", :tag =>  s.version.to_s }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -89,10 +89,10 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "AlmappCore", "AlmappCore/**/*.{h,m}"
-  s.exclude_files = "AlmappCore/Exclude"
+  s.source_files  = "AlmappCore", "AlmappCore/AlmappCore.h"
+  # s.exclude_files = "AlmappCore/Exclude"
 
-  # s.public_header_files = "AlmappCore/**/*.h"
+  s.public_header_files = "AlmappCore/**/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -104,7 +104,7 @@ Pod::Spec.new do |s|
   #
 
   # s.resource  = "icon.png"
-  s.resources = "AlmappCore/*.png"
+  # s.resources = "AlmappCore/*.png"
 
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
@@ -115,7 +115,7 @@ Pod::Spec.new do |s|
   #  the lib prefix of their name.
   #
 
-  s.framework    = 'SystemConfiguration'
+  # s.framework    = 'SystemConfiguration'
   # s.frameworks = "SomeFramework", "AnotherFramework"
 
   # s.library   = "iconv"
