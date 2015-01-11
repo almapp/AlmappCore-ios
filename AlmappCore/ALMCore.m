@@ -12,6 +12,8 @@ static NSString *const MEMORY_REALM_PATH = @"TemporalRealm";
 
 @interface ALMCore ()
 
+@property (strong, nonatomic) NSMutableDictionary* controllers;
+
 @property (strong, nonatomic) id<ALMCoreDelegate> coreDelegate;
 @property (strong, nonatomic) NSURL* baseURL;
 @property (strong, nonatomic) RLMRealm* inMemoryRealm;
@@ -32,6 +34,7 @@ static NSString *const MEMORY_REALM_PATH = @"TemporalRealm";
     if (self) {
         _coreDelegate = delegate;
         _baseURL = baseURL;
+        _controllers = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -89,9 +92,17 @@ static dispatch_once_t once_token;
     }
 }
 
-- (id)controller:(Class)controller {
-    if([controller isSubclassOfClass:[ALMController class]]) {
-        return [controller performSelector:@selector(controllerWithDelegate:) withObject:self];
+- (id)controller:(Class)controllerClass {
+    if([controllerClass isSubclassOfClass:[ALMController class]]) {
+        ALMController* controller = [_controllers objectForKey:controllerClass];
+        if(controller != nil) {
+            return controller;
+        }
+        else {
+            controller = [controllerClass performSelector:@selector(controllerWithDelegate:) withObject:self];
+            [_controllers setObject:controller forKey:(id <NSCopying>)controllerClass];
+            return controller;
+        }
     }
     else {
         return nil;
