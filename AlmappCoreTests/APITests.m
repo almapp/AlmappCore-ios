@@ -145,7 +145,7 @@
 - (void)testOrganizations {
     [self resourceForClass:[ALMOrganization class] resourceID:1 path:nil params:nil withController:[ALMAreasController class]];
     ALMController* controller = [ALMCore controller];
-    ALMOrganization *o = [controller resourceInTemporalRealmOfClass:[ALMOrganization class] withID:1];
+    ALMOrganization *o = [controller loadResourceOfClass:[ALMOrganization class] withID:1 onTemporalRealm:YES];
     NSLog(@"%@",[o className]);
     
     XCTestExpectation *multipleResourcesExpectation = [self expectationWithDescription:[NSString stringWithFormat:@"validCollection_%@", [ALMCampus class]]];
@@ -154,7 +154,7 @@
     
     AFHTTPRequestOperation *op = [controller resourceCollectionForClass:[ALMCampus class] nestedOnParent:o parameters:nil onSuccess:^(NSArray *result) {
         [multipleResourcesExpectation fulfill];
-        ALMOrganization *org = [controller resourceInTemporalRealmOfClass:[ALMOrganization class] withID:1];
+        ALMOrganization *org = [controller loadResourceOfClass:[ALMOrganization class] withID:1 onTemporalRealm:YES];
         NSLog(@"%lu", org.campuses.count);
         XCTAssertFalse(org.campuses.count == 0, @"Must have entities");
         
@@ -249,8 +249,7 @@
     
     AFHTTPRequestOperation *op = [controller resourceCollectionForClass:[ALMComment class] nestedOnClass:[ALMCampus class] withID:5 parameters:nil onSuccess:^(NSArray *result) {
         [multipleResourcesExpectation fulfill];
-        
-        ALMCampus *campus = [controller resourceInTemporalRealmOfClass:[ALMCampus class] withID:5];
+        ALMCampus *campus = [controller loadResourceOfClass:[ALMCampus class] withID:5 onTemporalRealm:YES];
         XCTAssertNotNil(campus, @"This should be fetched inside the operation");
         NSLog(@"%@", result);
         XCTAssertEqual(campus.comments.count, result.count, @"Must be coherent");

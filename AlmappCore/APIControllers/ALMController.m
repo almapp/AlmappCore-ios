@@ -339,12 +339,13 @@
 
 #pragma mark - Getting resources
 
-- (id)resourceInTemporalRealmOfClass:(Class)resourceClass withID:(NSUInteger)resourceID {
-    return [self resourceOfClass:resourceClass withID:resourceID inRealm:[self requestTemporalRealm]];
+- (id)loadResourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID {
+    return [self resourceOfClass:resourceClass withID:resourceID inRealm:[self requestDefaultRealm]];
 }
 
-- (id)resourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID {
-    return [self resourceOfClass:resourceClass withID:resourceID inRealm:[self requestDefaultRealm]];
+- (id)loadResourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID onTemporalRealm:(BOOL)loadFromTemporal {
+    RLMRealm *realm = loadFromTemporal ? [self requestTemporalRealm] : [self requestDefaultRealm];
+    return [self resourceOfClass:resourceClass withID:resourceID inRealm:realm];
 }
 
 - (id)resourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID inRealm:(RLMRealm*)realm {
