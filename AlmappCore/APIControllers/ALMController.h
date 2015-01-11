@@ -49,17 +49,42 @@ typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, NS
 
 #pragma mark - Fetch methods
 
-- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass id:(NSUInteger)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure ;
+- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass
+                                          id:(NSUInteger)resourceID
+                                  parameters:(id)parameters
+                                   onSuccess:(void (^)(id result))onSuccess
+                                   onFailure:(void (^)(NSError *error))onFailure ;
 
-- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass inPath:(NSString*)resourcePath id:(NSUInteger)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure ;
+- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass
+                                      inPath:(NSString*)resourcePath
+                                          id:(NSUInteger)resourceID
+                                  parameters:(id)parameters
+                                   onSuccess:(void (^)(id result))onSuccess
+                                   onFailure:(void (^)(NSError *error))onFailure ;
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass inPath:(NSString*)resourcesPath parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure;
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass
+                                                inPath:(NSString*)resourcesPath
+                                            parameters:(id)parameters
+                                             onSuccess:(void (^)(NSArray *result))onSuccess
+                                             onFailure:(void (^)(NSError *error))onFailure;
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure;
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass
+                                            parameters:(id)parameters
+                                             onSuccess:(void (^)(NSArray *result))onSuccess
+                                             onFailure:(void (^)(NSError *error))onFailure;
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnClass:(Class)parentClass withID:(NSUInteger)parentID parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure;
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass
+                                         nestedOnClass:(Class)parentClass
+                                                withID:(NSUInteger)parentID
+                                            parameters:(id)parameters
+                                             onSuccess:(void (^)(NSArray *result))onSuccess
+                                             onFailure:(void (^)(NSError *error))onFailure;
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnParent:(ALMResource*)parent parameters:(id)parameters onSuccess:(void (^)(NSArray *result))onSuccess onFailure:(void (^)(NSError *error))onFailure;
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass
+                                        nestedOnParent:(ALMResource*)parent
+                                            parameters:(id)parameters
+                                             onSuccess:(void (^)(NSArray *result))onSuccess
+                                             onFailure:(void (^)(NSError *error))onFailure;
 
 #pragma mark - Persistence: commit operations
 
@@ -69,7 +94,7 @@ typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, NS
 
 #pragma mark - Persistence: load resources
 
-- (id)resourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID;
-- (id)resourceInTemporalRealmOfClass:(Class)resourceClass withID:(NSUInteger)resourceID;
+- (id)loadResourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID;
+- (id)loadResourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID onTemporalRealm:(BOOL)loadFromTemporal;
 
 @end
