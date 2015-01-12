@@ -13,6 +13,7 @@
 #import "ALMCampus.h"
 #import "AlmappCore.h"
 #import "ALMPlace.h"
+#import "ALMWebPage.h"
 #import "ALMAreasController.h"
 #import "ALMOrganization.h"
 
@@ -239,6 +240,10 @@
             XCTAssertTrue(c.localization.area.resourceID == c.resourceID, @"Must be related");
         }
     }
+}
+
+- (void)testWebPages {
+    [self resourcesForClass:[ALMWebPage class] path:nil params:nil];
 }
 
 - (void)testCommentsWithAutoFetchParent {

@@ -163,6 +163,32 @@ NSString *const kRValuation = @"valuation";
 NSString *const kACurriculumURL = @"curriculum_url";
 NSString *const kRCurriculumURL = @"curriculumUrl";
 
+#pragma mark - WebPages
+
+NSString *const kAOwner = @"owner";
+NSString *const kROwner = @"owner";
+
+NSString *const kAPageType = @"page_type";
+NSString *const kRPageType = @"pageType";
+
+NSString *const kAIsAvailable = @"available";
+NSString *const kRIsAvailable = @"isAvailable";
+
+NSString *const kAIsSecureProtocol = @"secure_protocol";
+NSString *const kRIsSecureProtocol = @"isSecureProtocol";
+
+NSString *const kAIsLoginRequired = @"requires_login";
+NSString *const kRIsLoginRequired = @"isLoginRequired";
+
+NSString *const kAShouldOpenInBrowser = @"should_open_in_browser";
+NSString *const kRShouldOpenInBrowser = @"shouldOpenInBrowser";
+
+NSString *const kABaseUrl = @"base_url";
+NSString *const kRBaseUrl = @"baseUrl";
+
+NSString *const kAHomeUrl = @"home_url";
+NSString *const kRHomeUrl = @"homeUrl";
+
 /*
 extern NSString *const kA = @"";
 extern NSString *const kR = @"";

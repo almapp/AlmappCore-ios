@@ -37,6 +37,7 @@
 		F65DD4DA1A509153006BCAF0 /* ALMController.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4D91A509153006BCAF0 /* ALMController.m */; };
 		F65DD4DD1A509182006BCAF0 /* ALMUsersController.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4DC1A509182006BCAF0 /* ALMUsersController.m */; };
 		F6647B5E1A56ED6A00D8C814 /* ALMOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = F6647B5D1A56ED6A00D8C814 /* ALMOrganization.m */; };
+		F66B93471A63DF2D0048DACD /* ALMWebPage.m in Sources */ = {isa = PBXBuildFile; fileRef = F66B93461A63DF2D0048DACD /* ALMWebPage.m */; };
 		F6A058A91A543E27001A1E45 /* ALMCore.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058A81A543E27001A1E45 /* ALMCore.m */; };
 		F6A058AC1A54523C001A1E45 /* ALMCampus.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058AB1A54523C001A1E45 /* ALMCampus.m */; };
 		F6A058B01A545E5D001A1E45 /* ALMResource.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058AF1A545E5D001A1E45 /* ALMResource.m */; };
@@ -109,6 +110,8 @@
 		F65DD4DC1A509182006BCAF0 /* ALMUsersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUsersController.m; sourceTree = "<group>"; };
 		F6647B5C1A56ED6A00D8C814 /* ALMOrganization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMOrganization.h; sourceTree = "<group>"; };
 		F6647B5D1A56ED6A00D8C814 /* ALMOrganization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMOrganization.m; sourceTree = "<group>"; };
+		F66B93451A63DF2D0048DACD /* ALMWebPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMWebPage.h; sourceTree = "<group>"; };
+		F66B93461A63DF2D0048DACD /* ALMWebPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMWebPage.m; sourceTree = "<group>"; };
 		F6A058A71A543E27001A1E45 /* ALMCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCore.h; sourceTree = "<group>"; };
 		F6A058A81A543E27001A1E45 /* ALMCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCore.m; sourceTree = "<group>"; };
 		F6A058AA1A54523C001A1E45 /* ALMCampus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCampus.h; sourceTree = "<group>"; };
@@ -295,6 +298,8 @@
 				F60F90761A5969F2002EF807 /* ALMComment.m */,
 				F60F907D1A59841D002EF807 /* ALMLike.h */,
 				F60F907E1A59841D002EF807 /* ALMLike.m */,
+				F66B93451A63DF2D0048DACD /* ALMWebPage.h */,
+				F66B93461A63DF2D0048DACD /* ALMWebPage.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -476,6 +481,7 @@
 				F6A058B31A5480C8001A1E45 /* ALMFaculty.m in Sources */,
 				F6A058AC1A54523C001A1E45 /* ALMCampus.m in Sources */,
 				F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */,
+				F66B93471A63DF2D0048DACD /* ALMWebPage.m in Sources */,
 				F6A058B61A5481B6001A1E45 /* ALMArea.m in Sources */,
 				F65DD4DD1A509182006BCAF0 /* ALMUsersController.m in Sources */,
 				F6D19BD41A518E6000FD4715 /* ALMOrganizationsController.m in Sources */,
