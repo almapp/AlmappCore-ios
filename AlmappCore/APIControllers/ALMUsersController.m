@@ -10,16 +10,4 @@
 
 @implementation ALMUsersController
 
--(RLMObject *)updateInRealm:(RLMRealm *)realm resource:(NSDictionary *)resource {
-    return [ALMUser createOrUpdateInRealm:realm withJSONDictionary:resource];
-}
-
--(NSArray *)updateInRealm:(RLMRealm *)realm resources:(NSArray *)resources {
-    return [ALMUser createOrUpdateInRealm:realm withJSONArray:resources];
-}
-
-//-(NSString *)resourceSingleName {
-//    return @"user";
-//}
-
 @end
