@@ -156,6 +156,32 @@ extern NSString *const kRValuation;
 extern NSString *const kACurriculumURL;
 extern NSString *const kRCurriculumURL;
 
+#pragma mark - Webpages
+
+extern NSString *const kAOwner;
+extern NSString *const kROwner;
+
+extern NSString *const kAPageType;
+extern NSString *const kRPageType;
+
+extern NSString *const kAIsAvailable;
+extern NSString *const kRIsAvailable;
+
+extern NSString *const kAIsSecureProtocol;
+extern NSString *const kRIsSecureProtocol;
+
+extern NSString *const kAIsLoginRequired;
+extern NSString *const kRIsLoginRequired;
+
+extern NSString *const kAShouldOpenInBrowser;
+extern NSString *const kRShouldOpenInBrowser;
+
+extern NSString *const kABaseUrl;
+extern NSString *const kRBaseUrl;
+
+extern NSString *const kAHomeUrl;
+extern NSString *const kRHomeUrl;
+
 /*
 extern NSString *const kA;
 extern NSString *const kR;
