@@ -72,7 +72,7 @@
 - (NSString*)resourcePathFor:(Class)resourceClass nestedInClass:(Class)parentClass withID:(long long)parentID {
     NSString* parentPath = [self resourcePathFor:parentClass];
     NSString* childPath = [self resourcePathFor:resourceClass];
-    NSString* fullPath = [NSString stringWithFormat:@"%@/%lu/%@", parentPath, (unsigned long)parentID, childPath];
+    NSString* fullPath = [NSString stringWithFormat:@"%@/%lld/%@", parentPath, parentID, childPath];
     return [self buildUrlWithPath:fullPath];
 }
 
@@ -198,7 +198,7 @@
     return [self resourceCollectionForClass:rClass inPath:nil parameters:parameters onSuccess:onSuccess onFailure:onFailure];
 }
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnExistentClass:(Class)parentClass withID:(NSUInteger)parentID parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnExistentClass:(Class)parentClass withID:(long long)parentID parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
     
     if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
         onFailure([self errorForInvalidClass:rClass]);
@@ -285,7 +285,7 @@
 }
 
 - (ALMCommitNestedResourcesOperation)commitNestedResources {
-    return ^(RLMRealm* realm, Class resourceClass, Class parentClass, NSUInteger parentID, NSArray* data) {
+    return ^(RLMRealm* realm, Class resourceClass, Class parentClass, long long parentID, NSArray* data) {
 
         ALMResource* parent = [ALMResource objectInRealm:realm ofType:parentClass withID:parentID];
         
@@ -349,7 +349,7 @@
     return [self resourceOfClass:resourceClass withID:resourceID inRealm:realm];
 }
 
-- (id)resourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID inRealm:(RLMRealm*)realm {
+- (id)resourceOfClass:(Class)resourceClass withID:(long long)resourceID inRealm:(RLMRealm*)realm {
     return [ALMResource objectInRealm:realm ofType:resourceClass withID:resourceID];
 }
 
