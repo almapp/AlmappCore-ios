@@ -79,7 +79,7 @@
 }
 
 - (ALMCommitNestedResourcesOperation)commitNestedResources {
-    return ^(RLMRealm* realm, Class resourceClass, Class parentClass, NSUInteger parentID, NSArray* data) {
+    return ^(RLMRealm* realm, Class resourceClass, Class parentClass, long long parentID, NSArray* data) {
         
         ALMResource* parent = [ALMResource objectInRealm:realm ofType:parentClass withID:parentID];
         

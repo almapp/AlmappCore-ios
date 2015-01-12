@@ -18,7 +18,7 @@
 
 typedef id (^ALMCommitResourceOperation)(RLMRealm*, Class, NSDictionary*);
 typedef NSArray*(^ALMCommitResourcesOperation)(RLMRealm*, Class, NSArray*);
-typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, NSUInteger, NSArray*);
+typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, long long, NSArray*);
 
 @interface ALMController : NSObject
 
