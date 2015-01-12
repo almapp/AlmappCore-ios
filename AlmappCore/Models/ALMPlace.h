@@ -18,7 +18,7 @@
 @property NSString *identifier;
 @property BOOL isService;
 @property NSString *areaType; // Owner type
-@property NSInteger areaID;   // Owner ID (no polymorhpic assosiations)
+@property long long areaID;   // Owner ID (no polymorhpic assosiations)
 @property float zoom;
 @property float angle;
 @property float tilt;

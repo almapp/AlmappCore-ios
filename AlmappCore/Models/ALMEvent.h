@@ -24,7 +24,7 @@
 @property ALMUser *user;
 @property RLMArray<ALMUser> *participants;
 @property NSString *hostType;
-@property NSInteger hostID;
+@property long long hostID;
 @property NSString *facebookUrl;
 @property NSString *url;
 

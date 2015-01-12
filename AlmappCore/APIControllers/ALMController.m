@@ -69,7 +69,7 @@
     return [resourceClass performSelector:@selector(apiPluralForm)];
 }
 
-- (NSString*)resourcePathFor:(Class)resourceClass nestedInClass:(Class)parentClass withID:(NSUInteger)parentID {
+- (NSString*)resourcePathFor:(Class)resourceClass nestedInClass:(Class)parentClass withID:(long long)parentID {
     NSString* parentPath = [self resourcePathFor:parentClass];
     NSString* childPath = [self resourcePathFor:resourceClass];
     NSString* fullPath = [NSString stringWithFormat:@"%@/%lu/%@", parentPath, (unsigned long)parentID, childPath];
@@ -80,10 +80,10 @@
     return dirtyUrl;
 }
 
-- (NSString *)buildUrlWithPath:(NSString *)path resourceID:(NSUInteger)resourceID {
+- (NSString *)buildUrlWithPath:(NSString *)path resourceID:(long long)resourceID {
     NSString* cleanedPath = [self cleanUrl:path];
     if (cleanedPath != nil) {
-        return [[self buildUrlWithPath:path] stringByAppendingString:[NSString stringWithFormat:@"/%ld", resourceID]];
+        return [[self buildUrlWithPath:path] stringByAppendingString:[NSString stringWithFormat:@"/%lld", resourceID]];
     }
     else {
         return nil;
@@ -104,7 +104,7 @@
 
 #pragma mark - Requests operations
 
--(AFHTTPRequestOperation *)resourceForClass:(Class)rClass inPath:(NSString *)resourcePath id:(NSUInteger)resourceID parameters:(id)parameters onSuccess:(void (^)(id))onSuccess onFailure:(void (^)(NSError *))onFailure {
+-(AFHTTPRequestOperation *)resourceForClass:(Class)rClass inPath:(NSString *)resourcePath id:(long long)resourceID parameters:(id)parameters onSuccess:(void (^)(id))onSuccess onFailure:(void (^)(NSError *))onFailure {
     
     if ([rClass isSubclassOfClass:[ALMResource class]] == NO) {
         onFailure([self errorForInvalidClass:rClass]);
@@ -146,7 +146,7 @@
 
 }
 
-- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass id:(NSUInteger)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure {
+- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass id:(long long)resourceID parameters:(id)parameters onSuccess:(void (^)(id result))onSuccess onFailure:(void (^)(NSError *error))onFailure {
     
     return [self resourceForClass:rClass inPath:nil id:resourceID parameters:parameters onSuccess:onSuccess onFailure:onFailure];
 }
@@ -235,7 +235,7 @@
     return op;
 }
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnClass:(Class)parentClass withID:(NSUInteger)parentID parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
+- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass nestedOnClass:(Class)parentClass withID:(long long)parentID parameters:(id)parameters onSuccess:(void (^)(NSArray *))onSuccess onFailure:(void (^)(NSError *))onFailure {
     
     ALMResource *parent = [ALMResource objectInRealm:self.requestRealm ofType:parentClass withID:parentID];
     
@@ -340,11 +340,11 @@
 
 #pragma mark - Getting resources
 
-- (id)loadResourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID {
+- (id)loadResourceOfClass:(Class)resourceClass withID:(long long)resourceID {
     return [self resourceOfClass:resourceClass withID:resourceID inRealm:[self requestDefaultRealm]];
 }
 
-- (id)loadResourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID onTemporalRealm:(BOOL)loadFromTemporal {
+- (id)loadResourceOfClass:(Class)resourceClass withID:(long long)resourceID onTemporalRealm:(BOOL)loadFromTemporal {
     RLMRealm *realm = loadFromTemporal ? [self requestTemporalRealm] : [self requestDefaultRealm];
     return [self resourceOfClass:resourceClass withID:resourceID inRealm:realm];
 }

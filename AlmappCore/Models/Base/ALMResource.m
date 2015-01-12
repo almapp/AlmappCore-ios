@@ -95,8 +95,12 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
     return kPersistModeDefault;
 }
 
-+ (id)objectInRealm:(RLMRealm *)realm ofType:(Class)resourceClass withID:(NSUInteger)resourceID {
-    return [resourceClass performSelector:@selector(objectInRealm:forPrimaryKey:) withObject:realm withObject:[NSNumber numberWithUnsignedLong:resourceID]];
++ (id)objectInRealm:(RLMRealm *)realm ofType:(Class)resourceClass withID:(long long)resourceID {
+    return [resourceClass performSelector:@selector(objectInRealm:forPrimaryKey:) withObject:realm withObject:[NSNumber numberWithLongLong:resourceID]];
+}
+
++ (id)objectOfType:(Class)resourceClass withID:(long long)resourceID {
+    return [self objectInRealm:[RLMRealm defaultRealm] ofType:resourceClass withID:resourceID];
 }
 
 @end
