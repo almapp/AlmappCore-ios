@@ -43,21 +43,21 @@ typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, NS
 #pragma mark - Paths & URLs
 
 - (NSString*)resourcePathFor:(Class)resourceClass;
-- (NSString*)resourcePathFor:(Class)resourceClass nestedInClass:(Class)parentClass withID:(NSUInteger)parentID;
-- (NSString*)buildUrlWithPath:(NSString*)path resourceID:(NSUInteger)resourceID;
+- (NSString*)resourcePathFor:(Class)resourceClass nestedInClass:(Class)parentClass withID:(long long)parentID;
+- (NSString*)buildUrlWithPath:(NSString*)path resourceID:(long long)resourceID;
 - (NSString*)buildUrlWithPath:(NSString*)path;
 
 #pragma mark - Fetch methods
 
 - (AFHTTPRequestOperation *)resourceForClass:(Class)rClass
-                                          id:(NSUInteger)resourceID
+                                          id:(long long)resourceID
                                   parameters:(id)parameters
                                    onSuccess:(void (^)(id result))onSuccess
                                    onFailure:(void (^)(NSError *error))onFailure ;
 
 - (AFHTTPRequestOperation *)resourceForClass:(Class)rClass
                                       inPath:(NSString*)resourcePath
-                                          id:(NSUInteger)resourceID
+                                          id:(long long)resourceID
                                   parameters:(id)parameters
                                    onSuccess:(void (^)(id result))onSuccess
                                    onFailure:(void (^)(NSError *error))onFailure ;
@@ -75,7 +75,7 @@ typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, NS
 
 - (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass
                                          nestedOnClass:(Class)parentClass
-                                                withID:(NSUInteger)parentID
+                                                withID:(long long)parentID
                                             parameters:(id)parameters
                                              onSuccess:(void (^)(NSArray *result))onSuccess
                                              onFailure:(void (^)(NSError *error))onFailure;
@@ -94,7 +94,7 @@ typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, NS
 
 #pragma mark - Persistence: load resources
 
-- (id)loadResourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID;
-- (id)loadResourceOfClass:(Class)resourceClass withID:(NSUInteger)resourceID onTemporalRealm:(BOOL)loadFromTemporal;
+- (id)loadResourceOfClass:(Class)resourceClass withID:(long long)resourceID;
+- (id)loadResourceOfClass:(Class)resourceClass withID:(long long)resourceID onTemporalRealm:(BOOL)loadFromTemporal;
 
 @end

@@ -17,7 +17,7 @@
 @property ALMUser *user;
 @property NSInteger valuation;
 @property NSString *likeableType;
-@property NSInteger likeableID;
+@property long long likeableID;
 
 - (void)setLikeable:(ALMResource<ALMLikeable>*)likeable;
 - (id)likeable;

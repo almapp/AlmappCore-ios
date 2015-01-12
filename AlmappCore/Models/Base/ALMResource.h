@@ -40,7 +40,7 @@ extern ALMPersistMode const kPersistModeDefault;
 
 @interface ALMResource : RLMObject
 
-@property NSInteger resourceID;
+@property long long resourceID;
 
 - (NSString *)className;
 
@@ -65,6 +65,8 @@ extern ALMPersistMode const kPersistModeDefault;
 
 + (ALMPersistMode)persistMode;
 
-+ (id)objectInRealm:(RLMRealm *)realm ofType:(Class)resourceClass withID:(NSUInteger)resourceID;
++ (id)objectInRealm:(RLMRealm *)realm ofType:(Class)resourceClass withID:(long long)resourceID;
+
++ (id)objectOfType:(Class)resourceClass withID:(long long)resourceID;
 
 @end
