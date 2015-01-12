@@ -22,6 +22,7 @@
 #import "ALMAreasController.h"
 
 #import "ALMResource.h"
+#import "ALMResourceConstants.h"
 #import "ALMLikeable.h"
 #import "ALMCommentable.h"
 
@@ -41,3 +42,4 @@
 #import "ALMComment.h"
 #import "ALMLike.h"
 
+#import "ALMWebPage.h"
