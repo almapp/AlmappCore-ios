@@ -96,5 +96,5 @@ typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, lo
 
 - (id)loadResourceOfClass:(Class)resourceClass withID:(long long)resourceID;
 - (id)loadResourceOfClass:(Class)resourceClass withID:(long long)resourceID onTemporalRealm:(BOOL)loadFromTemporal;
-
++ (NSArray *)sortResources:(RLMResults *)resources onProperty:(NSString *)property withValues:(NSArray *)preferedOrder;
 @end
