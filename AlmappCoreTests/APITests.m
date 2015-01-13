@@ -16,6 +16,7 @@
 #import "ALMWebPage.h"
 #import "ALMAreasController.h"
 #import "ALMOrganization.h"
+#import "ALMPost.h"
 
 #import <Realm/Realm.h>
 #import <Realm+JSON/RLMObject+JSON.h>
@@ -244,6 +245,10 @@
 
 - (void)testWebPages {
     [self resourcesForClass:[ALMWebPage class] path:nil params:nil];
+}
+
+- (void)testPosts {
+    [self resourcesForClass:[ALMPost class] path:nil params:nil];
 }
 
 - (void)testCommentsWithAutoFetchParent {

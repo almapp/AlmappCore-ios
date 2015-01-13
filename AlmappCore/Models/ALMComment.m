@@ -42,7 +42,7 @@
     [self setCommentableType:commentable.className];
 }
 
-- (id)commentable {
+- (ALMResource<ALMCommentable>*)commentable {
     Class commentableClass = NSClassFromString(self.commentableType);
     return [ALMResource objectInRealm:[self realm] ofType:commentableClass withID:self.commentableID];
 }

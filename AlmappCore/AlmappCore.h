@@ -41,5 +41,6 @@
 
 #import "ALMComment.h"
 #import "ALMLike.h"
+#import "ALMPost.h"
 
 #import "ALMWebPage.h"

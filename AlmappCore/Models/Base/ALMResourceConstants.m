@@ -40,6 +40,14 @@ NSString *const kRPolymorphicLikeable = @"likeable";
 NSString *const kRPolymorphicLikeableType = @"likeableType";
 NSString *const kRPolymorphicLikeableID = @"likeableID";
 
+NSString *const kRPolymorphicPostTargetable = @"target";
+NSString *const kRPolymorphicPostTargetableType = @"targetType";
+NSString *const kRPolymorphicPostTargetableID = @"targetID";
+
+NSString *const kRPolymorphicPostPublisher = @"entity";
+NSString *const kRPolymorphicPostPublisherType = @"entityType";
+NSString *const kRPolymorphicPostPublisherID = @"entityID";
+
 #pragma mark - Basics
 
 NSString *const kAResourceID = @"id";
@@ -188,6 +196,14 @@ NSString *const kRBaseUrl = @"baseUrl";
 
 NSString *const kAHomeUrl = @"home_url";
 NSString *const kRHomeUrl = @"homeUrl";
+
+#pragma mark - Posts
+
+NSString *const kAContent = @"content";
+NSString *const kRContent = @"content";
+
+NSString *const kAShouldNotify = @"notify";
+NSString *const kRShouldNotify = @"shouldNotify";
 
 /*
 extern NSString *const kA = @"";

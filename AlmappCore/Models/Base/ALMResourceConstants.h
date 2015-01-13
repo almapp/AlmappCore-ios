@@ -33,6 +33,14 @@ extern NSString *const kRPolymorphicLikeable;
 extern NSString *const kRPolymorphicLikeableType;
 extern NSString *const kRPolymorphicLikeableID;
 
+extern NSString *const kRPolymorphicPostTargetable;
+extern NSString *const kRPolymorphicPostTargetableType;
+extern NSString *const kRPolymorphicPostTargetableID;
+
+extern NSString *const kRPolymorphicPostPublisher;
+extern NSString *const kRPolymorphicPostPublisherType;
+extern NSString *const kRPolymorphicPostPublisherID;
+
 #pragma mark - Basics
 
 extern NSString *const kAResourceID;
@@ -181,6 +189,14 @@ extern NSString *const kRBaseUrl;
 
 extern NSString *const kAHomeUrl;
 extern NSString *const kRHomeUrl;
+
+#pragma mark - Posts
+
+extern NSString *const kAContent;
+extern NSString *const kRContent;
+
+extern NSString *const kAShouldNotify;
+extern NSString *const kRShouldNotify;
 
 /*
 extern NSString *const kA;
