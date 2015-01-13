@@ -25,7 +25,7 @@
 @property NSDate *createdAt;
 
 - (void)setCommentable:(ALMResource<ALMCommentable>*)commmentable;
-- (id)commentable;
+- (ALMResource<ALMCommentable>*)commentable;
 
 @end
 RLM_ARRAY_TYPE(ALMComment)

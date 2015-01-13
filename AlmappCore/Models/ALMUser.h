@@ -7,8 +7,9 @@
 //
 
 #import "ALMResource.h"
+#import "ALMPostPublisher.h"
 
-@interface ALMUser : ALMResource
+@interface ALMUser : ALMResource <ALMPostPublisher>
 
 @property NSString *name;
 @property NSString *username;

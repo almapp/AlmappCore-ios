@@ -11,6 +11,8 @@
 
 @implementation ALMUser
 
+@synthesize publishedPosts = _publishedPosts;
+
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
              [self jatt:kAResourceID]     : kRResourceID,

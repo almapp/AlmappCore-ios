@@ -32,7 +32,7 @@
     [self setLikeableType:[likeable className]];
 }
 
-- (id)likeable {
+- (ALMResource<ALMLikeable>*)likeable {
     Class likeableClass = NSClassFromString(self.likeableType);
     return [ALMResource objectInRealm:[self realm] ofType:likeableClass withID:self.likeableID];
 }

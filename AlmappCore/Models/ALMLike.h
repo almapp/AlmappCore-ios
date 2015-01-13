@@ -20,7 +20,7 @@
 @property long long likeableID;
 
 - (void)setLikeable:(ALMResource<ALMLikeable>*)likeable;
-- (id)likeable;
+- (ALMResource<ALMLikeable>*)likeable;
 
 #pragma mark - Like helpers
 

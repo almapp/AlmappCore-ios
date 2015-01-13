@@ -10,8 +10,10 @@
 #import "ALMPlace.h"
 #import "ALMCommentable.h"
 #import "ALMLikeable.h"
+#import "ALMPostTargetable.h"
+#import "ALMPostPublisher.h"
 
-@interface ALMArea : ALMResource <ALMLikeable, ALMCommentable>
+@interface ALMArea : ALMResource <ALMLikeable, ALMCommentable, ALMPostTargetable, ALMPostPublisher>
 
 @property NSString *name;
 @property NSString *shortName;
