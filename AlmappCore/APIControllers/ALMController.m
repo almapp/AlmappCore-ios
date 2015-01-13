@@ -353,4 +353,26 @@
     return [ALMResource objectInRealm:realm ofType:resourceClass withID:resourceID];
 }
 
++ (NSArray *)sortResources:(RLMResults *)resources onProperty:(NSString *)property withValues:(NSArray *)preferedOrder {
+    NSMutableArray* results = [NSMutableArray arrayWithCapacity:resources.count];
+    NSMutableArray* missingValues = [NSMutableArray array];
+    
+    for (int i = 0; i < resources.count; i++) {
+        [results addObject:[NSNull null]];
+    }
+    
+    for (id resource in resources) {
+        id value = [resource valueForKey:property];
+        NSUInteger index = [preferedOrder indexOfObject:value];
+        if (index != NSNotFound) {
+            [results replaceObjectAtIndex:index withObject:resource];
+        }
+        else {
+            [missingValues addObject:resource];
+        }
+    }
+    [results addObjectsFromArray:missingValues];
+    return results;
+}
+
 @end
