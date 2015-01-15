@@ -34,14 +34,14 @@
         _core = [ALMCore initInstanceWithDelegate:_dummy baseURL:nil];
         XCTAssertNil(_core, @"Cannot create singleton with invalid params");
         
-        _core = [ALMCore initInstanceWithDelegate:_dummy baseURL:[NSURL URLWithString:ALMBaseURL]];
+        _core = [ALMCore initInstanceWithDelegate:_dummy baseURL:[NSURL URLWithString:kTestingBaseURL]];
         XCTAssertNotNil(_core, @"Cannot find AlmappCore instance for valid params");
         
         _core = nil;
         [ALMCore setSharedInstance:nil];
         XCTAssertNil([ALMCore sharedInstance], @"Singleton must not exist");
         
-        _core = [ALMCore initInstanceWithDelegate:_dummy baseURLString:ALMBaseURL];
+        _core = [ALMCore initInstanceWithDelegate:_dummy baseURLString:kTestingBaseURL];
         XCTAssertNotNil(_core, @"Cannot find AlmappCore instance for valid params with URL string");
     }
 }

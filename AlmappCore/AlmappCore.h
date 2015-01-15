@@ -18,7 +18,6 @@
 #import "ALMControllerDelegate.h"
 
 #import "ALMController.h"
-#import "ALMAreasController.h"
 #import "ALMWebPagesController.h"
 
 #import "ALMResource.h"

@@ -8,6 +8,9 @@
 
 #import "ALMPost.h"
 #import "ALMResourceConstants.h"
+#import "ALMUser.h"
+#import "ALMPlace.h"
+#import "ALMEvent.h"
 
 @implementation ALMPost
 
@@ -33,11 +36,39 @@
              kRPolymorphicPostPublisherID       : kRDefaultPolymorphicID,
              kRPolymorphicPostTargetableType    : kRDefaultPolymorphicType,
              kRPolymorphicPostTargetableID      : kRDefaultPolymorphicID,
-             kRUpdatedAt                        : [NSDate distantPast],
-             kRCreatedAt                        : [NSDate distantPast]
+             kRUpdatedAt                        : [NSDate defaultDate],
+             kRCreatedAt                        : [NSDate defaultDate]
              };
 }
 
++ (NSDictionary *)JSONNestedResourceInboundMappingDictionary {
+    return @{
+             kAUser : kRUser,
+             kAPolymorphicPostTargetable : kRPolymorphicPostTargetable,
+             kAPolymorphicPostPublisher : kRPolymorphicPostPublisher,
+             kALocalization: kRLocalization,
+             kAEvent : kREvent
+             };
+}
+
++ (Class)propertyTypeForKRConstant:(NSString *)kr {
+    if([kr isEqualToString:kRUser]) {
+        return [ALMUser class];
+    }
+    else if ([kr isEqualToString:kRLocalization]) {
+        return [ALMPlace class];
+    }
+    else if ([kr isEqualToString:kREvent]) {
+        return [ALMEvent class];
+    }
+    else {
+        return [super propertyTypeForKRConstant:kr];
+    }
+}
+
++ (NSArray *)polymorphicNestedResourcesKeys {
+    return @[kAPolymorphicPostTargetable, kAPolymorphicPostPublisher];
+}
 
 - (void)setEntity:(ALMResource<ALMPostPublisher> *)entity {
     [self setEntityID:[entity resourceID]];
@@ -46,7 +77,7 @@
 
 - (ALMResource<ALMPostPublisher>*)entity {
     Class entityClass = NSClassFromString(self.entityType);
-    return [ALMResource objectInRealm:[self realm] ofType:entityClass withID:self.entityID];
+    return [entityClass objectInRealm:self.realm forID:self.entityID];
 }
 
 - (void)setTarget:(ALMResource<ALMPostTargetable> *)target {
@@ -56,7 +87,7 @@
 
 - (id)target {
     Class targetClass = NSClassFromString(self.targetType);
-    return [ALMResource objectInRealm:[self realm] ofType:targetClass withID:self.targetID];
+    return [targetClass objectForID:self.targetID];
 }
 
 - (NSUInteger)positiveLikeCount {

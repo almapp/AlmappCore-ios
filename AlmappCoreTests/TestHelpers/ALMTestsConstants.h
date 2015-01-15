@@ -10,6 +10,6 @@
 
 @interface ALMTestsConstants : NSObject
 
-extern NSString * const ALMBaseURL;
+extern NSString * const kTestingBaseURL;
 
 @end

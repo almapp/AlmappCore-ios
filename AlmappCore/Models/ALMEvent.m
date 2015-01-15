@@ -34,16 +34,49 @@
              kRTitle                    : kRDefaultNullString,
              kRIsPrivate                : @NO,
              kRInformation              : kRDefaultNullString,
-             kRPublishDate              : [NSDate distantPast],
-             kRFromDate                 : [NSDate distantPast],
-             kRToDate                   : [NSDate distantPast],
+             kRPublishDate              : [NSDate defaultEventDate],
+             kRFromDate                 : [NSDate defaultEventDate],
+             kRToDate                   : [NSDate defaultEventDate],
              kRPolymorphicHostType      : kRDefaultPolymorphicType,
              kRPolymorphicHostID        : kRDefaultPolymorphicID,
              kRFacebookURL              : kRDefaultNullString,
              kRURL                      : kRDefaultNullString,
-             kRUpdatedAt                : [NSDate distantPast],
-             kRCreatedAt                : [NSDate distantPast]
+             kRUpdatedAt                : [NSDate defaultEventDate],
+             kRCreatedAt                : [NSDate defaultEventDate]
              };
+}
+
++ (NSDictionary *)JSONNestedResourceInboundMappingDictionary {
+    return @{
+             kAUser                     : kRUser,
+             kAPolymorphicHost          : kRPolymorphicHost,
+             kALocalization             : kRLocalization,
+             };
+}
+
++ (NSDictionary *)JSONNestedResourceCollectionInboundMappingDictionary {
+    return @{
+             kAParticipants             : kRParticipants
+             };
+}
+
++ (Class)propertyTypeForKRConstant:(NSString *)kr {
+    if([kr isEqualToString:kRUser]) {
+        return [ALMUser class];
+    }
+    else if ([kr isEqualToString:kRLocalization]) {
+        return [ALMPlace class];
+    }
+    else if ([kr isEqualToString:kRParticipants]) {
+        return [ALMUser class];
+    }
+    else {
+        return [super propertyTypeForKRConstant:kr];
+    }
+}
+
++ (NSArray *)polymorphicNestedResourcesKeys {
+    return @[kAPolymorphicHost];
 }
 
 - (void)setHost:(ALMResource *)host {
@@ -53,7 +86,7 @@
 
 - (id)host {
     Class hostClass = NSClassFromString(self.hostType);
-    return [ALMResource objectInRealm:[self realm] ofType:hostClass withID:self.hostID];
+    return [hostClass objectInRealm:self.realm forID:self.hostID];
 }
 
 - (NSUInteger)positiveLikeCount {

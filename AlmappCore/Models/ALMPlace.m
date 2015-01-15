@@ -45,8 +45,8 @@
              kRAngle                    : @0.0f,
              kRLatitude                 : @0.0f,
              kRLongitude                : @0.0f,
-             kRUpdatedAt                : [NSDate distantPast],
-             kRCreatedAt                : [NSDate distantPast]
+             kRUpdatedAt                : [NSDate defaultDate],
+             kRCreatedAt                : [NSDate defaultDate]
              };
 }
 
@@ -57,7 +57,7 @@
 
 - (ALMArea *)area {
     Class areaClass = NSClassFromString(self.areaType);
-    return [ALMResource objectInRealm:[self realm] ofType:areaClass withID:self.areaID];
+    return [areaClass objectInRealm:self.realm forID:self.areaID];
 }
 
 - (NSUInteger)positiveLikeCount {

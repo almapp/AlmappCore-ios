@@ -36,6 +36,15 @@ extern ALMPersistMode const kPersistModeDefault;
 
 @end
 
+#pragma mark - Date Category
+
+@interface NSDate (ALMResource)
+
++ (NSDate*)defaultDate;
++ (NSDate*)defaultEventDate;
+
+@end
+
 #pragma mark - Resource header
 
 @interface ALMResource : RLMObject
@@ -51,22 +60,46 @@ extern ALMPersistMode const kPersistModeDefault;
 + (NSString*)realmSingleForm;
 + (NSString*)realmPluralForm;
 
+- (NSString*)apiSingleForm;
+- (NSString*)apiPluralForm;
+- (NSString*)realmSingleForm;
+- (NSString*)realmPluralForm;
+
 #pragma mark - Lexic helpers
 
 + (NSString*)pluralForm;
 + (NSString*)singleForm;
 
+- (NSString*)pluralForm;
+- (NSString*)singleForm;
+
 #pragma mark - JSON helpers
 
 + (NSString*)jsonRoot;
+
+- (NSString*)jsonRoot;
+
 + (NSString*)jatt:(NSString*)attribute;
+
+#pragma mark - Methods
+
++ (NSDictionary*)JSONNestedResourceInboundMappingDictionary;
++ (NSDictionary*)JSONNestedResourceCollectionInboundMappingDictionary;
++ (Class)propertyTypeForKRConstant:(NSString*)kr;
++ (NSArray*)polymorphicNestedResourcesKeys;
++ (NSString*)nameWhenAssociatedWith:(Class)associatedClass;
+
+#pragma mark - Tools
+
++ (NSDictionary*)renameResourceRootOf:(NSDictionary*)resource to:(NSString*)newRoot;
 
 #pragma mark - Persistence
 
 + (ALMPersistMode)persistMode;
 
-+ (id)objectInRealm:(RLMRealm *)realm ofType:(Class)resourceClass withID:(long long)resourceID;
+#pragma mark - Loading
 
-+ (id)objectOfType:(Class)resourceClass withID:(long long)resourceID;
++ (id)objectInRealm:(RLMRealm *)realm forID:(long long)resourceID;
++ (id)objectForID:(long long)resourceID;
 
 @end

@@ -24,6 +24,30 @@ NSString *const kRDefaultUnknownFloor = @"?";
 
 #pragma mark - Polymorphic
 
+NSString *const kAPolymorphicArea = @"area";
+NSString *const kAPolymorphicAreaType = @"area_type";
+NSString *const kAPolymorphicAreaID = @"area_id";
+
+NSString *const kAPolymorphicHost = @"host";
+NSString *const kAPolymorphicHostType = @"host_type";
+NSString *const kAPolymorphicHostID = @"host_id";
+
+NSString *const kAPolymorphicCommentable = @"commentable";
+NSString *const kAPolymorphicCommentableType = @"commentable_type";
+NSString *const kAPolymorphicCommentableID = @"commentable_id";
+
+NSString *const kAPolymorphicLikeable = @"likeable";
+NSString *const kAPolymorphicLikeableType = @"likeable_type";
+NSString *const kAPolymorphicLikeableID = @"likeable_id";
+
+NSString *const kAPolymorphicPostTargetable = @"target";
+NSString *const kAPolymorphicPostTargetableType = @"target_type";
+NSString *const kAPolymorphicPostTargetableID = @"target_id";
+
+NSString *const kAPolymorphicPostPublisher = @"entity";
+NSString *const kAPolymorphicPostPublisherType = @"entity_type";
+NSString *const kAPolymorphicPostPublisherID = @"entity_id";
+
 NSString *const kRPolymorphicArea = @"area";
 NSString *const kRPolymorphicAreaType = @"areaType";
 NSString *const kRPolymorphicAreaID = @"areaID";
@@ -77,6 +101,9 @@ NSString *const kRTitle = @"title";
 NSString *const kAAddress = @"address";
 NSString *const kRAddress = @"address";
 
+NSString *const kAUser = @"user";
+NSString *const kRUser = @"user";
+
 NSString *const kAUsername = @"username";
 NSString *const kRUsername = @"username";
 
@@ -117,6 +144,9 @@ NSString *const kRStudentID = @"studentID";
 
 #pragma mark - Places
 
+NSString *const kALocalization = @"localization";
+NSString *const kRLocalization = @"localization";
+
 NSString *const kAIsService = @"service";
 NSString *const kRIsService = @"isService";
 
@@ -139,6 +169,12 @@ NSString *const kAFloor = @"floor";
 NSString *const kRFloor = @"floor";
 
 #pragma mark - Events
+
+NSString *const kAEvent = @"event";
+NSString *const kREvent = @"event";
+
+NSString *const kAParticipants = @"participants";
+NSString *const kRParticipants = @"participants";
 
 NSString *const kAIsPrivate = @"private";
 NSString *const kRIsPrivate = @"isPrivate";
@@ -221,5 +257,21 @@ extern NSString *const kR;
 */
 
 @implementation ALMResourceConstants
+
++ (NSString*)polymorphicATypeKey:(NSString*)polymorphicResource {
+    return [NSString stringWithFormat:@"%@_type", polymorphicResource];
+}
+
++ (NSString*)polymorphicAIDKey:(NSString*)polymorphicResource {
+    return [NSString stringWithFormat:@"%@_id", polymorphicResource];
+}
+
++ (NSString*)polymorphicRTypeKey:(NSString*)polymorphicResource {
+    return [NSString stringWithFormat:@"%@Type", polymorphicResource];
+}
+
++ (NSString*)polymorphicRIDpeKey:(NSString*)polymorphicResource {
+    return [NSString stringWithFormat:@"%@ID", polymorphicResource];
+}
 
 @end

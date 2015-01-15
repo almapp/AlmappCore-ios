@@ -14,13 +14,15 @@
 #import "ALMControllerDelegate.h"
 #import "ALMResource.h"
 
+
 #pragma mark - Definitions
 
 typedef id (^ALMCommitResourceOperation)(RLMRealm*, Class, NSDictionary*);
 typedef NSArray*(^ALMCommitResourcesOperation)(RLMRealm*, Class, NSArray*);
-typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, long long, NSArray*);
+typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, ALMResource*, NSArray*);
 
 @interface ALMController : NSObject
+
 
 #pragma mark - Properties
 
@@ -29,16 +31,19 @@ typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, lo
 /* Default is YES, change to NO if you want to keep the store on the memory. */
 @property (assign) BOOL saveToPersistenceStore;
 
+
 # pragma mark - Constructors
 
 - (instancetype) init __attribute__((unavailable("Instanciate through ALMCore class")));
 
 + (id)controllerWithDelegate:(id<ALMControllerDelegate>)controllerDelegate;
 
+
 #pragma mark - Managers
 
 - (AFHTTPRequestOperationManager*)requestManager;
 - (RLMRealm*)requestRealm;
+
 
 #pragma mark - Paths & URLs
 
@@ -47,44 +52,46 @@ typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, lo
 - (NSString*)buildUrlWithPath:(NSString*)path resourceID:(long long)resourceID;
 - (NSString*)buildUrlWithPath:(NSString*)path;
 
+
 #pragma mark - Fetch methods
 
-- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass
-                                          id:(long long)resourceID
-                                  parameters:(id)parameters
-                                   onSuccess:(void (^)(id result))onSuccess
-                                   onFailure:(void (^)(NSError *error))onFailure ;
+- (AFHTTPRequestOperation *)resource:(Class)rClass
+                                  id:(long long)resourceID
+                          parameters:(id)parameters
+                           onSuccess:(void (^)(id result))onSuccess
+                           onFailure:(void (^)(NSError *error))onFailure;
 
-- (AFHTTPRequestOperation *)resourceForClass:(Class)rClass
-                                      inPath:(NSString*)resourcePath
-                                          id:(long long)resourceID
-                                  parameters:(id)parameters
-                                   onSuccess:(void (^)(id result))onSuccess
-                                   onFailure:(void (^)(NSError *error))onFailure ;
+- (AFHTTPRequestOperation *)resource:(Class)rClass
+                              inPath:(NSString*)resourcePath
+                                  id:(long long)resourceID
+                          parameters:(id)parameters
+                           onSuccess:(void (^)(id result))onSuccess
+                           onFailure:(void (^)(NSError *error))onFailure;
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass
-                                                inPath:(NSString*)resourcesPath
-                                            parameters:(id)parameters
-                                             onSuccess:(void (^)(NSArray *result))onSuccess
-                                             onFailure:(void (^)(NSError *error))onFailure;
+- (AFHTTPRequestOperation *)resourceCollection:(Class)rClass
+                                    parameters:(id)parameters
+                                     onSuccess:(void (^)(NSArray *result))onSuccess
+                                     onFailure:(void (^)(NSError *error))onFailure;
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass
-                                            parameters:(id)parameters
-                                             onSuccess:(void (^)(NSArray *result))onSuccess
-                                             onFailure:(void (^)(NSError *error))onFailure;
+- (AFHTTPRequestOperation *)resourceCollection:(Class)rClass
+                                        inPath:(NSString*)resourcesPath
+                                    parameters:(id)parameters
+                                     onSuccess:(void (^)(NSArray *result))onSuccess
+                                     onFailure:(void (^)(NSError *error))onFailure;
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass
-                                         nestedOnClass:(Class)parentClass
-                                                withID:(long long)parentID
-                                            parameters:(id)parameters
-                                             onSuccess:(void (^)(NSArray *result))onSuccess
-                                             onFailure:(void (^)(NSError *error))onFailure;
+- (AFHTTPRequestOperation *)nestedResourceCollection:(Class)rClass
+                                            nestedOn:(ALMResource*)parent
+                                          parameters:(id)parameters
+                                           onSuccess:(void (^)(id parent, NSArray *result))onSuccess
+                                           onFailure:(void (^)(NSError *error))onFailure;
 
-- (AFHTTPRequestOperation *)resourceCollectionForClass:(Class)rClass
-                                        nestedOnParent:(ALMResource*)parent
-                                            parameters:(id)parameters
-                                             onSuccess:(void (^)(NSArray *result))onSuccess
-                                             onFailure:(void (^)(NSError *error))onFailure;
+- (AFHTTPRequestOperation *)nestedResourceCollection:(Class)rClass
+                                            nestedOn:(Class)parentClass
+                                              withID:(long long)parentID
+                                          parameters:(id)parameters
+                                           onSuccess:(void (^)(id parent, NSArray *result))onSuccess
+                                           onFailure:(void (^)(NSError *error))onFailure;
+
 
 #pragma mark - Persistence: commit operations
 
@@ -92,9 +99,11 @@ typedef NSArray*(^ALMCommitNestedResourcesOperation)(RLMRealm*, Class, Class, lo
 - (ALMCommitResourcesOperation)commitResources;
 - (ALMCommitNestedResourcesOperation)commitNestedResources;
 
+
 #pragma mark - Persistence: load resources
 
 - (id)loadResourceOfClass:(Class)resourceClass withID:(long long)resourceID;
 - (id)loadResourceOfClass:(Class)resourceClass withID:(long long)resourceID onTemporalRealm:(BOOL)loadFromTemporal;
 + (NSArray *)sortResources:(RLMResults *)resources onProperty:(NSString *)property withValues:(NSArray *)preferedOrder;
+
 @end
