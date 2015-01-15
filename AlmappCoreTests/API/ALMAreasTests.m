@@ -16,6 +16,10 @@
 
 @implementation ALMAreasTests
 
+- (NSArray*)areas {
+    return @[/*[ALMOrganization class],*/ [ALMCampus class], [ALMBuilding class], [ALMFaculty class], [ALMAcademicUnity class]];
+}
+
 - (void)testPlaces {
     [self resource:[ALMPlace class] ID:1 path:nil params:nil afterSuccess:^(id result) {
         XCTAssertNotNil(result, @"Must rerturn a valid object.");
@@ -32,9 +36,14 @@
     }];
 }
 
+- (void)testAreaLocalizations {
+    for (Class areaClass in [self areas]) {
+        [self testAreaLocalization:areaClass id:1];
+    }
+}
+
 - (void)testAreas {
-    NSArray *areas = @[[ALMOrganization class], [ALMCampus class], [ALMBuilding class], [ALMFaculty class], [ALMAcademicUnity class]];
-    for (Class areaClass in areas) {
+    for (Class areaClass in [self areas]) {
         [self testArea:areaClass];
     }
     
@@ -50,7 +59,7 @@
 - (void)testArea:(Class)areaSubclass {
     [self resource:areaSubclass ID:1 path:nil params:nil afterSuccess:^(id result) {
         XCTAssertNotNil(result, @"Must rerturn a valid object.");
-        XCTAssertTrue([result isKindOfClass:areaSubclass], @"Nested collection incorrect type.");
+        XCTAssertTrue([result isKindOfClass:areaSubclass], @"Fetched area incorrect type.");
         
         id area = [areaSubclass objectInRealm:self.testRealm forID:1];
         XCTAssertNotNil(area, @"New object must be able to load.");
@@ -59,9 +68,17 @@
     [self resourceCollection:areaSubclass path:nil params:nil afterSuccess:^(NSArray *result) {
         XCTAssertNotNil(result, @"Must rerturn a collection.");
         XCTAssertNotEqual(result.count, 0, @"Must contain at least one value.");
-        XCTAssertTrue([result.firstObject isKindOfClass:areaSubclass], @"Nested collection incorrect type.");
+        XCTAssertTrue([result.firstObject isKindOfClass:areaSubclass], @"Fetched area incorrect type.");
     }];
 }
 
+- (void)testAreaLocalization:(Class)areaSubclass id:(long long)areaSubclassID {
+    [self resource:areaSubclass ID:areaSubclassID path:nil params:nil afterSuccess:^(id result) {
+        XCTAssertNotNil(result, @"Must rerturn a valid object.");
+        XCTAssertTrue([result isKindOfClass:areaSubclass], @"Fetched area incorrect type.");
+        
+        XCTAssertNotNil(((ALMArea*)result).localization, @"Should have a localization");
+    }];
+}
 
 @end
