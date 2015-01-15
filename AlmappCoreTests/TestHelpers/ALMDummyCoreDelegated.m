@@ -11,11 +11,11 @@
 @implementation ALMDummyCoreDelegated
 
 -(void)startPerformingNetworkTask {
-    
+    NSLog(@"Performing network task");
 }
 
 -(void)stopPerformingNetworkTask {
-    
+    NSLog(@"Ended network task");
 }
 
 @end
