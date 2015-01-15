@@ -89,7 +89,7 @@
               ID:(NSUInteger)resourceID
             path:(NSString*)path
           params:(id)params
-    afterSuccess:(void (^)(NSArray *result))afterSuccess {
+       afterSuccess:(void (^)(id result))afterSuccess {
  
     [self resource:rClass ID:resourceID path:path params:params withController:[ALMController class] afterSuccess:afterSuccess];
 }
@@ -99,7 +99,7 @@
             path:(NSString*)path
           params:(id)params
   withController:(Class)controllerClass
-    afterSuccess:(void (^)(NSArray *result))afterSuccess {
+    afterSuccess:(void (^)(id result))afterSuccess {
     
     XCTestExpectation *expectation = [self expectationWithDescription:[NSString stringWithFormat:@"%@Single_Expectation", rClass]];
     

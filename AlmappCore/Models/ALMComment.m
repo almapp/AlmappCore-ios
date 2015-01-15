@@ -38,8 +38,8 @@
 }
 
 -(void)setCommentable:(ALMResource<ALMCommentable>*)commentable {
-    [self setCommentableID:commentable.resourceID];
-    [self setCommentableType:commentable.className];
+    [self setCommentableID:[commentable resourceID]];
+    [self setCommentableType:[commentable className]];
 }
 
 - (ALMResource<ALMCommentable>*)commentable {

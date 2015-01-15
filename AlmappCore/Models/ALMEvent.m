@@ -80,8 +80,8 @@
 }
 
 - (void)setHost:(ALMResource *)host {
-    [self setHostID:host.resourceID];
-    [self setHostType:host.className];
+    [self setHostID:[host resourceID]];
+    [self setHostType:[host className]];
 }
 
 - (id)host {

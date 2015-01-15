@@ -69,7 +69,7 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
 @implementation ALMResource
 
 - (NSString *)className {
-    return NSStringFromClass([self class]);
+    return [[self class] className];
 }
 
 #pragma mark - Attributes helpers
