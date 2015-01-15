@@ -8,34 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "ALMUser.h"
-#import "ALMCore.h"
-#import "ALMDummyCoreDelegated.h"
-#import "ALMTestsConstants.h"
+#import "ALMTestCase.h"
 
-@interface PersistenceTests : XCTestCase
+@interface PersistenceTests : ALMTestCase
 
 @end
 
 @implementation PersistenceTests
 
-- (void)setUp {
-    [super setUp];
-    [ALMCore initInstanceWithDelegate:[[ALMDummyCoreDelegated alloc] init] baseURL:[NSURL URLWithString:ALMBaseURL]];
-}
-
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
 - (void)testDatabaseDrop {
     XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:@"validGetSingleResource"];
     
     ALMController* controller = [ALMCore controller];
-    
-    
-    AFHTTPRequestOperation *op1 = [controller resourceForClass:[ALMUser class] id:1 parameters:nil onSuccess:^(id result) {
+    AFHTTPRequestOperation *op = [controller resource:[ALMUser class] id:1 parameters:nil onSuccess:^(id result) {
         ALMUser *user = result;
         [singleResourceExpectation fulfill];
         NSLog(@"result: %@", user);
@@ -50,10 +35,11 @@
         NSLog(@"Error: %@", error);
         XCTFail(@"Error performing request.");
         [singleResourceExpectation fulfill];
+        
     }];
     
     [self waitForExpectationsWithTimeout:7 handler:^(NSError *error) {
-        [op1 cancel];
+        [op cancel];
     }];
 
 }

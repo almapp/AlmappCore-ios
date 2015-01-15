@@ -32,8 +32,8 @@
              kRURL                      : kRDefaultNullString,
              kRCurriculumURL            : kRDefaultNullString,
              kRInformation              : kRDefaultNullString,
-             kRUpdatedAt                : [NSDate distantPast],
-             kRCreatedAt                : [NSDate distantPast]
+             kRUpdatedAt                : [NSDate defaultDate],
+             kRCreatedAt                : [NSDate defaultDate]
              };
 }
 

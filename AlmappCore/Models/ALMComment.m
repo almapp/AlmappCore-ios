@@ -32,8 +32,8 @@
              kRIsAnonymous                  : @NO,
              kRPolymorphicCommentableType   : kRDefaultPolymorphicType,
              kRPolymorphicCommentableID     : kRDefaultPolymorphicID,
-             kRUpdatedAt                    : [NSDate distantPast],
-             kRCreatedAt                    : [NSDate distantPast]
+             kRUpdatedAt                    : [NSDate defaultDate],
+             kRCreatedAt                    : [NSDate defaultDate]
              };
 }
 
@@ -44,7 +44,7 @@
 
 - (ALMResource<ALMCommentable>*)commentable {
     Class commentableClass = NSClassFromString(self.commentableType);
-    return [ALMResource objectInRealm:[self realm] ofType:commentableClass withID:self.commentableID];
+    return [commentableClass objectInRealm:self.realm forID:self.commentableID];
 }
 
 + (ALMPersistMode)persistMode {

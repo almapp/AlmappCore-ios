@@ -17,6 +17,30 @@ extern NSString *const kRDefaultUnknownFloor;
 
 #pragma mark - Polymorphic
 
+extern NSString *const kAPolymorphicArea;
+extern NSString *const kAPolymorphicAreaType;
+extern NSString *const kAPolymorphicAreaID;
+
+extern NSString *const kAPolymorphicHost;
+extern NSString *const kAPolymorphicHostType;
+extern NSString *const kAPolymorphicHostID;
+
+extern NSString *const kAPolymorphicCommentable;
+extern NSString *const kAPolymorphicCommentableType;
+extern NSString *const kAPolymorphicCommentableID;
+
+extern NSString *const kAPolymorphicLikeable;
+extern NSString *const kAPolymorphicLikeableType;
+extern NSString *const kAPolymorphicLikeableID;
+
+extern NSString *const kAPolymorphicPostTargetable;
+extern NSString *const kAPolymorphicPostTargetableType;
+extern NSString *const kAPolymorphicPostTargetableID;
+
+extern NSString *const kAPolymorphicPostPublisher;
+extern NSString *const kAPolymorphicPostPublisherType;
+extern NSString *const kAPolymorphicPostPublisherID;
+
 extern NSString *const kRPolymorphicArea;
 extern NSString *const kRPolymorphicAreaType;
 extern NSString *const kRPolymorphicAreaID;
@@ -70,6 +94,9 @@ extern NSString *const kRTitle;
 extern NSString *const kAAddress;
 extern NSString *const kRAddress;
 
+extern NSString *const kAUser;
+extern NSString *const kRUser;
+
 extern NSString *const kAUsername;
 extern NSString *const kRUsername;
 
@@ -110,6 +137,9 @@ extern NSString *const kRStudentID;
 
 #pragma mark - Places
 
+extern NSString *const kALocalization;
+extern NSString *const kRLocalization;
+
 extern NSString *const kAIsService;
 extern NSString *const kRIsService;
 
@@ -132,6 +162,12 @@ extern NSString *const kAFloor;
 extern NSString *const kRFloor;
 
 #pragma mark - Events
+
+extern NSString *const kAEvent;
+extern NSString *const kREvent;
+
+extern NSString *const kAParticipants;
+extern NSString *const kRParticipants;
 
 extern NSString *const kAIsPrivate;
 extern NSString *const kRIsPrivate;
@@ -214,5 +250,10 @@ extern NSString *const kR;
 */
 
 @interface ALMResourceConstants : NSObject
+
++ (NSString*)polymorphicATypeKey:(NSString*)polymorphicResource;
++ (NSString*)polymorphicAIDKey:(NSString*)polymorphicResource;
++ (NSString*)polymorphicRTypeKey:(NSString*)polymorphicResource;
++ (NSString*)polymorphicRIDpeKey:(NSString*)polymorphicResource;
 
 @end

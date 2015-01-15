@@ -8,6 +8,7 @@
 
 #import "ALMUser.h"
 #import "ALMResourceConstants.h"
+#import "ALMEvent.h"
 
 @implementation ALMUser
 
@@ -36,9 +37,9 @@
              kRStudentID                  : kRDefaultNullString,
              kRCountry                    : kRDefaultNullString,
              kRFindeable                  : @YES,
-             kRLastSeen                   : [NSDate distantPast],
-             kRUpdatedAt                  : [NSDate distantPast],
-             kRCreatedAt                  : [NSDate distantPast]
+             kRLastSeen                   : [NSDate defaultDate],
+             kRUpdatedAt                  : [NSDate defaultDate],
+             kRCreatedAt                  : [NSDate defaultDate]
              };
 }
 

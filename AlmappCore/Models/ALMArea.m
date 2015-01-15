@@ -33,6 +33,9 @@
 
 + (NSDictionary *)defaultPropertyValues {
     return @{
+             kRName                     : kRDefaultNullString,
+             kRShortName                : kRDefaultNullString,
+             kRAbbreviation             : kRDefaultNullString,
              kRAddress                  : kRDefaultNullString,
              kREmail                    : kRDefaultNullString,
              kRURL                      : kRDefaultNullString,
@@ -40,9 +43,33 @@
              kRTwitterURL               : kRDefaultNullString,
              kRPhone                    : kRDefaultNullString,
              kRInformation              : kRDefaultNullString,
-             kRUpdatedAt                : [NSDate distantPast],
-             kRCreatedAt                : [NSDate distantPast]
+             kRUpdatedAt                : [NSDate defaultDate],
+             kRCreatedAt                : [NSDate defaultDate]
              };
+}
+
++ (NSDictionary *)JSONNestedResourceInboundMappingDictionary {
+    return @{
+             kALocalization: kRLocalization
+             };
+}
+
++ (Class)propertyTypeForKRConstant:(NSString *)kr {
+    if ([kr isEqualToString:kRLocalization]) {
+        return [ALMPlace class];
+    }
+    else {
+        return [super propertyTypeForKRConstant:kr];
+    }
+}
+
++ (NSString *)nameWhenAssociatedWith:(Class)associatedClass {
+    if (associatedClass == [ALMPlace class]) {
+        return kRPolymorphicArea;
+    }
+    else {
+        return [super nameWhenAssociatedWith:associatedClass];
+    }
 }
 
 + (ALMPersistMode)persistMode {

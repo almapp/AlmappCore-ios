@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "AlmappCore"
-  s.version      = "0.0.3.1"
+  s.version      = "0.0.4"
   s.summary      = "Mobile backend for Almapp REST API."
 
   s.description  = <<-DESC
@@ -54,8 +54,6 @@ Pod::Spec.new do |s|
   #
 
   s.author             = { "Patricio Lopez" => "lopezjuripatricio@gmail.com" }
-  # Or just: s.author    = "Patricio Lopez"
-  # s.authors            = { "Patricio Lopez" => "lopezjuripatricio@gmail.com" }
   s.social_media_url   = "http://twitter.com/mrpatiwi"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -115,7 +113,7 @@ Pod::Spec.new do |s|
   #  the lib prefix of their name.
   #
 
-  # s.framework    = 'SystemConfiguration'
+  # s.framework  = 'SystemConfiguration'
   # s.frameworks = "SomeFramework", "AnotherFramework"
 
   # s.library   = "iconv"
@@ -131,6 +129,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
+
   s.dependency "Realm+JSON"
   s.dependency "AFNetworking"
 end
