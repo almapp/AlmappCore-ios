@@ -51,8 +51,8 @@
 }
 
 - (void)setArea:(ALMArea *)area {
-    [self setAreaID:area.resourceID];
-    [self setAreaType:area.className];
+    [self setAreaID:[area resourceID]];
+    [self setAreaType:[area className]];
 }
 
 - (ALMArea *)area {

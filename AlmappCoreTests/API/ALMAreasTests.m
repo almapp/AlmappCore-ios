@@ -17,13 +17,14 @@
 @implementation ALMAreasTests
 
 - (void)testPlaces {
-    [self resource:[ALMPlace class] ID:1 path:nil params:nil afterSuccess:^(NSArray *result) {
+    [self resource:[ALMPlace class] ID:1 path:nil params:nil afterSuccess:^(id result) {
         XCTAssertNotNil(result, @"Must rerturn a valid object.");
         XCTAssertTrue([result isKindOfClass:[ALMPlace class]], @"Nested collection incorrect type.");
         
         ALMPlace* place = [ALMPlace objectInRealm:self.testRealm forID:1];
         XCTAssertNotNil(place, @"New object must be able to load.");
     }];
+    
     [self resourceCollection:[ALMPlace class] path:@"campuses/2/places" params:nil afterSuccess:^(NSArray *result) {
         XCTAssertNotNil(result, @"Must rerturn a collection.");
         XCTAssertNotEqual(result.count, 0, @"Must contain at least one value.");
@@ -47,13 +48,14 @@
 }
 
 - (void)testArea:(Class)areaSubclass {
-    [self resource:areaSubclass ID:1 path:nil params:nil afterSuccess:^(NSArray *result) {
+    [self resource:areaSubclass ID:1 path:nil params:nil afterSuccess:^(id result) {
         XCTAssertNotNil(result, @"Must rerturn a valid object.");
         XCTAssertTrue([result isKindOfClass:areaSubclass], @"Nested collection incorrect type.");
         
         id area = [areaSubclass objectInRealm:self.testRealm forID:1];
         XCTAssertNotNil(area, @"New object must be able to load.");
     }];
+    
     [self resourceCollection:areaSubclass path:nil params:nil afterSuccess:^(NSArray *result) {
         XCTAssertNotNil(result, @"Must rerturn a collection.");
         XCTAssertNotEqual(result.count, 0, @"Must contain at least one value.");

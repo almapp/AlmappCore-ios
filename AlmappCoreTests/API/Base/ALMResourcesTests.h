@@ -29,14 +29,14 @@
               ID:(NSUInteger)resourceID
             path:(NSString*)path
           params:(id)params
-    afterSuccess:(void (^)(NSArray *result))afterSuccess;
+    afterSuccess:(void (^)(id result))afterSuccess;
 
 - (void)resource:(Class)rClass
               ID:(NSUInteger)resourceID
             path:(NSString*)path
           params:(id)params
   withController:(Class)controllerClass
-    afterSuccess:(void (^)(NSArray *result))afterSuccess;
+    afterSuccess:(void (^)(id result))afterSuccess;
 
 - (void)resourceCollection:(Class)rClass
                       path:(NSString*)path

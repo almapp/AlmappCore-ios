@@ -30,6 +30,7 @@
 		F63736081A6751D200D52E59 /* ALMAreasTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F63736021A6751D200D52E59 /* ALMAreasTests.m */; };
 		F63736091A6751D200D52E59 /* ALMControllersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F63736041A6751D200D52E59 /* ALMControllersTests.m */; };
 		F637360A1A6751D200D52E59 /* ALMResourcesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F63736061A6751D200D52E59 /* ALMResourcesTests.m */; };
+		F637360C1A6753F700D52E59 /* ALMPostsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F637360B1A6753F700D52E59 /* ALMPostsTests.m */; };
 		F64478131A58ECB60078FB29 /* ALMCareer.m in Sources */ = {isa = PBXBuildFile; fileRef = F64478121A58ECB60078FB29 /* ALMCareer.m */; };
 		F64478171A58EE820078FB29 /* ALMResourceConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F64478161A58EE820078FB29 /* ALMResourceConstants.m */; };
 		F649C7A21A659CD900CF64AA /* ALMPost.m in Sources */ = {isa = PBXBuildFile; fileRef = F649C7A11A659CD900CF64AA /* ALMPost.m */; };
@@ -99,6 +100,7 @@
 		F63736041A6751D200D52E59 /* ALMControllersTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMControllersTests.m; sourceTree = "<group>"; };
 		F63736051A6751D200D52E59 /* ALMResourcesTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMResourcesTests.h; sourceTree = "<group>"; };
 		F63736061A6751D200D52E59 /* ALMResourcesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMResourcesTests.m; sourceTree = "<group>"; };
+		F637360B1A6753F700D52E59 /* ALMPostsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMPostsTests.m; sourceTree = "<group>"; };
 		F64478111A58ECB60078FB29 /* ALMCareer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCareer.h; sourceTree = "<group>"; };
 		F64478121A58ECB60078FB29 /* ALMCareer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCareer.m; sourceTree = "<group>"; };
 		F64478151A58EE820078FB29 /* ALMResourceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMResourceConstants.h; sourceTree = "<group>"; };
@@ -207,9 +209,10 @@
 		F63736001A6751D200D52E59 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				F63736031A6751D200D52E59 /* Base */,
 				F63736011A6751D200D52E59 /* ALMAcademicUnitiesTests.m */,
 				F63736021A6751D200D52E59 /* ALMAreasTests.m */,
-				F63736031A6751D200D52E59 /* Base */,
+				F637360B1A6753F700D52E59 /* ALMPostsTests.m */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -552,6 +555,7 @@
 				F649C7BE1A67037100CF64AA /* ALMTestCase.m in Sources */,
 				F63736071A6751D200D52E59 /* ALMAcademicUnitiesTests.m in Sources */,
 				F63736081A6751D200D52E59 /* ALMAreasTests.m in Sources */,
+				F637360C1A6753F700D52E59 /* ALMPostsTests.m in Sources */,
 				F637360A1A6751D200D52E59 /* ALMResourcesTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

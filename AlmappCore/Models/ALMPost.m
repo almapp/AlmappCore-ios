@@ -87,7 +87,7 @@
 
 - (id)target {
     Class targetClass = NSClassFromString(self.targetType);
-    return [targetClass objectForID:self.targetID];
+    return [targetClass objectInRealm:self.realm forID:self.targetID];
 }
 
 - (NSUInteger)positiveLikeCount {
