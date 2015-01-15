@@ -11,5 +11,4 @@
 
 @interface ALMDummyCoreDelegated : NSObject <ALMCoreDelegate>
 
-
 @end
