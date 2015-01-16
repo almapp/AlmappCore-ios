@@ -29,6 +29,9 @@
         
         XCTAssertNotNil(event.participants, @"Must rerturn a valid nested collection.");
         XCTAssertEqual(event.participants.count, 2, @"Must has the correct number of people.");
+        
+        ALMUser *user = [ALMUser objectInRealm:[self testRealm] forID:1];
+        XCTAssertEqualObjects(user.attendingEvents.firstObject, event, @"First should be attending to event");
     }];
 }
 
