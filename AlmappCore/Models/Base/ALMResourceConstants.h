@@ -234,6 +234,11 @@ extern NSString *const kRContent;
 extern NSString *const kAShouldNotify;
 extern NSString *const kRShouldNotify;
 
+#pragma mark - Groups
+
+extern NSString *const kASubscribers;
+extern NSString *const kRSubscribers;
+
 /*
 extern NSString *const kA;
 extern NSString *const kR;
