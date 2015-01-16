@@ -11,8 +11,8 @@
 NSString* const MCJSONDateTimeTransformerName = @"MCJSONDateTimeTransformerName";
 NSString* const MCJSONDateTimeMillisecondTransformerName = @"MCJSONDateTimeMillisecondTransformerName";
 NSString* const MCJSONDateOnlyTransformerName = @"MCJSONDateOnlyTransformerName";
-static NSString *const kDateFormatDateTime = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
-static NSString *const kDateFormatDateTimeMillisecond = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+static NSString *const kDateFormatDateTime = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+static NSString *const kDateFormatDateTimeMillisecond = @"yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 static NSString *const kDateFormatDateOnly = @"yyyy-MM-dd";
 
 @interface MCJSONDateTransformer ()
