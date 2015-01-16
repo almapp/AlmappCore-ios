@@ -28,18 +28,18 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
-  - Realm+JSON (from `https://github.com/mrpatiwi/Realm-JSON.git`, commit `90a4d864bc539f38651e5f652e1f1b7cdba3a0c5`, branch `master`)
+  - Realm+JSON (from `https://github.com/mrpatiwi/Realm-JSON.git`, commit `1c80b5d9e17bcf9a7b491e28e26244a8501e4d7e`, branch `master`)
 
 EXTERNAL SOURCES:
   Realm+JSON:
     :branch: master
-    :commit: 90a4d864bc539f38651e5f652e1f1b7cdba3a0c5
+    :commit: 1c80b5d9e17bcf9a7b491e28e26244a8501e4d7e
     :git: https://github.com/mrpatiwi/Realm-JSON.git
 
 CHECKOUT OPTIONS:
   Realm+JSON:
     :branch: master
-    :commit: 90a4d864bc539f38651e5f652e1f1b7cdba3a0c5
+    :commit: 1c80b5d9e17bcf9a7b491e28e26244a8501e4d7e
     :git: https://github.com/mrpatiwi/Realm-JSON.git
 
 SPEC CHECKSUMS:
