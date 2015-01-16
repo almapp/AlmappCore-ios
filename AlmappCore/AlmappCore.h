@@ -26,6 +26,7 @@
 #import "ALMCommentable.h"
 
 #import "ALMUser.h"
+#import "ALMGroup.h"
 
 #import "ALMArea.h"
 #import "ALMOrganization.h"

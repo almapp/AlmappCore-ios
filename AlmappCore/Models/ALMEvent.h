@@ -12,6 +12,8 @@
 #import "ALMCommentable.h"
 #import "ALMLikeable.h"
 
+@protocol ALMEventHost;
+
 @interface ALMEvent : ALMResource <ALMLikeable, ALMCommentable>
 
 @property NSString *title;
@@ -31,8 +33,8 @@
 @property NSDate *updatedAt;
 @property NSDate *createdAt;
 
-- (void)setHost:(ALMResource*)host;
-- (id)host;
+- (void)setHost:(ALMResource<ALMEventHost>*)host;
+- (ALMResource<ALMEventHost>*)host;
 
 @end
 RLM_ARRAY_TYPE(ALMEvent)
