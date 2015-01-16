@@ -241,6 +241,11 @@ NSString *const kRContent = @"content";
 NSString *const kAShouldNotify = @"notify";
 NSString *const kRShouldNotify = @"shouldNotify";
 
+#pragma mark - Groups
+
+NSString *const kASubscribers = @"subscribers";
+NSString *const kRSubscribers = @"subscribers";
+
 /*
 extern NSString *const kA = @"";
 extern NSString *const kR = @"";
