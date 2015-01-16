@@ -191,7 +191,7 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
     for (NSString *apiCollectionPropertyName in nestedCollectionProperties) {
         NSString *resourceCollectionPropertyName = [nestedCollectionProperties objectForKey:apiCollectionPropertyName];
         
-        NSArray *nestedResourceCollectionInResponse = [dictionary.allValues.firstObject objectForKey:apiCollectionPropertyName];
+        NSArray *nestedResourceCollectionInResponse = [[dictionary objectForKey:self.jsonRoot] objectForKey:apiCollectionPropertyName];
         NSMutableArray *savedCollection = [NSMutableArray arrayWithCapacity:nestedResourceCollectionInResponse.count];
         
         Class propertyClass = [self propertyTypeForKRConstant:resourceCollectionPropertyName];
@@ -226,7 +226,7 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
     for (NSString *apiPropertyName in nestedProperties) {
         NSString *resourcePropertyName = [nestedProperties objectForKey:apiPropertyName];
         
-        id nestedResourceInResponse = [dictionary.allValues.firstObject objectForKey:apiPropertyName];
+        id nestedResourceInResponse = [[dictionary objectForKey:self.jsonRoot] objectForKey:apiPropertyName];
         if (![nestedResourceInResponse isKindOfClass:[NSNull class]] && nestedResourceInResponse != nil) {
             
             Class propertyClass = NULL;

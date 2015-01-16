@@ -15,6 +15,10 @@ static void InitGlobalNumber() {
     kRDefaultPolymorphicID = [NSNumber numberWithInteger:0];
 }
 
+#pragma mark - Configuration
+
+NSString *const kDateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
 #pragma mark - Defaults
 
 NSString *const kRDefaultNullString = @"";
