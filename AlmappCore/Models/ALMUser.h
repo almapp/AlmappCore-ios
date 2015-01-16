@@ -23,5 +23,8 @@
 @property NSDate *updatedAt;
 @property NSDate *createdAt;
 
+@property (readonly) NSArray *subscribedGroups;
+@property (readonly) NSArray *attendingEvents;
+
 @end
 RLM_ARRAY_TYPE(ALMUser)
