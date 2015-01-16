@@ -1,5 +1,5 @@
 //
-//  CoreSingletonTests.m
+//  ALMCoreSingletonTests.m
 //  AlmappCore
 //
 //  Created by Patricio López on 28-12-14.
@@ -14,14 +14,14 @@
 #import "ALMDummyCoreDelegated.h"
 #import "ALMTestsConstants.h"
 
-@interface CoreSingletonTests : XCTestCase
+@interface ALMCoreSingletonTests : XCTestCase
 
 @property (strong, nonatomic) ALMDummyCoreDelegated *dummy;
 @property (strong) ALMCore *core;
 
 @end
 
-@implementation CoreSingletonTests
+@implementation ALMCoreSingletonTests
 
 - (void)setUp {
     // Put setup code here. This method is called before the invocation of each test method in the class.
