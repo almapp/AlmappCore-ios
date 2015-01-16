@@ -1,5 +1,5 @@
 //
-//  PersistenceTests.m
+//  ALMPersistenceTests.m
 //  AlmappCore
 //
 //  Created by Patricio López on 01-01-15.
@@ -10,11 +10,11 @@
 #import <XCTest/XCTest.h>
 #import "ALMTestCase.h"
 
-@interface PersistenceTests : ALMTestCase
+@interface ALMPersistenceTests : ALMTestCase
 
 @end
 
-@implementation PersistenceTests
+@implementation ALMPersistenceTests
 
 - (void)testDatabaseDrop {
     XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:@"validGetSingleResource"];
