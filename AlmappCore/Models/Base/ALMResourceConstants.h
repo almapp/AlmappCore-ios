@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+#pragma mark - Configuration
+
+extern NSString *const kDateFormat;
+
 #pragma mark - Defaults
 
 extern NSString *const kRDefaultNullString;
