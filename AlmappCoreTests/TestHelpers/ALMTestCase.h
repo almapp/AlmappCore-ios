@@ -13,8 +13,8 @@
 
 @interface ALMTestCase : XCTestCase
 
-@property (nonatomic, strong) ALMCore *core;
+@property (readonly) ALMCore *core;
 
-@property (nonatomic, readonly) RLMRealm* testRealm;
+@property (readonly) RLMRealm* testRealm;
 
 @end
