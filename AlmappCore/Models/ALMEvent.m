@@ -79,12 +79,12 @@
     return @[kAPolymorphicHost];
 }
 
-- (void)setHost:(ALMResource *)host {
+- (void)setHost:(ALMResource<ALMEventHost> *)host {
     [self setHostID:[host resourceID]];
     [self setHostType:[host className]];
 }
 
-- (id)host {
+- (ALMResource<ALMEventHost> *)host {
     Class hostClass = NSClassFromString(self.hostType);
     return [hostClass objectInRealm:self.realm forID:self.hostID];
 }

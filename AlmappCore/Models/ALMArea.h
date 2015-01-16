@@ -12,8 +12,9 @@
 #import "ALMLikeable.h"
 #import "ALMPostTargetable.h"
 #import "ALMPostPublisher.h"
+#import "ALMEventHost.h"
 
-@interface ALMArea : ALMResource <ALMLikeable, ALMCommentable, ALMPostTargetable, ALMPostPublisher>
+@interface ALMArea : ALMResource <ALMLikeable, ALMCommentable, ALMPostTargetable, ALMPostPublisher, ALMEventHost>
 
 @property NSString *name;
 @property NSString *shortName;

@@ -11,7 +11,7 @@
 
 @implementation ALMArea
 
-@synthesize comments = _comments, likes = _likes, posts = _posts, publishedPosts = _publishedPosts;
+@synthesize comments = _comments, likes = _likes, posts = _posts, publishedPosts = _publishedPosts, events = _events;
 
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
