@@ -9,6 +9,7 @@
 #import "ALMUser.h"
 #import "ALMResourceConstants.h"
 #import "ALMEvent.h"
+#import "ALMGroup.h"
 
 @implementation ALMUser
 
@@ -43,8 +44,12 @@
              };
 }
 
-//+ (NSValueTransformer *)nameJSONTransformer {
-//    return [MCJSONNonNullStringTransformer valueTransformer];
-//}
+- (NSArray *)subscribedGroups {
+    return [self linkingObjectsOfClass:[ALMGroup className] forProperty:kRSubscribers];
+}
+
+- (NSArray *)attendingEvents {
+    return [self linkingObjectsOfClass:[ALMEvent className] forProperty:kRParticipants];
+}
 
 @end

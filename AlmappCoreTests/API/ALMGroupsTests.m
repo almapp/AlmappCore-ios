@@ -25,6 +25,9 @@
         
         XCTAssertNotNil(group.subscribers, @"Must rerturn a valid nested collection.");
         XCTAssertEqual(group.subscribers.count, 2, @"Must has the correct number of people.");
+        
+        ALMUser *user = [ALMUser objectInRealm:[self testRealm] forID:1];
+        XCTAssertEqualObjects(user.subscribedGroups.firstObject, group, @"First should be subscribed to the group");
     }];
 }
 
