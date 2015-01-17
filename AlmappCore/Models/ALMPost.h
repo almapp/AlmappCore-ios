@@ -9,15 +9,15 @@
 #import "ALMResource.h"
 #import "ALMLikeable.h"
 #import "ALMCommentable.h"
+#import "ALMMapable.h"
 
 @protocol ALMPostTargetable, ALMPostPublisher;
 
 @class ALMUser, ALMPlace, ALMEvent;
 
-@interface ALMPost : ALMResource <ALMLikeable, ALMCommentable>
+@interface ALMPost : ALMResource <ALMLikeable, ALMCommentable, ALMMapable>
 
 @property ALMUser *user;
-@property ALMPlace *localization;
 @property ALMEvent *event;
 
 @property NSString *content;

@@ -14,6 +14,7 @@
 
 @implementation ALMPost
 
+@synthesize localization = _localization;
 @synthesize likes = _likes, comments = _comments;
 
 + (NSDictionary *)JSONInboundMappingDictionary {

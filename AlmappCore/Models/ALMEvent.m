@@ -8,9 +8,11 @@
 
 #import "ALMEvent.h"
 #import "ALMResourceConstants.h"
+#import "ALMPlace.h"
 
 @implementation ALMEvent
 
+@synthesize localization = _localization;
 @synthesize comments = _comments, likes = _likes;
 
 + (NSDictionary *)JSONInboundMappingDictionary {
