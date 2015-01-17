@@ -8,19 +8,19 @@
 
 #import "ALMResource.h"
 #import "ALMPlace.h"
+#import "ALMMapable.h"
 #import "ALMCommentable.h"
 #import "ALMLikeable.h"
 #import "ALMPostTargetable.h"
 #import "ALMPostPublisher.h"
 #import "ALMEventHost.h"
 
-@interface ALMArea : ALMResource <ALMLikeable, ALMCommentable, ALMPostTargetable, ALMPostPublisher, ALMEventHost>
+@interface ALMArea : ALMResource <ALMMapable, ALMLikeable, ALMCommentable, ALMPostTargetable, ALMPostPublisher, ALMEventHost>
 
 @property NSString *name;
 @property NSString *shortName;
 @property NSString *abbreviation;
 @property NSString *address;
-@property ALMPlace *localization;
 @property RLMArray<ALMPlace> *places;
 @property NSString *email;
 @property NSString *url;

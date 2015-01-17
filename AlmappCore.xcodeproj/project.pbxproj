@@ -95,6 +95,7 @@
 		F60F907C1A598284002EF807 /* ALMLikeable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMLikeable.h; sourceTree = "<group>"; };
 		F60F907D1A59841D002EF807 /* ALMLike.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMLike.h; sourceTree = "<group>"; };
 		F60F907E1A59841D002EF807 /* ALMLike.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMLike.m; sourceTree = "<group>"; };
+		F62B94C11A6A11EA00C1F534 /* ALMMapable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMMapable.h; sourceTree = "<group>"; };
 		F63683041A58C8D000DBCC6A /* ALMEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMEvent.h; sourceTree = "<group>"; };
 		F63683051A58C8D000DBCC6A /* ALMEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEvent.m; sourceTree = "<group>"; };
 		F63736011A6751D200D52E59 /* ALMAcademicUnitiesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMAcademicUnitiesTests.m; sourceTree = "<group>"; };
@@ -211,6 +212,7 @@
 				F649C7A31A659ECF00CF64AA /* ALMPostTargetable.h */,
 				F649C7A61A65A5A300CF64AA /* ALMPostPublisher.h */,
 				F645D7C11A68B1530054A45A /* ALMEventHost.h */,
+				F62B94C11A6A11EA00C1F534 /* ALMMapable.h */,
 			);
 			path = Concerns;
 			sourceTree = "<group>";

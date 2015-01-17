@@ -7,19 +7,18 @@
 //
 
 #import "ALMResource.h"
-#import "ALMPlace.h"
 #import "ALMUser.h"
 #import "ALMCommentable.h"
 #import "ALMLikeable.h"
+#import "ALMMapable.h"
 
 @protocol ALMEventHost;
 
-@interface ALMEvent : ALMResource <ALMLikeable, ALMCommentable>
+@interface ALMEvent : ALMResource <ALMLikeable, ALMCommentable, ALMMapable>
 
 @property NSString *title;
 @property BOOL isPrivate;
 @property NSString *information;
-@property ALMPlace *localization;
 @property NSDate *publishDate;
 @property NSDate *fromDate;
 @property NSDate *toDate;
