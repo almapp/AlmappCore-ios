@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-AlmappCore-DateTools.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-AlmappCore-Realm+JSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,27 +37,32 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0D221C7F7083500FE8BD100A</key>
+		<key>7F0BA4652724DB8DDF8EB5B2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>127DDC6042C9D1F00B14F821</key>
+		<key>8EE6BBD4992F2F85D2E17147</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>297EC4DAB1B81776D14591F1</key>
+		<key>A43FDF5826E80AA8B1BBCB59</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>840C1B0EA8893C54FDEE1D79</key>
+		<key>A6BC80C996E6C894BB73EAA9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D2C18B24532FC8DAB6B8C744</key>
+		<key>BCB2C136AA0390568697385F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CBF703740A67402D9BDF48EE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
