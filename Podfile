@@ -4,6 +4,7 @@ target 'AlmappCore' do
     pod 'AFNetworking'
     pod 'Realm+JSON', :git => 'https://github.com/mrpatiwi/Realm-JSON.git', :branch => 'master', :commit => '261faf80a0aeb650982181f1562dfb7a71a3a1cc'
     pod 'BlocksKit', '~> 2.2'
+    pod 'DateTools'
 end
 
 target 'AlmappCoreTests' do
