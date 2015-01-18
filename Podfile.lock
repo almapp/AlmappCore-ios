@@ -20,6 +20,21 @@ PODS:
   - AFNetworking/UIKit (2.5.0):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - BlocksKit (2.2.5):
+    - BlocksKit/All (= 2.2.5)
+  - BlocksKit/All (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+    - BlocksKit/MessageUI
+    - BlocksKit/UIKit
+  - BlocksKit/Core (2.2.5)
+  - BlocksKit/DynamicDelegate (2.2.5)
+  - BlocksKit/MessageUI (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+  - BlocksKit/UIKit (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
   - Realm (0.89.2):
     - Realm/Headers (= 0.89.2)
   - Realm+JSON (0.2.4):
@@ -28,6 +43,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
+  - BlocksKit (~> 2.2)
   - Realm+JSON (from `https://github.com/mrpatiwi/Realm-JSON.git`, commit `261faf80a0aeb650982181f1562dfb7a71a3a1cc`, branch `master`)
 
 EXTERNAL SOURCES:
@@ -44,6 +60,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
+  BlocksKit: 4439e7f30a9f90743462ca63545a15c1f4304cef
   Realm: 4ba08033bea6a32e49eebcfd41e5fd651168135b
   Realm+JSON: 2f6fe3e758bc765512b82e953137cf7c52a296bc
 

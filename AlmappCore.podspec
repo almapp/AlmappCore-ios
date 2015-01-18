@@ -132,4 +132,5 @@ Pod::Spec.new do |s|
 
   s.dependency "Realm+JSON"
   s.dependency "AFNetworking"
+  s.dependency "BlocksKit"
 end
