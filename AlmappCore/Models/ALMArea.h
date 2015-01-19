@@ -6,16 +6,14 @@
 //  Copyright (c) 2014 almapp. All rights reserved.
 //
 
-#import "ALMResource.h"
+#import "ALMSocialResource.h"
 #import "ALMPlace.h"
 #import "ALMMapable.h"
-#import "ALMCommentable.h"
-#import "ALMLikeable.h"
 #import "ALMPostTargetable.h"
 #import "ALMPostPublisher.h"
 #import "ALMEventHost.h"
 
-@interface ALMArea : ALMResource <ALMMapable, ALMLikeable, ALMCommentable, ALMPostTargetable, ALMPostPublisher, ALMEventHost>
+@interface ALMArea : ALMSocialResource <ALMMapable, ALMPostTargetable, ALMPostPublisher, ALMEventHost>
 
 @property NSString *name;
 @property NSString *shortName;

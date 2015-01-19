@@ -12,8 +12,6 @@
 
 @implementation ALMPlace
 
-@synthesize comments = _comments, likes = _likes;
-
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
              [self jatt:kAResourceID]   : kRResourceID,
@@ -58,14 +56,6 @@
 - (ALMArea *)area {
     Class areaClass = NSClassFromString(self.areaType);
     return [areaClass objectInRealm:self.realm forID:self.areaID];
-}
-
-- (NSUInteger)positiveLikeCount {
-    return [ALMLike positiveLikeCountFor:self];
-}
-
-- (NSUInteger)negativeLikeCount {
-    return [ALMLike negativeLikeCountFor:self];
 }
 
 //+ (NSValueTransformer *)nameJSONTransformer {

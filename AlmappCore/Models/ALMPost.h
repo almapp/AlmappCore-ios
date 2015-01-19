@@ -6,16 +6,14 @@
 //  Copyright (c) 2015 almapp. All rights reserved.
 //
 
-#import "ALMResource.h"
-#import "ALMLikeable.h"
-#import "ALMCommentable.h"
+#include "ALMSocialResource.h"
 #import "ALMMapable.h"
 
 @protocol ALMPostTargetable, ALMPostPublisher;
 
 @class ALMUser, ALMPlace, ALMEvent;
 
-@interface ALMPost : ALMResource <ALMLikeable, ALMCommentable, ALMMapable>
+@interface ALMPost : ALMSocialResource <ALMMapable>
 
 @property ALMUser *user;
 @property ALMEvent *event;

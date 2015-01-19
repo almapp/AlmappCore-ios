@@ -13,7 +13,6 @@
 @implementation ALMEvent
 
 @synthesize localization = _localization;
-@synthesize comments = _comments, likes = _likes;
 
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
@@ -89,14 +88,6 @@
 - (ALMResource<ALMEventHost> *)host {
     Class hostClass = NSClassFromString(self.hostType);
     return [hostClass objectInRealm:self.realm forID:self.hostID];
-}
-
-- (NSUInteger)positiveLikeCount {
-    return [ALMLike positiveLikeCountFor:self];
-}
-
-- (NSUInteger)negativeLikeCount {
-    return [ALMLike negativeLikeCountFor:self];
 }
 
 @end

@@ -6,13 +6,11 @@
 //  Copyright (c) 2014 almapp. All rights reserved.
 //
 
-#import "ALMResource.h"
-#import "ALMCommentable.h"
-#import "ALMLikeable.h"
+#import "ALMSocialResource.h"
 
 @class ALMArea;
 
-@interface ALMPlace : ALMResource  <ALMLikeable, ALMCommentable>
+@interface ALMPlace : ALMSocialResource
 
 @property NSString *name;
 @property NSString *identifier;

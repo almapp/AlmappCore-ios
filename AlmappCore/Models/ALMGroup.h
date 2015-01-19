@@ -6,14 +6,12 @@
 //  Copyright (c) 2015 almapp. All rights reserved.
 //
 
-#import "ALMResource.h"
+#import "ALMSocialResource.h"
 #import "ALMUser.h"
 #import "ALMPostPublisher.h"
 #import "ALMPostTargetable.h"
-#import "ALMLikeable.h"
-#import "ALMCommentable.h"
 
-@interface ALMGroup : ALMResource <ALMLikeable, ALMCommentable, ALMPostTargetable, ALMPostPublisher>
+@interface ALMGroup : ALMSocialResource <ALMPostTargetable, ALMPostPublisher>
 
 @property NSString *name;
 @property NSString *email;

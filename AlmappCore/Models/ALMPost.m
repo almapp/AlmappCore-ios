@@ -15,7 +15,6 @@
 @implementation ALMPost
 
 @synthesize localization = _localization;
-@synthesize likes = _likes, comments = _comments;
 
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
@@ -89,14 +88,6 @@
 - (id)target {
     Class targetClass = NSClassFromString(self.targetType);
     return [targetClass objectInRealm:self.realm forID:self.targetID];
-}
-
-- (NSUInteger)positiveLikeCount {
-    return [ALMLike positiveLikeCountFor:self];
-}
-
-- (NSUInteger)negativeLikeCount {
-    return [ALMLike negativeLikeCountFor:self];
 }
 
 @end

@@ -8,13 +8,11 @@
 
 #import "ALMResource.h"
 #import "ALMUser.h"
-#import "ALMCommentable.h"
-#import "ALMLikeable.h"
 #import "ALMMapable.h"
 
 @protocol ALMEventHost;
 
-@interface ALMEvent : ALMResource <ALMLikeable, ALMCommentable, ALMMapable>
+@interface ALMEvent : ALMSocialResource <ALMMapable>
 
 @property NSString *title;
 @property BOOL isPrivate;

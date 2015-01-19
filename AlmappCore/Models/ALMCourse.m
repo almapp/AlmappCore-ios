@@ -12,8 +12,6 @@
 
 @implementation ALMCourse
 
-@synthesize comments = _comments, likes = _likes;
-
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
              [self jatt:kAResourceID]   : kRResourceID,
@@ -45,14 +43,6 @@
 
 - (RLMResults *)sectionsOnYear:(short)year period:(short)period {
     return [self.sections objectsWithPredicate:[NSPredicate predicateWithFormat:@"%@ = %@ AND %@ = %@", kRYear, year, kRPeriod, period]];
-}
-
-- (NSUInteger)positiveLikeCount {
-    return [ALMLike positiveLikeCountFor:self];
-}
-
-- (NSUInteger)negativeLikeCount {
-    return [ALMLike negativeLikeCountFor:self];
 }
 
 @end
