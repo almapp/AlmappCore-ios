@@ -18,13 +18,13 @@
 - (void(^)(id))defaultSingleSuccessBlock;
 - (void(^)(NSArray*))defaultCollectionSuccessBlock;
 
-- (ALMController*)getController:(Class)controllerClass;
+- (id)getController:(Class)controllerClass;
 
 - (void)testNameMatching:(NSDictionary*)expectedMatches;
 
 - (void)testClass:(Class)classToTest match:(NSString*)name;
 
-- (void)testClasses:(NSArray*)classesToTest math:(NSArray*)names;
+- (void)testClasses:(NSArray*)classesToTest match:(NSArray*)names;
 
 - (void)resource:(Class)rClass
               ID:(NSUInteger)resourceID

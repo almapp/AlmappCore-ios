@@ -16,18 +16,16 @@
         XCTAssertNotNil(nestedCollection, @"Must rerturn a valid collection.");
         XCTAssertNotEqual(nestedCollection.count, 0, @"Must contain at least one value.");
         
-        if (nestedCollection.count > 0) {
-            ALMResource* sample = nestedCollection.firstObject;
+        ALMResource* sample = nestedCollection.firstObject;
+        
+        SEL collectionSelector = NSSelectorFromString(sample.realmPluralForm);
+        
+        if ([parent respondsToSelector:collectionSelector]) {
+            IMP imp = [parent methodForSelector:collectionSelector];
+            RLMArray* (*func)(id, SEL) = (void*)imp;
+            RLMArray *parentNestedResourcecollection = func(parent, collectionSelector);
             
-            SEL collectionSelector = NSSelectorFromString(sample.realmPluralForm);
-            
-            if ([parent respondsToSelector:collectionSelector]) {
-                IMP imp = [parent methodForSelector:collectionSelector];
-                RLMArray* (*func)(id, SEL) = (void*)imp;
-                RLMArray *parentNestedResourcecollection = func(parent, collectionSelector);
-                
-                XCTAssertEqual(parentNestedResourcecollection.count, nestedCollection.count, @"Must be coherent nested results");
-            }
+            XCTAssertEqual(parentNestedResourcecollection.count, nestedCollection.count, @"Must be coherent nested results");
         }
     };
 }
@@ -61,7 +59,7 @@
     return 5;
 }
 
-- (ALMController*)getController:(Class)controllerClass {
+- (id)getController:(Class)controllerClass {
     ALMController* controller = (controllerClass != NULL && controllerClass != nil) ? [self.core controller:controllerClass] : [self.core controller];
     controller.saveToPersistenceStore = NO;
     return controller;
@@ -79,7 +77,7 @@
     XCTAssertTrue([className isEqualToString:name]);
 }
 
-- (void)testClasses:(NSArray*)classesToTest math:(NSArray*)names {
+- (void)testClasses:(NSArray*)classesToTest match:(NSArray*)names {
     for (int i = 0; i < classesToTest.count; i++) {
         [self testClass:classesToTest[i] match:names[i]];
     }

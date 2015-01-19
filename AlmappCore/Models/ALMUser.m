@@ -8,6 +8,7 @@
 
 #import "ALMUser.h"
 #import "ALMResourceConstants.h"
+#import "ALMSection.h"
 #import "ALMEvent.h"
 #import "ALMGroup.h"
 
@@ -42,6 +43,10 @@
              kRUpdatedAt                  : [NSDate defaultDate],
              kRCreatedAt                  : [NSDate defaultDate]
              };
+}
+
+- (NSArray *)sections {
+    return [self linkingObjectsOfClass:[ALMSection className] forProperty:kRStudents];
 }
 
 - (NSArray *)subscribedGroups {

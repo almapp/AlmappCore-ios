@@ -1,0 +1,58 @@
+//
+//  ALMCourse.m
+//  AlmappCore
+//
+//  Created by Patricio López on 18-01-15.
+//  Copyright (c) 2015 almapp. All rights reserved.
+//
+
+#import "ALMCourse.h"
+#import "ALMAcademicUnity.h"
+#import "ALMResourceConstants.h"
+
+@implementation ALMCourse
+
+@synthesize comments = _comments, likes = _likes;
+
++ (NSDictionary *)JSONInboundMappingDictionary {
+    return @{
+             [self jatt:kAResourceID]   : kRResourceID,
+             [self jatt:kAInitials]     : kRInitials,
+             [self jatt:kAName]         : kRName,
+             [self jatt:kACredits]      : kRCredits,
+             [self jatt:kAIsAvailable]  : kRIsAvailable,
+             [self jatt:kAInformation]  : kRInformation,
+             [self jatt:kAUpdatedAt]    : kRUpdatedAt,
+             [self jatt:kACreatedAt]    : kRCreatedAt
+             };
+}
+
++ (NSDictionary *)defaultPropertyValues {
+    return @{
+             kRInitials                 : kRDefaultNullString,
+             kRName                     : kRDefaultNullString,
+             kRCredits                  : @0,
+             kRIsAvailable              : @YES,
+             kRInformation              : kRDefaultNullString,
+             kRUpdatedAt                : [NSDate defaultDate],
+             kRCreatedAt                : [NSDate defaultDate]
+             };
+}
+
+- (ALMAcademicUnity *)academicUnity {
+    return [self linkingObjectsOfClass:[ALMAcademicUnity className] forProperty:self.realmPluralForm].firstObject;
+}
+
+- (RLMResults *)sectionsOnYear:(short)year period:(short)period {
+    return [self.sections objectsWithPredicate:[NSPredicate predicateWithFormat:@"%@ = %@ AND %@ = %@", kRYear, year, kRPeriod, period]];
+}
+
+- (NSUInteger)positiveLikeCount {
+    return [ALMLike positiveLikeCountFor:self];
+}
+
+- (NSUInteger)negativeLikeCount {
+    return [ALMLike negativeLikeCountFor:self];
+}
+
+@end
