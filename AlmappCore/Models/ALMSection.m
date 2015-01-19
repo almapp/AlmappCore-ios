@@ -12,8 +12,6 @@
 
 @implementation ALMSection
 
-@synthesize likes = _likes, comments = _comments;
-
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
              [self jatt:kAResourceID]       : kRResourceID,
@@ -46,14 +44,6 @@
 
 - (ALMCourse *)course {
     return [self linkingObjectsOfClass:[ALMCourse className] forProperty:self.realmPluralForm].firstObject;
-}
-
-- (NSUInteger)positiveLikeCount {
-    return [ALMLike positiveLikeCountFor:self];
-}
-
-- (NSUInteger)negativeLikeCount {
-    return [ALMLike negativeLikeCountFor:self];
 }
 
 @end

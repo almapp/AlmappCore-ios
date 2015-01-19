@@ -6,14 +6,12 @@
 //  Copyright (c) 2015 almapp. All rights reserved.
 //
 
-#import "ALMResource.h"
+#import "ALMSocialResource.h"
 #import "ALMUser.h"
-#import "ALMCommentable.h"
-#import "ALMLikeable.h"
 
 @class ALMCourse;
 
-@interface ALMSection : ALMResource <ALMCommentable, ALMLikeable>
+@interface ALMSection : ALMSocialResource
 
 @property int number;
 @property int year;

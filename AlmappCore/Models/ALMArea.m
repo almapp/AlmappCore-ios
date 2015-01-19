@@ -12,7 +12,7 @@
 @implementation ALMArea
 
 @synthesize localization = _localization;
-@synthesize comments = _comments, likes = _likes, posts = _posts, publishedPosts = _publishedPosts, events = _events;
+@synthesize posts = _posts, publishedPosts = _publishedPosts, events = _events;
 
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
@@ -75,14 +75,6 @@
 
 + (ALMPersistMode)persistMode {
     return ALMPersistModeForever;
-}
-
-- (NSUInteger)positiveLikeCount {
-    return [ALMLike positiveLikeCountFor:self];
-}
-
-- (NSUInteger)negativeLikeCount {
-    return [ALMLike negativeLikeCountFor:self];
 }
 
 @end

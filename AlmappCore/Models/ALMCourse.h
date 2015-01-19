@@ -6,14 +6,12 @@
 //  Copyright (c) 2015 almapp. All rights reserved.
 //
 
-#import "ALMResource.h"
+#import "ALMSocialResource.h"
 #import "ALMSection.h"
-#import "ALMCommentable.h"
-#import "ALMLikeable.h"
 
 @class ALMAcademicUnity;
 
-@interface ALMCourse : ALMResource <ALMCommentable, ALMLikeable>
+@interface ALMCourse : ALMSocialResource
 
 @property NSString *initials;
 @property NSString *name;

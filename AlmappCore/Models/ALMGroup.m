@@ -11,7 +11,7 @@
 
 @implementation ALMGroup
 
-@synthesize comments = _comments, likes = _likes, posts = _posts, publishedPosts = _publishedPosts;
+@synthesize posts = _posts, publishedPosts = _publishedPosts;
 
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
@@ -53,14 +53,6 @@
     else {
         return [super propertyTypeForKRConstant:kr];
     }
-}
-
-- (NSUInteger)positiveLikeCount {
-    return [ALMLike positiveLikeCountFor:self];
-}
-
-- (NSUInteger)negativeLikeCount {
-    return [ALMLike negativeLikeCountFor:self];
 }
 
 @end
