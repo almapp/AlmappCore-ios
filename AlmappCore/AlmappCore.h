@@ -19,6 +19,7 @@
 
 #import "ALMController.h"
 #import "ALMWebPagesController.h"
+#import "ALMSectionsController.h"
 
 #import "ALMResource.h"
 #import "ALMResourceConstants.h"
@@ -38,6 +39,10 @@
 
 #import "ALMEvent.h"
 #import "ALMCareer.h"
+#import "ALMScheduleItem.h"
+#import "ALMScheduleModule.h"
+#import "ALMCourse.h"
+#import "ALMSection.h"
 
 #import "ALMComment.h"
 #import "ALMLike.h"

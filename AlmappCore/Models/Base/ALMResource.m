@@ -206,7 +206,7 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
     ALMResource *result = [super createOrUpdateInRealm:realm withJSONDictionary:dictionary];
     
     NSDictionary *nestedCollectionProperties = [self JSONNestedResourceCollectionInboundMappingDictionary];
-    for (NSString *apiCollectionPropertyName in nestedCollectionProperties) {
+    for (NSString *apiCollectionPropertyName in nestedCollectionProperties.allKeys) {
         NSString *resourceCollectionPropertyName = [nestedCollectionProperties objectForKey:apiCollectionPropertyName];
         
         NSArray *nestedResourceCollectionInResponse = [[dictionary objectForKey:self.jsonRoot] objectForKey:apiCollectionPropertyName];
@@ -241,7 +241,7 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
     }
     
     NSDictionary *nestedProperties = [self JSONNestedResourceInboundMappingDictionary];
-    for (NSString *apiPropertyName in nestedProperties) {
+    for (NSString *apiPropertyName in nestedProperties.allKeys) {
         NSString *resourcePropertyName = [nestedProperties objectForKey:apiPropertyName];
         
         id nestedResourceInResponse = [[dictionary objectForKey:self.jsonRoot] objectForKey:apiPropertyName];

@@ -38,6 +38,9 @@ typedef NS_ENUM(NSUInteger, ALMScheduleDay) {
 - (instancetype)nextModuleOnSameDay;
 - (instancetype)previousModuleOnSameDay;
 
++ (RLMResults *)scheduleModulesOfDay:(ALMScheduleDay)day;
++ (RLMResults *)scheduleModulesOfDay:(ALMScheduleDay)day inRealm:(RLMRealm*)realm;
+
 
 #pragma mark - Persistent information
 

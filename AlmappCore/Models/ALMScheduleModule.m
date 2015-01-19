@@ -93,7 +93,7 @@
 }
 
 + (instancetype)moduleForDay:(int)day block:(int)block inRealm:(RLMRealm *)realm {
-    NSString *query = [NSString stringWithFormat:@"%@ = %ld AND %@ = %d",kRDay, (long)day, kRBlock, block ];
+    NSString *query = [NSString stringWithFormat:@"%@ = %d AND %@ = %d",kRDay, (int)day, kRBlock, block ];
     return [ALMScheduleModule objectsInRealm:realm where:query].firstObject;
 }
 
@@ -175,6 +175,13 @@
     return (previous.day == self.day) ? previous : nil;
 }
 
++ (RLMResults *)scheduleModulesOfDay:(ALMScheduleDay)day {
+    return [self scheduleModulesOfDay:day inRealm:[RLMRealm defaultRealm]];
+}
+
++ (RLMResults *)scheduleModulesOfDay:(ALMScheduleDay)day inRealm:(RLMRealm *)realm {
+    return [[self objectsInRealm:realm where:[NSString stringWithFormat:@"%@ = %d", kRDay, (int)day]] sortedResultsUsingProperty:kRBlock ascending:YES];
+}
 
 #pragma mark - Non-persistent information
 
@@ -232,7 +239,7 @@
 }
 
 + (RLMResults*)allModulesInDay:(ALMScheduleDay)day inRealm:(RLMRealm*)realm {
-    NSString *query = [NSString stringWithFormat:@"%@ = %lu", kRDay, (long)day];
+    NSString *query = [NSString stringWithFormat:@"%@ = %d", kRDay, (int)day];
     return [[self objectsInRealm:realm where:query] sortedResultsUsingProperty:kRResourceID ascending:YES] ;
 }
 

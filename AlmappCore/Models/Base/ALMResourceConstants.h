@@ -208,6 +208,23 @@ extern NSString *const kRValuation;
 extern NSString *const kACurriculumURL;
 extern NSString *const kRCurriculumURL;
 
+extern NSString *const kRStudents;
+
+extern NSString *const kASections;
+extern NSString *const kRSections;
+
+extern NSString *const kAYear;
+extern NSString *const kRYear;
+
+extern NSString *const kAPeriod;
+extern NSString *const kRPeriod;
+
+extern NSString *const kASectionNumber;
+extern NSString *const kRSectionNumber;
+
+extern NSString *const kACredits;
+extern NSString *const kRCredits;
+
 extern NSString *const kADay;
 extern NSString *const kRDay;
 

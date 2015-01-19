@@ -215,6 +215,23 @@ NSString *const kRValuation = @"valuation";
 NSString *const kACurriculumURL = @"curriculum_url";
 NSString *const kRCurriculumURL = @"curriculumUrl";
 
+NSString *const kRStudents = @"students";
+
+NSString *const kASections = @"sections";
+NSString *const kRSections = @"sections";
+
+NSString *const kAYear = @"year";
+NSString *const kRYear = @"year";
+
+NSString *const kAPeriod = @"semester";
+NSString *const kRPeriod = @"period";
+
+NSString *const kASectionNumber = @"number";
+NSString *const kRSectionNumber = @"number";
+
+NSString *const kACredits = @"credits";
+NSString *const kRCredits = @"credits";
+
 NSString *const kADay = @"day";
 NSString *const kRDay = @"dayNumber";
 
