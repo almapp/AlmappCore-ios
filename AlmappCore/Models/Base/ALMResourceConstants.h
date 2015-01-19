@@ -18,6 +18,7 @@ extern NSString *const kRDefaultNullString;
 extern NSString *const kRDefaultPolymorphicType;
 extern NSNumber *kRDefaultPolymorphicID;
 extern NSString *const kRDefaultUnknownFloor;
+extern NSString *const kRDefaultTimeString;
 
 #pragma mark - Polymorphic
 
@@ -76,6 +77,9 @@ extern NSString *const kRResourceID;
 
 extern NSString *const kAIdentifier;
 extern NSString *const kRIdentifier;
+
+extern NSString *const kAInitials;
+extern NSString *const kRInitials;
 
 extern NSString *const kAUpdatedAt;
 extern NSString *const kRUpdatedAt;
@@ -203,6 +207,24 @@ extern NSString *const kRValuation;
 
 extern NSString *const kACurriculumURL;
 extern NSString *const kRCurriculumURL;
+
+extern NSString *const kADay;
+extern NSString *const kRDay;
+
+extern NSString *const kABlock;
+extern NSString *const kRBlock;
+
+extern NSString *const kAStartTimeHour;
+extern NSString *const kRStartTimeHour;
+
+extern NSString *const kAStartTimeMinute;
+extern NSString *const kRStartTimeMinute;
+
+extern NSString *const kAEndTimeHour;
+extern NSString *const kREndTimeHour;
+
+extern NSString *const kAEndTimeMinute;
+extern NSString *const kREndTimeMinute;
 
 #pragma mark - Webpages
 

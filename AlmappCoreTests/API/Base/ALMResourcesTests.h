@@ -8,6 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "ALMTestCase.h"
+#import "ALMResourceConstants.h"
 
 @interface ALMResourcesTests : ALMTestCase
 

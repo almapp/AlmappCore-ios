@@ -140,6 +140,24 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
     return [NSString stringWithFormat:@"%@.%@", [self jsonRoot], attribute];
 }
 
+/*
++ (NSString*)jatts:(NSString*)attributes, ... {
+    NSMutableString * res = [NSMutableString stringWithString:[self jsonRoot]];
+    [res appendString:attributes];
+    
+    va_list args;
+    va_start(args, attributes);
+    id arg = nil;
+    
+    while(( arg = va_arg(args, id))){
+        [res appendString:@"."];
+        [res appendString:arg];
+    }
+    va_end(args);
+    return res;
+}
+ */
+
 #pragma mark - Methods
 
 + (NSDictionary *)JSONNestedResourceInboundMappingDictionary {
