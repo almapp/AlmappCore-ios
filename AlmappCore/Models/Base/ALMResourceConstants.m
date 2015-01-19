@@ -25,6 +25,7 @@ NSString *const kRDefaultNullString = @"";
 NSString *const kRDefaultPolymorphicType = @"NONE";
 NSNumber *kRDefaultPolymorphicID;
 NSString *const kRDefaultUnknownFloor = @"?";
+NSString *const kRDefaultTimeString = @"00:00";
 
 #pragma mark - Polymorphic
 
@@ -83,6 +84,9 @@ NSString *const kRResourceID = @"resourceID";
 
 NSString *const kAIdentifier = @"identifier";
 NSString *const kRIdentifier = @"identifier";
+
+NSString *const kAInitials = @"initials";
+NSString *const kRInitials = @"initials";
 
 NSString *const kAUpdatedAt = @"updated_at";
 NSString *const kRUpdatedAt = @"updatedAt";
@@ -210,6 +214,24 @@ NSString *const kRValuation = @"valuation";
 
 NSString *const kACurriculumURL = @"curriculum_url";
 NSString *const kRCurriculumURL = @"curriculumUrl";
+
+NSString *const kADay = @"day";
+NSString *const kRDay = @"dayNumber";
+
+NSString *const kABlock = @"block";
+NSString *const kRBlock = @"block";
+
+NSString *const kAStartTimeHour = @"start.hour";
+NSString *const kRStartTimeHour = @"startHour";
+
+NSString *const kAStartTimeMinute = @"start.minute";
+NSString *const kRStartTimeMinute = @"startMinute";
+
+NSString *const kAEndTimeHour = @"end.hour";
+NSString *const kREndTimeHour = @"endHour";
+
+NSString *const kAEndTimeMinute = @"end.minute";
+NSString *const kREndTimeMinute = @"endMinute";
 
 #pragma mark - WebPages
 
