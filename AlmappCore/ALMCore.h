@@ -41,6 +41,14 @@
 
 - (NSArray*)availableUsers;
 
++ (short)currentAcademicYear;
+
+- (short)currentAcademicYear;
+
++ (short)currentAcademicPeriod;
+
+- (short)currentAcademicPeriod;
+
 #pragma mark - Persistence
 
 - (void)dropDatabaseInMemory;

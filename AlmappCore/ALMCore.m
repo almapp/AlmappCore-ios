@@ -9,6 +9,7 @@
 #import "ALMCore.h"
 
 static NSString *const MEMORY_REALM_PATH = @"TemporalRealm";
+static short const kDefaultSemesterDividerMonth = 7;
 
 @interface ALMCore ()
 
@@ -116,6 +117,42 @@ static dispatch_once_t once_token;
 - (NSArray*)availableUsers {
     return nil;
 }
+
++ (short)defaultAcademicYear {
+    return [[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]].year;
+}
+
++ (short)currentAcademicYear {
+    return [ALMCore sharedInstance] != nil ? [[ALMCore sharedInstance] currentAcademicYear] : [self defaultAcademicYear];
+}
+
+- (short)currentAcademicYear {
+    if([self.coreDelegate respondsToSelector:@selector(currentAcademicYear)]) {
+        return [self.coreDelegate currentAcademicYear];
+    }
+    else {
+        return [self.class defaultAcademicYear];
+    }
+}
+
++ (short)defaultAcademicPeriod {
+    NSInteger month = [[NSCalendar currentCalendar] components:NSCalendarUnitMonth fromDate:[NSDate date]].month;
+    return (month < kDefaultSemesterDividerMonth) ? 1 : 2;
+}
+
++ (short)currentAcademicPeriod {
+    return [ALMCore sharedInstance] != nil ? [[ALMCore sharedInstance] currentAcademicPeriod] : [self defaultAcademicPeriod];
+}
+
+- (short)currentAcademicPeriod {
+    if([self.coreDelegate respondsToSelector:@selector(currentAcademicPeriod)]) {
+        return [self.coreDelegate currentAcademicPeriod];
+    }
+    else {
+        return [self.class defaultAcademicPeriod];
+    }
+}
+
 
 #pragma mark - Persistence
 

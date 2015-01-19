@@ -13,4 +13,8 @@
 - (void)startPerformingNetworkTask;
 - (void)stopPerformingNetworkTask;
 
+@optional
+- (short)currentAcademicYear;
+- (short)currentAcademicPeriod;
+
 @end
