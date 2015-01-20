@@ -43,6 +43,7 @@
 #import "ALMScheduleModule.h"
 #import "ALMCourse.h"
 #import "ALMSection.h"
+#import "ALMTeacher.h"
 
 #import "ALMComment.h"
 #import "ALMLike.h"

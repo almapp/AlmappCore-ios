@@ -20,12 +20,12 @@
 @property BOOL isMale;
 @property NSDate *lastSeen;
 
-@property NSDate *updatedAt;
-@property NSDate *createdAt;
-
 @property (readonly) NSArray *sections;
 @property (readonly) NSArray *subscribedGroups;
 @property (readonly) NSArray *attendingEvents;
+
+@property NSDate *updatedAt;
+@property NSDate *createdAt;
 
 @end
 RLM_ARRAY_TYPE(ALMUser)
