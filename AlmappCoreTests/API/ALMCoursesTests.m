@@ -44,4 +44,8 @@
 
 }
 
+- (void)testTeachers {
+    [self nestedResourceCollection:[ALMTeacher class] on:[ALMCampus class] withID:3 params:nil afterSuccess:nil];
+}
+
 @end

@@ -8,6 +8,7 @@
 
 #import "ALMArea.h"
 #import "ALMCourse.h"
+#import "ALMTeacher.h"
 
 @class ALMFaculty;
 
@@ -15,6 +16,7 @@
 
 @property ALMFaculty* faculty;
 @property RLMArray<ALMCourse> *courses;
+@property RLMArray<ALMTeacher> *teachers;
 
 @end
 RLM_ARRAY_TYPE(ALMAcademicUnity)

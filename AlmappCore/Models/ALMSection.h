@@ -8,6 +8,7 @@
 
 #import "ALMSocialResource.h"
 #import "ALMUser.h"
+#import "ALMTeacher.h"
 
 @class ALMCourse;
 
@@ -17,6 +18,7 @@
 @property int year;
 @property int period;
 @property RLMArray<ALMUser> *students;
+@property RLMArray<ALMTeacher> *teachers;
 
 @property NSDate *updatedAt;
 @property NSDate *createdAt;

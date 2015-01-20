@@ -106,20 +106,18 @@
     ALMResourcesTests * __weak weakSelf = self;
     
     AFHTTPRequestOperation *op = [controller resource:rClass inPath:path id:resourceID parameters:params onSuccess:^(id result) {
-        [expectation fulfill];
-        
         NSLog(@"Resource Class: %@ | result: %@", rClass, result);
         if (afterSuccess != nil) {
             afterSuccess(result);
         } else {
             weakSelf.defaultSingleSuccessBlock(result);
         }
-        
-    } onFailure:^(NSError *error) {
         [expectation fulfill];
         
+    } onFailure:^(NSError *error) {
         NSLog(@"Resource Class: %@ | error: %@", rClass, error);
         XCTFail(@"Error performing request.");
+        [expectation fulfill];
     }];
     
     [self waitForExpectationsWithTimeout:[self timeout] handler:^(NSError *error) {
@@ -148,7 +146,6 @@
     ALMResourcesTests * __weak weakSelf = self;
     
     AFHTTPRequestOperation* op = [controller resourceCollection:rClass inPath:path parameters:params onSuccess:^(NSArray *result) {
-        [expectation fulfill];
         
         NSLog(@"Resource Collection: %@ | result: %@", rClass, result);
         if (afterSuccess != nil) {
@@ -156,12 +153,12 @@
         } else {
             weakSelf.defaultCollectionSuccessBlock(result);
         }
-        
-    } onFailure:^(NSError *error) {
         [expectation fulfill];
         
+    } onFailure:^(NSError *error) {
         NSLog(@"Resource Class: %@ | error: %@", rClass, error);
         XCTFail(@"Error performing request.");
+        [expectation fulfill];
     }];
     
     [self waitForExpectationsWithTimeout:[self timeout] handler:^(NSError *error) {
@@ -192,18 +189,17 @@
     ALMResourcesTests * __weak weakSelf = self;
     
     AFHTTPRequestOperation* op = [controller nestedResourceCollection:rClass nestedOn:parentClass withID:parentID parameters:params onSuccess:^(id parent, NSArray *result) {
-        [expectation fulfill];
-        
         if (afterSuccess != nil) {
             afterSuccess(parent, result);
         } else {
             weakSelf.defaultNestedSuccessBlock(parent, result);
         }
-    } onFailure:^(NSError *error) {
         [expectation fulfill];
         
+    } onFailure:^(NSError *error) {
         NSLog(@"Resource Class: %@ | error: %@", rClass, error);
         XCTFail(@"Error performing request.");
+        [expectation fulfill];
     }];
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
