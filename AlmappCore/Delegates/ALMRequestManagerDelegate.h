@@ -1,5 +1,5 @@
 //
-//  ALMControllerDelegate.h
+//  ALMRequestManagerDelegate.h
 //  AlmappCore
 //
 //  Created by Patricio López on 29-12-14.
@@ -7,17 +7,25 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AFNetworking/AFNetworking.h>
 #import <Realm/Realm.h>
 
 #import "ALMSession.h"
+#import "ALMSessionManager.h"
 
-@protocol ALMControllerDelegate <NSObject>
+@protocol ALMRequestManagerDelegate <NSObject>
+
+@optional
+
+- (ALMSession *)parseResponseHeaders:(NSDictionary *)headers data:(id)data to:(ALMSession *)session;
 
 @required
+
+- (ALMSessionManager *)sessionManager;
+- (NSString *)apiKey;
 
 - (RLMRealm *)realmNamed:(NSString *)name;
 - (RLMRealm *)defaultRealm;
 - (RLMRealm *)temporalRealm;
+- (RLMRealm *)encryptedRealm;
 
 @end

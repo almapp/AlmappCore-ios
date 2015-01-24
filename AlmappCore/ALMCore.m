@@ -1,4 +1,4 @@
-//
+ //
 //  ALMCore.m
 //  AlmappCore
 //
@@ -8,18 +8,21 @@
 
 #import "ALMCore.h"
 
-static NSString *const MEMORY_REALM_PATH = @"TemporalRealm";
+static NSString *const kMemoryRealmPath = @"temporal.realm";
+static NSString *const kDefaultRealmPath = @"realm_v1.realm";
+static NSString *const kEncryptedRealmPath = @"encrypted_realm_v1.realm";
+
 static short const kDefaultSemesterDividerMonth = 7;
 
 @interface ALMCore ()
 
 @property (strong, nonatomic) NSMutableDictionary* controllers;
 
-@property (strong, nonatomic) id<ALMCoreDelegate> coreDelegate;
+@property (weak, nonatomic) id<ALMCoreDelegate> coreDelegate;
 @property (strong, nonatomic) NSURL* baseURL;
 @property (strong, nonatomic) RLMRealm* inMemoryRealm;
 
-- (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL: (NSURL*)baseURL;
+- (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL: (NSURL*)baseURL apiKey:(NSString *)apiKey;
 
 - (void)dropRealm:(RLMRealm*)realm;
 - (void)deleteRealm:(RLMRealm*)realm;
@@ -30,12 +33,13 @@ static short const kDefaultSemesterDividerMonth = 7;
 
 #pragma mark - Private Constructor
 
-- (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL: (NSURL*)baseURL {
+- (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL: (NSURL*)baseURL apiKey:(NSString *)apiKey {
     self = [super init];
     if (self) {
         _coreDelegate = delegate;
         _baseURL = baseURL;
         _controllers = [NSMutableDictionary dictionary];
+        _apiKey = apiKey;
     }
     return self;
 }
@@ -45,11 +49,11 @@ static short const kDefaultSemesterDividerMonth = 7;
 static ALMCore *_sharedInstance = nil;
 static dispatch_once_t once_token;
 
-+ (ALMCore*)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL {
++ (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL apiKey:(NSString *)apiKey {
     if (baseURL != nil && delegate != nil){
         dispatch_once(&once_token, ^{
             if (_sharedInstance == nil) {
-                _sharedInstance = [[ALMCore alloc] initWithDelegate:delegate baseURL:baseURL];
+                _sharedInstance = [[self alloc] initWithDelegate:delegate baseURL:baseURL apiKey:apiKey];
             }
         });
         return _sharedInstance;
@@ -58,15 +62,19 @@ static dispatch_once_t once_token;
     }
 }
 
-+ (ALMCore*)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString*)baseURLString {
-    if(true) {
-        return [ALMCore initInstanceWithDelegate:delegate baseURL:[NSURL URLWithString:baseURLString]];
-    } else {
-        return nil;
-    }
++ (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString *)baseURLString apiKey:(NSString *)apiKey {
+    return [self initInstanceWithDelegate:delegate baseURL:[NSURL URLWithString:baseURLString] apiKey:apiKey];
 }
 
-+ (ALMCore*)sharedInstance {
++ (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString *)baseURLString {
+    return [self initInstanceWithDelegate:delegate baseURLString:baseURLString apiKey:nil];
+}
+
++ (BOOL)isAlive {
+    return [self sharedInstance] != nil;
+}
+
++ (instancetype)sharedInstance {
     return _sharedInstance;
 }
 
@@ -78,52 +86,113 @@ static dispatch_once_t once_token;
     _sharedInstance = instance;
 }
 
-#pragma mark - Core Methods
+
+#pragma mark - Web & Session
+
+- (NSString *)baseURLString {
+    return [_baseURL absoluteString];
+}
+
+- (NSURL *)baseURL {
+    return _baseURL;
+}
+
+- (NSString *)apiKey {
+    if (!_apiKey) {
+        NSException* myException = [NSException
+                                    exceptionWithName:@"ApiKeyNotFound"
+                                    reason:@"Api-Key string has not been set on core singleton class"
+                                    userInfo:nil];
+        @throw myException;
+    }
+    return _apiKey;
+}
+
+- (ALMRequestManager *)requestManager {
+    if (!_requestManager) {
+        _requestManager = [[ALMRequestManager alloc] initWithBaseURL:_baseURL delegate:self];
+    }
+    return _requestManager;
+}
+
+- (ALMSessionManager *)sessionManager {
+    if (!_sessionManager) {
+        _sessionManager = [[ALMSessionManager alloc] init];
+    }
+    return _sessionManager;
+}
+
++ (ALMRequestManager *)requestManager {
+    return [self isAlive] ? [[self sharedInstance] requestManager] : nil;
+}
+
++ (ALMSessionManager *)sessionManager {
+    return [self isAlive] ? [[self sharedInstance] sessionManager] : nil;
+}
+
+- (void)setRequestManagerDelegate:(id<ALMRequestManagerDelegate>)delegate {
+    self.requestManager.requestManagerDelegate = delegate;
+}
+
+- (id<ALMRequestManagerDelegate>)requestManagerDelegate {
+    return self.requestManager.requestManagerDelegate;
+}
+
+- (void)setSessionManagerDelegate:(id<ALMSessionManagerDelegate>)sessionManagerDelegate {
+    self.sessionManager.sessionManagerDelegate = sessionManagerDelegate;
+}
+
+- (id<ALMSessionManagerDelegate>)sessionManagerDelegate {
+    return self.sessionManager.sessionManagerDelegate;
+}
+
+- (void)setCurrentSession:(ALMSession *)session {
+    self.sessionManager.currentSession = session;
+}
+
+- (ALMSession *)currentSession {
+    return self.sessionManager.currentSession;
+}
+
++ (ALMSession *)currentSession {
+    return [self sharedInstance] != nil ? [[self sharedInstance] currentSession] : nil;
+}
+
+
+#pragma mark - Controller
+
 
 + (id)controller {
-    return [ALMCore controller:[ALMController class]];
-}
-
-+ (id)controller:(Class)controller {
-    if ([ALMCore sharedInstance] != nil) {
-        return [[ALMCore sharedInstance] controller:controller];
-    }
-    else {
-        return nil;
-    }
-}
-
-- (id)controller:(Class)controllerClass {
-    if([controllerClass isSubclassOfClass:[ALMController class]]) {
-        ALMController* controller = [_controllers objectForKey:controllerClass];
-        if(controller != nil) {
-            return controller;
-        }
-        else {
-            controller = [controllerClass performSelector:@selector(controllerWithDelegate:) withObject:self];
-            [_controllers setObject:controller forKey:(id <NSCopying>)controllerClass];
-            return controller;
-        }
-    }
-    else {
-        return nil;
-    }
-}
-
-- (id)controller {
-    return [self controller:[ALMController class]];
-}
-
-- (NSArray*)availableUsers {
     return nil;
 }
 
-+ (short)defaultAcademicYear {
++ (id)controller:(Class)controllerClass {
+    return ([self sharedInstance] != nil) ? [[self sharedInstance] controller:controllerClass] : nil;
+}
+
+- (id)controller:(Class)controllerClass {
+    return nil;
+}
+
+- (id)controller {
+    return nil;
+}
+
+
+
+#pragma mark - Academic
+
++ (short)calculateAcademicYear {
     return [[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]].year;
 }
 
++ (short)calculateAcademicPeriod {
+    NSInteger month = [[NSCalendar currentCalendar] components:NSCalendarUnitMonth fromDate:[NSDate date]].month;
+    return (month < kDefaultSemesterDividerMonth) ? 1 : 2;
+}
+
 + (short)currentAcademicYear {
-    return [ALMCore sharedInstance] != nil ? [[ALMCore sharedInstance] currentAcademicYear] : [self defaultAcademicYear];
+    return [self sharedInstance] != nil ? [[self sharedInstance] currentAcademicYear] : [self calculateAcademicYear];
 }
 
 - (short)currentAcademicYear {
@@ -131,17 +200,12 @@ static dispatch_once_t once_token;
         return [self.coreDelegate currentAcademicYear];
     }
     else {
-        return [self.class defaultAcademicYear];
+        return [self.class calculateAcademicYear];
     }
 }
 
-+ (short)defaultAcademicPeriod {
-    NSInteger month = [[NSCalendar currentCalendar] components:NSCalendarUnitMonth fromDate:[NSDate date]].month;
-    return (month < kDefaultSemesterDividerMonth) ? 1 : 2;
-}
-
 + (short)currentAcademicPeriod {
-    return [ALMCore sharedInstance] != nil ? [[ALMCore sharedInstance] currentAcademicPeriod] : [self defaultAcademicPeriod];
+    return [self sharedInstance] != nil ? [[self sharedInstance] currentAcademicPeriod] : [self calculateAcademicPeriod];
 }
 
 - (short)currentAcademicPeriod {
@@ -149,65 +213,125 @@ static dispatch_once_t once_token;
         return [self.coreDelegate currentAcademicPeriod];
     }
     else {
-        return [self.class defaultAcademicPeriod];
+        return [self.class calculateAcademicPeriod];
     }
 }
 
 
 #pragma mark - Persistence
 
-- (void)dropDatabaseDefault {
-    [self dropRealm:[self requestRealm]];
+- (void)dropDefaultDatabase {
+    [self dropRealm:self.defaultRealm];
 }
 
-- (void)dropDatabaseInMemory {
-    [self dropRealm:[self requestTemporalRealm]];
+- (void)dropEncryptedDatabase {
+    [self dropRealm:self.encryptedRealm];
 }
 
-- (void)deleteDatabaseDefault {
-    [self deleteRealm:[self requestRealm]];
+- (void)dropTemporalDatabase {
+    [self dropRealm:self.temporalRealm];
 }
 
-- (void)deleteDatabaseInMemory {
-    [self deleteRealm:[self requestTemporalRealm]];
+- (void)dropDatabaseNamed:(NSString *)name {
+    [self dropRealm:[self realmNamed:name]];
+}
+
+- (void)deleteDefaultDatabase {
+    [self deleteRealm:self.defaultRealm];
+}
+
+- (void)deleteEncryptedDatabase {
+    [self deleteRealm:self.encryptedRealm];
+}
+
+- (void)deleteTemporalDatabase {
+    [self deleteRealm:self.temporalRealm];
+}
+
+- (void)deleteDatabaseNamed:(NSString *)name {
+    [self deleteRealm:[self realmNamed:name]];
 }
 
 - (void)dropRealm:(RLMRealm*)realm {
-    NSLog(@"%@", realm.path);
+    NSLog(@"Drop database at: %@", realm.path);
     [realm beginWriteTransaction];
     [realm deleteAllObjects];
     [realm commitWriteTransaction];
 }
 
 - (void)deleteRealm:(RLMRealm*)realm {
+    NSLog(@"Delete database at: %@", realm.path);
     [[NSFileManager defaultManager] removeItemAtPath:realm.path error:nil];
 }
 
-
-#pragma mark - Exposed attributes
-
-
-
-#pragma mark - Controller Delegate Implementation
-
-- (NSString *)baseURL {
-    return [_baseURL absoluteString];
++ (RLMRealm *)defaultRealm {
+    return [self isAlive] ? [[self sharedInstance] defaultRealm] : nil;
 }
 
-- (AFHTTPRequestOperationManager *)requestManager {
-    return [AFHTTPRequestOperationManager manager];
-}
-
-- (RLMRealm *)requestRealm {
+- (RLMRealm *)defaultRealm {
     return [RLMRealm defaultRealm];
 }
 
-- (RLMRealm *)requestTemporalRealm {
++ (RLMRealm *)realmNamed:(NSString *)name {
+    return [self isAlive] ? [[self sharedInstance] realmNamed:name] : nil;
+}
+
+- (RLMRealm *)realmNamed:(NSString *)name {
+    return nil;
+}
+
++ (RLMRealm *)temporalRealm {
+    return [self isAlive] ? [[self sharedInstance] temporalRealm] : nil;
+}
+
+- (RLMRealm *)temporalRealm {
     if (_inMemoryRealm == nil){
-        _inMemoryRealm = [RLMRealm inMemoryRealmWithIdentifier:MEMORY_REALM_PATH];
+        _inMemoryRealm = [RLMRealm inMemoryRealmWithIdentifier:kMemoryRealmPath];
         return _inMemoryRealm;
     }
-    return [RLMRealm inMemoryRealmWithIdentifier:MEMORY_REALM_PATH];
+    return [RLMRealm inMemoryRealmWithIdentifier:kMemoryRealmPath];
+}
+
++ (RLMRealm *)encryptedRealm {
+    return [self isAlive] ? [[self sharedInstance] encryptedRealm] : nil;
+}
+
+- (RLMRealm *)encryptedRealm {
+    
+    // TODO, INCOMPLETE
+    
+    //NSString *realmPath = [self.class writeablePathForFile:kEncryptedRealmPath];
+    //return [RLMRealm encryptedRealmWithPath:realmPath key:nil readOnly:NO error:nil];
+    
+    return self.defaultRealm;
+}
+
+
++ (NSString *)writeablePathForFile:(NSString*)fileName
+{
+#if TARGET_OS_IPHONE
+    // On iOS the Documents directory isn't user-visible, so put files there
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+#else
+    // On OS X it is, so put files in Application Support. If we aren't running
+    // in a sandbox, put it in a subdirectory based on the bundle identifier
+    // to avoid accidentally sharing files between applications
+    NSString *path = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES)[0];
+    if (![[NSProcessInfo processInfo] environment][@"APP_SANDBOX_CONTAINER_ID"]) {
+        NSString *identifier = [[NSBundle mainBundle] bundleIdentifier];
+        if ([identifier length] == 0) {
+            identifier = [[[NSBundle mainBundle] executablePath] lastPathComponent];
+        }
+        path = [path stringByAppendingPathComponent:identifier];
+        
+        // create directory
+        [[NSFileManager defaultManager] createDirectoryAtPath:path
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:nil];
+    }
+#endif
+    return [path stringByAppendingPathComponent:fileName];
 }
 
 @end

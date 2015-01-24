@@ -131,8 +131,14 @@ extern NSString *const kRInformation;
 
 #pragma mark - Users
 
-extern NSString *const kALastSeen;
-extern NSString *const kRLastSeen;
+extern NSString *const kASession;
+extern NSString *const kRSession;
+
+extern NSString *const kALastSignIn;
+extern NSString *const kRLastSignIn;
+
+extern NSString *const kACurrentSignIn;
+extern NSString *const kRCurrentSignIn;
 
 extern NSString *const kAMale;
 extern NSString *const kRMale;

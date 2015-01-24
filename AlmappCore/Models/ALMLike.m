@@ -34,7 +34,7 @@
 
 - (ALMResource<ALMLikeable>*)likeable {
     Class likeableClass = NSClassFromString(self.likeableType);
-    return [likeableClass objectInRealm:self.realm forID:self.likeableID];
+    return [likeableClass objectInRealm:self.realm withID:self.likeableID];
 }
 
 + (ALMPersistMode)persistMode {
