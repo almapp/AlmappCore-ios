@@ -18,7 +18,8 @@
 @property NSString *country;
 @property BOOL isFindeable;
 @property BOOL isMale;
-@property NSDate *lastSeen;
+@property NSDate *lastSignIn;
+@property NSDate *currentSignIn;
 
 @property (readonly) NSArray *sections;
 @property (readonly) NSArray *subscribedGroups;

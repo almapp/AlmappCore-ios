@@ -11,5 +11,6 @@
 @interface ALMTestsConstants : NSObject
 
 extern NSString * const kTestingBaseURL;
+extern NSString * const kTestingApiKey;
 
 @end

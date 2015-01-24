@@ -77,7 +77,7 @@
 
 - (ALMResource<ALMPostPublisher>*)entity {
     Class entityClass = NSClassFromString(self.entityType);
-    return [entityClass objectInRealm:self.realm forID:self.entityID];
+    return [entityClass objectInRealm:self.realm withID:self.entityID];
 }
 
 - (void)setTarget:(ALMResource<ALMPostTargetable> *)target {
@@ -87,7 +87,7 @@
 
 - (id)target {
     Class targetClass = NSClassFromString(self.targetType);
-    return [targetClass objectInRealm:self.realm forID:self.targetID];
+    return [targetClass objectInRealm:self.realm withID:self.targetID];
 }
 
 @end

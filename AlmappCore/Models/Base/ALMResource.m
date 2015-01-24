@@ -296,12 +296,42 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
 
 #pragma mark - Loading
 
-+ (id)objectForID:(long long)resourceID {
-    return [self objectInRealm:[RLMRealm defaultRealm] forID:resourceID];
++ (id)objectWithID:(long long)resourceID {
+    return [self objectInRealm:[RLMRealm defaultRealm] withID:resourceID];
 }
 
-+ (id)objectInRealm:(RLMRealm *)realm forID:(long long)resourceID {
++ (id)objectInRealm:(RLMRealm *)realm withID:(long long)resourceID {
     return [self objectInRealm:realm forPrimaryKey:[NSNumber numberWithLongLong:resourceID]];
+}
+
++ (id)objectOfType:(Class)resourceClass withID:(long long)resourceID {
+    return [self objectOfType:resourceClass withID:resourceID inRealm:[RLMRealm defaultRealm]];
+}
+
++ (id)objectOfType:(Class)resourceClass withID:(long long)resourceID inRealm:(RLMRealm *)realm {
+    return [resourceClass objectInRealm:realm withID:resourceID];
+}
+
+
++ (id)allObjectsOfType:(Class)resourceClass {
+    return [self allObjectsOfType:resourceClass inRealm:[RLMRealm defaultRealm]];
+}
+
++ (id)allObjectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm {
+    return [resourceClass allObjectsInRealm:realm];
+}
+
++ (id)objectsOfType:(Class)resourceClass where:(NSString *)query {
+    return [self objectsOfType:resourceClass inRealm:[RLMRealm defaultRealm] where:query];
+}
+
++ (id)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm where:(NSString *)query {
+    if (query && query.length > 0) {
+        return [resourceClass objectsInRealm:realm where:query];
+    }
+    else {
+        return [resourceClass allObjectsInRealm:realm];
+    }
 }
 
 @end
