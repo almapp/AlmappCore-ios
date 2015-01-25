@@ -20,8 +20,6 @@ NSString *const kHttpHeaderFieldUID = @"Uid";
 
 @interface ALMRequest ()
 
-@property (strong, nonatomic) NSString *realmPath;
-
 @end
 
 @implementation NSDate (Compare)
@@ -45,18 +43,35 @@ NSString *const kHttpHeaderFieldUID = @"Uid";
 
 @implementation ALMRequest
 
-+ (RLMRealm *)defaultRealm {
-    return [RLMRealm defaultRealm];
+#pragma mark - Constructor
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.realmPath = [ALMRequest defaultRealmPath];
+    }
+    return self;
 }
-/*
-- (void)setRealm:(RLMRealm *)realm {
-    self.realmPath = realm.path;
+
+
+#pragma mark - Realms
+
++ (NSString *)defaultRealmPath {
+    return [RLMRealm defaultRealmPath];
 }
 
 - (RLMRealm *)realm {
-    return [RLMRealm realmWithPath:self.realmPath];
+    return [RLMRealm realmWithPath:_realmPath];
 }
- */
+
+- (void)setRealm:(RLMRealm *)realm {
+    if (realm) {
+        _realmPath = realm.path;
+    }
+}
+
+
+#pragma mark - Validations
 
 - (BOOL (^)(ALMSession*))tokenValidationOperation {
     if (!_tokenValidationOperation) {
@@ -81,6 +96,16 @@ NSString *const kHttpHeaderFieldUID = @"Uid";
     return (self.session == nil || self.tokenValidationOperation(self.session));
 }
 
+- (BOOL)validateRequest {
+    if (![self.resourceClass isSubclassOfClass:[ALMResource class]]) {
+        return NO;
+    }
+    return YES;
+}
+
+
+#pragma mark - HTTP Headers
+
 - (NSDictionary *(^)(ALMSession *, NSString *))configureHttpRequestHeaders{
     if (!_configureHttpRequestHeaders) {
         _configureHttpRequestHeaders = [self.class defaultHttpHeaders];
@@ -104,6 +129,9 @@ NSString *const kHttpHeaderFieldUID = @"Uid";
     };
 }
 
+
+#pragma mark - Path methods
+
 + (NSString *)intuitedPathFor:(Class)resourceClass {
     if ([resourceClass instancesRespondToSelector:@selector(apiPluralForm)]) {
         return [resourceClass performSelector:@selector(apiPluralForm)];
@@ -121,12 +149,8 @@ NSString *const kHttpHeaderFieldUID = @"Uid";
     return (_customPath) ? _customPath : self.intuitedPath;
 }
 
-- (BOOL)validateRequest {
-    if (![self.resourceClass isSubclassOfClass:[ALMResource class]]) {
-        return NO;
-    }
-    return YES;
-}
+
+#pragma mark - Execute operations
 
 - (id)execCommit:(id)data {
     NSException* myException = [NSException

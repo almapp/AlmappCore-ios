@@ -6,10 +6,9 @@
 //  Copyright (c) 2015 almapp. All rights reserved.
 //
 
-#import "ALMResource.h"
 #import "ALMUser.h"
 
-@interface ALMSession : ALMResource
+@interface ALMSession : RLMObject
 
 @property NSString *email;
 @property NSString *password;
@@ -27,3 +26,4 @@
 + (instancetype)sessionWithEmail:(NSString *)email;
 
 @end
+RLM_ARRAY_TYPE(ALMSession)

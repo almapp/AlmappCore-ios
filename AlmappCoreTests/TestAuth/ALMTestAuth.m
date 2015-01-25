@@ -13,16 +13,15 @@
 
 @interface ALMTestAuth : ALMTestCase
 
+@property (readonly) ALMSession *session;
+
 @end
 
 @implementation ALMTestAuth
 
-- (void)testAuth {
-    XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:@"validGetSingleResource"];
-    
+- (ALMSession *)session {
     ALMSession *session = [[ALMSession alloc] init];
     
-    session.resourceID = 1;
     session.email = @"pelopez2@uc.cl";
     session.password = @"randompassword";
     
@@ -31,11 +30,22 @@
     session = [ALMSession createOrUpdateInRealm:realm withObject:session];
     [realm commitWriteTransaction];
     
+    return session;
+}
+
+- (void)testLogin {
+    
+}
+
+- (void)testPrivateResource {
+    XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:@"validGetSingleResource"];
+    
+    ALMSession *session = self.session;
+    
     NSURLSessionDataTask *op = [self.requestManager GET:[ALMSingleRequest request:^(ALMSingleRequest *builder) {
-        builder.realm = self.testRealm;
-        builder.session = [ALMSession sessionWithEmail:@"pelopez2@uc.cl" inRealm:builder.realm];
+        builder.realmPath = self.testRealmPath;
+        builder.session = session;
         builder.resourceClass = [ALMUser class];
-        builder.resourceID = 1;
         builder.customPath = @"users/me";
         
     } onLoad:^(id loadedResource) {

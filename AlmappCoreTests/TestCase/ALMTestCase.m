@@ -14,17 +14,20 @@
     [super setUp];
     
     _core = [ALMCore initInstanceWithDelegate:[[ALMDummyCoreDelegated alloc] init] baseURL:[NSURL URLWithString:kTestingBaseURL] apiKey:kTestingApiKey];
+    [_core deleteTemporalDatabase];
 }
 
 - (void)tearDown {
     [super tearDown];
-    
-    [_core dropTemporalDatabase];
-    [_core deleteTemporalDatabase];
+    [_core shutDown];
 }
 
 - (RLMRealm *)testRealm {
     return [_core temporalRealm];
+}
+
+- (NSString *)testRealmPath {
+    return self.testRealm.path;
 }
 
 - (ALMRequestManager *)requestManager {

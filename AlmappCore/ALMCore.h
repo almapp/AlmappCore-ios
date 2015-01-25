@@ -30,7 +30,7 @@
 
 + (BOOL)isAlive;
 
-+ (void)shutDown;
+- (void)shutDown;
 
 + (void)setSharedInstance:(ALMCore*)instance;
 
@@ -105,9 +105,9 @@
 - (void)dropDefaultDatabase;
 - (void)dropEncryptedDatabase;
 
-- (void)deleteDatabaseNamed:(NSString *)name;
-- (void)deleteTemporalDatabase;
-- (void)deleteDefaultDatabase;
-- (void)deleteEncryptedDatabase;
+- (BOOL)deleteDatabaseNamed:(NSString *)name;
+- (BOOL)deleteTemporalDatabase;
+- (BOOL)deleteDefaultDatabase;
+- (BOOL)deleteEncryptedDatabase;
 
 @end

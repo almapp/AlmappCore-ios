@@ -97,7 +97,7 @@
         __block ALMRequest * blockRequest = request;
         __weak typeof(self) weakSelf = self;
         
-        NSURLSessionDataTask *login = [self loginWith:blockRequest.session onSuccess:^(NSURLSessionDataTask *task, ALMSession *session) {
+        NSURLSessionDataTask *login = [self performLoginOperationWith:blockRequest.session onSuccess:^(NSURLSessionDataTask *task, ALMSession *session) {
             blockRequest.session = session;
             
             __strong typeof(self) strongSelf = weakSelf;
@@ -141,14 +141,32 @@
     return op;
 }
 
-- (NSURLSessionDataTask *)GETNestedResources:(ALMNestedCollectionRequest *)request {
-    return nil;
-}
-
 
 #pragma mark - Login
 
-- (NSURLSessionDataTask *)loginWith:(ALMSession *)session
+- (NSURLSessionDataTask *)loginWith:(ALMSession *)session onSuccess:(void (^)(NSURLSessionDataTask *, ALMSession *))onSuccess onFail:(void (^)(NSURLSessionDataTask *, NSError *))onFail {
+    
+    NSString *realmPath = session.realm.path;
+    NSString *sessionEmail = session.email;
+    
+    return [self performLoginOperationWith:session onSuccess:^(NSURLSessionDataTask *task, ALMSession *session) {
+        if (onSuccess) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                RLMRealm *realm = [RLMRealm realmWithPath:realmPath];
+                ALMSession *threadSafeSession = [ALMSession sessionWithEmail:sessionEmail inRealm:realm];
+                onSuccess(task, threadSafeSession);
+            });
+        }
+    } onFail:^(NSURLSessionDataTask *task, NSError *error) {
+        if (onFail) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                onFail(task, error);
+            });
+        }
+    }];
+}
+
+- (NSURLSessionDataTask *)performLoginOperationWith:(ALMSession *)session
                           onSuccess:(void (^)(NSURLSessionDataTask *task, ALMSession *session))onSuccess
                              onFail:(void (^)(NSURLSessionDataTask *task, NSError *error))onFail {
     
@@ -196,7 +214,9 @@
     else {
         NSDictionary *jsonResponse = @{kAUser : data[kASession][kAUser]};
         
-        [session.realm beginWriteTransaction];
+        RLMRealm *realm = session.realm;
+        
+        [realm beginWriteTransaction];
         
         session.uid = headers[kHttpHeaderFieldUID];
         session.tokenAccessKey = headers[kHttpHeaderFieldAccessToken];
@@ -204,9 +224,9 @@
         session.client = headers[kHttpHeaderFieldClient];
         session.tokenType = headers[kHttpHeaderFieldTokenType];
         
-        session.user = [ALMUser createOrUpdateInRealm:session.realm withJSONDictionary:jsonResponse];
+        session.user = [ALMUser createOrUpdateInRealm:realm withJSONDictionary:jsonResponse];
         
-        [session.realm commitWriteTransaction];
+        [realm commitWriteTransaction];
         
         return session;
     }

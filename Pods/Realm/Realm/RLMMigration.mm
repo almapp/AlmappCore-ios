@@ -47,22 +47,22 @@
 
 @implementation RLMMigration
 
-+ (instancetype)migrationForRealm:(RLMRealm *)realm key:(NSData *)key error:(NSError **)error {
-    RLMMigration *migration = [RLMMigration new];
-    
-    // create rw realm to migrate with current on disk table
-    migration->_realm = realm;
-    
-    // create read only realm used during migration with current on disk schema
-    migration->_oldRealm = [[RLMMigrationRealm alloc] initWithPath:realm.path key:key readOnly:NO inMemory:NO error:error];
-    if (migration->_oldRealm) {
-        RLMRealmSetSchema(migration->_oldRealm, [RLMSchema dynamicSchemaFromRealm:migration->_oldRealm]);
+- (instancetype)initWithRealm:(RLMRealm *)realm key:(NSData *)key error:(NSError **)error {
+    self = [super init];
+    if (self) {
+        // create rw realm to migrate with current on disk table
+        _realm = realm;
+
+        // create read only realm used during migration with current on disk schema
+        _oldRealm = [[RLMMigrationRealm alloc] initWithPath:realm.path key:key readOnly:NO inMemory:NO dynamic:YES error:error];
+        if (_oldRealm) {
+            RLMRealmSetSchema(_oldRealm, [RLMSchema dynamicSchemaFromRealm:_oldRealm], true);
+        }
+        if (error && *error) {
+            return nil;
+        }
     }
-    if (error && *error) {
-        return nil;
-    }
-    
-    return migration;
+    return self;
 }
 
 - (RLMSchema *)oldSchema {
@@ -126,14 +126,8 @@
     }
 }
 
-- (void)migrateWithBlock:(RLMMigrationBlock)block version:(NSUInteger)newVersion {
-    // start write transaction
-    [_realm beginWriteTransaction];
-
-    @try {
-        // add new tables/columns for the current shared schema
-        RLMRealmCreateTables(_realm, [RLMSchema sharedSchema], true);
-
+- (void)execute:(RLMMigrationBlock)block {
+    @autoreleasepool {
         // disable all primary keys for migration
         for (RLMObjectSchema *objectSchema in _realm.schema.objectSchema) {
             objectSchema.primaryKeyProperty.isPrimary = NO;
@@ -145,13 +139,6 @@
 
         // verify uniqueness for any new unique columns before committing
         [self verifyPrimaryKeyUniqueness];
-
-        // update new version
-        RLMRealmSetSchemaVersion(_realm, newVersion);
-    }
-    @finally {
-        // end transaction
-        [_realm commitWriteTransaction];
     }
 }
 

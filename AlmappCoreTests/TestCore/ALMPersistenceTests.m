@@ -23,7 +23,7 @@
     NSURLSessionDataTask *op = [self.requestManager GET:[ALMSingleRequest request:^(ALMSingleRequest *builder) {
         builder.resourceClass = [ALMUser class];
         builder.resourceID = 1;
-        builder.realm = [self testRealm];
+        builder.realmPath = [self testRealmPath];
         
     } onLoad:^(id loadedResource) {
         XCTAssertNil(loadedResource, @"Should not exist");

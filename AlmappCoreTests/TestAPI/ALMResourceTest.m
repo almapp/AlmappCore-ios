@@ -33,7 +33,7 @@
     NSURLSessionDataTask *op = [self.requestManager GET:[ALMSingleRequest request:^(ALMSingleRequest *builder) {
         builder.resourceClass = resourceClass;
         builder.resourceID = resourceID;
-        builder.realm = [weakSelf testRealm];
+        builder.realmPath = [weakSelf testRealmPath];
         
     } onLoad:^(id loadedResource) {
         NSLog(@"Loaded: %@", loadedResource);
@@ -65,7 +65,7 @@
     
     NSURLSessionDataTask *op = [self.requestManager GET:[ALMCollectionRequest request:^(ALMCollectionRequest *builder) {
         builder.resourceClass = resourcesClass;
-        builder.realm = [weakSelf testRealm];
+        builder.realmPath = [weakSelf testRealmPath];
         
     } onLoad:^(RLMResults *loadedResources) {
         NSLog(@"Loaded: %@", loadedResources);

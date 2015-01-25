@@ -25,7 +25,7 @@ static short const kDefaultSemesterDividerMonth = 7;
 - (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL: (NSURL*)baseURL apiKey:(NSString *)apiKey;
 
 - (void)dropRealm:(RLMRealm*)realm;
-- (void)deleteRealm:(RLMRealm*)realm;
+- (BOOL)deleteRealmWithPath:(NSString *)realmPath;
 
 @end
 
@@ -78,7 +78,11 @@ static dispatch_once_t once_token;
     return _sharedInstance;
 }
 
-+ (void)shutDown {
+- (void)shutDown {
+    BOOL deleteTemporalRealm = [self deleteTemporalDatabase];
+    if (!deleteTemporalRealm) {
+        NSLog(@"Error, temporal realm was not destroyed");
+    }
 }
 
 + (void)setSharedInstance:(ALMCore*)instance {
@@ -236,20 +240,22 @@ static dispatch_once_t once_token;
     [self dropRealm:[self realmNamed:name]];
 }
 
-- (void)deleteDefaultDatabase {
-    [self deleteRealm:self.defaultRealm];
+
+- (BOOL)deleteDefaultDatabase {
+    return [self deleteRealmWithPath:[self defaultRealmPath]];
 }
 
-- (void)deleteEncryptedDatabase {
-    [self deleteRealm:self.encryptedRealm];
+- (BOOL)deleteEncryptedDatabase {
+    return [self deleteDatabaseNamed:kEncryptedRealmPath];
 }
 
-- (void)deleteTemporalDatabase {
-    [self deleteRealm:self.temporalRealm];
+- (BOOL)deleteTemporalDatabase {
+    return [self deleteDatabaseNamed:kMemoryRealmPath];
 }
 
-- (void)deleteDatabaseNamed:(NSString *)name {
-    [self deleteRealm:[self realmNamed:name]];
+- (BOOL)deleteDatabaseNamed:(NSString *)name {
+    NSString *path = [self.class writeablePathForFile:name];
+    return [self deleteRealmWithPath:path];
 }
 
 - (void)dropRealm:(RLMRealm*)realm {
@@ -259,13 +265,23 @@ static dispatch_once_t once_token;
     [realm commitWriteTransaction];
 }
 
-- (void)deleteRealm:(RLMRealm*)realm {
-    NSLog(@"Delete database at: %@", realm.path);
-    [[NSFileManager defaultManager] removeItemAtPath:realm.path error:nil];
+- (BOOL)deleteRealmWithPath:(NSString *)realmPath {
+    NSLog(@"Deleting Realm database at: %@", realmPath);
+    return [[NSFileManager defaultManager] removeItemAtPath:realmPath error:nil];
+}
+
+
+
+- (NSString *)defaultRealmPath {
+    return [RLMRealm defaultRealmPath];
+}
+
++ (NSString *)defaultRealmPath {
+    return [RLMRealm defaultRealmPath];
 }
 
 + (RLMRealm *)defaultRealm {
-    return [self isAlive] ? [[self sharedInstance] defaultRealm] : nil;
+    return [RLMRealm defaultRealm];
 }
 
 - (RLMRealm *)defaultRealm {
@@ -273,23 +289,28 @@ static dispatch_once_t once_token;
 }
 
 + (RLMRealm *)realmNamed:(NSString *)name {
-    return [self isAlive] ? [[self sharedInstance] realmNamed:name] : nil;
+    NSString *path = [self writeablePathForFile:name];
+    return [RLMRealm realmWithPath:path];
 }
 
 - (RLMRealm *)realmNamed:(NSString *)name {
-    return nil;
+    return [self.class realmNamed:name];
 }
 
 + (RLMRealm *)temporalRealm {
-    return [self isAlive] ? [[self sharedInstance] temporalRealm] : nil;
+    return [self realmNamed:kMemoryRealmPath];
+    //return [self isAlive] ? [[self sharedInstance] temporalRealm] : nil;
 }
 
 - (RLMRealm *)temporalRealm {
+    return [self realmNamed:kMemoryRealmPath];
+    /*
     if (_inMemoryRealm == nil){
         _inMemoryRealm = [RLMRealm inMemoryRealmWithIdentifier:kMemoryRealmPath];
         return _inMemoryRealm;
     }
     return [RLMRealm inMemoryRealmWithIdentifier:kMemoryRealmPath];
+     */
 }
 
 + (RLMRealm *)encryptedRealm {

@@ -24,9 +24,6 @@
     NSParameterAssert(builderBlock);
     ALMNestedCollectionRequest *request = [[self alloc] init];
     builderBlock(request);
-    if (!request.realm) {
-        request.realm = [self defaultRealm];
-    }
     
     [request setCustomRequestTask:^NSURLSessionDataTask *(ALMRequestManager *manager, ALMRequest *originalRequest) {
         if ([originalRequest isKindOfClass:[ALMNestedCollectionRequest class]]) {
@@ -84,7 +81,7 @@
             
             [manager GET:[ALMSingleRequest request:^(ALMSingleRequest *builder) {
                 builder.session = nestedRequest.session;
-                builder.realm = nestedRequest.realm;
+                builder.realmPath = nestedRequest.realmPath;
                 builder.resourceClass = nestedRequest.parentClass;
                 builder.resourceID = nestedRequest.parentID;
                 
@@ -97,7 +94,7 @@
             
             NSURLSessionDataTask *nestedTask = [manager GET:[ALMCollectionRequest request:^(ALMCollectionRequest *builder) {
                 builder.session = nestedRequest.session;
-                builder.realm = nestedRequest.realm;
+                builder.realmPath = nestedRequest.realmPath;
                 builder.resourceClass = nestedRequest.resourceClass;
                 builder.parameters = nestedRequest.parameters;
                 builder.customPath = nestedRequest.path;
