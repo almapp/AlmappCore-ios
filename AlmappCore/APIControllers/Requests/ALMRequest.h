@@ -11,7 +11,7 @@
 
 #import "ALMSession.h"
 
-extern long long const kDefaultID;
+extern long long const kDefaultRequestID;
 
 extern NSString *const kHttpHeaderFieldApiKey;
 extern NSString *const kHttpHeaderFieldAccessToken;

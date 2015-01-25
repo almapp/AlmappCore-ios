@@ -9,7 +9,7 @@
 #import "ALMRequest.h"
 #import "ALMRequestManager.h"
 
-long long const kDefaultID = 0;
+long long const kDefaultRequestID = 1;
 
 NSString *const kHttpHeaderFieldApiKey = @"X-Api-Key";
 NSString *const kHttpHeaderFieldAccessToken = @"Access-Token";
