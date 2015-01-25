@@ -9,6 +9,14 @@
 #import "ALMRequestManager.h"
 #import "ALMResourceConstants.h"
 
+@interface ALMRequestManager ()
+
+@property (strong, nonatomic) NSMutableArray *taskWaitingForAuth;
+@property (strong, nonatomic) NSURLSessionDataTask *loginTask;
+@property (assign) BOOL isAuthtenticating;
+
+@end
+
 @implementation ALMRequestManager
 
 #pragma mark - Constructors
@@ -93,19 +101,33 @@
             return [self performGET:request];
         }
     }
+    else if (_isAuthtenticating) {
+        [self.taskWaitingForAuth addObject:request];
+        NSLog(@"Added request to auth queue");
+        return _loginTask;
+    }
     else {
+        _isAuthtenticating = YES;
         __block ALMRequest * blockRequest = request;
         __weak typeof(self) weakSelf = self;
         
-        NSURLSessionDataTask *login = [self performLoginOperationWith:blockRequest.session onSuccess:^(NSURLSessionDataTask *task, ALMSession *session) {
+        [self.taskWaitingForAuth addObject:request];
+        
+        _loginTask = [self performLoginOperationWith:blockRequest.session onSuccess:^(NSURLSessionDataTask *task, ALMSession *session) {
             blockRequest.session = session;
+           
             
             __strong typeof(self) strongSelf = weakSelf;
-            [strongSelf GET:blockRequest];
+            strongSelf.isAuthtenticating = NO;
+            for (ALMRequest *waitingRequest in strongSelf.taskWaitingForAuth) {
+                NSLog(@"Performing queued request");
+                [strongSelf GET:waitingRequest];
+            }
+            [strongSelf.taskWaitingForAuth removeAllObjects];
             
         } onFail:blockRequest.onError];
         
-        return login;
+        return _loginTask;
     }
 }
 
@@ -230,6 +252,13 @@
         
         return session;
     }
+}
+
+- (NSMutableArray *)taskWaitingForAuth {
+    if (!_taskWaitingForAuth) {
+        _taskWaitingForAuth = [NSMutableArray array];
+    }
+    return _taskWaitingForAuth;
 }
 
 #pragma mark - Errors
