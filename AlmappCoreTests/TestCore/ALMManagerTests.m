@@ -25,7 +25,7 @@
     } onLoad:^(ALMResource *loadedResource) {
         XCTFail(@"This not should be executed");
         
-    } onFinish:^(ALMResource *resource) {
+    } onFinish:^(NSURLSessionDataTask *task, id resource) {
         XCTFail(@"This not should be executed");
         
     } onError:^(NSURLSessionDataTask *task, NSError *error) {

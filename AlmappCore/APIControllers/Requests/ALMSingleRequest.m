@@ -89,16 +89,19 @@
 
 #pragma mark - Methods
 
-+ (NSString *)pathFor:(Class)resourceClass id:(long long)resourceID {
-    NSString *path = [self pathFor:resourceClass];
-    return (path != nil) ? [NSString stringWithFormat:@"%@/%lld", path, resourceID] : nil;
++ (NSString *)intuitedPathFor:(Class)resourceClass withID:(long long)resourceID {
+    return [NSString stringWithFormat:@"%@/%lld", [self.class intuitedPathFor:resourceClass], resourceID];
+}
+
+- (NSString *)intuitedPath {
+    return [self.class intuitedPathFor:self.resourceClass withID:self.resourceID];
 }
 
 - (BOOL)validateRequest {
     if (![super validateRequest]) {
         return NO;
     }
-    if (self.resourceID <= 0) {
+    if (!self.customPath && self.resourceID <= 0) {
         return NO;
     }
     return YES;
@@ -106,13 +109,6 @@
 
 
 #pragma mark - Getters
-
-- (NSString *)path {
-    if (!super.path) {
-        super.path = [self.class pathFor:self.resourceClass id:self.resourceID];
-    }
-    return super.path;
-}
 
 - (ALMResource *)resource {
     return [ALMResource objectOfType:self.resourceClass withID:self.resourceID inRealm:self.realm];

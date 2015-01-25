@@ -17,12 +17,6 @@
 #import "ALMCollectionRequest.h"
 #import "ALMNestedCollectionRequest.h"
 
-@interface NSURLSessionDataTask (ALMRequest)
-
-@property (readonly) NSHTTPURLResponse *httpResponse;
-
-@end
-
 @interface ALMRequestManager : AFHTTPSessionManager
 
 #pragma mark - Delegates

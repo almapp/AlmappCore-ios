@@ -9,14 +9,6 @@
 #import "ALMRequestManager.h"
 #import "ALMResourceConstants.h"
 
-@implementation NSURLSessionDataTask (ALMRequest)
-
-- (NSHTTPURLResponse *)httpResponse {
-    return (NSHTTPURLResponse*)self.response;
-}
-
-@end
-
 @implementation ALMRequestManager
 
 #pragma mark - Constructors
@@ -91,7 +83,15 @@
         NSDictionary *headers = request.configureHttpRequestHeaders(request.session, self.apiKey);
         [self setHttpRequestHeaders:headers];
         
-        return [self performGET:request];
+        if (request.customRequestTask) {
+            __block ALMRequest * blockRequest = request;
+            __weak typeof(self) weakSelf = self;
+            
+            return request.customRequestTask(weakSelf, blockRequest);
+        }
+        else {
+            return [self performGET:request];
+        }
     }
     else {
         __block ALMRequest * blockRequest = request;
@@ -114,11 +114,11 @@
     __block ALMRequest * blockRequest = request;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [blockRequest execOnLoad];
+        [request execOnLoad];
     });
     
-    NSURLSessionDataTask *op = [self GET:blockRequest.path
-                              parameters:blockRequest.parameters
+    NSURLSessionDataTask *op = [self GET:request.path
+                              parameters:request.parameters
                                  success:^(NSURLSessionDataTask *task, id responseObject) {
         
         id finalResponseObject = [blockRequest execFetch:task fetchedData:responseObject];
@@ -166,14 +166,19 @@
     
     operation = [self POST:loginPath parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
         
-        NSHTTPURLResponse *httpResponse = task.httpResponse;
-        
-        __strong typeof(self) strongSelf = weakSelf;
-        blockSession = [strongSelf parseResponseHeaders:[httpResponse allHeaderFields] data:responseObject to:blockSession];
-        if (onSuccess) {
-            onSuccess(operation, blockSession);
+        if ([task.response isKindOfClass:[NSHTTPURLResponse class]]) {
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+            __strong typeof(self) strongSelf = weakSelf;
+            
+            blockSession = [strongSelf parseResponseHeaders:[httpResponse allHeaderFields] data:responseObject to:blockSession];
+            if (onSuccess) {
+                onSuccess(operation, blockSession);
+            }
         }
-        
+        else if (onFail) {
+            onFail(operation, nil);
+        }
+
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"Could not perform login, error: %@", error);
         if (onFail) {

@@ -20,11 +20,18 @@ extern NSString *const kHttpHeaderFieldExpiry;
 extern NSString *const kHttpHeaderFieldClient;
 extern NSString *const kHttpHeaderFieldUID;
 
+@class ALMRequestManager;
+
 @interface ALMRequest : NSObject
 
 @property (weak, nonatomic) RLMRealm *realm;
 @property (strong, nonatomic) ALMSession *session;
-@property (strong, nonatomic) NSString *path;
+
+@property (strong, nonatomic) NSString *customPath;
+@property (copy, readonly) NSString *intuitedPath;
+@property (copy, readonly) NSString *path;
++ (NSString *)intuitedPathFor:(Class)resourceClass;
+
 @property (strong, nonatomic) Class resourceClass;
 @property (strong, nonatomic) id parameters;
 @property (assign, getter=shouldLog) BOOL log;
@@ -34,18 +41,13 @@ extern NSString *const kHttpHeaderFieldUID;
 @property (copy, nonatomic) BOOL (^tokenValidationOperation)(ALMSession *session);
 @property (readonly, copy, nonatomic) BOOL (^defaultTokenValidationOperation)(ALMSession *session);
 
-- (BOOL)needsAuthentication;
-
-/* 
- For a non-expired token
- */
 @property (copy, nonatomic) NSDictionary* (^configureHttpRequestHeaders)(ALMSession *session, NSString *apiKey);
 + (NSDictionary *(^)(ALMSession *, NSString *))defaultHttpHeaders;
 
-+ (NSString *)pathFor:(Class)resourceClass;
+@property (strong, nonatomic) NSURLSessionDataTask* (^customRequestTask)(ALMRequestManager *manager, ALMRequest *request);
 
 + (RLMRealm *)defaultRealm;
-
+- (BOOL)needsAuthentication;
 - (BOOL)validateRequest;
 
 - (id)execCommit:(id)data;

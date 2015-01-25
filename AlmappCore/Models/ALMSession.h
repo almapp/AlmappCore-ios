@@ -23,4 +23,7 @@
 @property NSString *lastIP;
 @property NSString *currentIP;
 
++ (instancetype)sessionWithEmail:(NSString *)email inRealm:(RLMRealm *)realm;
++ (instancetype)sessionWithEmail:(NSString *)email;
+
 @end

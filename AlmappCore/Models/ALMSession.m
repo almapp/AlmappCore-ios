@@ -29,4 +29,13 @@
              };
 }
 
++ (instancetype)sessionWithEmail:(NSString *)email inRealm:(RLMRealm *)realm{
+    NSString *query = [NSString stringWithFormat:@"%@ = '%@'", kREmail, email];
+    return [self objectsInRealm:realm where:query].firstObject;
+}
+
++ (instancetype)sessionWithEmail:(NSString *)email {
+    return [self sessionWithEmail:email inRealm:[RLMRealm defaultRealm]];
+}
+
 @end
