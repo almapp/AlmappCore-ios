@@ -10,13 +10,14 @@
 
 @interface ALMNestedCollectionRequest : ALMRequest
 
-@property (readonly) RLMResults *resources;
+@property (readonly) RLMArray *resources;
 @property (strong, nonatomic) ALMResource *parent;
 @property (strong, nonatomic) Class parentClass;
 @property (assign, nonatomic) long long parentID;
+@property (readonly) BOOL didLoadNestedCollection;
 
-@property (copy, nonatomic) void (^onLoad)(id parent, RLMResults* resources);
-@property (copy, nonatomic) void (^onFinish)(NSURLSessionDataTask *task, id parent, RLMResults* resources);
+@property (copy, nonatomic) void (^onLoad)(id parent, RLMArray* resources);
+@property (copy, nonatomic) void (^onFinish)(NSURLSessionDataTask *task, id parent, RLMArray* resources);
 @property (copy, nonatomic) id (^afterFetchOperation)(NSURLSessionDataTask *task, id parent, NSArray* results);
 @property (copy, nonatomic) NSArray* (^commitOperation)(RLMRealm *realm, Class resourceClass, ALMResource *parent, NSArray *data);
 @property (readonly, copy, nonatomic) NSArray* (^defaultCommitOperation)(RLMRealm *realm, Class resourceClass, ALMResource *parent, NSArray *data);
@@ -24,10 +25,10 @@
 + (instancetype)request:(void(^)(ALMNestedCollectionRequest *builder))builderBlock;
 
 + (instancetype)request:(void(^)(ALMNestedCollectionRequest *builder))builderBlock
-                 onLoad:(void(^)(id parent, RLMResults* resources))onLoad
-               onFinish:(void(^)(NSURLSessionDataTask *task, id parent, RLMResults* resources))onFinish
+                 onLoad:(void(^)(id parent, RLMArray* resources))onLoad
+               onFinish:(void(^)(NSURLSessionDataTask *task, id parent, RLMArray* resources))onFinish
                 onError:(void(^)(NSURLSessionDataTask *task, NSError* error))onError;
 
-+ (NSString *)pathFor:(Class)resourceClass inParent:(Class)parentClass parentID:(long long)parentID;
++ (NSString *)intuitedPathFor:(Class)resourceClass inParent:(Class)parentClass parentID:(long long)parentID;
 
 @end

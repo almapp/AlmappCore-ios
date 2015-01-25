@@ -31,6 +31,6 @@
 - (void)execOnFinishWithTask:(NSURLSessionDataTask *)task;
 - (id)execFetch:(NSURLSessionDataTask *)task fetchedData:(id)result;
 
-+ (NSString *)pathFor:(Class)resourceClass id:(long long)resourceID;
++ (NSString *)intuitedPathFor:(Class)resourceClass withID:(long long)resourceID;
 
 @end

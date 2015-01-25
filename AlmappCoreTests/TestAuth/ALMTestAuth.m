@@ -1,8 +1,8 @@
 //
-//  ALMPersistenceTests.m
+//  ALMTestAuth.m
 //  AlmappCore
 //
-//  Created by Patricio López on 01-01-15.
+//  Created by Patricio López on 23-01-15.
 //  Copyright (c) 2015 almapp. All rights reserved.
 //
 
@@ -11,39 +11,46 @@
 
 #import "ALMTestCase.h"
 
-@interface ALMPersistenceTests : ALMTestCase
+@interface ALMTestAuth : ALMTestCase
 
 @end
 
-@implementation ALMPersistenceTests
+@implementation ALMTestAuth
 
-- (void)testDatabaseDrop {
+- (void)testAuth {
     XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:@"validGetSingleResource"];
     
+    ALMSession *session = [[ALMSession alloc] init];
+    
+    session.resourceID = 1;
+    session.email = @"pelopez2@uc.cl";
+    session.password = @"randompassword";
+    
+    RLMRealm *realm = self.testRealm;
+    [realm beginWriteTransaction];
+    session = [ALMSession createOrUpdateInRealm:realm withObject:session];
+    [realm commitWriteTransaction];
+    
     NSURLSessionDataTask *op = [self.requestManager GET:[ALMSingleRequest request:^(ALMSingleRequest *builder) {
+        builder.realm = self.testRealm;
+        builder.session = [ALMSession sessionWithEmail:@"pelopez2@uc.cl" inRealm:builder.realm];
         builder.resourceClass = [ALMUser class];
-        builder.resourceID = 1;
-        builder.realm = [self testRealm];
+        builder.customPath = @"me";
         
     } onLoad:^(id loadedResource) {
-        XCTAssertNil(loadedResource, @"Should not exist");
         
     } onFinish:^(NSURLSessionDataTask *task, id resource) {
-        XCTAssertNotNil(resource, @"Should exist");
         NSLog(@"%@", resource);
-        
-        XCTAssert([ALMUser allObjectsInRealm:[self testRealm]].count > 0, @"Must have at least one object");
-        [[ALMCore sharedInstance] dropDefaultDatabase];
-        XCTAssert([ALMUser allObjects].count == 0, @"All users should been deleted.");
         [singleResourceExpectation fulfill];
         
     } onError:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"Error: %@", error);
         XCTFail(@"Error performing request.");
         [singleResourceExpectation fulfill];
+        
     }]];
     
-    [self waitForExpectationsWithTimeout:7 handler:^(NSError *error) {
+    [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         [op cancel];
     }];
 }

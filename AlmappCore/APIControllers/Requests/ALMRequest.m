@@ -7,6 +7,7 @@
 //
 
 #import "ALMRequest.h"
+#import "ALMRequestManager.h"
 
 long long const kDefaultID = 0;
 
@@ -16,6 +17,12 @@ NSString *const kHttpHeaderFieldTokenType = @"Token-Type";
 NSString *const kHttpHeaderFieldExpiry = @"Expiry";
 NSString *const kHttpHeaderFieldClient = @"Client";
 NSString *const kHttpHeaderFieldUID = @"Uid";
+
+@interface ALMRequest ()
+
+@property (strong, nonatomic) NSString *realmPath;
+
+@end
 
 @implementation NSDate (Compare)
 
@@ -41,6 +48,15 @@ NSString *const kHttpHeaderFieldUID = @"Uid";
 + (RLMRealm *)defaultRealm {
     return [RLMRealm defaultRealm];
 }
+/*
+- (void)setRealm:(RLMRealm *)realm {
+    self.realmPath = realm.path;
+}
+
+- (RLMRealm *)realm {
+    return [RLMRealm realmWithPath:self.realmPath];
+}
+ */
 
 - (BOOL (^)(ALMSession*))tokenValidationOperation {
     if (!_tokenValidationOperation) {
@@ -88,7 +104,7 @@ NSString *const kHttpHeaderFieldUID = @"Uid";
     };
 }
 
-+ (NSString *)pathFor:(Class)resourceClass {
++ (NSString *)intuitedPathFor:(Class)resourceClass {
     if ([resourceClass instancesRespondToSelector:@selector(apiPluralForm)]) {
         return [resourceClass performSelector:@selector(apiPluralForm)];
     }
@@ -97,11 +113,12 @@ NSString *const kHttpHeaderFieldUID = @"Uid";
     }
 }
 
+- (NSString *)intuitedPath {
+    return [self.class intuitedPathFor:self.resourceClass];
+}
+
 - (NSString *)path {
-    if (!_path) {
-        _path = [self.class pathFor:self.resourceClass];
-    }
-    return _path;
+    return (_customPath) ? _customPath : self.intuitedPath;
 }
 
 - (BOOL)validateRequest {
@@ -138,6 +155,5 @@ NSString *const kHttpHeaderFieldUID = @"Uid";
 - (id)execFetch:(NSURLSessionDataTask *)task fetchedData:(id)result {
     return result;
 }
-
 
 @end

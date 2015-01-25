@@ -32,7 +32,7 @@
 }
 
 - (NSTimeInterval)timeout {
-    return 10;
+    return 20;
 }
 
 @end
