@@ -132,7 +132,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.parentID = kDefaultID;
+        self.parentID = kDefaultRequestID;
     }
     return self;
 }
@@ -229,7 +229,7 @@
 }
 
 - (BOOL)isNestedCollection {
-    return self.parentClass != NULL && self.parentID != kDefaultID;
+    return self.parentClass != NULL;
 }
 
 + (NSString *)intuitedPathFor:(Class)resourceClass inParent:(Class)parentClass parentID:(long long)parentID {

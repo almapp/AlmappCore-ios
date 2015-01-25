@@ -35,11 +35,13 @@
         builder.realm = self.testRealm;
         builder.session = [ALMSession sessionWithEmail:@"pelopez2@uc.cl" inRealm:builder.realm];
         builder.resourceClass = [ALMUser class];
-        builder.customPath = @"me";
+        builder.resourceID = 1;
+        builder.customPath = @"users/me";
         
     } onLoad:^(id loadedResource) {
         
     } onFinish:^(NSURLSessionDataTask *task, id resource) {
+        XCTAssertNotNil(resource);
         NSLog(@"%@", resource);
         [singleResourceExpectation fulfill];
         

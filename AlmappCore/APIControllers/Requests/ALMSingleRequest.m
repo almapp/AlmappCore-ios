@@ -37,7 +37,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.resourceID = kDefaultID;
+        self.resourceID = kDefaultRequestID;
     }
     return self;
 }
