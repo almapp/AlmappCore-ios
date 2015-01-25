@@ -93,7 +93,9 @@ NSString *const kHttpHeaderFieldUID = @"Uid";
 }
 
 - (BOOL)needsAuthentication {
-    return (self.session == nil || self.tokenValidationOperation(self.session));
+    BOOL needs = (self.session == nil || self.tokenValidationOperation(self.session));
+    NSLog( (needs) ? @"Needs auth" : @"No auth needed");
+    return needs;
 }
 
 - (BOOL)validateRequest {
