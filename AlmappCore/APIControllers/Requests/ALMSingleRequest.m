@@ -18,9 +18,6 @@
     ALMSingleRequest *request = [[self alloc] init];
     
     builderBlock(request);
-    if (!request.realm) {
-        request.realm = [self defaultRealm];
-    }
     
     return request;
 }

@@ -18,6 +18,8 @@
 
 @property (readonly) RLMRealm* testRealm;
 
+@property (readonly) NSString* testRealmPath;
+
 @property (readonly) ALMRequestManager *requestManager;
 
 @property (readonly) NSTimeInterval timeout;

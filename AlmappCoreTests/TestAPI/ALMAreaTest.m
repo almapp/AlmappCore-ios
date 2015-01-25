@@ -62,7 +62,7 @@
     __weak typeof(self) weakSelf = self;
     
     NSURLSessionDataTask *op = [self.requestManager GET:[ALMNestedCollectionRequest request:^(ALMNestedCollectionRequest *builder) {
-        builder.realm = weakSelf.testRealm;
+        builder.realmPath = weakSelf.testRealmPath;
         builder.parentClass = parentClass;
         builder.parentID = parentID;
         builder.resourceClass = resourcesClass;

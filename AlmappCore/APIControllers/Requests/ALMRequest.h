@@ -24,7 +24,9 @@ extern NSString *const kHttpHeaderFieldUID;
 
 @interface ALMRequest : NSObject
 
-@property (weak, nonatomic) RLMRealm *realm;
+@property (strong, nonatomic) NSString *realmPath;
+@property (readonly) RLMRealm *realm;
+- (void)setRealm:(RLMRealm *)realm;
 @property (strong, nonatomic) ALMSession *session;
 
 @property (strong, nonatomic) NSString *customPath;
@@ -46,7 +48,7 @@ extern NSString *const kHttpHeaderFieldUID;
 
 @property (strong, nonatomic) NSURLSessionDataTask* (^customRequestTask)(ALMRequestManager *manager, ALMRequest *request);
 
-+ (RLMRealm *)defaultRealm;
++ (NSString *)defaultRealmPath;
 - (BOOL)needsAuthentication;
 - (BOOL)validateRequest;
 
