@@ -24,8 +24,11 @@
 
 #import "ALMUser.h"
 #import "ALMGroup.h"
+
 #import "ALMSession.h"
 #import "ALMSessionManager.h"
+#import "ALMRequestManager.h"
+#import "ALMSectionRequest.h"
 
 #import "ALMArea.h"
 #import "ALMOrganization.h"

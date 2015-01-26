@@ -34,6 +34,8 @@
         builder.resourceClass = resourceClass;
         builder.resourceID = resourceID;
         builder.realmPath = [weakSelf testRealmPath];
+        builder.customPath = path;
+        builder.parameters = params;
         
     } onLoad:^(id loadedResource) {
         NSLog(@"Loaded: %@", loadedResource);
@@ -66,6 +68,8 @@
     NSURLSessionDataTask *op = [self.requestManager GET:[ALMCollectionRequest request:^(ALMCollectionRequest *builder) {
         builder.resourceClass = resourcesClass;
         builder.realmPath = [weakSelf testRealmPath];
+        builder.customPath = path;
+        builder.parameters = params;
         
     } onLoad:^(RLMResults *loadedResources) {
         NSLog(@"Loaded: %@", loadedResources);
@@ -84,5 +88,47 @@
         [op cancel];
     }];
 }
+
+- (void)nestedResources:(Class)resourcesClass
+                     on:(Class)parentClass
+                     id:(long long)parentID
+                   path:(NSString *)path
+                 params:(id)params
+              onSuccess:(void (^)(id parent, RLMArray *results))onSuccess {
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"validGetMultipleResource"];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    NSURLSessionDataTask *op = [self.requestManager GET:[ALMNestedCollectionRequest request:^(ALMNestedCollectionRequest *builder) {
+        builder.realmPath = weakSelf.testRealmPath;
+        builder.parentClass = parentClass;
+        builder.parentID = parentID;
+        builder.resourceClass = resourcesClass;
+        builder.customPath = path;
+        builder.parameters = params;
+        
+    } onLoad:^(id parent, RLMArray *resources) {
+        NSLog(@"Loaded parent: %@", parent);
+        NSLog(@"Loaded collection: %@", resources);
+        
+    } onFinish:^(NSURLSessionDataTask *task, id parent, RLMArray *resources) {
+        NSLog(@"Loaded parent: %@", parent);
+        NSLog(@"Loaded collection with %lul elements", (unsigned long)resources.count);
+        
+        XCTAssertNotNil(resources, @"Should exist");
+        XCTAssertNotNil(parent, @"Should exist");
+        if (onSuccess) {
+            onSuccess(parent, resources);
+        }
+        [expectation fulfill];
+        
+    } onError:[weakSelf errorBlock:expectation class:resourcesClass]]];
+    
+    [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
+        [op cancel];
+    }];
+}
+
 
 @end

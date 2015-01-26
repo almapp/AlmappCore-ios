@@ -219,6 +219,9 @@ extern NSString *const kRStudents;
 extern NSString *const kASections;
 extern NSString *const kRSections;
 
+extern NSString *const kAClassType;
+extern NSString *const kRClassType;
+
 extern NSString *const kAYear;
 extern NSString *const kRYear;
 

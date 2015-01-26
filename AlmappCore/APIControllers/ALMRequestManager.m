@@ -78,6 +78,10 @@
 #pragma mark - GET
 
 - (NSURLSessionDataTask *)GET:(ALMRequest *)request {
+    if (!request) {
+        return nil;
+    }
+    
     if (![request validateRequest]) {
         if (request.onError) {
             request.onError(nil, [NSError errorWithDomain:@"Request Manager"
@@ -87,7 +91,7 @@
         return nil;
     }
     
-    if (request.needsAuthentication) {
+    if (!request.needsAuthentication) {
         NSDictionary *headers = request.configureHttpRequestHeaders(request.session, self.apiKey);
         [self setHttpRequestHeaders:headers];
         

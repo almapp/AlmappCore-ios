@@ -17,7 +17,7 @@
 @property (copy, nonatomic) void (^onLoad)(RLMResults *resources);
 @property (copy, nonatomic) id (^afterFetchOperation)(NSURLSessionDataTask *task, NSArray* results, ALMCollectionRequest *request);
 @property (copy, nonatomic) NSArray* (^commitOperation)(RLMRealm *realm, Class resourceClass, NSArray *data);
-@property (readonly, copy, nonatomic) NSArray* (^defaultCommitOperation)(RLMRealm *realm, Class resourceClass, NSArray *data);
++ (NSArray *(^)(RLMRealm *realm, Class resourceClass, NSArray *data))defaultCommitOperation;
 
 + (instancetype)request:(void(^)(ALMCollectionRequest *builder))builderBlock;
 

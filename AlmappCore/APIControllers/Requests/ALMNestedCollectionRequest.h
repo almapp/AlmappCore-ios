@@ -19,8 +19,11 @@
 @property (copy, nonatomic) void (^onLoad)(id parent, RLMArray* resources);
 @property (copy, nonatomic) void (^onFinish)(NSURLSessionDataTask *task, id parent, RLMArray* resources);
 @property (copy, nonatomic) id (^afterFetchOperation)(NSURLSessionDataTask *task, id parent, NSArray* results);
-@property (copy, nonatomic) NSArray* (^commitOperation)(RLMRealm *realm, Class resourceClass, ALMResource *parent, NSArray *data);
-@property (readonly, copy, nonatomic) NSArray* (^defaultCommitOperation)(RLMRealm *realm, Class resourceClass, ALMResource *parent, NSArray *data);
+
+@property (copy, nonatomic) id (^parentCommitOperation)(RLMRealm *realm, Class resourceClass, NSDictionary *data);
+@property (copy, nonatomic) NSArray* (^nestedCommitOperation)(RLMRealm *realm, Class resourceClass, NSArray *data);
+@property (copy, nonatomic) BOOL (^associationOperation)(ALMNestedCollectionRequest *request, ALMResource* loadedParent, RLMResults *loadedCollection);
++ (BOOL (^)(ALMNestedCollectionRequest *request, ALMResource* loadedParent, RLMResults *loadedCollection))defaultAssociationOperation;
 
 + (instancetype)request:(void(^)(ALMNestedCollectionRequest *builder))builderBlock;
 

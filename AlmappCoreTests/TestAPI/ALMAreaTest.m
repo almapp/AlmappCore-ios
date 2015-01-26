@@ -49,47 +49,6 @@
     }];
 }
 
-
-- (void)nestedResources:(Class)resourcesClass
-                     on:(Class)parentClass
-                     id:(long long)parentID
-                   path:(NSString *)path
-                 params:(id)params
-              onSuccess:(void (^)(id parent, RLMArray *results))onSuccess {
-    
-    XCTestExpectation *expectation = [self expectationWithDescription:@"validGetMultipleResource"];
-    
-    __weak typeof(self) weakSelf = self;
-    
-    NSURLSessionDataTask *op = [self.requestManager GET:[ALMNestedCollectionRequest request:^(ALMNestedCollectionRequest *builder) {
-        builder.realmPath = weakSelf.testRealmPath;
-        builder.parentClass = parentClass;
-        builder.parentID = parentID;
-        builder.resourceClass = resourcesClass;
-        
-    } onLoad:^(id parent, RLMArray *resources) {
-        NSLog(@"Loaded parent: %@", parent);
-        NSLog(@"Loaded collection: %@", resources);
-        
-    } onFinish:^(NSURLSessionDataTask *task, id parent, RLMArray *resources) {
-        NSLog(@"Loaded parent: %@", parent);
-        NSLog(@"Loaded collection with %lul elements", (unsigned long)resources.count);
-        
-        XCTAssertNotNil(resources, @"Should exist");
-        XCTAssertNotNil(parent, @"Should exist");
-        if (onSuccess) {
-            onSuccess(parent, resources);
-        }
-        [expectation fulfill];
-        
-    } onError:[weakSelf errorBlock:expectation class:resourcesClass]]];
-    
-    [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
-        [op cancel];
-    }];
-}
-
-
 - (void)testAreaLocalization:(Class)areaSubclass id:(long long)areaSubclassID {
     [self resource:areaSubclass id:areaSubclassID path:nil params:nil onSuccess:^(id resource) {
         XCTAssertNotNil(resource, @"Must rerturn a valid object of type %@", areaSubclass);

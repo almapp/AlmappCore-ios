@@ -23,4 +23,11 @@
            params:(id)params
         onSuccess:(void(^)(RLMResults *resources))onSuccess;
 
+- (void)nestedResources:(Class)resourcesClass
+                     on:(Class)parentClass
+                     id:(long long)parentID
+                   path:(NSString *)path
+                 params:(id)params
+              onSuccess:(void (^)(id parent, RLMArray *results))onSuccess;
+
 @end

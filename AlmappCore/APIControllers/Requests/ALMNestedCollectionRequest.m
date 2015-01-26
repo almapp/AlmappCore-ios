@@ -9,6 +9,7 @@
 #import "ALMNestedCollectionRequest.h"
 #import "ALMRequestManager.h"
 #import "ALMSingleRequest.h"
+#import "ALMCollectionRequest.h"
 
 @interface ALMNestedCollectionRequest ()
 
@@ -43,39 +44,10 @@
                 }
                 
                 if (request.parent && request.didLoadNestedCollection) {
-                    RLMRealm *realm = request.realm;
-                    ALMResource *parent = request.parent;
-                    RLMResults *collection = request.fetchedCollection;
-                    
-                    NSString *nestedCollectionName = [request.resourceClass performSelector:@selector(realmPluralForm)];
-                    NSString *resourceParentName = [[parent class] performSelector:@selector(realmSingleForm)];
-                    
-                    // http://stackoverflow.com/questions/7017281/performselector-may-cause-a-leak-because-its-selector-is-unknown
-                    SEL collectionSelector = NSSelectorFromString([NSString stringWithFormat:@"%@", nestedCollectionName]);
-                    SEL parentSelector = NSSelectorFromString([NSString stringWithFormat:@"set%@:", [resourceParentName capitalizedString]]);
-                    
-                    [realm beginWriteTransaction];
-                    
-                    if ([parent respondsToSelector:collectionSelector]) {
-                        IMP imp = [parent methodForSelector:collectionSelector];
-                        RLMArray* (*func)(id, SEL) = (void*)imp;
-                        RLMArray *parentNestedResourcecollection = func(parent, collectionSelector);
-                        
-                        [parentNestedResourcecollection removeAllObjects];
-                        [parentNestedResourcecollection addObjects:collection];
+                    BOOL success = request.associationOperation(request, request.parent, request.fetchedCollection);
+                    if (success) {
+                        request.onFinish(nil, request.parent, request.resources);
                     }
-                    
-                    for (ALMResource *resource in collection) {
-                        if([resource respondsToSelector:parentSelector]) {
-                            IMP imp = [resource methodForSelector:parentSelector];
-                            void (*func)(id, SEL, ALMResource*) = (void*)imp;
-                            func(resource, parentSelector, parent);
-                        }
-                    }
-                    
-                    [realm commitWriteTransaction];
-                    
-                    request.onFinish(nil, parent, request.resources);
                 }
             };
             
@@ -83,6 +55,7 @@
                 builder.session = nestedRequest.session;
                 builder.realmPath = nestedRequest.realmPath;
                 builder.resourceClass = nestedRequest.parentClass;
+                builder.commitOperation = nestedRequest.parentCommitOperation;
                 builder.resourceID = nestedRequest.parentID;
                 
             } onLoad:^(id loadedResource) {
@@ -97,6 +70,7 @@
                 builder.realmPath = nestedRequest.realmPath;
                 builder.resourceClass = nestedRequest.resourceClass;
                 builder.parameters = nestedRequest.parameters;
+                builder.commitOperation = nestedRequest.nestedCommitOperation;
                 builder.customPath = nestedRequest.path;
                 
             } onLoad:^(RLMResults *loadedResources) {
@@ -136,11 +110,61 @@
 
 #pragma mark - Commit
 
-- (NSArray *(^)(RLMRealm *, __unsafe_unretained Class, ALMResource *, NSArray *))commitOperation {
-    if (!_commitOperation) {
-        _commitOperation = [self.class defaultCommitOperation];
+- (id (^)(RLMRealm *, __unsafe_unretained Class, NSDictionary *))parentCommitOperation {
+    if (!_parentCommitOperation) {
+        _parentCommitOperation = [ALMSingleRequest defaultCommitOperation];
     }
-    return _commitOperation;
+    return _parentCommitOperation;
+}
+
+- (NSArray *(^)(RLMRealm *, __unsafe_unretained Class, NSArray *))nestedCommitOperation {
+    if (!_nestedCommitOperation) {
+        _nestedCommitOperation = [ALMCollectionRequest defaultCommitOperation];
+    }
+    return _nestedCommitOperation;
+}
+
+- (BOOL(^)(ALMNestedCollectionRequest *, ALMResource *, RLMResults *))associationOperation {
+    if (!_associationOperation) {
+        _associationOperation = [self.class defaultAssociationOperation];
+    }
+    return _associationOperation;
+}
+
++ (BOOL(^)(ALMNestedCollectionRequest *, ALMResource *, RLMResults *))defaultAssociationOperation {
+    return ^(ALMNestedCollectionRequest *request, ALMResource *parent, RLMResults *collection) {
+        RLMRealm *realm = request.realm;
+        
+        NSString *nestedCollectionName = [request.resourceClass performSelector:@selector(realmPluralForm)];
+        NSString *resourceParentName = [[parent class] performSelector:@selector(realmSingleForm)];
+        
+        // http://stackoverflow.com/questions/7017281/performselector-may-cause-a-leak-because-its-selector-is-unknown
+        SEL collectionSelector = NSSelectorFromString([NSString stringWithFormat:@"%@", nestedCollectionName]);
+        SEL parentSelector = NSSelectorFromString([NSString stringWithFormat:@"set%@:", [resourceParentName capitalizedString]]);
+        
+        [realm beginWriteTransaction];
+        
+        if ([parent respondsToSelector:collectionSelector]) {
+            IMP imp = [parent methodForSelector:collectionSelector];
+            RLMArray* (*func)(id, SEL) = (void*)imp;
+            RLMArray *parentNestedResourcecollection = func(parent, collectionSelector);
+            
+            [parentNestedResourcecollection removeAllObjects];
+            [parentNestedResourcecollection addObjects:collection];
+        }
+        
+        for (ALMResource *resource in collection) {
+            if([resource respondsToSelector:parentSelector]) {
+                IMP imp = [resource methodForSelector:parentSelector];
+                void (*func)(id, SEL, ALMResource*) = (void*)imp;
+                func(resource, parentSelector, parent);
+            }
+        }
+        
+        [realm commitWriteTransaction];
+        
+        return YES;
+    };
 }
 
 + (NSArray *(^)(RLMRealm *, __unsafe_unretained Class, ALMResource *, NSArray *))defaultCommitOperation {
@@ -183,7 +207,7 @@
 #pragma mark - Execute blocks
 
 - (id)execCommit:(id)data {
-    return self.commitOperation(self.realm, self.resourceClass, self.parent, data);
+    return nil;
 }
 
 - (void)execOnLoad {
