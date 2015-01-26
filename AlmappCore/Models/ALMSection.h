@@ -7,11 +7,11 @@
 //
 
 #import "ALMSocialResource.h"
-#import "ALMUser.h"
 #import "ALMTeacher.h"
 #import "ALMScheduleItem.h"
 
 @class ALMCourse;
+@protocol ALMUser;
 
 @interface ALMSection : ALMSocialResource
 

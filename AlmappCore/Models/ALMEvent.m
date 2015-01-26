@@ -9,6 +9,7 @@
 #import "ALMEvent.h"
 #import "ALMResourceConstants.h"
 #import "ALMPlace.h"
+#import "ALMUser.h"
 
 @implementation ALMEvent
 

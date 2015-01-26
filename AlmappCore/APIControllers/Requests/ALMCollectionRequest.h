@@ -12,7 +12,9 @@
 
 @property (readonly) RLMResults *resources;
 
-@property (copy, nonatomic) RLMResults* (^filteredAndSortedLoad)(ALMCollectionRequest *request);
+@property (strong, nonatomic) NSArray *IDs;
+
+@property (copy, nonatomic) RLMResults* (^filteredAndSortedLoad)(ALMCollectionRequest *request, NSArray *fetchedIDs);
 @property (copy, nonatomic) void (^onFinish)(NSURLSessionDataTask *task, RLMResults *resource);
 @property (copy, nonatomic) void (^onLoad)(RLMResults *resources);
 @property (copy, nonatomic) id (^afterFetchOperation)(NSURLSessionDataTask *task, NSArray* results, ALMCollectionRequest *request);

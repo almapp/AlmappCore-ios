@@ -7,6 +7,7 @@
 //
 
 #import "ALMGroup.h"
+#import "ALMUser.h"
 #import "ALMResourceConstants.h"
 
 @implementation ALMGroup

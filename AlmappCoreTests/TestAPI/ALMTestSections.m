@@ -31,6 +31,7 @@
         
     } onFinish:^(NSURLSessionDataTask *task, ALMSection *loadedResource) {
         XCTAssertNotNil(loadedResource);
+        [expectation fulfill];
         
     } onError:[self errorBlock:expectation class:[ALMSection class]]]];
     
