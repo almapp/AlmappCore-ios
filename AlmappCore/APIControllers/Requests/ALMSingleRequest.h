@@ -17,7 +17,7 @@
 @property (copy, nonatomic) id (^afterFetchOperation)(NSURLSessionDataTask *task, id result , ALMSingleRequest *request);
 @property (copy, nonatomic) void (^onFinish)(NSURLSessionDataTask *task, id resource);
 @property (copy, nonatomic) id (^commitOperation)(RLMRealm *realm, Class resourceClass, NSDictionary *data);
-@property (readonly, copy, nonatomic) id (^defaultCommitOperation)(RLMRealm *realm, Class resourceClass, NSDictionary *data);
++ (id(^)(RLMRealm *realm, Class resourceClass, NSDictionary *data))defaultCommitOperation;
 
 + (instancetype)request:(void(^)(ALMSingleRequest *builder))builderBlock;
 

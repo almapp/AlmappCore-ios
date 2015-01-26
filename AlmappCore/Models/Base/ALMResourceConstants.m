@@ -226,6 +226,9 @@ NSString *const kRStudents = @"students";
 NSString *const kASections = @"sections";
 NSString *const kRSections = @"sections";
 
+NSString *const kAClassType = @"class_type";
+NSString *const kRClassType = @"classType";
+
 NSString *const kAYear = @"year";
 NSString *const kRYear = @"year";
 
