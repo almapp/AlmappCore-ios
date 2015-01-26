@@ -47,16 +47,5 @@
              };
 }
 
-- (NSArray *)sections {
-    return [self linkingObjectsOfClass:[ALMSection className] forProperty:kRStudents];
-}
-
-- (NSArray *)subscribedGroups {
-    return [self linkingObjectsOfClass:[ALMGroup className] forProperty:kRSubscribers];
-}
-
-- (NSArray *)attendingEvents {
-    return [self linkingObjectsOfClass:[ALMEvent className] forProperty:kRParticipants];
-}
 
 @end

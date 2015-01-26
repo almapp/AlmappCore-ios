@@ -56,28 +56,41 @@
 }
 
 - (void)testPrivateResource {
-    XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:@"validGetSingleResource"];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"validGetSingleResource"];
     
     ALMSession *session = self.session;
     
-    NSURLSessionDataTask *op = [self.requestManager GET:[ALMSingleRequest request:^(ALMSingleRequest *builder) {
+    NSURLSessionDataTask *op = [self.requestManager GET:[ALMCollectionRequest request:^(ALMCollectionRequest *builder) {
         builder.realmPath = self.testRealmPath;
         builder.session = session;
-        builder.resourceClass = [ALMUser class];
-        builder.customPath = @"users/me";
+        builder.resourceClass = [ALMSection class];
+        builder.customPath = @"me/sections";
         
-    } onLoad:^(id loadedResource) {
+    } onLoad:^(RLMResults *loadedResources) {
         
-    } onFinish:^(NSURLSessionDataTask *task, id resource) {
-        XCTAssertNotNil(resource);
-        NSLog(@"%@", resource);
+    } onFinish:^(NSURLSessionDataTask *task, RLMResults *resources) {
+        XCTAssertNotNil(resources);
+        NSLog(@"%@", resources);
         XCTAssertTrue([NSThread isMainThread], @"Must be on main thread");
-        [singleResourceExpectation fulfill];
+        XCTAssertNotEqual(resources.count, 0);
+        
+        RLMRealm *realm = self.testRealm;
+        [realm beginWriteTransaction];
+        
+        ALMSession *session1 = [ALMSession sessionWithEmail:session.email inRealm:realm];
+        [session1.user.sections removeAllObjects];
+        [session1.user.sections addObjects:resources];
+        
+        [realm commitWriteTransaction];
+        
+        XCTAssertEqual(session1.user.sections.count, resources.count);
+        
+        [expectation fulfill];
         
     } onError:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"Error: %@", error);
         XCTFail(@"Error performing request.");
-        [singleResourceExpectation fulfill];
+        [expectation fulfill];
         
     }]];
     

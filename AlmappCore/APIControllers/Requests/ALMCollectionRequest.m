@@ -7,6 +7,11 @@
 //
 
 #import "ALMCollectionRequest.h"
+#import "ALMResourceConstants.h"
+
+@interface ALMCollectionRequest ()
+
+@end
 
 @implementation ALMCollectionRequest
 
@@ -55,7 +60,14 @@
 #pragma mark - Execute blocks
 
 - (id)execCommit:(id)data {
-    return self.commitOperation(self.realm, self.resourceClass, data);
+    NSArray *saved = self.commitOperation(self.realm, self.resourceClass, data);
+    
+    NSMutableArray *ids = [NSMutableArray arrayWithCapacity:saved.count];
+    for (ALMResource *resource in saved) {
+        [ids addObject:[NSNumber numberWithLongLong:resource.resourceID]];
+    }
+    self.IDs = ids;
+    return saved;
 }
 
 - (void)execOnLoad {
@@ -79,7 +91,12 @@
 - (RLMResults *)resources {
     if (self.filteredAndSortedLoad) {
         __block ALMCollectionRequest *blockSelf = self;
-        return self.filteredAndSortedLoad(blockSelf);
+        return self.filteredAndSortedLoad(blockSelf, self.IDs);
+    } else if (self.IDs) {
+        NSString *query = [[self.IDs valueForKey:@"description"] componentsJoinedByString:@", "];
+        query = [NSString stringWithFormat:@"{ %@ }", query];
+        query = [NSString stringWithFormat:@"%@ IN %@", kRResourceID, query];
+        return [ALMResource objectsOfType:self.resourceClass inRealm:self.realm where:query];
     } else {
         return [ALMResource allObjectsOfType:self.resourceClass inRealm:self.realm];
     }

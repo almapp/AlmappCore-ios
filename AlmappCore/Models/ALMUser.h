@@ -8,6 +8,9 @@
 
 #import "ALMResource.h"
 #import "ALMPostPublisher.h"
+#import "ALMSection.h"
+#import "ALMGroup.h"
+#import "ALMEvent.h"
 
 @interface ALMUser : ALMResource <ALMPostPublisher>
 
@@ -21,9 +24,9 @@
 @property NSDate *lastSignIn;
 @property NSDate *currentSignIn;
 
-@property (readonly) NSArray *sections;
-@property (readonly) NSArray *subscribedGroups;
-@property (readonly) NSArray *attendingEvents;
+@property RLMArray<ALMSection> *sections;
+@property RLMArray<ALMGroup> *subscribedGroups;
+@property RLMArray<ALMEvent> *attendingEvents;
 
 @property NSDate *updatedAt;
 @property NSDate *createdAt;

@@ -9,6 +9,7 @@
 #import "ALMSection.h"
 #import "ALMCourse.h"
 #import "ALMScheduleItem.h"
+#import "ALMUser.h"
 #import "ALMResourceConstants.h"
 
 @implementation ALMSection
