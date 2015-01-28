@@ -10,9 +10,8 @@
 
 #import "AlmappCore.h"
 #import "ALMTestsConstants.h"
-#import "ALMDummyCoreDelegated.h"
 
-@interface ALMTestCase : XCTestCase
+@interface ALMTestCase : XCTestCase <ALMCoreDelegate>
 
 @property (readonly) ALMCore *core;
 
