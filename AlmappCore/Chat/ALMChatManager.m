@@ -10,7 +10,8 @@
 
 @interface ALMChatManager ()
 
-@property (strong, nonatomic) FayeCppClient *fayeClient;
+@property (strong, nonatomic) NSMutableDictionary *clients;
+@property (strong, nonatomic) NSMutableDictionary *chats;
 
 - (NSString *)channelNameForChat:(ALMChat *)chat as:(ALMSession *)session;
 
@@ -20,27 +21,74 @@
 
 #pragma mark - Constructor
 
-+ (instancetype)chatManagerWithURL:(NSURL *)url {
++ (instancetype)chatManagerWithURL:(NSURL *)url inRealm:(RLMRealm *)realm {
     ALMChatManager *manager = [[self alloc] init];
-    manager.fayeClient = [[FayeCppClient alloc] init];
-    manager.fayeClient.delegate = manager;
-    manager.fayeClient.urlString = url.absoluteString;
+    manager.chatURL = url;
+    manager.chatRealm = realm;
     return manager;
+}
+
+
+#pragma mark - Clients
+
+- (void)addClientWithSession:(ALMSession *)session URL:(NSURL *)url {
+    FayeCppClient *client = [_clients objectForKey:session.email];
+    if (!client) {
+        client = [[FayeCppClient alloc] init];
+        client.delegate = self;
+        client.urlString = url.absoluteString;
+        [_clients setObject:client forKey:session.email];
+    }
+}
+
+- (ALMSession *)removeClient:(FayeCppClient *)client {
+    NSString *sessionEmail = [_clients allKeysForObject:client][0];
+    if (sessionEmail) {
+        ALMSession *session = [ALMSession sessionWithEmail:sessionEmail inRealm:self.chatRealm];
+        [_clients removeObjectForKey:sessionEmail];
+        return session;
+    }
+    return nil;
+}
+
+- (FayeCppClient *)clientForSession:(ALMSession *)session {
+    return [_clients objectForKey:session];
+}
+
+- (ALMSession *)sessionForClient:(FayeCppClient *)client {
+    NSString *sessionEmail = [_clients allKeysForObject:client][0];
+    return (sessionEmail) ? [ALMSession sessionWithEmail:sessionEmail inRealm:self.chatRealm] : nil;
 }
 
 
 #pragma mark - Connection
 
 - (BOOL)connectAs:(ALMSession *)session {
-    // TODO: add auth headers
-    BOOL success = [_fayeClient connect];
+    FayeCppClient *client = [self clientForSession:session];
+    
+    if (!client.extValue || client.extValue == NULL || client.extValue == [NSNull null]) {
+        [client setExtValue:[self extValueForSession:session]];
+    }
+    
+    BOOL success = [client connect];
     return success;
 }
 
 - (BOOL)disconnectAs:(ALMSession *)session {
-    [_fayeClient disconnect];
-    BOOL success = [_fayeClient isFayeConnected];
+    FayeCppClient *client = [self clientForSession:session];
+    [client disconnect];
+    BOOL success = [client isFayeConnected];
     return success;
+}
+
+- (id)extValueForSession:(ALMSession *)session {
+    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:extValueFor:)]) {
+        id ext = [self.chatManagerDelegate chatManager:self extValueFor:session];
+        return ext;
+    }
+    else {
+        return nil; // TODO: ext value
+    }
 }
 
 
@@ -67,6 +115,7 @@
     else {
         return nil;
         // TODO: get message
+        // [ALMChatMessage createOrUpdateInRealm:nil withJSONDictionary:data];
     }
 }
 
@@ -80,7 +129,7 @@
     NSDictionary *jsonMessage = [self parseOutgoingMessage:message in:chat as:session];
     NSString *channel = [self channelNameForChat:chat as:session];
     
-    BOOL success = [_fayeClient sendMessage:jsonMessage toChannel:channel];
+    BOOL success = [[self clientForSession:session] sendMessage:jsonMessage toChannel:channel];
     return success;
 }
 
@@ -88,8 +137,7 @@
 #pragma mark - Subscribing
 
 - (ALMChat *)chatForChannel:(NSString *)channel {
-    return nil;
-    // TODO: get chat
+    return _chats[channel];
 }
 
 - (NSString *)channelNameForChat:(ALMChat *)chat as:(ALMSession *)session {
@@ -117,7 +165,10 @@
 
 - (BOOL)subscribeToChat:(ALMChat *)chat as:(ALMSession *)session {
     NSString *channelName = [self channelNameForChat:chat as:session];
-    BOOL success = [_fayeClient subscribeToChannel:channelName];
+    BOOL success = [[self clientForSession:session] subscribeToChannel:channelName];
+    if (success) {
+        [_chats setObject:chat forKey:channelName];
+    }
     return success;
 }
 
@@ -132,7 +183,7 @@
 
 - (BOOL)unsubscribeFromChat:(ALMChat *)chat as:(ALMSession *)session {
     NSString *channelName = [self channelNameForChat:chat as:session];
-    BOOL success = [_fayeClient unsubscribeFromChannel:channelName];
+    BOOL success = [[self clientForSession:session] unsubscribeFromChannel:channelName];
     return success;
 }
 
@@ -169,10 +220,10 @@
     }
     
     ALMChat *chat = [self chatForChannel:channel];
+    ALMSession *session = [self sessionForClient:client];
     
     if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:subscribedTo:as:)]) {
-        [self.chatManagerDelegate chatManager:self subscribedTo:chat as:nil];
-        // TODO: session
+        [self.chatManagerDelegate chatManager:self subscribedTo:chat as:session];
     }
 }
 
@@ -182,10 +233,12 @@
     }
     
     ALMChat *chat = [self chatForChannel:channel];
+    ALMSession *session = [self sessionForClient:client];
+
+    [_chats removeObjectForKey:channel];
     
     if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:unsubscribedFrom:as:)]) {
-        [self.chatManagerDelegate chatManager:self unsubscribedFrom:chat as:nil];
-        // TODO: session
+        [self.chatManagerDelegate chatManager:self unsubscribedFrom:chat as:session];
     }
 }
 
@@ -194,9 +247,10 @@
         NSLog(@"FayeClientConnected");
     }
     
+    ALMSession *session = [self sessionForClient:client];
+    
     if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:connectedAs:)]) {
-        [self.chatManagerDelegate chatManager:self connectedAs:nil];
-        // TODO: session
+        [self.chatManagerDelegate chatManager:self connectedAs:session];
     }
 }
 
@@ -205,9 +259,10 @@
         NSLog(@"FayeClientDisconnected");
     }
     
+    ALMSession *session = [self removeClient:client];
+    
     if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:disconnectedAs:)]) {
-        [self.chatManagerDelegate chatManager:self disconnectedAs:nil];
-        // TODO: session
+        [self.chatManagerDelegate chatManager:self disconnectedAs:session];
     }
 }
 
