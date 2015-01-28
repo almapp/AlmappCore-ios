@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-AlmappCore-FayeCpp.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-AlmappCore-Realm+JSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,27 +47,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4152531D874C6D57249E5019</key>
+		<key>0F4655B3460A9147B68909F9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4C2F401003239E591DF45FC5</key>
+		<key>13F8F537178EBF5F124BCD34</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>55C6E684E42DB47742BCECA2</key>
+		<key>510817D1CFDE23D99890A48B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>75297125DE6E7D3A74BF55D8</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>A0B38A15F77626A5142B5DF7</key>
+		<key>7F219F5B8C7C9E1A18B12B2A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -72,7 +72,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D61EDCDBAB157EEFE7FBEF94</key>
+		<key>D638F5F8EE7BA3FEE24CE0FF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -83,6 +83,11 @@
 			<true/>
 		</dict>
 		<key>E556EEC46BEDCFEA05410891</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F12CA6B7647D42693C5D1A77</key>
 		<dict>
 			<key>primary</key>
 			<true/>

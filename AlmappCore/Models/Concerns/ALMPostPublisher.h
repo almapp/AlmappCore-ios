@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ALMPost.h"
+
+@class ALMPost;
+@protocol ALMPost;
 
 @protocol ALMPostPublisher <NSObject>
 

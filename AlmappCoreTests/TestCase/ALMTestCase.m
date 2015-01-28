@@ -13,7 +13,7 @@
 - (void)setUp {
     [super setUp];
     
-    _core = [ALMCore initInstanceWithDelegate:[[ALMDummyCoreDelegated alloc] init] baseURL:[NSURL URLWithString:kTestingBaseURL] apiKey:kTestingApiKey];
+    _core = [ALMCore coreWithDelegate:self baseURL:[NSURL URLWithString:kTestingBaseURL] apiKey:kTestingApiKey];
     [_core deleteTemporalDatabase];
 }
 

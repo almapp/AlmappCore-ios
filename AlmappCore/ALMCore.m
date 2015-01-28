@@ -12,48 +12,61 @@ static NSString *const kMemoryRealmPath = @"temporal.realm";
 static NSString *const kDefaultRealmPath = @"realm_v1.realm";
 static NSString *const kEncryptedRealmPath = @"encrypted_realm_v1.realm";
 
+static short const kDefaultApiVersion = 1;
 static short const kDefaultSemesterDividerMonth = 7;
+
 
 @interface ALMCore ()
 
 @property (strong, nonatomic) NSMutableDictionary* controllers;
 
 @property (weak, nonatomic) id<ALMCoreDelegate> coreDelegate;
-@property (strong, nonatomic) NSURL* baseURL;
 @property (strong, nonatomic) RLMRealm* inMemoryRealm;
 
-- (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL: (NSURL*)baseURL apiKey:(NSString *)apiKey;
+- (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL apiKey:(NSString *)apiKey version:(short)version;
 
 - (void)dropRealm:(RLMRealm*)realm;
 - (BOOL)deleteRealmWithPath:(NSString *)realmPath;
 
 @end
 
+
+
 @implementation ALMCore
 
 #pragma mark - Private Constructor
 
-- (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL: (NSURL*)baseURL apiKey:(NSString *)apiKey {
+- (id)initWithDelegate:(id<ALMCoreDelegate>)delegate
+               baseURL:(NSURL*)baseURL
+                apiKey:(NSString *)apiKey
+               version:(short)version {
+    
     self = [super init];
     if (self) {
         _coreDelegate = delegate;
         _baseURL = baseURL;
-        _controllers = [NSMutableDictionary dictionary];
         _apiKey = apiKey;
+        _apiVersion = version;
+        _controllers = [NSMutableDictionary dictionary];
     }
     return self;
 }
+
 
 #pragma mark - Singleton
 
 static ALMCore *_sharedInstance = nil;
 static dispatch_once_t once_token;
 
-+ (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL apiKey:(NSString *)apiKey {
++ (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
+                         baseURL:(NSURL*)baseURL
+                          apiKey:(NSString *)apiKey
+                         version:(short)version {
+    
     if (baseURL != nil && delegate != nil){
         dispatch_once(&once_token, ^{
             if (_sharedInstance == nil) {
-                _sharedInstance = [[self alloc] initWithDelegate:delegate baseURL:baseURL apiKey:apiKey];
+                _sharedInstance = [[self alloc] initWithDelegate:delegate baseURL:baseURL apiKey:apiKey version:version];
             }
         });
         return _sharedInstance;
@@ -62,13 +75,13 @@ static dispatch_once_t once_token;
     }
 }
 
-+ (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString *)baseURLString apiKey:(NSString *)apiKey {
-    return [self initInstanceWithDelegate:delegate baseURL:[NSURL URLWithString:baseURLString] apiKey:apiKey];
++ (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
+                         baseURL:(NSURL *)baseURL
+                          apiKey:(NSString *)apiKey {
+    
+    return [self coreWithDelegate:delegate baseURL:baseURL apiKey:apiKey version:kDefaultApiVersion];
 }
 
-+ (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString *)baseURLString {
-    return [self initInstanceWithDelegate:delegate baseURLString:baseURLString apiKey:nil];
-}
 
 + (BOOL)isAlive {
     return [self sharedInstance] != nil;
@@ -93,12 +106,23 @@ static dispatch_once_t once_token;
 
 #pragma mark - Web & Session
 
-- (NSString *)baseURLString {
-    return [_baseURL absoluteString];
+- (void)setBaseURL:(NSURL *)baseURL {
+    _baseURL = baseURL;
+    // TODO: modify managers url
 }
 
-- (NSURL *)baseURL {
-    return _baseURL;
+- (NSURL *)apiBaseURL {
+    if (_apiBaseURL) {
+        _apiBaseURL = [self.baseURL URLByAppendingPathComponent:@"/api/v1"];
+    }
+    return _apiBaseURL;
+}
+
+- (NSURL *)chatURL {
+    if (_chatURL) {
+        _chatURL = [self.baseURL URLByAppendingPathComponent:@"/faye"];
+    }
+    return _chatURL;
 }
 
 - (NSString *)apiKey {
@@ -126,12 +150,23 @@ static dispatch_once_t once_token;
     return _sessionManager;
 }
 
+- (ALMChatManager *)chatManager {
+    if (!_chatManager) {
+        _chatManager = [ALMChatManager chatManagerWithURL:self.chatURL];
+    }
+    return _chatManager;
+}
+
 + (ALMRequestManager *)requestManager {
     return [self isAlive] ? [[self sharedInstance] requestManager] : nil;
 }
 
 + (ALMSessionManager *)sessionManager {
     return [self isAlive] ? [[self sharedInstance] sessionManager] : nil;
+}
+
++ (ALMChatManager *)chatManager {
+    return [self isAlive] ? [[self sharedInstance] chatManager] : nil;
 }
 
 - (void)setRequestManagerDelegate:(id<ALMRequestManagerDelegate>)delegate {
@@ -200,8 +235,8 @@ static dispatch_once_t once_token;
 }
 
 - (short)currentAcademicYear {
-    if([self.coreDelegate respondsToSelector:@selector(currentAcademicYear)]) {
-        return [self.coreDelegate currentAcademicYear];
+    if([self.coreDelegate respondsToSelector:@selector(coreCurrentAcademicYear)]) {
+        return [self.coreDelegate coreCurrentAcademicYear];
     }
     else {
         return [self.class calculateAcademicYear];
@@ -213,8 +248,8 @@ static dispatch_once_t once_token;
 }
 
 - (short)currentAcademicPeriod {
-    if([self.coreDelegate respondsToSelector:@selector(currentAcademicPeriod)]) {
-        return [self.coreDelegate currentAcademicPeriod];
+    if([self.coreDelegate respondsToSelector:@selector(coreCurrentAcademicPeriod)]) {
+        return [self.coreDelegate coreCurrentAcademicPeriod];
     }
     else {
         return [self.class calculateAcademicPeriod];

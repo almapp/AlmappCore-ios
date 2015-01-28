@@ -1,0 +1,2 @@
+PODS_ALMAPPCORE_FAYECPP_HEADER_SEARCH_PATHS = "${PODS_ROOT}/FayeCpp/contrib/objc" "${PODS_ROOT}/FayeCpp/libwebsockets/lib" "${PODS_ROOT}/FayeCpp/jansson/src"
+PODS_ALMAPPCORE_FAYECPP_OTHER_LDFLAGS = -l"stdc++" -l"z"

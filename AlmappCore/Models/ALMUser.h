@@ -11,6 +11,7 @@
 #import "ALMSection.h"
 #import "ALMGroup.h"
 #import "ALMEvent.h"
+#import "ALMChat.h"
 
 @interface ALMUser : ALMResource <ALMPostPublisher>
 
@@ -24,6 +25,7 @@
 @property NSDate *lastSignIn;
 @property NSDate *currentSignIn;
 
+@property RLMArray<ALMChat> *chats;
 @property RLMArray<ALMSection> *sections;
 @property RLMArray<ALMGroup> *subscribedGroups;
 @property RLMArray<ALMEvent> *attendingEvents;

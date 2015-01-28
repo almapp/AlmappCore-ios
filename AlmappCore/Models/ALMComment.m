@@ -8,6 +8,7 @@
 
 #import "ALMComment.h"
 #import "ALMUser.h"
+#import "ALMLike.h"
 #import "ALMResourceConstants.h"
 
 @implementation ALMComment

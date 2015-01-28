@@ -7,6 +7,7 @@
 //
 
 #import "ALMSocialResource.h"
+#import "ALMLike.h"
 
 @implementation ALMSocialResource
 

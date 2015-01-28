@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 almapp. All rights reserved.
 //
 
+#import <Realm+JSON/RLMObject+Copying.h>
+
 #import "ALMResource.h"
 #import "ALMResourceConstants.h"
 #import "ALMResourceIndex.h"
@@ -68,8 +70,18 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
 
 @implementation ALMResource
 
+- (id)copyWithZone:(NSZone *)zone {
+    return [self shallowCopy];
+}
+
 - (NSString *)className {
     return [[self class] className];
+}
+
++ (NSDictionary *)JSONInboundMappingDictionary {
+    return @{
+             [self jatt:kAResourceID]     : kRResourceID
+             };
 }
 
 #pragma mark - Attributes helpers

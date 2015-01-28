@@ -10,6 +10,7 @@
 
 #import "ALMCoreDelegate.h"
 #import "ALMRequestManager.h"
+#import "ALMChatManager.h"
 
 #import "ALMUtil.h"
 
@@ -17,11 +18,14 @@
 
 #pragma mark - Public constructors
 
-+ (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL *)baseURL apiKey:(NSString *)apiKey;
++ (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
+                         baseURL:(NSURL *)baseURL
+                          apiKey:(NSString *)apiKey
+                         version:(short)version;
 
-+ (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString *)baseURLString apiKey:(NSString *)apiKey;
-
-+ (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString *)baseURLString;
++ (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
+                         baseURL:(NSURL *)baseURL
+                          apiKey:(NSString *)apiKey;
 
 
 #pragma mark - Singleton methods
@@ -37,16 +41,20 @@
 
 #pragma mark - Web & Session
 
-- (NSURL *)baseURL;
-- (NSString *)baseURLString;
+@property (assign, nonatomic) short apiVersion;
+@property (strong, nonatomic) NSURL *baseURL;
+@property (strong, nonatomic) NSURL *apiBaseURL;
+@property (strong, nonatomic) NSURL *chatURL;
 
 @property (strong, nonatomic) NSString *apiKey;
 
 @property (strong, nonatomic) ALMRequestManager *requestManager;
 @property (strong, nonatomic) ALMSessionManager *sessionManager;
+@property (strong, nonatomic) ALMChatManager *chatManager;
 
 + (ALMRequestManager *)requestManager;
 + (ALMSessionManager *)sessionManager;
++ (ALMChatManager *)chatManager;
 
 - (id<ALMRequestManagerDelegate>) requestManagerDelegate;
 - (void) setRequestManagerDelegate:(id<ALMRequestManagerDelegate>)delegate;
