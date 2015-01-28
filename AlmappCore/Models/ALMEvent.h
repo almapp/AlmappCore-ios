@@ -9,6 +9,7 @@
 #import "ALMResource.h"
 #import "ALMMapable.h"
 
+@class ALMUser;
 @protocol ALMEventHost, ALMUser;
 
 @interface ALMEvent : ALMSocialResource <ALMMapable>
