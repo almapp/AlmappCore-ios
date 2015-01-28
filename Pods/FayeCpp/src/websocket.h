@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2014 Kulykov Oleh <nonamedemail@gmail.com>
+ *   Copyright (c) 2014 - 2015 Kulykov Oleh <nonamedemail@gmail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -124,7 +124,6 @@ namespace FayeCpp {
 		
 		void onCallbackConnectionDestroyed();
 		void onCallbackEstablished();
-		void onCallbackConnectionError();
 		int onCallbackWritable(struct libwebsocket_context * context,
 							   struct libwebsocket * connection,
 							   EchoSessionData * pss);

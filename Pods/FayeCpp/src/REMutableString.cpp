@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2014 Kulykov Oleh <nonamedemail@gmail.com>
+ *   Copyright (c) 2014 - 2015 Kulykov Oleh <nonamedemail@gmail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -189,7 +189,7 @@ namespace FayeCpp {
 			
 #if defined(HAVE_FUNCTION_VSNPRINTF)		
 			const int writed = vsnprintf(strBuff, 1024, format, args);
-#elif defined(HAVE_FUNCTION_VSPRINTF_S)		
+#elif defined(HAVE_FUNCTION_VSPRINTF_S) && !defined(__MINGW32__) && !defined(__MINGW64__) 
 			const int writed = vsprintf_s(strBuff, format, args);
 #else		
 			const int writed = vsprintf(strBuff, format, args);

@@ -113,10 +113,10 @@ static void RLMCreateColumn(RLMRealm *realm, tightdb::Table &table, RLMProperty 
     }
 }
 
-void RLMRealmCreateAccessors(RLMSchema *schema) {
-    // Schema used to created generated accessors
-    static NSMutableArray * const s_accessorSchema = [NSMutableArray new];
+// Schema used to created generated accessors
+static NSMutableArray * const s_accessorSchema = [NSMutableArray new];
 
+void RLMRealmCreateAccessors(RLMSchema *schema) {
     // create accessors for non-dynamic realms
     RLMSchema *matchingSchema = nil;
     for (RLMSchema *accessorSchema in s_accessorSchema) {
@@ -135,12 +135,18 @@ void RLMRealmCreateAccessors(RLMSchema *schema) {
     else {
         // create accessors and cache in s_accessorSchema
         for (RLMObjectSchema *objectSchema in schema.objectSchema) {
-            NSString *prefix = [NSString stringWithFormat:@"RLMAccessor_v%lu_",
-                                (unsigned long)s_accessorSchema.count];
-            objectSchema.accessorClass = RLMAccessorClassForObjectClass(objectSchema.objectClass, objectSchema, prefix);
+            if (objectSchema.table) {
+                NSString *prefix = [NSString stringWithFormat:@"RLMAccessor_v%lu_",
+                                    (unsigned long)s_accessorSchema.count];
+                objectSchema.accessorClass = RLMAccessorClassForObjectClass(objectSchema.objectClass, objectSchema, prefix);
+            }
         }
         [s_accessorSchema addObject:[schema copy]];
     }
+}
+
+void RLMClearAccessorCache() {
+    [s_accessorSchema removeAllObjects];
 }
 
 void RLMRealmSetSchema(RLMRealm *realm, RLMSchema *targetSchema, bool verify) {
@@ -405,6 +411,13 @@ void RLMAddObjectToRealm(RLMObjectBase *object, RLMRealm *realm, RLMCreationOpti
 
 
 RLMObjectBase *RLMCreateObjectInRealmWithValue(RLMRealm *realm, NSString *className, id value, RLMCreationOptions options) {
+    if (RLMIsSubclass([value class], RLMObjectBase.class) &&
+        [[[(RLMObjectBase *)value class] className] isEqualToString:className] &&
+        [(RLMObjectBase *)value realm] == realm) {
+        // This is a no-op if value is an RLMObject of the same type already backed by the target realm.
+        return value;
+    }
+
     // verify writable
     RLMVerifyInWriteTransaction(realm);
 

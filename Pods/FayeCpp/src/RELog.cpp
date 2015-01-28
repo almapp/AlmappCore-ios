@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2014 Kulykov Oleh <nonamedemail@gmail.com>
+ *   Copyright (c) 2014 - 2015 Kulykov Oleh <nonamedemail@gmail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -44,6 +44,10 @@
 #include <QDebug>
 #endif
 
+#include <stdio.h>
+#include <time.h>
+
+
 namespace FayeCpp {
 	
 	void RELog::log(const char * logString, ...)
@@ -71,11 +75,17 @@ namespace FayeCpp {
 #if defined(HAVE_ANDROID_LOG_H)
 			__android_log_vprint(ANDROID_LOG_INFO, LOG_TAG, logString, arguments);
 #elif defined(HAVE_QT)
-            char buff[1024*4] = { 0 };
+            char buff[1024*2] = { 0 };
             vsprintf(buff, logString, arguments);
             qDebug() << buff;
 #else
-			fprintf(stdout, "\n");
+			const time_t now = time(NULL);
+			char timeString[32] = { 0 };
+
+			if (strftime(timeString, 32 ,"%n%Y-%m-%d %X ", localtime(&now)))
+				fputs(timeString, stdout);
+			else
+				fprintf(stdout, "\n");
 			vfprintf(stdout, logString, arguments);
 			fflush(stdout);         
 #endif		

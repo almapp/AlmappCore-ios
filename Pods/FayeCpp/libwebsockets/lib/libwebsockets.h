@@ -23,8 +23,9 @@
 #define LIBWEBSOCKET_H_3060898B846849FF9F88F5DB59B5950C
 
 #ifdef __cplusplus
-extern "C" {
 #include <cstddef>
+#include <cstdarg>
+extern "C" {
 #endif
 	
 #ifdef CMAKE_BUILD
@@ -39,6 +40,7 @@ extern "C" {
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <basetsd.h>
 
 #define strcasecmp stricmp
@@ -86,6 +88,14 @@ extern "C" {
 #include <unistd.h>
 #endif
 
+#ifdef LWS_OPENSSL_SUPPORT
+#ifdef USE_CYASSL
+#include <cyassl/openssl/ssl.h>
+#else
+#include <openssl/ssl.h>
+#endif /* not USE_CYASSL */
+#endif
+
 #define CONTEXT_PORT_NO_LISTEN -1
 #define MAX_MUX_RECURSION 2
 
@@ -105,6 +115,7 @@ enum lws_log_levels {
 };
 
 LWS_VISIBLE LWS_EXTERN void _lws_log(int filter, const char *format, ...);
+LWS_VISIBLE LWS_EXTERN void _lws_logv(int filter, const char *format, va_list vl);
 
 /* notice, warn and log are always compiled in */
 #define lwsl_notice(...) _lws_log(LLL_NOTICE, __VA_ARGS__)
@@ -145,9 +156,14 @@ LWS_VISIBLE LWS_EXTERN void lwsl_hexdump(void *buf, size_t len);
 
 #define LWS_FEATURE_SERVE_HTTP_FILE_HAS_OTHER_HEADERS_ARG
 
-    /* the struct libwebsocket_protocols has the id field present */
+/* the struct libwebsocket_protocols has the id field present */
 #define LWS_FEATURE_PROTOCOLS_HAS_ID_FIELD
 
+/* you can call lws_get_peer_write_allowance */
+#define LWS_FEATURE_PROTOCOLS_HAS_PEER_WRITE_ALLOWANCE
+
+/* extra parameter introduced in 917f43ab821 */
+#define LWS_FEATURE_SERVE_HTTP_FILE_HAS_OTHER_HEADERS_LEN
 
 enum libwebsocket_context_options {
 	LWS_SERVER_OPTION_REQUIRE_VALID_OPENSSL_CLIENT_CERT = 2,
@@ -198,6 +214,8 @@ enum libwebsocket_callback_reasons {
 	LWS_CALLBACK_LOCK_POLL,
 	LWS_CALLBACK_UNLOCK_POLL,
 
+	LWS_CALLBACK_OPENSSL_CONTEXT_REQUIRES_PRIVATE_KEY,
+	
 	LWS_CALLBACK_USER = 1000, /* user code can use any including / above */
 };
 
@@ -257,6 +275,9 @@ enum libwebsocket_write_protocol {
 	LWS_WRITE_PING,
 	LWS_WRITE_PONG,
 
+	/* Same as write_http but we know this write ends the transaction */
+	LWS_WRITE_HTTP_FINAL,
+	
 	/* HTTP2 */
 
 	LWS_WRITE_HTTP_HEADERS,
@@ -366,6 +387,7 @@ enum lws_token_indexes {
 	WSI_TOKEN_HTTP_VARY,
 	WSI_TOKEN_HTTP_VIA,
 	WSI_TOKEN_HTTP_WWW_AUTHENTICATE,
+	WSI_TOKEN_PROXY,
 	
 	WSI_TOKEN_HTTP_URI_ARGS,
 
@@ -680,6 +702,15 @@ struct libwebsocket_extension;
  *		verify the validity of certificates returned by clients.  @user
  *		is the server's OpenSSL SSL_CTX*
  *
+ *	LWS_CALLBACK_OPENSSL_CONTEXT_REQUIRES_PRIVATE_KEY: if configured for
+ *		including OpenSSL support but no private key file has been specified
+ *		(ssl_private_key_filepath is NULL), this callback is called to
+ *		allow the user to set the private key directly via libopenssl
+ *		and perform further operations if required; this might be useful
+ *		in situations where the private key is not directly accessible by
+ *		the OS, for example if it is stored on a smartcard
+ *		@user is the server's OpenSSL SSL_CTX*
+ *
  *	LWS_CALLBACK_OPENSSL_PERFORM_CLIENT_CERT_VERIFICATION: if the
  *		libwebsockets context was created with the option
  *		LWS_SERVER_OPTION_REQUIRE_VALID_OPENSSL_CLIENT_CERT, then this
@@ -905,6 +936,10 @@ typedef int (extension_callback_function)(struct libwebsocket_context *context,
  *		code that acts differently according to the version can do so by
  *		switch (wsi->protocol->id), user code might use some bits as
  *		capability flags based on selected protocol version, etc.
+ * @user:	User provided context data at the protocol level.
+ *		Accessible via libwebsockets_get_protocol(wsi)->user
+ *		This should not be confused with wsi->user, it is not the same.
+ *		The library completely ignores any value in here.
  * @owning_server:	the server init call fills in this opaque pointer when
  *		registering this protocol with the server.
  * @protocol_index: which protocol we are starting from zero
@@ -924,6 +959,7 @@ struct libwebsocket_protocols {
 	size_t per_session_data_size;
 	size_t rx_buffer_size;
 	unsigned int id;
+	void *user;
 
 	/*
 	 * below are filled in on server init and can be left uninitialized,
@@ -977,8 +1013,10 @@ struct libwebsocket_extension {
  * @ssl_cert_filepath:	If libwebsockets was compiled to use ssl, and you want
  *			to listen using SSL, set to the filepath to fetch the
  *			server cert from, otherwise NULL for unencrypted
- * @ssl_private_key_filepath: filepath to private key if wanting SSL mode,
- *			else ignored
+ * @ssl_private_key_filepath: filepath to private key if wanting SSL mode;
+ *			if this is set to NULL but sll_cert_filepath is set, the
+ *			OPENSSL_CONTEXT_REQUIRES_PRIVATE_KEY callback is called to allow
+ *			setting of the private key directly via openSSL library calls
  * @ssl_ca_filepath: CA certificate filepath or NULL
  * @ssl_cipher_list:	List of valid ciphers to use (eg,
  * 			"RC4-MD5:RC4-SHA:AES128-SHA:AES256-SHA:HIGH:!DSS:!aNULL"
@@ -995,6 +1033,10 @@ struct libwebsocket_extension {
  *		and killing the connection
  * @ka_interval: if ka_time was nonzero, how long to wait before each ka_probes
  *		attempt
+ * @provided_client_ssl_ctx: If non-null, swap out libwebsockets ssl
+ *		implementation for the one provided by provided_ssl_ctx.
+ *		Libwebsockets no longer is responsible for freeing the context
+ *		if this option is selected.
  */
 
 struct lws_context_creation_info {
@@ -1017,7 +1059,11 @@ struct lws_context_creation_info {
 	int ka_time;
 	int ka_probes;
 	int ka_interval;
-
+#ifdef LWS_OPENSSL_SUPPORT
+	SSL_CTX *provided_client_ssl_ctx;
+#else /* maintain structure layout either way */
+    	void *provided_client_ssl_ctx;
+#endif
 };
 
 LWS_VISIBLE LWS_EXTERN
@@ -1066,12 +1112,19 @@ lws_add_http_header_by_token(struct libwebsocket_context *context,
 			    int length,
 			    unsigned char **p,
 			    unsigned char *end);
+LWS_VISIBLE LWS_EXTERN int lws_add_http_header_content_length(struct libwebsocket_context *context,
+			    struct libwebsocket *wsi,
+			    unsigned long content_length,
+			    unsigned char **p,
+			    unsigned char *end);
 LWS_VISIBLE LWS_EXTERN int
 lws_add_http_header_status(struct libwebsocket_context *context,
 			    struct libwebsocket *wsi,
 			    unsigned int code,
 			    unsigned char **p,
 			    unsigned char *end);
+
+LWS_EXTERN int lws_http_transaction_completed(struct libwebsocket *wsi);
 
 #ifdef LWS_USE_LIBEV
 LWS_VISIBLE LWS_EXTERN int
@@ -1200,6 +1253,25 @@ libwebsocket_rx_flow_allow_all_protocol(
 LWS_VISIBLE LWS_EXTERN size_t
 libwebsockets_remaining_packet_payload(struct libwebsocket *wsi);
 
+/*
+ * if the protocol does not have any guidence, returns -1.  Currently only
+ * http2 connections get send window information from this API.  But your code
+ * should use it so it can work properly with any protocol.
+ * 
+ * If nonzero return is the amount of payload data the peer or intermediary has
+ * reported it has buffer space for.  That has NO relationship with the amount
+ * of buffer space your OS can accept on this connection for a write action.
+ * 
+ * This number represents the maximum you could send to the peer or intermediary
+ * on this connection right now without it complaining.
+ * 
+ * lws manages accounting for send window updates and payload writes
+ * automatically, so this number reflects the situation at the peer or
+ * intermediary dynamically.
+ */
+LWS_VISIBLE LWS_EXTERN size_t
+lws_get_peer_write_allowance(struct libwebsocket *wsi);
+
 LWS_VISIBLE LWS_EXTERN struct libwebsocket *
 libwebsocket_client_connect(struct libwebsocket_context *clients,
 			      const char *address,
@@ -1285,6 +1357,12 @@ libwebsocket_read(struct libwebsocket_context *context,
 #ifndef LWS_NO_EXTENSIONS
 LWS_VISIBLE LWS_EXTERN struct libwebsocket_extension *libwebsocket_get_internal_extensions();
 #endif
+
+/*
+ * custom allocator support
+ */
+LWS_VISIBLE LWS_EXTERN void
+lws_set_allocator(void *(*realloc)(void *ptr, size_t size));
 
 #ifdef __cplusplus
 }

@@ -149,7 +149,9 @@
 #endif
 
 #ifndef HAVE_BZERO
+#ifndef bzero
 #define bzero(b, len) (memset((b), '\0', (len)), (void) 0)
+#endif
 #endif
 
 #ifndef HAVE_STRERROR
@@ -205,6 +207,12 @@ typedef unsigned __int64 u_int64_t;
 #include <sys/endian.h>
 #elif defined(__linux__)
 #include <endian.h>
+#endif
+
+#include <stddef.h>
+
+#ifndef container_of
+#define container_of(P,T,M)	((T *)((char *)(P) - offsetof(T, M)))
 #endif
 
 #if defined(__QNX__)
@@ -325,6 +333,7 @@ enum lws_pending_protocol_send {
 	LWS_PPS_NONE,
 	LWS_PPS_HTTP2_MY_SETTINGS,
 	LWS_PPS_HTTP2_ACK_SETTINGS,
+	LWS_PPS_HTTP2_PONG,
 };
 
 enum lws_rx_parse_state {
@@ -462,6 +471,7 @@ struct libwebsocket_context {
 #ifdef LWS_OPENSSL_SUPPORT
 	int use_ssl;
 	int allow_non_ssl_on_ssl_port;
+	unsigned int user_supplied_ssl_ctx:1;
 	SSL_CTX *ssl_ctx;
 	SSL_CTX *ssl_client_ctx;
 	unsigned int ssl_flag_buffered_reads:1;
@@ -607,17 +617,31 @@ enum lws_http2_wellknown_frame_types {
 	LWS_HTTP2_FRAME_TYPE_COUNT /* always last */
 };
 
+enum lws_http2_flags {
+	LWS_HTTP2_FLAG_END_STREAM = 1,
+	LWS_HTTP2_FLAG_END_HEADERS = 4,
+	LWS_HTTP2_FLAG_PADDED = 8,
+	LWS_HTTP2_FLAG_PRIORITY = 0x20,
+
+	LWS_HTTP2_FLAG_SETTINGS_ACK = 1,
+};
+
 #define LWS_HTTP2_STREAM_ID_MASTER 0
 #define LWS_HTTP2_FRAME_HEADER_LENGTH 9
 #define LWS_HTTP2_SETTINGS_LENGTH 6
-
-#define LWS_HTTP2_FLAGS__HEADER__END_HEADER 4
 
 struct http2_settings {
 	unsigned int setting[LWS_HTTP2_SETTINGS__COUNT];
 };
 
 enum http2_hpack_state {
+	
+	/* optional before first header block */
+	HPKS_OPT_PADDING,
+	HKPS_OPT_E_DEPENDENCY,
+	HKPS_OPT_WEIGHT,
+	
+	/* header block */
 	HPKS_TYPE,
 	
 	HPKS_IDX_EXT,
@@ -626,6 +650,9 @@ enum http2_hpack_state {
 	HPKS_HLEN_EXT,
 
 	HPKS_DATA,
+	
+	/* optional after last header block */
+	HKPS_OPT_DISCARD_PADDING,
 };
 
 enum http2_hpack_type {
@@ -635,6 +662,21 @@ enum http2_hpack_type {
 	HPKT_INDEXED_HDR_4_VALUE,
 	HPKT_LITERAL_HDR_VALUE,
 	HPKT_SIZE_5
+};
+
+struct hpack_dt_entry {
+	int token; /* additions that don't map to a token are ignored */
+	int arg_offset;
+	int arg_len;
+};
+
+struct hpack_dynamic_table {
+	struct hpack_dt_entry *entries;
+	char *args;
+	int pos;
+	int next;
+	int num_entries;
+	int args_length;
 };
 
 struct _lws_http2_related {
@@ -651,6 +693,8 @@ struct _lws_http2_related {
 	struct libwebsocket *parent_wsi;
 	struct libwebsocket *next_child_wsi;
 
+	struct hpack_dynamic_table *hpack_dyn_table;
+	
 	unsigned int count;
 	
 	/* frame */
@@ -660,6 +704,19 @@ struct _lws_http2_related {
 	unsigned char type;
 	unsigned char flags;
 	unsigned char frame_state;
+	unsigned char padding;
+
+	unsigned char ping_payload[8];
+	
+	unsigned short round_robin_POLLOUT;
+	unsigned short count_POLLOUT_children;
+
+	unsigned int END_STREAM:1;
+	unsigned int END_HEADERS:1;
+	unsigned int send_END_STREAM:1;
+	unsigned int GOING_AWAY;
+	unsigned int requested_POLLOUT:1;
+	unsigned int waiting_tx_credit:1;
 
 	/* hpack */
 	enum http2_hpack_state hpack;
@@ -668,10 +725,12 @@ struct _lws_http2_related {
 	unsigned int hpack_len;
 	unsigned short hpack_pos;
 	unsigned char hpack_m;
+	unsigned int hpack_e_dep;
 	unsigned int huff:1;
 	unsigned int value:1;
 	
-	unsigned int tx_credit;
+	/* negative credit is mandated by the spec */
+	int tx_credit;
 	unsigned int my_stream_id;
 	unsigned int child_count;
 	int my_priority;
@@ -679,7 +738,7 @@ struct _lws_http2_related {
 	unsigned char one_setting[LWS_HTTP2_SETTINGS_LENGTH];
 };
 
-#define HTTP2_IS_TOPLEVEL_WSI(wsi) (!wsi->parent_wsi)
+#define HTTP2_IS_TOPLEVEL_WSI(wsi) (!wsi->u.http2.parent_wsi)
 
 #endif
 
@@ -742,6 +801,7 @@ struct libwebsocket {
 
 	unsigned int hdr_parsing_completed:1;
 	unsigned int user_space_externally_allocated:1;
+	unsigned int socket_is_permanently_unusable:1;
 
 	char pending_timeout; /* enum pending_timeout */
 	time_t pending_timeout_limit;
@@ -782,6 +842,7 @@ struct libwebsocket {
 	BIO *client_bio;
 	unsigned int use_ssl:2;
 	unsigned int buffered_reads_pending:1;
+	unsigned int upgraded:1;
 #endif
 
 #ifdef _WIN32
@@ -804,9 +865,9 @@ lws_rxflow_cache(struct libwebsocket *wsi, unsigned char *buf, int n, int len);
 #ifndef LWS_LATENCY
 static inline void lws_latency(struct libwebsocket_context *context,
 		struct libwebsocket *wsi, const char *action,
-					 int ret, int completion) { while (0); }
+					 int ret, int completion) { do { } while (0); }
 static inline void lws_latency_pre(struct libwebsocket_context *context,
-					struct libwebsocket *wsi) { while (0); }
+					struct libwebsocket *wsi) { do { } while (0); }
 #else
 #define lws_latency_pre(_context, _wsi) lws_latency(_context, _wsi, NULL, 0, 0)
 extern void
@@ -860,6 +921,7 @@ libwebsockets_generate_client_handshake(struct libwebsocket_context *context,
 LWS_EXTERN int
 lws_handle_POLLOUT_event(struct libwebsocket_context *context,
 			      struct libwebsocket *wsi, struct libwebsocket_pollfd *pollfd);
+
 /*
  * EXTENSIONS
  */
@@ -903,6 +965,9 @@ lws_issue_raw_ext_access(struct libwebsocket *wsi,
 LWS_EXTERN int
 _libwebsocket_rx_flow_control(struct libwebsocket *wsi);
 
+LWS_EXTERN void
+lws_union_transition(struct libwebsocket *wsi, enum connection_mode mode);
+
 LWS_EXTERN int
 user_callback_handle_rxflow(callback_function,
 		struct libwebsocket_context *context,
@@ -910,6 +975,8 @@ user_callback_handle_rxflow(callback_function,
 			 enum libwebsocket_callback_reasons reason, void *user,
 							  void *in, size_t len);
 #ifdef LWS_USE_HTTP2
+LWS_EXTERN struct libwebsocket *lws_http2_get_network_wsi(struct libwebsocket *wsi);
+struct libwebsocket * lws_http2_get_nth_child(struct libwebsocket *wsi, int n);
 LWS_EXTERN int
 lws_http2_interpret_settings_payload(struct http2_settings *settings, unsigned char *buf, int len);
 LWS_EXTERN void lws_http2_init(struct http2_settings *settings);
@@ -945,6 +1012,10 @@ lws_add_http2_header_status(struct libwebsocket_context *context,
 			    unsigned int code,
 			    unsigned char **p,
 			    unsigned char *end);
+LWS_EXTERN
+void lws_http2_configure_if_upgraded(struct libwebsocket *wsi);
+#else
+#define lws_http2_configure_if_upgraded(x)
 #endif
 
 LWS_EXTERN int
@@ -952,6 +1023,9 @@ lws_plat_set_socket_options(struct libwebsocket_context *context, int fd);
 
 LWS_EXTERN int
 lws_allocate_header_table(struct libwebsocket *wsi);
+
+LWS_EXTERN int
+lws_free_header_table(struct libwebsocket *wsi);
 
 LWS_EXTERN char *
 lws_hdr_simple_ptr(struct libwebsocket *wsi, enum lws_token_indexes h);
@@ -1088,6 +1162,19 @@ lws_ssl_capable_write_no_ssl(struct libwebsocket *wsi, unsigned char *buf, int l
 #define _libwebsocket_rx_flow_control(_a) (0)
 #define lws_handshake_server(_a, _b, _c, _d) (0)
 #endif
+
+/*
+ * custom allocator
+ */
+LWS_EXTERN void*
+lws_realloc(void *ptr, size_t size);
+
+LWS_EXTERN void*
+lws_zalloc(size_t size);
+
+#define lws_malloc(S)	lws_realloc(NULL, S)
+#define lws_free(P)	lws_realloc(P, 0)
+#define lws_free2(P)	do { lws_realloc(P, 0); (P) = NULL; } while(0)
 
 /*
  * lws_plat_

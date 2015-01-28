@@ -23,11 +23,11 @@
 - (BOOL)connectAs:(ALMSession *)session;
 - (BOOL)disconnectAs:(ALMSession *)session;
 
-- (NSDictionary *)subscribedToChats:(NSArray *)chats as:(ALMSession *)session;
-- (BOOL)subscribedToChat:(ALMChat *)chat as:(ALMSession *)session;
+- (NSDictionary *)subscribeToChats:(NSArray *)chats as:(ALMSession *)session;
+- (BOOL)subscribeToChat:(ALMChat *)chat as:(ALMSession *)session;
 
-- (NSDictionary *)unsubscribedFromChats:(NSArray *)chats as:(ALMSession *)session;
-- (BOOL)unsubscribedFromChat:(ALMChat *)chat as:(ALMSession *)session;
+- (NSDictionary *)unsubscribeFromChats:(NSArray *)chats as:(ALMSession *)session;
+- (BOOL)unsubscribeFromChat:(ALMChat *)chat as:(ALMSession *)session;
 
 - (BOOL)sendMessage:(ALMChatMessage *)message to:(ALMChat *)chat as:(ALMSession *)session;
 

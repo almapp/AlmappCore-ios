@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2014 Kulykov Oleh <nonamedemail@gmail.com>
+ *   Copyright (c) 2014 - 2015 Kulykov Oleh <nonamedemail@gmail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -37,13 +37,28 @@ namespace FayeCpp {
 		return client ? client->isUsingIPV6() : false;
 	}
 	
-	void Transport::receivedAdvice(const VariantMap & advice)
+	RETimeInterval Transport::adviceInterval() const 
+	{
+		return _advice.interval; 
+	}
+	
+	RETimeInterval Transport::adviceTimeout() const 
+	{
+		return _advice.timeout; 
+	}
+	
+	int Transport::adviceReconnect() const 
+	{
+		return _advice.reconnect; 
+	}
+	
+	void Transport::receivedAdvice(const REVariantMap & advice)
 	{
 		Advice a;
 		a.reconnect = ADVICE_RECONNECT_NONE;
 		a.timeout = a.interval = -1;
 		
-		VariantMap::Iterator i = advice.iterator();
+		REVariantMap::Iterator i = advice.iterator();
 		while (i.next())
 		{
 			if (i.key().isEqual("reconnect") && i.value().isString())
@@ -61,7 +76,7 @@ namespace FayeCpp {
 		
 		_advice = a;
 		
-		Variant * thisTransportAdvice = advice.findTypedValue(this->name(), Variant::TypeMap);
+		REVariant * thisTransportAdvice = advice.findTypedValue(this->name(), REVariant::TypeMap);
 		if (thisTransportAdvice) this->receivedAdvice(thisTransportAdvice->toMap());
 	}
 	
@@ -88,7 +103,7 @@ namespace FayeCpp {
 
 		_isConnected = true;
 		
-		Responce message; message.setType(Responce::ResponceTransportConnected);
+		Responce message(Responce::ResponceTransportConnected);
 		if (_processMethod) _processMethod->invokeWithPointer(&message);	
 	}
 	
@@ -98,7 +113,7 @@ namespace FayeCpp {
 
 		_isConnected = false;
 		
-		Responce message; message.setType(Responce::ResponceTransportDisconnected);
+		Responce message(Responce::ResponceTransportDisconnected);
 		if (_processMethod) _processMethod->invokeWithPointer(&message);
 	}
 	
@@ -106,13 +121,13 @@ namespace FayeCpp {
 	{
 		FAYECPP_DEBUG_LOGA("TRANSPORT RECEIVED: %s", text)
 		
-		Responce message; message.setMessageText(text).setType(Responce::ResponceMessage);
+		Responce message(Responce::ResponceMessage); message.setMessageText(text);
 		if (_processMethod) _processMethod->invokeWithPointer(&message);
 	}
 	
 	void Transport::onDataReceived(const unsigned char * data, const size_t dataSize)
 	{
-		Responce message; message.setMessageData(data, dataSize).setType(Responce::ResponceMessage);
+		Responce message(Responce::ResponceMessage); message.setMessageData(data, dataSize);
 		if (_processMethod) _processMethod->invokeWithPointer(&message);
 	}
 	
@@ -120,7 +135,7 @@ namespace FayeCpp {
 	{
 		FAYECPP_DEBUG_LOGA("TRANSPORT ERROR: %s", error.UTF8String())
 		
-		Responce message; message.setType(Responce::ResponceTransportError).setErrorString(error);
+		Responce message(Responce::ResponceTransportError); message.setErrorString(error);
 		if (_processMethod) _processMethod->invokeWithPointer(&message);
 	}
 	
@@ -128,7 +143,7 @@ namespace FayeCpp {
 	{
 		FAYECPP_DEBUG_LOGA("TRANSPORT ERROR: %s", error)
 		
-		Responce message; message.setType(Responce::ResponceTransportError).setErrorString(error);
+		Responce message(Responce::ResponceTransportError); message.setErrorString(error);
 		if (_processMethod) _processMethod->invokeWithPointer(&message);
 	}
 	

@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2014 Kulykov Oleh <nonamedemail@gmail.com>
+ *   Copyright (c) 2014 - 2015 Kulykov Oleh <nonamedemail@gmail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -40,12 +40,12 @@ namespace FayeCpp {
 		return _errorString;
 	}
 	
-	VariantList * Responce::messageList() const
+	REVariantList * Responce::messageList() const
 	{
 		return _messageList;
 	}
 	
-	VariantMap * Responce::messageMap() const
+	REVariantMap * Responce::messageMap() const
 	{
 		return _messageMap;
 	}
@@ -109,12 +109,12 @@ namespace FayeCpp {
 			JsonParser parser((const char *)data);
 			if (parser.isList()) 
 			{
-				_messageList = new VariantList();
+				_messageList = new REVariantList();
 				if (_messageList) isOk = parser.toList(*_messageList);
 			}
 			else if (parser.isMap())
 			{
-				_messageMap = new VariantMap();
+				_messageMap = new REVariantMap();
 				if (_messageMap) isOk = parser.toMap(*_messageMap);
 			}
 			
@@ -124,6 +124,16 @@ namespace FayeCpp {
 			}
 		}
 		return *this;
+	}
+	
+	Responce::Responce(const Responce::ResponceType type) :
+		_messageList(NULL),
+		_messageMap(NULL),
+		_messageBuffer(NULL),
+		_errorString(NULL),
+		_type(type)
+	{
+		
 	}
 	
 	Responce::Responce() :

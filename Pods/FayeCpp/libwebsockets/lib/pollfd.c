@@ -131,11 +131,18 @@ do_ext:
 int
 lws_change_pollfd(struct libwebsocket *wsi, int _and, int _or)
 {
-	struct libwebsocket_context *context = wsi->protocol->owning_server;
+	struct libwebsocket_context *context;
 	int tid;
 	int sampled_tid;
 	struct libwebsocket_pollfd *pfd;
 	struct libwebsocket_pollargs pa;
+
+	if (!wsi || !wsi->protocol || wsi->position_in_fds_table < 0)
+		return 1;
+	
+	context = wsi->protocol->owning_server;
+	if (!context)
+		return 1;
 
 	pfd = &context->fds[wsi->position_in_fds_table];
 	pa.fd = wsi->sock;
@@ -193,6 +200,53 @@ LWS_VISIBLE int
 libwebsocket_callback_on_writable(struct libwebsocket_context *context,
 						      struct libwebsocket *wsi)
 {
+#ifdef LWS_USE_HTTP2
+	struct libwebsocket *network_wsi, *wsi2;
+	int already;
+
+	lwsl_info("%s: %p\n", __func__, wsi);
+	
+	if (wsi->mode != LWS_CONNMODE_HTTP2_SERVING)
+		goto network_sock;
+	
+	if (wsi->u.http2.requested_POLLOUT) {
+		lwsl_info("already pending writable\n");
+		return 1;
+	}
+	
+	if (wsi->u.http2.tx_credit <= 0) {
+		/*
+		 * other side is not able to cope with us sending
+		 * anything so no matter if we have POLLOUT on our side.
+		 * 
+		 * Delay waiting for our POLLOUT until peer indicates he has
+		 * space for more using tx window command in http2 layer
+		 */
+		lwsl_info("%s: %p: waiting_tx_credit (%d)\n", __func__, wsi, wsi->u.http2.tx_credit);
+		wsi->u.http2.waiting_tx_credit = 1;
+		return 0;
+	}
+	
+	network_wsi = lws_http2_get_network_wsi(wsi);
+	already = network_wsi->u.http2.requested_POLLOUT;
+	
+	/* mark everybody above him as requesting pollout */
+	
+	wsi2 = wsi;
+	while (wsi2) {
+		wsi2->u.http2.requested_POLLOUT = 1;
+		lwsl_info("mark %p pending writable\n", wsi2);
+		wsi2 = wsi2->u.http2.parent_wsi;
+	}
+	
+	/* for network action, act only on the network wsi */
+	
+	wsi = network_wsi;
+	if (already)
+		return 1;
+network_sock:
+#endif
+
 	if (lws_ext_callback_for_each_active(wsi,
 				LWS_EXT_CALLBACK_REQUEST_ON_WRITEABLE, NULL, 0))
 		return 1;

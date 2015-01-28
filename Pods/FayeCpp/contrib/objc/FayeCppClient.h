@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2014 Kulykov Oleh <nonamedemail@gmail.com>
+ *   Copyright (c) 2014 - 2015 Kulykov Oleh <nonamedemail@gmail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -172,6 +172,35 @@ unsubscribedFromChannel:(NSString *) channel;
  @detailed This property used custom methods 'isUsingIPV6' and 'setUsingIPV6:'.
  */
 @property (nonatomic, assign, getter = isUsingIPV6, setter = setUsingIPV6:) BOOL usingIPV6;
+
+
+/**
+ @brief Property for ext value.
+ @detailed This property used custom methods 'extValue' and 'setExtValue:'.
+ */
+@property (nonatomic, assign, getter = extValue, setter = setExtValue:) id extValue;
+
+
+/**
+ @brief Getter for an ext message field which MAY be included in any Bayeux message.
+ @detailed By default this value is empty(nil)
+ and will not included to messages.
+ @return ext message value.
+ */
+- (id) extValue;
+
+
+/**
+ @brief An ext message field MAY be included in any Bayeux message.
+ @detailed The contents of ext message field may be arbitrary values
+ that allow extensions to be negotiated and implemented between server and client implementations.
+ If this value is not empty(type not REVariant::TypeNone), than will added to each message.
+ http://docs.cometd.org/2/reference/bayeux_message_fields.html
+ By default this value is empty(nil) and will not included to messages.
+ For clean up this value just set nil or NSNull value.
+ @param value Variant value of the ext field.
+ */
+- (void) setExtValue:(id) value;
 
 
 /**

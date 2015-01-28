@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2014 Kulykov Oleh <nonamedemail@gmail.com>
+ *   Copyright (c) 2014 - 2015 Kulykov Oleh <nonamedemail@gmail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,13 @@
 /*
  *   Faye C++ client main and one header file.
  *   All class interfaces added to namespace, preventing include files mess.
+ *   Changes on version 0.1.6 (current):
+ *   - Added extra(ext) message field included in any Bayeux message.
+ *      The contents of ext message field may be arbitrary values that allow extensions
+ *      to be negotiated and implemented between server and client implementations.
+ *      http://docs.cometd.org/2/reference/bayeux_message_fields.html
  *
- *   Changes on version 0.1.5 (current):
+ *   Changes on version 0.1.5:
  *   - Added secure socket connection support with SSL data source.
  *   - Client transport become logically detached from the client which adds possibility
  *      to control client logic from delegate methods and from another thread.
@@ -38,6 +43,8 @@
  *   - Removed unused classes RETime, REThread and REMutex.
  *   - Redused size of code and library size thanks to previous two punkts.
  *   - Added client library build information.
+ *   - Build results(binary library/framework & headers) from continuous integration systems now stores
+ *      and available on GitHub release page: https://github.com/OlehKulykov/FayeCpp/releases
  *
  *   Changes on version 0.1.4:
  *   - Possibility to switch client between IPV4 & IPV6 if possible.
@@ -56,7 +63,7 @@
 
 #define FAYECPP_VERSION_MAJOR 0
 #define FAYECPP_VERSION_MINOR 1
-#define FAYECPP_VERSION_PATCH 5
+#define FAYECPP_VERSION_PATCH 6
 
 
 #if !defined(HAVE_SUITABLE_QT_VERSION) 
@@ -120,13 +127,12 @@
 
 #endif /* __RE_OS_WINDOWS__ */
 
-#if __GNUC__ >= 4
-#	define __RE_PUBLIC_CLASS_API__ __attribute__ ((visibility("default")))
+
+#if defined(__GNUC__) 
+#	if __GNUC__ >= 4
+#		define __RE_PUBLIC_CLASS_API__ __attribute__ ((visibility("default")))
+#	endif
 #endif
-
-
-//#undef __RE_PUBLIC_CLASS_API__
-//#undef __RE_EXPORT_IMPLEMENTATION_TEMPLATE__
 
 
 #ifndef __RE_PUBLIC_CLASS_API__
@@ -139,7 +145,7 @@
 #endif
 
 
-/* Standart C Library headers */
+/* Standart C Library headers */ 
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -333,7 +339,7 @@ typedef REFloat64 RETimeInterval;
  @brief Define for default signed integer(int) minimum value.
  */
 #ifndef INT_MIN
-#define INT_MIN (−2147483648)
+#define INT_MIN (-2147483648)
 #endif
 
 
@@ -362,9 +368,9 @@ namespace FayeCpp {
 	
 	class Client;
 	class Responce;
-	class VariantList;
-	class VariantMap;
-	class Variant;
+	class REVariantList;
+	class REVariantMap;
+	class REVariant;
 
 	/*
 #if defined(__RE_OS_WINDOWS__) && defined(_MSC_VER)
@@ -1937,12 +1943,11 @@ namespace FayeCpp {
 	
 
 	/**
-	  @brief Immutable string wrapper for holding pointer to UTF8 string without creation new buffer and copying string data.
-	  @example
-	  {
-			REStaticString helloString("hello"); // no new string buffer & no copy, just holds pointer to const char * C string.
-			// do something with helloString & forgot.
-	  }
+	 @brief Immutable string wrapper for holding pointer to UTF8 string without creation new buffer and copying string data.
+	 @code
+		REStaticString helloString("hello"); // no new string buffer & no copy, just holds pointer to const char * C string.
+		// do something with helloString & forgot.
+	 @endcode
 	 */
 	class __RE_PUBLIC_CLASS_API__ REStaticString : public REString
 	{
@@ -1968,6 +1973,7 @@ namespace FayeCpp {
 		
 		virtual ~REStaticString();
 	};
+	
 	
 	class REMutableString;
 	
@@ -2449,7 +2455,7 @@ namespace FayeCpp {
 		 @param channel Subscribed channel which received message data.
 		 */
 		virtual void onFayeClientReceivedMessageFromChannel(FayeCpp::Client * client,
-															const FayeCpp::VariantMap & message,
+															const FayeCpp::REVariantMap & message,
 															const FayeCpp::REString & channel) = 0;
 		
 		
@@ -2460,7 +2466,7 @@ namespace FayeCpp {
 		 @param message Message map.
 		 */
 		virtual void onFayeClientWillSendMessage(FayeCpp::Client * client,
-												 FayeCpp::VariantMap & message) = 0;
+												 FayeCpp::REVariantMap & message) = 0;
 		
 		
 		/**
@@ -2485,7 +2491,9 @@ namespace FayeCpp {
 		/**
 		 @brief Get client sertificate file path.
 		 @detailed Path to certificate file. Currently supports rsa algorithm & pem encoding format.
-		 @example return REString("/Volumes/Data/faye/client.crt");
+		 @code 
+		 return REString("/Volumes/Data/faye/client.crt");
+		 @endcode
 		 @return String with file path or empty string.
 		 */
 		virtual FayeCpp::REString clientLocalCertificateFilePath() const = 0;
@@ -2494,7 +2502,9 @@ namespace FayeCpp {
 		/**
 		 @brief Get client private key file path.
 		 @detailed Path to key file. Currently supports rsa algorithm & pem encoding format.
-		 @example return REString("/Volumes/Data/faye/client.key");
+		 @code 
+		 return REString("/Volumes/Data/faye/client.key");
+		 @endcode
 		 @return String with file path or empty string.
 		 */
 		virtual FayeCpp::REString clientPrivateKeyFilePath() const = 0;
@@ -2524,7 +2534,462 @@ namespace FayeCpp {
 
 
 	class Transport;
-	
+
+
+	/**
+	 @brief Class of variant for storing base types, such as integers, reals, strings, lists and maps.
+	 */
+	class __RE_PUBLIC_CLASS_API__ REVariant
+	{
+	public:
+		typedef enum _variantType
+		{
+			/**
+			 @brief Variant type is undefined.
+			 */
+			TypeNone,
+
+
+			/**
+			 @brief Type is signed integer, used 64 bit signed int for storing values.
+			 */
+			TypeInteger,
+
+
+			/**
+			 @brief Type is unsigned integer, used 64 bit unsigned int for storing values.
+			 */
+			TypeUnsignedInteger,
+
+
+			/**
+			 @brief Type is real, used double type for storing values.
+			 */
+			TypeReal,
+
+
+			/**
+			 @brief Type is boolean, used bool type for storing values.
+			 */
+			TypeBool,
+
+
+			/**
+			 @brief Type is string object.
+			 */
+			TypeString,
+
+
+			/**
+			 @brief Type is map object.
+			 */
+			TypeMap,
+
+
+			/**
+			 @brief Type is list object.
+			 */
+			TypeList
+		}
+		/**
+		 @brief Type of the variant object.
+		 */
+		VariantType;
+
+	protected:
+		typedef union _variantUnion
+		{
+			int64_t int64Value;
+			uint64_t uint64Value;
+			double doubleValue;
+			bool boolValue;
+			void * pointerValue;
+		}
+		/**
+		 @brief Union for storing varian data.
+		 */
+		VariantUnion;
+
+
+		/**
+		 @brief Union with variant data.
+		 */
+		VariantUnion _u;
+
+
+		/**
+		 @brief Type of the data.
+		 */
+		VariantType _t;
+
+
+		/**
+		 @brief Cleans the varint object, releases any alloced value and sets type to TypeNone
+		 */
+		void clean();
+
+	public:
+		/**
+		 @brief Checks union pointer for NULL, used for detecting strings, lists and maps.
+		 @return True if NULL, othervice false.
+		 */
+		bool isNULL() const;
+
+
+		/**
+		 @brief Checks variant for number type(integers and reals)
+		 @return True if varian is integer or real, othervice false.
+		 */
+		bool isNumber() const;
+
+
+		/**
+		 @brief Getter for type of the variant.
+		 */
+		VariantType type() const;
+
+
+		/**
+		 @brief Getter for signed int value.
+		 @return Signed int for integers or reals, or 0 for other types.
+		 */
+		int toInt() const;
+
+
+		/**
+		 @brief Getter for unsigned int value.
+		 @return Signed int for unintegers or reals, or 0 for other types.
+		 */
+		unsigned int toUInt() const;
+
+
+		/**
+		 @brief Getter for signed int 64 bit value.
+		 @return 64 bit signed int for integers or reals, or 0 for other types.
+		 */
+		int64_t toInt64() const;
+
+
+		/**
+		 @brief Getter for unsigned int 64 bit value.
+		 @return 64 bit unsigned int for integers or reals, or 0 for other types.
+		 */
+		uint64_t toUInt64() const;
+
+
+		/**
+		 @brief Getter for double value.
+		 @return Double value for integers or reals, or 0 for other types.
+		 */
+		double toDouble() const;
+
+
+		/**
+		 @brief Getter for boolean value.
+		 @return True on type is boolean or any digit value is 1, othervice false.
+		 */
+		bool toBool() const;
+
+
+		/**
+		 @brief Setter operator for the variant with signed int value.
+		 @detailed Type of the variant becomes TypeInteger.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(int v);
+
+
+		/**
+		 @brief Setter operator for the variant with unsigned int value.
+		 @detailed Type of the variant becomes TypeUnsignedInteger.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(unsigned int v);
+
+
+		/**
+		 @brief Setter operator for the variant with float value.
+		 @detailed Type of the variant becomes TypeReal.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(float v);
+
+
+		/**
+		 @brief Setter operator for the variant with double value.
+		 @detailed Type of the variant becomes TypeReal.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(double v);
+
+
+		/**
+		 @brief Setter operator for the variant with long long value.
+		 @detailed Type of the variant becomes TypeInteger.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(long long v);
+
+
+		/**
+		 @brief Setter operator for the variant with unsigned long long value.
+		 @detailed Type of the variant becomes TypeUnsignedInteger.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(unsigned long long v);
+
+
+		/**
+		 @brief Setter operator for the variant with long double value.
+		 @detailed Type of the variant becomes TypeReal and value will be truncated to double value.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(long double v);
+
+
+		/**
+		 @brief Setter operator for the variant with long double value.
+		 @detailed Type of the variant becomes TypeReal.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(bool v);
+
+
+		/**
+		 @brief Setter operator for the variant string value if not NULL.
+		 @detailed Type of the variant becomes TypeString.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(const REString & s);
+
+
+		/**
+		 @brief Setter operator for the variant C string value if not NULL.
+		 @detailed Type of the variant becomes TypeString.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(const char * s);
+
+
+		/**
+		 @brief Setter operator for the variant wide string value if not NULL.
+		 @detailed Type of the variant becomes TypeString.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(const wchar_t * s);
+
+
+		/**
+		 @brief Setter operator for the variant map value.
+		 @detailed Type of the variant becomes TypeMap.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(const REVariantMap & m);
+
+
+		/**
+		 @brief Setter operator for the variant list value.
+		 @detailed Type of the variant becomes TypeList.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(const REVariantList & l);
+
+
+		/**
+		 @brief Setter operator for the variant value.
+		 @detailed Type of the variant becomes same as setted variant.
+		 @return Address of the variant.
+		 */
+		REVariant & operator=(const REVariant & v);
+
+
+		/**
+		 @brief Checks variant is string value.
+		 @detailed Checks type for TypeString.
+		 @return True if variant is string, othervice false.
+		 */
+		bool isString() const;
+
+
+		/**
+		 @brief Getter of the string address.
+		 @warning Unsequre method. Use this ONLY if variant is string.
+		 Check with 'isString()' mathod.
+		 @return Const address of the string, or undefined address if not string.
+		 */
+		const REString & toString() const;
+
+
+		/**
+		 @brief Getter of the string address.
+		 @warning Unsequre method. Use this ONLY if variant is string.
+		 Check with 'isString()' mathod.
+		 @return Address of the string, or undefined address if not string.
+		 */
+		REString & toString();
+
+
+		/**
+		 @brief Checks variant is map value.
+		 @detailed Checks type for TypeMap.
+		 @return True if variant is map, othervice false.
+		 */
+		bool isMap() const;
+
+
+		/**
+		 @brief Getter of the map address.
+		 @warning Unsequre method. Use this ONLY if variant is map.
+		 Check with 'isMap()' method.
+		 @return Const address of the map, or undefined address if not map.
+		 */
+		const REVariantMap & toMap() const;
+
+
+		/**
+		 @brief Getter of the map address.
+		 @warning Unsequre method. Use this ONLY if variant is map.
+		 Check with 'isMap()' method.
+		 @return Address of the map, or undefined address if not map.
+		 */
+		REVariantMap & toMap();
+
+
+		/**
+		 @brief Checks variant is list value.
+		 @detailed Checks type for TypeList.
+		 @return True if variant is list, othervice false.
+		 */
+		bool isList() const;
+
+
+		/**
+		 @brief Getter of the list address.
+		 @warning Unsequre method. Use this ONLY if variant is list.
+		 Check with 'isList()' method.
+		 @return Const address of the list, or undefined address if not list.
+		 */
+		const REVariantList & toList() const;
+
+
+		/**
+		 @brief Getter of the list address.
+		 @warning Unsequre method. Use this ONLY if variant is list.
+		 Check with 'isList()' method.
+		 @return Address of the list, or undefined address if not list.
+		 */
+		REVariantList & toList();
+
+
+		/**
+		 @brief Constructs empty variant object.
+		 */
+		REVariant();
+
+
+		/**
+		 @brief Constructs variant object with int value.
+		 @param v The int value.
+		 */
+		REVariant(int v);
+
+
+		/**
+		 @brief Constructs variant object with unsigned int value.
+		 @param v The unsigned int value.
+		 */
+		REVariant(unsigned int v);
+
+
+		/**
+		 @brief Constructs variant object with float value.
+		 @param v The float value.
+		 */
+		REVariant(float v);
+
+
+		/**
+		 @brief Constructs variant object with double value.
+		 @param v The double value.
+		 */
+		REVariant(double v);
+
+
+		/**
+		 @brief Constructs variant object with long double value.
+		 @param v The long double value.
+		 */
+		REVariant(long double v);
+
+
+		/**
+		 @brief Constructs variant object with long long value.
+		 @param v The long long value.
+		 */
+		REVariant(long long v);
+
+
+		/**
+		 @brief Constructs variant object with unsigned long long value.
+		 @param v The unsigned long long value.
+		 */
+		REVariant(unsigned long long v);
+
+
+		/**
+		 @brief Constructs variant object with boolean value.
+		 @param v The boolean value.
+		 */
+		REVariant(bool v);
+
+
+		/**
+		 @brief Constructs variant object with C string pointer.
+		 @param v The C string pointer.
+		 */
+		REVariant(const char * v);
+
+
+		/**
+		 @brief Constructs variant object with wide string pointer.
+		 @param v The wide string pointer.
+		 */
+		REVariant(const wchar_t * v);
+
+
+		/**
+		 @brief Constructs variant object with string object.
+		 @param v The string object.
+		 */
+		REVariant(const REString & v);
+
+
+		/**
+		 @brief Constructs variant object with map object.
+		 @param v The map object.
+		 */
+		REVariant(const REVariantMap & v);
+
+
+		/**
+		 @brief Constructs variant object with list object.
+		 @param v The list object.
+		 */
+		REVariant(const REVariantList & v);
+
+
+		/**
+		 @brief Constructs variant object with variant object.
+		 @param v The variant object.
+		 */
+		REVariant(const REVariant & v);
+
+
+		/**
+		 @brief Default virtual destructor.
+		 */
+		virtual ~REVariant();
+	};
 
 	/**
 	  @brief Faye clent object.
@@ -2539,7 +3004,8 @@ namespace FayeCpp {
 		REString _host;
 		REString _path;
 		REString _clientId;
-		
+		REVariant _extValue;
+
 		REStringList _subscribedChannels;
 		REStringList _pendingSubscriptions;
 		REStringList _supportedConnectionTypes;
@@ -2556,25 +3022,25 @@ namespace FayeCpp {
 		void onTransportConnected();
 		void onTransportDisconnected();
 		
-		void onClientResponceMessageReceived(const VariantMap & message);
-		void onClientResponceMessagesListReceived(const VariantList & messagesList);
+		void onClientResponceMessageReceived(const REVariantMap & message);
+		void onClientResponceMessagesListReceived(const REVariantList & messagesList);
 		void onClientResponceReceived(Responce * responce);
 		
-		void onReceivedMessageOnChannel(const VariantMap & message, const REString & channel);
+		void onReceivedMessageOnChannel(const REVariantMap & message, const REString & channel);
 		
 		void onClientError(Responce * responce);
 		
-		void onHandshakeDone(const VariantMap & message);
+		void onHandshakeDone(const REVariantMap & message);
 		void handshake();
 		
-		void onConnectFayeDone(const VariantMap & message);
+		void onConnectFayeDone(const REVariantMap & message);
 		void connectFaye();
 		
-		void onSubscriptionDone(const VariantMap & message);
+		void onSubscriptionDone(const REVariantMap & message);
 		void subscribePendingSubscriptions();
 		
-		void onUnsubscribingDone(const VariantMap & message);
-		void onDisconnectFayeDone(const VariantMap & message);
+		void onUnsubscribingDone(const REVariantMap & message);
+		void onDisconnectFayeDone(const REVariantMap & message);
 		
 		bool isPendingChannel(const char * channel) const;
 
@@ -2582,6 +3048,37 @@ namespace FayeCpp {
 		static void parseURL(Client * client);
 		
 	public:
+		/**
+		 @brief Constant getter for an ext message field which MAY be included in any Bayeux message.
+		 @detailed By default this value is empty(type() is REVariant::TypeNone)
+		 and will not included to messages.
+		 @return Constant address of the ext message value.
+		 */
+		const REVariant & extValue() const;
+
+
+		/**
+		 @brief Getter for an ext message field which MAY be included in any Bayeux message.
+		 @detailed By default this value is empty(type() is REVariant::TypeNone)
+		 and will not included to messages.
+		 @return Address of the ext message value.
+		 */
+		REVariant & extValue();
+
+
+		/**
+		 @brief An ext message field MAY be included in any Bayeux message.
+		 @detailed The contents of ext message field may be arbitrary values 
+		 that allow extensions to be negotiated and implemented between server and client implementations.
+		 If this value is not empty(type not REVariant::TypeNone), than will added to each message.
+		 http://docs.cometd.org/2/reference/bayeux_message_fields.html
+		 By default this value is empty(type() is REVariant::TypeNone) and will not included to messages.
+		 For clean up this value just setExtValue(REVariant());
+		 @param value Variant value of the ext field.
+		 */
+		void setExtValue(const REVariant & value);
+
+
 		/**
 		 @brief Check client should use IPV6.
 		 @detailed Default value is false, no matter client supports it or not.
@@ -2742,7 +3239,7 @@ namespace FayeCpp {
 		 @param channel Non empty, subscribed channel.
 		 @return True - if connected and parameters non empty and sended, othervice false.
 		 */
-		bool sendMessageToChannel(const VariantMap & message, const char * channel);
+		bool sendMessageToChannel(const REVariantMap & message, const char * channel);
 		
 		
 		/**
@@ -2817,147 +3314,238 @@ namespace FayeCpp {
 		 */
 		static const char * info();
 	};
+
 	
-	
-	class __RE_PUBLIC_CLASS_API__ Variant
+	/**
+	 @brief Class of the variant map. Keys is string objects and values is variants.
+	 */
+	class __RE_PUBLIC_CLASS_API__ REVariantMap : public REMap<REString, REVariant>
 	{
 	public:
-		typedef enum _variantType
-		{
-			TypeNone,
-			TypeInteger,
-			TypeUnsignedInteger,
-			TypeReal,
-			TypeBool,
-			TypeString,
-			TypeMap,
-			TypeList
-		}
-		VariantType;
+		/**
+		 @brief Locates pointer of the variant object by C string key with specific variant type of the value.
+		 @param key C string of the key.
+		 @param type Type of the finded value.
+		 @return Pointer of the variant value or NULL if not finded or wrong type.
+		 */
+		REVariant * findTypedValue(const char * key, const REVariant::VariantType type) const;
 		
-	protected:
-		typedef union _variantUnion
-		{
-			int64_t int64Value;
-			uint64_t uint64Value;
-			double doubleValue;
-			bool boolValue;
-			void * pointerValue;
-		} VariantUnion;
 		
-		VariantUnion _u;
-		VariantType _t;
+		/**
+		 @brief Locates pointer of the variant object by wide string key with specific variant type of the value.
+		 @param key Wide string of the key.
+		 @param type Type of the finded value.
+		 @return Pointer of the variant value or NULL if not finded or wrong type.
+		 */
+		REVariant * findTypedValue(const wchar_t * key, const REVariant::VariantType type) const;
 		
-		void clean();
 		
-	public:
-		bool isNULL() const;
+		/**
+		 @brief Locates pointer of the variant object by string object key with specific variant type of the value.
+		 @param key String object of the key.
+		 @param type Type of the finded value.
+		 @return Pointer of the variant value or NULL if not finded or wrong type.
+		 */
+		REVariant * findTypedValue(const REString & key, const REVariant::VariantType type) const;
 		
-		bool isNumber() const;
 		
-		VariantType type() const;
+		/**
+		 @brief Getter operator with key.
+		 @param key String key.
+		 */
+		const REVariant operator[](const char * key) const;
 		
-		int toInt() const;
 		
-		int64_t toInt64() const;
+		/**
+		 @brief Getter operator with key.
+		 @param key String key.
+		 */
+		const REVariant operator[](const wchar_t * key) const;
 		
-		uint64_t toUInt64() const;
 		
-		double toDouble() const;
+		/**
+		 @brief Getter operator with key.
+		 @param key String key.
+		 */
+		const REVariant operator[](const REString & key) const;
 		
-		bool toBool() const;
 		
-		Variant & operator=(int v);
-		Variant & operator=(float v);
-		Variant & operator=(double v);
+		/**
+		 @brief Getter operator with key.
+		 @param key String key.
+		 */
+		REVariant & operator[](const char * key);
 		
-		Variant & operator=(long long v);
-		Variant & operator=(unsigned long long v);
-		Variant & operator=(long double v);
-		Variant & operator=(bool v);
-		Variant & operator=(const REString & s);
-		Variant & operator=(const char * s);
-		Variant & operator=(const wchar_t * s);
 		
-		Variant & operator=(const VariantMap & m);
-		Variant & operator=(const VariantList & l);
+		/**
+		 @brief Getter operator with key.
+		 @param key String key.
+		 */
+		REVariant & operator[](const wchar_t * key);
 		
-		Variant & operator=(const Variant & v);
 		
-		bool isString() const;
-		const REString & toString() const;
+		/**
+		 @brief Getter operator with key.
+		 @param key String key.
+		 */
+		REVariant & operator[](const REString & key);
 		
-		bool isMap() const;
-		const VariantMap & toMap() const;
 		
-		bool isList() const;
-		const VariantList & toList() const;
+		/**
+		 @brief Add key/values from another map.
+		 @param map Map object.
+		 */
+		REVariantMap & operator=(const REVariantMap & map);
 		
-		REString & toString();
 		
-		VariantMap & toMap();
+		/**
+		 @brief Contructs map with keys/values from another map.
+		 */
+		REVariantMap(const REVariantMap & map);
 		
-		VariantList & toList();
 		
-		Variant();
+		/**
+		 @brief Constructs empty map.
+		 */
+		REVariantMap();
 		
-		Variant(int v);
-		Variant(float v);
-		Variant(double v);
-		Variant(long long v);
-		Variant(unsigned long long v);
-		Variant(long double v);
-		Variant(bool v);
-		Variant(const char * v);
-		Variant(const wchar_t * v);
-		Variant(const REString & v);
-		Variant(const VariantMap & v);
-		Variant(const VariantList & v);
-		Variant(const Variant & v);
 		
-		~Variant();
+		/**
+		 @brief Default virtual destructor.
+		 */
+		virtual ~REVariantMap();
 	};
 	
-	class __RE_PUBLIC_CLASS_API__ VariantMap : public REMap<REString, Variant>
-	{
-	public:
-		Variant * findTypedValue(const char * key, const Variant::VariantType type) const;
-		Variant * findTypedValue(const wchar_t * key, const Variant::VariantType type) const;
-		Variant * findTypedValue(const REString & key, const Variant::VariantType type) const;
-		const Variant operator[](const char * key) const;
-		const Variant operator[](const wchar_t * key) const;
-		const Variant operator[](const REString & key) const;
-		Variant & operator[](const char * key);
-		Variant & operator[](const wchar_t * key);
-		Variant & operator[](const REString & key);
-		VariantMap & operator=(const VariantMap & map);
-		VariantMap(const VariantMap & map);
-		VariantMap();
-		virtual ~VariantMap();
-	};
 	
-	class __RE_PUBLIC_CLASS_API__ VariantList : public REList<Variant>
+	/**
+	 @brief Class of the list containes variants objects.
+	 */
+	class __RE_PUBLIC_CLASS_API__ REVariantList : public REList<REVariant>
 	{
 	public:
-		VariantList & operator+=(int v);
-		VariantList & operator+=(float v);
-		VariantList & operator+=(double v);
-		VariantList & operator+=(long long v);
-		VariantList & operator+=(unsigned long long v);
-		VariantList & operator+=(long double v);
-		VariantList & operator+=(bool v);
-		VariantList & operator+=(const REString & s);
-		VariantList & operator+=(const char * s);
-		VariantList & operator+=(const wchar_t * s);
-		VariantList & operator+=(const VariantMap & m);
-		VariantList & operator+=(const VariantList & l);
-		VariantList & operator+=(const Variant & v);
+		/**
+		 @brief Add variant to the list with int value.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(int v);
 		
-		VariantList & operator=(const VariantList & list);
-		VariantList(const VariantList & list);
-		VariantList();
-		virtual ~VariantList();
+		
+		/**
+		 @brief Add variant to the list with unsigned int value.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(unsigned int v);
+		
+		
+		/**
+		 @brief Add variant to the list with float value.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(float v);
+		
+		
+		/**
+		 @brief Add variant to the list with double value.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(double v);
+		
+		
+		/**
+		 @brief Add variant to the list with long long value.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(long long v);
+		
+		
+		/**
+		 @brief Add variant to the list with unsigned long long value.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(unsigned long long v);
+		
+		
+		/**
+		 @brief Add variant to the list with long double value.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(long double v);
+		
+		
+		/**
+		 @brief Add variant to the list with boolean value.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(bool v);
+		
+		
+		/**
+		 @brief Add variant to the list with string object.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(const REString & s);
+		
+		
+		/**
+		 @brief Add variant to the list with C string.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(const char * s);
+		
+		
+		/**
+		 @brief Add variant to the list with wide string.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(const wchar_t * s);
+		
+		
+		/**
+		 @brief Add variant to the list with map object.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(const REVariantMap & m);
+		
+		
+		/**
+		 @brief Add variant to the list with list object.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(const REVariantList & l);
+		
+		
+		/**
+		 @brief Add variant to the list with varing object.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator+=(const REVariant & v);
+		
+		
+		/**
+		 @brief Set variant objects from another list.
+		 @return Address of this list object.
+		 */
+		REVariantList & operator=(const REVariantList & list);
+		
+		
+		/**
+		 @brief Constructs list with objects from another list.
+		 */
+		REVariantList(const REVariantList & list);
+		
+		
+		/**
+		 @brief Constructs empty list.
+		 */
+		REVariantList();
+		
+		
+		/**
+		 @brief Default virtual destructor.
+		 */
+		virtual ~REVariantList();
 	};
+
 	
 	/**
 	 @brief Message class for internal logic communication.
@@ -3005,8 +3593,8 @@ namespace FayeCpp {
 		ResponceType;
 		
 	private:
-		VariantList * _messageList;
-		VariantMap * _messageMap;
+		REVariantList * _messageList;
+		REVariantMap * _messageMap;
 		REBuffer * _messageBuffer;
 		REString * _errorString;
 		ResponceType _type;
@@ -3023,14 +3611,14 @@ namespace FayeCpp {
 		 @brief Get message list pointer.
 		 @return Variant list pointer or NULL.
 		 */
-		VariantList * messageList() const;
+		REVariantList * messageList() const;
 		
 		
 		/**
 		 @brief Get message map pointer.
 		 @return Variant map pointer or NULL.
 		 */
-		VariantMap * messageMap() const;
+		REVariantMap * messageMap() const;
 		
 		
 		/**
@@ -3089,6 +3677,13 @@ namespace FayeCpp {
 		
 		
 		/**
+		 @brief Contructs typed responce object.
+		 @param type Type of the responce.
+		 */
+		Responce(const Responce::ResponceType type);
+		
+		
+		/**
 		 @brief Default contructor for the message.
 		 */
 		Responce();
@@ -3099,7 +3694,25 @@ namespace FayeCpp {
 		 */
 		~Responce();
 	};
-
+	
+	
+	/**
+	 @brief Section with deprecated types.
+	 */
+#if defined(__GNUC__)	
+	typedef REVariantList VariantList __attribute__((deprecated));
+	typedef REVariantMap VariantMap __attribute__((deprecated));
+	typedef REVariant Variant __attribute__((deprecated));
+#elif defined(_MSC_VER)
+	typedef __declspec(deprecated) REVariantList VariantList;
+	typedef __declspec(deprecated) REVariantMap VariantMap;
+	typedef __declspec(deprecated) REVariant Variant;
+#else
+	typedef REVariantList VariantList;
+	typedef REVariantMap VariantMap;
+	typedef REVariant Variant;
+#endif
+	
 }
 
 #endif /* __FAYECPP_FAYECPP_H__ */

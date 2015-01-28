@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2014 Kulykov Oleh <nonamedemail@gmail.com>
+ *   Copyright (c) 2014 - 2015 Kulykov Oleh <nonamedemail@gmail.com>
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -26,89 +26,95 @@
 
 namespace FayeCpp {
 	
-	VariantList & VariantList::operator+=(int v)
+	REVariantList & REVariantList::operator+=(int v)
 	{
 		this->add(v);
 		return *this;
 	}
 	
-	VariantList & VariantList::operator+=(float v)
+	REVariantList & REVariantList::operator+=(unsigned int v)
 	{
 		this->add(v);
 		return *this;
 	}
 	
-	VariantList & VariantList::operator+=(double v)
+	REVariantList & REVariantList::operator+=(float v)
 	{
 		this->add(v);
 		return *this;
 	}
 	
-	VariantList & VariantList::operator+=(long long v)
+	REVariantList & REVariantList::operator+=(double v)
 	{
 		this->add(v);
 		return *this;
 	}
 	
-	VariantList & VariantList::operator+=(unsigned long long v)
+	REVariantList & REVariantList::operator+=(long long v)
 	{
 		this->add(v);
 		return *this;
 	}
 	
-	VariantList & VariantList::operator+=(long double v)
+	REVariantList & REVariantList::operator+=(unsigned long long v)
 	{
 		this->add(v);
 		return *this;
 	}
 	
-	VariantList & VariantList::operator+=(bool v)
+	REVariantList & REVariantList::operator+=(long double v)
 	{
 		this->add(v);
 		return *this;
 	}
 	
-	VariantList & VariantList::operator+=(const REString & s)
+	REVariantList & REVariantList::operator+=(bool v)
+	{
+		this->add(v);
+		return *this;
+	}
+	
+	REVariantList & REVariantList::operator+=(const REString & s)
 	{
 		this->add(s);
 		return *this;
 	}
 	
-	VariantList & VariantList::operator+=(const char * s)
+	REVariantList & REVariantList::operator+=(const char * s)
 	{
 		this->add(s);
 		return *this;
 	}
 	
-	VariantList & VariantList::operator+=(const wchar_t * s)
+	REVariantList & REVariantList::operator+=(const wchar_t * s)
 	{
 		this->add(s);
 		return *this;
 	}
 	
-	VariantList & VariantList::operator+=(const VariantMap & m)
+	REVariantList & REVariantList::operator+=(const REVariantMap & m)
 	{
 		this->add(m);
 		return *this;
 	}
 	
-	VariantList & VariantList::operator+=(const VariantList & l)
+	REVariantList & REVariantList::operator+=(const REVariantList & l)
 	{
 		this->add(l);
 		return *this;
 	}
 	
-	VariantList & VariantList::operator+=(const Variant & v)
+	REVariantList & REVariantList::operator+=(const REVariant & v)
 	{
 		this->add(v);
 		return *this;
 	}
 	
-    VariantList & VariantList::operator=(const VariantList & list)
+    REVariantList & REVariantList::operator=(const REVariantList & list)
 	{
 		this->clear();
 		
-		VariantList::Iterator i = list.iterator();
+		REVariantList::Iterator i = list.iterator();
 		while (i.next()) 
 		{
 			this->add(i.value());
@@ -117,17 +123,17 @@ namespace FayeCpp {
 		return *this;
 	}
 	
-	VariantList::VariantList(const VariantList & list)
+	REVariantList::REVariantList(const REVariantList & list)
 	{
 		*this = list;
 	}
 	
-	VariantList::VariantList()
+	REVariantList::REVariantList()
 	{
 		
 	}
 	
-	VariantList::~VariantList()
+	REVariantList::~REVariantList()
 	{
 		
 	}
