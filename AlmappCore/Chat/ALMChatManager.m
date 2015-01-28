@@ -106,31 +106,31 @@
     }
 }
 
-- (NSDictionary *)subscribedToChats:(NSArray *)chats as:(ALMSession *)session {
+- (NSDictionary *)subscribeToChats:(NSArray *)chats as:(ALMSession *)session {
     NSMutableDictionary *successHash = [NSMutableDictionary dictionaryWithCapacity:chats.count];
     for (ALMChat *chat in chats) {
-        BOOL success = [self subscribedToChat:chat as:session];
+        BOOL success = [self subscribeToChat:chat as:session];
         [successHash setObject:@(success) forKey:chat];
     }
     return successHash;
 }
 
-- (BOOL)subscribedToChat:(ALMChat *)chat as:(ALMSession *)session {
+- (BOOL)subscribeToChat:(ALMChat *)chat as:(ALMSession *)session {
     NSString *channelName = [self channelNameForChat:chat as:session];
     BOOL success = [_fayeClient subscribeToChannel:channelName];
     return success;
 }
 
-- (NSDictionary *)unsubscribedFromChats:(NSArray *)chats as:(ALMSession *)session {
+- (NSDictionary *)unsubscribeFromChats:(NSArray *)chats as:(ALMSession *)session {
     NSMutableDictionary *successHash = [NSMutableDictionary dictionaryWithCapacity:chats.count];
     for (ALMChat *chat in chats) {
-        BOOL success = [self unsubscribedFromChat:chat as:session];
+        BOOL success = [self unsubscribeFromChat:chat as:session];
         [successHash setObject:@(success) forKey:chat];
     }
     return successHash;
 }
 
-- (BOOL)unsubscribedFromChat:(ALMChat *)chat as:(ALMSession *)session {
+- (BOOL)unsubscribeFromChat:(ALMChat *)chat as:(ALMSession *)session {
     NSString *channelName = [self channelNameForChat:chat as:session];
     BOOL success = [_fayeClient unsubscribeFromChannel:channelName];
     return success;
