@@ -47,7 +47,7 @@ extern ALMPersistMode const kPersistModeDefault;
 
 #pragma mark - Resource header
 
-@interface ALMResource : RLMObject
+@interface ALMResource : RLMObject <NSCopying>
 
 @property long long resourceID;
 

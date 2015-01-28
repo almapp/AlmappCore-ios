@@ -14,5 +14,6 @@
 
 @protocol ALMChatManagerDelegate <NSObject>
 
+- (NSString *)channelNameForChat:(ALMChat *)chat as:(ALMSession *)session;
 
 @end
