@@ -31,5 +31,6 @@
 
 - (NSDictionary *)chatManager:(ALMChatManager *)manager parseOutgoingMessage:(ALMChatMessage *)message in:(ALMChat *)chat as:(ALMSession *)session;
 - (ALMChatMessage *)chatManager:(ALMChatManager *)manager parseIncommingMessage:(NSDictionary *)message from:(ALMChat *)chat;
+- (id)chatManager:(ALMChatManager *)manager extValueFor:(ALMSession *)session;
 
 @end

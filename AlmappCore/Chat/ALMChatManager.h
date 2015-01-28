@@ -17,8 +17,12 @@
 
 @property (weak, nonatomic) id<ALMChatManagerDelegate> chatManagerDelegate;
 @property (assign, nonatomic) BOOL shouldLog;
+@property (strong, nonatomic) NSURL *chatURL;
+@property (strong, nonatomic) RLMRealm *chatRealm;
 
-+ (instancetype)chatManagerWithURL:(NSURL *)url;
++ (instancetype)chatManagerWithURL:(NSURL *)url inRealm:(RLMRealm *)realm;
+
+- (void)addClientWithSession:(ALMSession *)session URL:(NSURL *)url;
 
 - (BOOL)connectAs:(ALMSession *)session;
 - (BOOL)disconnectAs:(ALMSession *)session;
