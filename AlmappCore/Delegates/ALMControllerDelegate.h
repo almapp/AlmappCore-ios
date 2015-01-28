@@ -10,12 +10,14 @@
 #import <AFNetworking/AFNetworking.h>
 #import <Realm/Realm.h>
 
+#import "ALMSession.h"
+
 @protocol ALMControllerDelegate <NSObject>
 
 @required
-- (NSString*)baseURL;
-- (AFHTTPRequestOperationManager*)requestManager;
-- (RLMRealm*)requestRealm;
-- (RLMRealm*)requestTemporalRealm;
+
+- (RLMRealm *)realmNamed:(NSString *)name;
+- (RLMRealm *)defaultRealm;
+- (RLMRealm *)temporalRealm;
 
 @end

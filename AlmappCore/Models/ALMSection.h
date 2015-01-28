@@ -7,16 +7,18 @@
 //
 
 #import "ALMSocialResource.h"
-#import "ALMUser.h"
 #import "ALMTeacher.h"
+#import "ALMScheduleItem.h"
 
 @class ALMCourse;
+@protocol ALMUser;
 
 @interface ALMSection : ALMSocialResource
 
 @property int number;
 @property int year;
 @property int period;
+@property RLMArray<ALMScheduleItem> *scheduleItems;
 @property RLMArray<ALMUser> *students;
 @property RLMArray<ALMTeacher> *teachers;
 

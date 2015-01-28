@@ -44,7 +44,7 @@
 
 - (ALMResource<ALMCommentable>*)commentable {
     Class commentableClass = NSClassFromString(self.commentableType);
-    return [commentableClass objectInRealm:self.realm forID:self.commentableID];
+    return [commentableClass objectInRealm:self.realm withID:self.commentableID];
 }
 
 + (ALMPersistMode)persistMode {

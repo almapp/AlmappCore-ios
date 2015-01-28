@@ -55,7 +55,7 @@
 
 - (ALMArea *)area {
     Class areaClass = NSClassFromString(self.areaType);
-    return [areaClass objectInRealm:self.realm forID:self.areaID];
+    return [areaClass objectInRealm:self.realm withID:self.areaID];
 }
 
 //+ (NSValueTransformer *)nameJSONTransformer {

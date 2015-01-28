@@ -17,10 +17,6 @@
 #import "ALMCoreDelegate.h"
 #import "ALMControllerDelegate.h"
 
-#import "ALMController.h"
-#import "ALMWebPagesController.h"
-#import "ALMSectionsController.h"
-
 #import "ALMResource.h"
 #import "ALMResourceConstants.h"
 #import "ALMLikeable.h"
@@ -28,6 +24,11 @@
 
 #import "ALMUser.h"
 #import "ALMGroup.h"
+
+#import "ALMSession.h"
+#import "ALMSessionManager.h"
+#import "ALMRequestManager.h"
+#import "ALMSectionRequest.h"
 
 #import "ALMArea.h"
 #import "ALMOrganization.h"

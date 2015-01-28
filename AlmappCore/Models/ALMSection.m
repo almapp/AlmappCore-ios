@@ -8,6 +8,8 @@
 
 #import "ALMSection.h"
 #import "ALMCourse.h"
+#import "ALMScheduleItem.h"
+#import "ALMUser.h"
 #import "ALMResourceConstants.h"
 
 @implementation ALMSection
@@ -33,9 +35,32 @@
              };
 }
 
++ (NSDictionary *)JSONNestedResourceInboundMappingDictionary {
+    return @{
+             //[ALMCourse apiSingleForm] : [ALMCourse realmSingleForm]
+             };
+}
+
++ (NSDictionary *)JSONNestedResourceCollectionInboundMappingDictionary {
+    return @{
+             [ALMScheduleItem apiPluralForm] : [ALMScheduleItem realmPluralForm],
+             [ALMTeacher apiPluralForm] : [ALMTeacher apiPluralForm],
+             @"assistants" : kRStudents
+             };
+}
+
 + (Class)propertyTypeForKRConstant:(NSString *)kr {
     if([kr isEqualToString:kRStudents]) {
         return [ALMUser class];
+    }
+    else if ([kr isEqualToString:[ALMTeacher realmPluralForm]]) {
+        return [ALMTeacher class];
+    }
+    else if ([kr isEqualToString:[ALMScheduleItem realmPluralForm]]) {
+        return [ALMScheduleItem class];
+    }
+    else if ([kr isEqualToString:[ALMCourse realmSingleForm]]) {
+        return [ALMCourse class];
     }
     else {
         return [super propertyTypeForKRConstant:kr];

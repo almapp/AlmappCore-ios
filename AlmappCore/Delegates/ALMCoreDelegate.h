@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ALMSession.h"
 
 @protocol ALMCoreDelegate <NSObject>
 

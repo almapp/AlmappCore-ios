@@ -99,7 +99,15 @@ extern ALMPersistMode const kPersistModeDefault;
 
 #pragma mark - Loading
 
-+ (id)objectInRealm:(RLMRealm *)realm forID:(long long)resourceID;
-+ (id)objectForID:(long long)resourceID;
++ (id)objectInRealm:(RLMRealm *)realm withID:(long long)resourceID;
++ (id)objectWithID:(long long)resourceID;
++ (id)objectOfType:(Class)resourceClass withID:(long long)resourceID;
++ (id)objectOfType:(Class)resourceClass withID:(long long)resourceID inRealm:(RLMRealm *)realm;
+
++ (id)allObjectsOfType:(Class)resourceClass;
++ (id)allObjectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm;
+
++ (id)objectsOfType:(Class)resourceClass where:(NSString *)query;
++ (id)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm where:(NSString *)query;
 
 @end

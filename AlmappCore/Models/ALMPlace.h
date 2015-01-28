@@ -7,6 +7,7 @@
 //
 
 #import "ALMSocialResource.h"
+#import <CoreGraphics/CGBase.h>
 
 @class ALMArea;
 
@@ -17,11 +18,11 @@
 @property BOOL isService;
 @property NSString *areaType; // Owner type
 @property long long areaID;   // Owner ID (no polymorhpic assosiations)
-@property float zoom;
-@property float angle;
-@property float tilt;
-@property float latitude;
-@property float longitude;
+@property CGFloat zoom;
+@property CGFloat angle;
+@property CGFloat tilt;
+@property CGFloat latitude;
+@property CGFloat longitude;
 @property NSString *floor;
 @property NSString *information;
 
