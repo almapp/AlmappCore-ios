@@ -16,6 +16,7 @@
 @interface ALMChatManager : NSObject <FayeCppClientDelegate>
 
 @property (weak, nonatomic) id<ALMChatManagerDelegate> chatManagerDelegate;
+@property (assign, nonatomic) BOOL shouldLog;
 
 + (instancetype)chatManagerWithURL:(NSURL *)url;
 

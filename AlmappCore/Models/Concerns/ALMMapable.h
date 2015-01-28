@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ALMPlace.h"
+
+@class ALMPlace;
 
 @protocol ALMMapable <NSObject>
 

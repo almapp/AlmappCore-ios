@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ALMLike.h"
+
+@class ALMLike;
+@protocol ALMLike;
 
 @protocol ALMLikeable <NSObject>
 
