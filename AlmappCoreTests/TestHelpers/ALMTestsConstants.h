@@ -12,5 +12,6 @@
 
 extern NSString * const kTestingBaseURL;
 extern NSString * const kTestingApiKey;
+extern short const kTestingApiVersion;
 
 @end

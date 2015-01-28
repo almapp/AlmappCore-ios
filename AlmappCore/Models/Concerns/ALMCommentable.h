@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ALMComment.h"
+
+@class ALMComment;
+@protocol ALMComment;
 
 @protocol ALMCommentable <NSObject>
 

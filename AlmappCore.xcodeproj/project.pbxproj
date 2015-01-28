@@ -188,6 +188,7 @@
 		F6B3582A1A796B1B00999DCE /* ALMChatManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMChatManager.h; sourceTree = "<group>"; };
 		F6B3582B1A796B1B00999DCE /* ALMChatManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMChatManager.m; sourceTree = "<group>"; };
 		F6B3582E1A79723300999DCE /* ALMChatTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMChatTest.m; sourceTree = "<group>"; };
+		F6B358301A79850100999DCE /* ALMConversable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMConversable.h; sourceTree = "<group>"; };
 		F6D19BDD1A51B02800FD4715 /* ALMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUser.h; sourceTree = "<group>"; };
 		F6D19BDE1A51B02800FD4715 /* ALMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUser.m; sourceTree = "<group>"; };
 		F6D19BEB1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCJSONNonNullStringTransformer.h; sourceTree = "<group>"; };
@@ -267,6 +268,7 @@
 		F60F90781A596EA6002EF807 /* Concerns */ = {
 			isa = PBXGroup;
 			children = (
+				F6B358301A79850100999DCE /* ALMConversable.h */,
 				F60F90791A596EC6002EF807 /* ALMCommentable.h */,
 				F60F907C1A598284002EF807 /* ALMLikeable.h */,
 				F649C7A31A659ECF00CF64AA /* ALMPostTargetable.h */,

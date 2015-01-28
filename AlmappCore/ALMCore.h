@@ -18,11 +18,14 @@
 
 #pragma mark - Public constructors
 
-+ (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL *)baseURL apiKey:(NSString *)apiKey;
++ (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
+                         baseURL:(NSURL *)baseURL
+                          apiKey:(NSString *)apiKey
+                         version:(short)version;
 
-+ (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString *)baseURLString apiKey:(NSString *)apiKey;
-
-+ (instancetype)initInstanceWithDelegate:(id<ALMCoreDelegate>)delegate baseURLString:(NSString *)baseURLString;
++ (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
+                         baseURL:(NSURL *)baseURL
+                          apiKey:(NSString *)apiKey;
 
 
 #pragma mark - Singleton methods
@@ -38,6 +41,7 @@
 
 #pragma mark - Web & Session
 
+@property (assign, nonatomic) short apiVersion;
 @property (strong, nonatomic) NSURL *baseURL;
 @property (strong, nonatomic) NSURL *apiBaseURL;
 @property (strong, nonatomic) NSURL *chatURL;

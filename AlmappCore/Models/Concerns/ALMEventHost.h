@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ALMEvent.h"
+
+@class ALMEvent;
+@protocol ALMEvent;
 
 @protocol ALMEventHost <NSObject>
 

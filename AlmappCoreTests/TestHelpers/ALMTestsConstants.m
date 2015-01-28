@@ -12,5 +12,6 @@
 
 NSString * const kTestingBaseURL = @"http://patiwi-mcburger-pro.local:3000/api/v1";
 NSString * const kTestingApiKey = @"DevelopmentKey";
+short const kTestingApiVersion = 1;
 
 @end
