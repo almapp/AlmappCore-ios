@@ -138,8 +138,14 @@ NSString *const kRInformation = @"information";
 
 #pragma mark - Users
 
-NSString *const kALastSeen = @"last_seen";
-NSString *const kRLastSeen = @"lastSeen";
+NSString *const kASession = @"session";
+NSString *const kRSession = @"session";
+
+NSString *const kALastSignIn = @"last_sign_in_at";
+NSString *const kRLastSignIn = @"lastSignIn";
+
+NSString *const kACurrentSignIn = @"current_sign_in_at";
+NSString *const kRCurrentSignIn = @"currentSignIn";
 
 NSString *const kAMale = @"male";
 NSString *const kRMale = @"isMale";
@@ -219,6 +225,9 @@ NSString *const kRStudents = @"students";
 
 NSString *const kASections = @"sections";
 NSString *const kRSections = @"sections";
+
+NSString *const kAClassType = @"class_type";
+NSString *const kRClassType = @"classType";
 
 NSString *const kAYear = @"year";
 NSString *const kRYear = @"year";

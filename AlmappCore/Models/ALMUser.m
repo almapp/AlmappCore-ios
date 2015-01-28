@@ -26,7 +26,8 @@
              [self jatt:kAStudentID]      : kRStudentID,
              [self jatt:kACountry]        : kRCountry,
              [self jatt:kAFindeable]      : kRFindeable,
-             [self jatt:kALastSeen]       : kRLastSeen,
+             [self jatt:kALastSignIn]     : kRLastSignIn,
+             [self jatt:kACurrentSignIn]  : kRCurrentSignIn,
              [self jatt:kAUpdatedAt]      : kRUpdatedAt,
              [self jatt:kACreatedAt]      : kRCreatedAt
              };
@@ -39,22 +40,12 @@
              kRStudentID                  : kRDefaultNullString,
              kRCountry                    : kRDefaultNullString,
              kRFindeable                  : @YES,
-             kRLastSeen                   : [NSDate defaultDate],
+             kRLastSignIn                 : [NSDate defaultDate],
+             kRCurrentSignIn              : [NSDate defaultDate],
              kRUpdatedAt                  : [NSDate defaultDate],
              kRCreatedAt                  : [NSDate defaultDate]
              };
 }
 
-- (NSArray *)sections {
-    return [self linkingObjectsOfClass:[ALMSection className] forProperty:kRStudents];
-}
-
-- (NSArray *)subscribedGroups {
-    return [self linkingObjectsOfClass:[ALMGroup className] forProperty:kRSubscribers];
-}
-
-- (NSArray *)attendingEvents {
-    return [self linkingObjectsOfClass:[ALMEvent className] forProperty:kRParticipants];
-}
 
 @end

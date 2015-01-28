@@ -36,12 +36,4 @@
              };
 }
 
-- (NSArray *)academicUnities {
-    return [self linkingObjectsOfClass:[ALMAcademicUnity className] forProperty:[ALMAcademicUnity realmPluralForm]];
-}
-
-- (NSArray *)sections {
-    return [self linkingObjectsOfClass:[ALMSection className] forProperty:[ALMSection realmPluralForm]];
-}
-
 @end

@@ -10,11 +10,18 @@
 
 #import "AlmappCore.h"
 #import "ALMTestsConstants.h"
+#import "ALMDummyCoreDelegated.h"
 
 @interface ALMTestCase : XCTestCase
 
 @property (readonly) ALMCore *core;
 
 @property (readonly) RLMRealm* testRealm;
+
+@property (readonly) NSString* testRealmPath;
+
+@property (readonly) ALMRequestManager *requestManager;
+
+@property (readonly) NSTimeInterval timeout;
 
 @end

@@ -7,9 +7,10 @@
 //
 
 #import "ALMSocialResource.h"
-#import "ALMUser.h"
 #import "ALMPostPublisher.h"
 #import "ALMPostTargetable.h"
+
+@protocol ALMUser;
 
 @interface ALMGroup : ALMSocialResource <ALMPostTargetable, ALMPostPublisher>
 

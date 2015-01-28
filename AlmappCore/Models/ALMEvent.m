@@ -9,6 +9,7 @@
 #import "ALMEvent.h"
 #import "ALMResourceConstants.h"
 #import "ALMPlace.h"
+#import "ALMUser.h"
 
 @implementation ALMEvent
 
@@ -87,7 +88,7 @@
 
 - (ALMResource<ALMEventHost> *)host {
     Class hostClass = NSClassFromString(self.hostType);
-    return [hostClass objectInRealm:self.realm forID:self.hostID];
+    return [hostClass objectInRealm:self.realm withID:self.hostID];
 }
 
 @end

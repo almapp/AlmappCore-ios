@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+
 #import "ALMTestCase.h"
 
 @interface ALMPersistenceTests : ALMTestCase
@@ -19,24 +20,28 @@
 - (void)testDatabaseDrop {
     XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:@"validGetSingleResource"];
     
-    ALMController* controller = [ALMCore controller];
-    AFHTTPRequestOperation *op = [controller resource:[ALMUser class] id:1 parameters:nil onSuccess:^(id result) {
-        ALMUser *user = result;
-        [singleResourceExpectation fulfill];
-        NSLog(@"result: %@", user);
-        XCTAssertNotNil(user, @"Must return object");
+    NSURLSessionDataTask *op = [self.requestManager GET:[ALMSingleRequest request:^(ALMSingleRequest *builder) {
+        builder.resourceClass = [ALMUser class];
+        builder.resourceID = 1;
+        builder.realmPath = [self testRealmPath];
         
-        XCTAssert([ALMUser allObjects].count > 0, @"Must have at least one object");
+    } onLoad:^(id loadedResource) {
+        XCTAssertNil(loadedResource, @"Should not exist");
         
-        [[ALMCore sharedInstance] dropDatabaseDefault];
+    } onFinish:^(NSURLSessionDataTask *task, id resource) {
+        XCTAssertNotNil(resource, @"Should exist");
+        NSLog(@"%@", resource);
+        
+        XCTAssert([ALMUser allObjectsInRealm:[self testRealm]].count > 0, @"Must have at least one object");
+        [[ALMCore sharedInstance] dropDefaultDatabase];
         XCTAssert([ALMUser allObjects].count == 0, @"All users should been deleted.");
+        [singleResourceExpectation fulfill];
         
-    } onFailure:^(NSError *error) {
+    } onError:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"Error: %@", error);
         XCTFail(@"Error performing request.");
         [singleResourceExpectation fulfill];
-        
-    }];
+    }]];
     
     [self waitForExpectationsWithTimeout:7 handler:^(NSError *error) {
         [op cancel];
