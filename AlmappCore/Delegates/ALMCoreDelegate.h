@@ -11,11 +11,12 @@
 
 @protocol ALMCoreDelegate <NSObject>
 
-- (void)startPerformingNetworkTask;
-- (void)stopPerformingNetworkTask;
-
 @optional
-- (short)currentAcademicYear;
-- (short)currentAcademicPeriod;
+
+- (void)coreStartPerformingNetworkTask;
+- (void)coreStopPerformingNetworkTask;
+
+- (short)coreCurrentAcademicYear;
+- (short)coreCurrentAcademicPeriod;
 
 @end

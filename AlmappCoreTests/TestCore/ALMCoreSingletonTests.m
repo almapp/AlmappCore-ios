@@ -11,12 +11,9 @@
 #import "AlmappCore.h"
 #import "ALMCoreDelegate.h"
 #import "ALMUtil.h"
-#import "ALMDummyCoreDelegated.h"
 #import "ALMTestsConstants.h"
 
-@interface ALMCoreSingletonTests : XCTestCase
-
-@property (strong, nonatomic) ALMDummyCoreDelegated *dummy;
+@interface ALMCoreSingletonTests : XCTestCase <ALMCoreDelegate>
 
 @end
 
@@ -27,29 +24,26 @@
 }
 
 - (ALMCore *)getCore {
-    _dummy = [[ALMDummyCoreDelegated alloc] init];
     [ALMCore setSharedInstance:nil];
     
-    return [ALMCore initInstanceWithDelegate:_dummy baseURLString:kTestingBaseURL apiKey:kTestingApiKey];
+    return [ALMCore initInstanceWithDelegate:self baseURLString:kTestingBaseURL apiKey:kTestingApiKey];
 }
 
 - (void)testSetup {
-    _dummy = [[ALMDummyCoreDelegated alloc] init];
-    
     ALMCore *core = [ALMCore initInstanceWithDelegate:nil baseURL:nil apiKey:kTestingApiKey];
     XCTAssertNil(core, @"Cannot create singleton with invalid params");
     
-    core = [ALMCore initInstanceWithDelegate:_dummy baseURL:nil apiKey:kTestingApiKey];
+    core = [ALMCore initInstanceWithDelegate:self baseURL:nil apiKey:kTestingApiKey];
     XCTAssertNil(core, @"Cannot create singleton with invalid params");
     
-    core = [ALMCore initInstanceWithDelegate:_dummy baseURL:[NSURL URLWithString:kTestingBaseURL] apiKey:kTestingApiKey];
+    core = [ALMCore initInstanceWithDelegate:self baseURL:[NSURL URLWithString:kTestingBaseURL] apiKey:kTestingApiKey];
     XCTAssertNotNil(core, @"Cannot find AlmappCore instance for valid params");
     
     core = nil;
     [ALMCore setSharedInstance:nil];
     XCTAssertNil([ALMCore sharedInstance], @"Singleton must not exist");
     
-    core = [ALMCore initInstanceWithDelegate:_dummy baseURLString:kTestingBaseURL apiKey:kTestingApiKey];
+    core = [ALMCore initInstanceWithDelegate:self baseURLString:kTestingBaseURL apiKey:kTestingApiKey];
     XCTAssertNotNil(core, @"Cannot find AlmappCore instance for valid params with URL string");
 }
 
@@ -60,10 +54,9 @@
 }
 
 - (void)testMissingApiKey {
-    _dummy = [[ALMDummyCoreDelegated alloc] init];
     [ALMCore setSharedInstance:nil];
     
-    ALMCore *core = [ALMCore initInstanceWithDelegate:_dummy baseURLString:kTestingBaseURL apiKey:nil];
+    ALMCore *core = [ALMCore initInstanceWithDelegate:self baseURLString:kTestingBaseURL apiKey:nil];
     XCTAssertThrows(core.apiKey, @"Must throw exception");
 }
 
