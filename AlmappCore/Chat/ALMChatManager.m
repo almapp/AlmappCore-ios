@@ -172,6 +172,7 @@
     
     if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:subscribedTo:as:)]) {
         [self.chatManagerDelegate chatManager:self subscribedTo:chat as:nil];
+        // TODO: session
     }
 }
 
@@ -184,6 +185,7 @@
     
     if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:unsubscribedFrom:as:)]) {
         [self.chatManagerDelegate chatManager:self unsubscribedFrom:chat as:nil];
+        // TODO: session
     }
 }
 
@@ -194,6 +196,7 @@
     
     if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:connectedAs:)]) {
         [self.chatManagerDelegate chatManager:self connectedAs:nil];
+        // TODO: session
     }
 }
 
@@ -204,6 +207,7 @@
     
     if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:disconnectedAs:)]) {
         [self.chatManagerDelegate chatManager:self disconnectedAs:nil];
+        // TODO: session
     }
 }
 
