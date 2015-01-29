@@ -28,7 +28,7 @@ extern long long const kDefaultRequestID;
 
 @property (strong, nonatomic) Class resourceClass;
 @property (strong, nonatomic) id parameters;
-@property (assign, getter=shouldLog) BOOL log;
+@property (assign, nonatomic) BOOL shouldLog;
 
 @property (copy, nonatomic) void (^onError)(NSURLSessionDataTask *task, NSError* error);
 
