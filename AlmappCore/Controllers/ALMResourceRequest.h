@@ -13,7 +13,7 @@
 
 extern BOOL const kRequestForceLogin;
 
-@interface ALMResourceRequest : NSObject
+@interface ALMResourceRequest : NSObject <NSCopying>
 
 @property (weak, nonatomic) id<ALMRequestDelegate> requestDelegate;
 
