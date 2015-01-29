@@ -143,6 +143,13 @@ static dispatch_once_t once_token;
     return _requestManager;
 }
 
+- (ALMController *)controller {
+    if (!_controller) {
+        _controller = [ALMController controllerWithURL:self.apiBaseURL coreDelegate:self];
+    }
+    return _controller;
+}
+
 - (ALMSessionManager *)sessionManager {
     if (!_sessionManager) {
         _sessionManager = [ALMSessionManager sessionManagerWithCoreDelegate:self];
@@ -159,6 +166,10 @@ static dispatch_once_t once_token;
 
 + (ALMRequestManager *)requestManager {
     return [self isAlive] ? [[self sharedInstance] requestManager] : nil;
+}
+
++ (ALMController *)controller {
+    return [self isAlive] ? [[self sharedInstance] controller] : nil;
 }
 
 + (ALMSessionManager *)sessionManager {
@@ -268,7 +279,7 @@ static dispatch_once_t once_token;
 }
 
 - (BOOL)deleteDatabaseNamed:(NSString *)name {
-    NSString *path = [self.class writeablePathForFile:name];
+    NSString *path = [ALMUtil writeablePathForFile:name];
     return [self deleteRealmWithPath:path];
 }
 
@@ -335,7 +346,7 @@ static dispatch_once_t once_token;
     
     // TODO, INCOMPLETE
     
-    //NSString *realmPath = [self.class writeablePathForFile:kEncryptedRealmPath];
+    //NSString *realmPath = [ALMUtil writeablePathForFile:kEncryptedRealmPath];
     //return [RLMRealm encryptedRealmWithPath:realmPath key:nil readOnly:NO error:nil];
     
     return self.defaultRealm;

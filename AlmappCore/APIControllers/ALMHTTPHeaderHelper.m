@@ -37,12 +37,24 @@ NSString *const kOutgoingHttpHeaderFieldUID = @"uid";
 }
 
 + (NSDictionary *)createHeaderHashForSession:(ALMSession *)session apiKey:(NSString *)apiKey {
-    return @{ kOutgoingHttpHeaderFieldAccessToken : session.tokenAccessKey,
-              kOutgoingHttpHeaderFieldTokenType   : session.tokenType,
-              kOutgoingHttpHeaderFieldClient      : session.client,
-              kOutgoingHttpHeaderFieldUID         : session.uid,
-              kOutgoingHttpHeaderFieldExpiry      : [NSString stringWithFormat:@"%ld", (long)session.tokenExpiration],
-              kOutgoingHttpHeaderFieldApiKey      : apiKey};
+    if (session) {
+        return @{ kOutgoingHttpHeaderFieldAccessToken : session.tokenAccessKey,
+                  kOutgoingHttpHeaderFieldTokenType   : session.tokenType,
+                  kOutgoingHttpHeaderFieldClient      : session.client,
+                  kOutgoingHttpHeaderFieldUID         : session.uid,
+                  kOutgoingHttpHeaderFieldExpiry      : [NSString stringWithFormat:@"%ld", (long)session.tokenExpiration],
+                  kOutgoingHttpHeaderFieldApiKey      : apiKey};
+    }
+    else {
+        return [self createHeaderHashForApiKey:apiKey];
+    }
+}
+
++ (void)setHttpRequestHeaders:(NSDictionary *)headers toSerializer:(AFHTTPRequestSerializer *)requestSerializer {
+    for (NSString *headerField in headers.allKeys) {
+        NSString *httpHeaderValue = headers[headerField];
+        [requestSerializer setValue:httpHeaderValue forHTTPHeaderField:headerField];
+    }
 }
 
 @end

@@ -13,6 +13,7 @@
 #import <Foundation/Foundation.h>
 
 #import "ALMCore.h"
+#import "ALMError.h"
 
 #import "ALMCoreDelegate.h"
 

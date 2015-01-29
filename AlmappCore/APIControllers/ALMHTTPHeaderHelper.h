@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AFNetworking/AFHTTPSessionManager.h>
 #import "ALMSession.h"
 
 extern NSString *const kIncommingHttpHeaderFieldApiKey;
@@ -28,5 +29,5 @@ extern NSString *const kOutgoingHttpHeaderFieldUID;
 + (void)setHeaders:(NSDictionary *)headers to:(ALMSession *)session;
 + (NSDictionary *)createHeaderHashForApiKey:(NSString *)apiKey;
 + (NSDictionary *)createHeaderHashForSession:(ALMSession *)session apiKey:(NSString *)apiKey;
-
++ (void)setHttpRequestHeaders:(NSDictionary *)headers toSerializer:(AFHTTPRequestSerializer *)requestSerializer;
 @end
