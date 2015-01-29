@@ -2,7 +2,7 @@ platform :ios, '7.0'
 
 target 'AlmappCore' do
     pod 'AFNetworking'
-    pod 'Realm+JSON', :git => 'https://github.com/mrpatiwi/Realm-JSON.git', :branch => 'master', :commit => '261faf80a0aeb650982181f1562dfb7a71a3a1cc'
+    pod 'Realm+JSON', :git => 'https://github.com/mrpatiwi/Realm-JSON.git', :branch => 'master', :commit => '813d6b474848f3ebaa1f6c92562cce00e9069ac4'
     pod 'BlocksKit', '~> 2.2'
     pod 'FayeCpp', :head
 
