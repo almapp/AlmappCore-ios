@@ -19,7 +19,7 @@
 
 @property (strong, nonatomic) ALMResourceRequest *nestedCollectionRequest;
 
-+ (NSArray *)requestNested:(void(^)(ALMNestedResourceRequest *r))builderBlock delegate:(id<ALMRequestDelegate>)delegate;
++ (instancetype)requestNested:(void(^)(ALMNestedResourceRequest *r))builderBlock delegate:(id<ALMRequestDelegate>)delegate;
 
 + (NSString *)intuitedPathFor:(Class)resourceClass inParent:(Class)parentClass parentID:(long long)parentID;
 

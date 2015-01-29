@@ -14,6 +14,7 @@
 #import "ALMError.h"
 
 #import "ALMResourceRequest.h"
+#import "ALMNestedResourceRequest.h"
 #import "ALMHTTPHeaderHelper.h"
 
 @interface ALMController : AFHTTPSessionManager

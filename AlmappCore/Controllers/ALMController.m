@@ -138,6 +138,11 @@
 }
 
 - (NSURLSessionDataTask *)GET:(ALMResourceRequest *)request {
+    if ([request isKindOfClass:[ALMNestedResourceRequest class]]) {
+        [self GET:[(ALMNestedResourceRequest *)request parentRequest]];
+        return [self GET:[(ALMNestedResourceRequest *)request nestedCollectionRequest]];
+    }
+    
     NSURLSessionDataTask *op = [self GET:request.path parameters:request.parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         
         BOOL success = [request commitData:responseObject];
