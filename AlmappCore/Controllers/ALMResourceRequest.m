@@ -35,7 +35,12 @@ BOOL const kRequestForceLogin = NO;
 
 
 - (BOOL)isRequestingACollection {
-    return _resourceID <= 0;
+    if (!_requestCollection) {
+        return _resourceID <= 0;
+    }
+    else {
+        return _requestCollection;
+    }
 }
 
 
@@ -51,7 +56,13 @@ BOOL const kRequestForceLogin = NO;
     return [RLMRealm defaultRealmPath];
 }
 
-
+- (void)setResourcesIDsWith:(RLMResults *)resourcesIDs {
+    NSMutableArray *ids = [NSMutableArray arrayWithCapacity:resourcesIDs.count];
+    for (ALMResource *resource in resourcesIDs) {
+        [ids addObject:[NSNumber numberWithLongLong:resource.resourceID]];
+    }
+    _resourcesIDs = ids;
+}
 
 
 + (NSString *)intuitedPathFor:(Class)resourceClass {
@@ -82,18 +93,30 @@ BOOL const kRequestForceLogin = NO;
 }
 
 
+- (dispatch_queue_t)dispatchQueue {
+    if (!_dispatchQueue) {
+        _dispatchQueue = dispatch_get_main_queue();
+    }
+    return _dispatchQueue;
+}
 
 
 
 
 
 
+- (void)publishError:(NSError *)error task:(NSURLSessionDataTask *)task {
+    if (_requestDelegate && [_requestDelegate respondsToSelector:@selector(request:error:task:)]) {
+        [_requestDelegate request:self error:error task:task];
+    }
+}
 
-
-
-- (void)publishError:(NSError *)error {
-    if (_requestDelegate && [_requestDelegate respondsToSelector:@selector(request:error:)]) {
-        [_requestDelegate request:self error:error];
+- (void)publishLoaded:(id)object {
+    if (self.isRequestingACollection) {
+        [self publishLoadedResources:object];
+    }
+    else {
+        [self publishLoadedResource:object];
     }
 }
 
@@ -109,21 +132,45 @@ BOOL const kRequestForceLogin = NO;
     }
 }
 
-- (void)publishFetchedResource:(ALMResource *)resource {
-    if (_requestDelegate && [_requestDelegate respondsToSelector:@selector(request:didFetchResource:)]) {
-        [_requestDelegate request:self didFetchResource:resource];
+- (void)publishFetched:(id)object task:(NSURLSessionDataTask *)task {
+    if (self.isRequestingACollection) {
+        [self publishFetchedResources:object task:task];
+    }
+    else {
+        [self publishFetchedResource:object task:task];
     }
 }
 
-- (void)publishFetchedResources:(RLMResults *)resources {
-    if (_requestDelegate && [_requestDelegate respondsToSelector:@selector(request:didFetchResources:)]) {
-        [_requestDelegate request:self didFetchResources:resources];
+- (void)publishFetchedResource:(ALMResource *)resource task:(NSURLSessionDataTask *)task {
+    if (_requestDelegate && [_requestDelegate respondsToSelector:@selector(request:didFetchResource:task:)]) {
+        [_requestDelegate request:self didFetchResource:resource task:task];
+    }
+}
+
+- (void)publishFetchedResources:(RLMResults *)resources task:(NSURLSessionDataTask *)task {
+    if (_requestDelegate && [_requestDelegate respondsToSelector:@selector(request:didFetchResources:task:)]) {
+        [_requestDelegate request:self didFetchResources:resources task:task];
     }
 }
 
 - (void)sortOrFilterResources:(RLMResults *)resources {
     if (_requestDelegate && [_requestDelegate respondsToSelector:@selector(request:sortOrFilter:)]) {
         [_requestDelegate request:self sortOrFilter:resources];
+    }
+}
+
+- (BOOL)commitData:(id)data {
+    RLMRealm *realm = self.realm;
+    if ([data isKindOfClass:[NSArray class]]) {
+        return [self commitMultiple:self.resourceClass data:data inRealm:realm];
+    }
+    else if ([data isKindOfClass:[NSDictionary class]]) {
+        return [self commitSingle:self.resourceClass data:data inRealm:realm];
+    }
+    else {
+        [self publishError:nil task:nil]; // TODO: error
+        NSLog(@"Error");
+        return NO;
     }
 }
 

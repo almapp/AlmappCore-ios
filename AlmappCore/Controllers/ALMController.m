@@ -32,6 +32,7 @@
 @interface ALMController ()
 
 @property (weak, nonatomic) id<ALMCoreModuleDelegate> coreModuleDelegate;
+@property (nonatomic, strong) dispatch_queue_t concurrentQueue;
 
 @end
 
@@ -39,11 +40,11 @@
 
 @implementation ALMController
 
-+ (instancetype)requestManagerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate {
-    return [self requestManagerWithURL:url configuration:nil coreDelegate:coreDelegate];
++ (instancetype)controllerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate {
+    return [self controllerWithURL:url configuration:nil coreDelegate:coreDelegate];
 }
 
-+ (instancetype)requestManagerWithURL:(NSURL *)url configuration:(NSURLSessionConfiguration *)configuration coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate {
++ (instancetype)controllerWithURL:(NSURL *)url configuration:(NSURLSessionConfiguration *)configuration coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate {
     ALMController *manager = [[self alloc] initWithBaseURL:url sessionConfiguration:configuration];
     manager.coreModuleDelegate = coreDelegate;
     return manager;
@@ -54,6 +55,9 @@
     
     self = [super initWithBaseURL:url sessionConfiguration:configuration];
     if (self) {
+        self.concurrentQueue = dispatch_queue_create("com.almappcore.controller.requestQueue",
+                                                          DISPATCH_QUEUE_CONCURRENT);
+        
         self.requestSerializer = [AFJSONRequestSerializer serializer];
         self.responseSerializer = [AFJSONResponseSerializer serializer];
     }
@@ -63,33 +67,107 @@
 
 #pragma mark - GET
 
-- (NSURLSessionDataTask *)GET:(ALMResourceRequest *)request {
-    if (!request) {
-        // TODO: error
-        return nil;
-    }
+- (id)LOAD:(ALMResourceRequest *)request {
+    RLMRealm *realm = request.realm;
     
-    if (![self validate:request]) {
-        // TODO: error
-        return nil;
-    }
-    
-    if ([self shouldPerformLoginTo:request]) {
+    if (request.isRequestingACollection) {
+        RLMResults *results = (request.resourcesIDs) ?
+        [ALMResource objectsOfType:request.resourceClass inRealm:realm withIDs:request.resourcesIDs] :
+        [ALMResource allObjectsOfType:request.resourceClass inRealm:realm];
         
+        [request sortOrFilterResources:results];
+        
+        return results;
     }
     else {
-        
+        ALMResource *result = [ALMResource objectOfType:request.resourceClass withID:request.resourceID inRealm:realm];
+        return result;
     }
-    return nil;
 }
 
+- (void)FETCH:(ALMResourceRequest *)request {
+    __block BOOL isLogingInBlock = _isLogingIn;
     
-   
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        if (!request) {
+            [request publishError:[ALMError errorWithCode:ALMErrorCodeInvalidRequest] task:nil];
+            return;
+        }
+        
+        if (![self validate:request]) {
+            [request publishError:[ALMError errorWithCode:ALMErrorCodeInvalidRequest] task:nil];
+            return;
+        }
+        
+        dispatch_async(request.dispatchQueue, ^{
+            id results = [self LOAD:request];
+            [request publishLoaded:results];
+        });
+        
+        NSDictionary *headers = [self getHttpRequestHeadersFor:request.session];
+        [ALMHTTPHeaderHelper setHttpRequestHeaders:headers toSerializer:self.requestSerializer];
+        
+        BOOL needsAuth = [self shouldPerformLoginTo:request];
+        
+        if (isLogingInBlock && needsAuth) {
+            dispatch_sync(self.concurrentQueue, ^{
+                [self GET:request];
+            });
+        }
+        else if(needsAuth) {
+            dispatch_barrier_async(self.concurrentQueue, ^{
+                
+                dispatch_async(self.concurrentQueue, ^{
+                    [self GET:request];
+                });
+            });
+        }
+        else {
+            dispatch_async(self.concurrentQueue, ^{
+                [self GET:request];
+            });
+        }
+    });
+}
+
+- (NSURLSessionDataTask *)GET:(ALMResourceRequest *)request {
+    NSURLSessionDataTask *op = [self GET:request.path parameters:request.parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        BOOL success = [request commitData:responseObject];
+        if (request.shouldLog) {
+            NSLog(@"Commit status %d",success);
+        }
+        
+        dispatch_async(request.dispatchQueue, ^{
+            id results = [self LOAD:request];
+            [request publishFetched:results task:task];
+        });
+        
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (request.shouldLog) {
+            NSLog(@"Error %@", error);
+        }
+        dispatch_async(request.dispatchQueue, ^{
+            [request publishError:error task:task];
+        });
+    }];
+    
+    return op;
+}
 
 
 
 
-
+- (NSDictionary *)getHttpRequestHeadersFor:(ALMSession *)session {
+    if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:httpRequestHeardersWithApiKey:as:)]) {
+        NSDictionary *headers = [_requestManagerDelegate requestManager:nil httpRequestHeardersWithApiKey:[self apiKey] as:session];
+        return headers;
+    }
+    else {
+        NSDictionary *headers = [ALMHTTPHeaderHelper createHeaderHashForSession:session apiKey:[self apiKey]];
+        return headers;
+    }
+}
 
 
 

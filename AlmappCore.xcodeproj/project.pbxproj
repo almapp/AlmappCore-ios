@@ -44,6 +44,8 @@
 		F65DD4BF1A505C6E006BCAF0 /* ALMUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4BE1A505C6E006BCAF0 /* ALMUtil.m */; };
 		F6647B5E1A56ED6A00D8C814 /* ALMOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = F6647B5D1A56ED6A00D8C814 /* ALMOrganization.m */; };
 		F66B93471A63DF2D0048DACD /* ALMWebPage.m in Sources */ = {isa = PBXBuildFile; fileRef = F66B93461A63DF2D0048DACD /* ALMWebPage.m */; };
+		F694DD561A7A9BA8005D9AE7 /* ALMError.m in Sources */ = {isa = PBXBuildFile; fileRef = F694DD551A7A9BA8005D9AE7 /* ALMError.m */; };
+		F694DD591A7ABBD2005D9AE7 /* ALMResourceTest2.m in Sources */ = {isa = PBXBuildFile; fileRef = F694DD581A7ABBD2005D9AE7 /* ALMResourceTest2.m */; };
 		F69C66A51A6BEA37006F1C0E /* ALMScheduleItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F69C66A41A6BEA37006F1C0E /* ALMScheduleItem.m */; };
 		F69C66A81A6BEA47006F1C0E /* ALMCourse.m in Sources */ = {isa = PBXBuildFile; fileRef = F69C66A71A6BEA47006F1C0E /* ALMCourse.m */; };
 		F69C66AB1A6BEA4E006F1C0E /* ALMSection.m in Sources */ = {isa = PBXBuildFile; fileRef = F69C66AA1A6BEA4E006F1C0E /* ALMSection.m */; };
@@ -158,6 +160,10 @@
 		F6647B5D1A56ED6A00D8C814 /* ALMOrganization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMOrganization.m; sourceTree = "<group>"; };
 		F66B93451A63DF2D0048DACD /* ALMWebPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMWebPage.h; sourceTree = "<group>"; };
 		F66B93461A63DF2D0048DACD /* ALMWebPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMWebPage.m; sourceTree = "<group>"; };
+		F694DD541A7A9BA8005D9AE7 /* ALMError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMError.h; sourceTree = "<group>"; };
+		F694DD551A7A9BA8005D9AE7 /* ALMError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMError.m; sourceTree = "<group>"; };
+		F694DD571A7ABBD2005D9AE7 /* ALMResourceTest2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMResourceTest2.h; sourceTree = "<group>"; };
+		F694DD581A7ABBD2005D9AE7 /* ALMResourceTest2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMResourceTest2.m; sourceTree = "<group>"; };
 		F69C66A31A6BEA37006F1C0E /* ALMScheduleItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMScheduleItem.h; sourceTree = "<group>"; };
 		F69C66A41A6BEA37006F1C0E /* ALMScheduleItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMScheduleItem.m; sourceTree = "<group>"; };
 		F69C66A61A6BEA47006F1C0E /* ALMCourse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCourse.h; sourceTree = "<group>"; };
@@ -344,6 +350,8 @@
 				F6A058A81A543E27001A1E45 /* ALMCore.m */,
 				F6B358391A79ADEA00999DCE /* ALMCoreModule.h */,
 				F6B3583A1A79ADEA00999DCE /* ALMCoreModule.m */,
+				F694DD541A7A9BA8005D9AE7 /* ALMError.h */,
+				F694DD551A7A9BA8005D9AE7 /* ALMError.m */,
 			);
 			path = AlmappCore;
 			sourceTree = "<group>";
@@ -402,6 +410,8 @@
 			children = (
 				F6B0CEA51A745EE70004B570 /* ALMResourceTest.h */,
 				F6B0CEA61A745EE70004B570 /* ALMResourceTest.m */,
+				F694DD571A7ABBD2005D9AE7 /* ALMResourceTest2.h */,
+				F694DD581A7ABBD2005D9AE7 /* ALMResourceTest2.m */,
 				F6B0CEA41A745EE70004B570 /* ALMAreaTest.m */,
 				F6FB88C91A76815C0076C8F4 /* ALMScheduleItemTest.m */,
 				F6FB88CB1A76905F0076C8F4 /* ALMTestSections.m */,
@@ -706,6 +716,7 @@
 				F6D652D01A7A6AE5000620A4 /* ALMResourceRequest.m in Sources */,
 				F63683061A58C8D000DBCC6A /* ALMEvent.m in Sources */,
 				F60297CA1A6E0783004C92BD /* ALMSession.m in Sources */,
+				F694DD561A7A9BA8005D9AE7 /* ALMError.m in Sources */,
 				F6B3582C1A796B1B00999DCE /* ALMChatManager.m in Sources */,
 				F649C7A21A659CD900CF64AA /* ALMPost.m in Sources */,
 				F69C66A81A6BEA47006F1C0E /* ALMCourse.m in Sources */,
@@ -757,6 +768,7 @@
 				F6F573DC1A741C5F00D19FC4 /* ALMManagerTests.m in Sources */,
 				F6B3582F1A79723300999DCE /* ALMChatTest.m in Sources */,
 				F6FB88CA1A76815C0076C8F4 /* ALMScheduleItemTest.m in Sources */,
+				F694DD591A7ABBD2005D9AE7 /* ALMResourceTest2.m in Sources */,
 				F6F573D91A741C4900D19FC4 /* ALMCoreSingletonTests.m in Sources */,
 				F603D02E1A73111600913806 /* ALMTestCase.m in Sources */,
 			);

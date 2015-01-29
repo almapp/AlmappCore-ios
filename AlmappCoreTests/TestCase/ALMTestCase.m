@@ -34,6 +34,10 @@
     return [_core requestManager];
 }
 
+- (ALMController *)controller {
+    return [_core controller];
+}
+
 - (NSTimeInterval)timeout {
     return 20;
 }

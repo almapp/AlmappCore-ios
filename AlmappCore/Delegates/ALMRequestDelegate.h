@@ -15,12 +15,12 @@
 
 @optional
 
-- (void)request:(ALMResourceRequest *)request error:(NSError *)error;
+- (void)request:(ALMResourceRequest *)request error:(NSError *)error task:(NSURLSessionDataTask *)task;
 - (void)request:(ALMResourceRequest *)request didLoadResource:(ALMResource *)resource;
 - (void)request:(ALMResourceRequest *)request didLoadResources:(RLMResults *)resources;
 
-- (void)request:(ALMResourceRequest *)request didFetchResource:(ALMResource *)resource;
-- (void)request:(ALMResourceRequest *)request didFetchResources:(RLMResults *)resources;
+- (void)request:(ALMResourceRequest *)request didFetchResource:(ALMResource *)resource task:(NSURLSessionDataTask *)task;
+- (void)request:(ALMResourceRequest *)request didFetchResources:(RLMResults *)resources task:(NSURLSessionDataTask *)task;
 
 - (void)request:(ALMResourceRequest *)request sortOrFilter:(RLMResults *)resources;
 

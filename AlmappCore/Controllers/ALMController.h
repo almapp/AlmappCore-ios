@@ -11,18 +11,28 @@
 
 #import "ALMRequestManagerDelegate.h"
 #import "ALMCoreModuleDelegate.h"
+#import "ALMError.h"
 
 #import "ALMResourceRequest.h"
+#import "ALMHTTPHeaderHelper.h"
 
 @interface ALMController : AFHTTPSessionManager
 
 #pragma mark - Delegates
 
 @property (weak, nonatomic) id<ALMRequestManagerDelegate> requestManagerDelegate;
+@property (assign, nonatomic) BOOL isLogingIn;
 
 - (id)init __attribute__((unavailable));
-+ (instancetype)requestManagerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate;
-+ (instancetype)requestManagerWithURL:(NSURL *)url configuration:(NSURLSessionConfiguration *)configuration coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate;
++ (instancetype)controllerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate;
++ (instancetype)controllerWithURL:(NSURL *)url configuration:(NSURLSessionConfiguration *)configuration coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate;
 
+- (id)LOAD:(ALMResourceRequest *)request;
+- (void)FETCH:(ALMResourceRequest *)request;
+- (NSURLSessionDataTask *)GET:(ALMResourceRequest *)request;
+
+- (RLMRealm*)temporalRealm;
+- (RLMRealm*)defaultRealm;
+- (RLMRealm *)encryptedRealm;
 
 @end

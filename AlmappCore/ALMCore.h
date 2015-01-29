@@ -12,6 +12,7 @@
 #import "ALMCoreModuleDelegate.h"
 
 #import "ALMSessionManager.h"
+#import "ALMController.h"
 #import "ALMRequestManager.h"
 #import "ALMChatManager.h"
 
@@ -52,10 +53,12 @@
 @property (strong, nonatomic) NSString *apiKey;
 
 @property (strong, nonatomic) ALMRequestManager *requestManager;
+@property (strong, nonatomic) ALMController *controller;
 @property (strong, nonatomic) ALMSessionManager *sessionManager;
 @property (strong, nonatomic) ALMChatManager *chatManager;
 
 + (ALMRequestManager *)requestManager;
++ (ALMController *)controller;
 + (ALMSessionManager *)sessionManager;
 + (ALMChatManager *)chatManager;
 
