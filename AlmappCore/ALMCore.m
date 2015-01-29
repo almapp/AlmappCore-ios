@@ -112,14 +112,14 @@ static dispatch_once_t once_token;
 }
 
 - (NSURL *)apiBaseURL {
-    if (_apiBaseURL) {
+    if (!_apiBaseURL) {
         _apiBaseURL = [self.baseURL URLByAppendingPathComponent:@"/api/v1"];
     }
     return _apiBaseURL;
 }
 
 - (NSURL *)chatURL {
-    if (_chatURL) {
+    if (!_chatURL) {
         _chatURL = [self.baseURL URLByAppendingPathComponent:@"/faye"];
     }
     return _chatURL;

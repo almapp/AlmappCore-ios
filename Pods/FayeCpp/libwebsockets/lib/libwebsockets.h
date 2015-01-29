@@ -1,7 +1,7 @@
 /*
  * libwebsockets - small server side websockets and web server implementation
  *
- * Copyright (C) 2010-2013 Andy Green <andy@warmcat.com>
+ * Copyright (C) 2010-2015 Andy Green <andy@warmcat.com>
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -62,6 +62,7 @@ extern "C" {
 
 #include <poll.h>
 #include <unistd.h>
+#include <netdb.h>
 
 #if defined(__GNUC__)
 #define LWS_VISIBLE __attribute__((visibility("default")))
@@ -389,8 +390,12 @@ enum lws_token_indexes {
 	WSI_TOKEN_HTTP_WWW_AUTHENTICATE,
 	WSI_TOKEN_PROXY,
 	
+	WSI_TOKEN_PATCH_URI,
+	WSI_TOKEN_PUT_URI,
+	WSI_TOKEN_DELETE_URI,
+	
 	WSI_TOKEN_HTTP_URI_ARGS,
-
+	
 	/* use token storage to stash these */
 
 	_WSI_TOKEN_CLIENT_SENT_PROTOCOLS,
