@@ -85,6 +85,12 @@
     }
 }
 
+- (void)FETCHMultiple:(NSArray *)requests {
+    for (ALMResourceRequest *request in requests) {
+        [self FETCH:request];
+    }
+}
+
 - (void)FETCH:(ALMResourceRequest *)request {
     __block BOOL isLogingInBlock = _isLogingIn;
     
@@ -115,6 +121,7 @@
             });
         }
         else if(needsAuth) {
+            isLogingInBlock = YES;
             dispatch_barrier_async(self.concurrentQueue, ^{
                 
                 dispatch_async(self.concurrentQueue, ^{
@@ -132,6 +139,7 @@
 
 - (NSURLSessionDataTask *)GET:(ALMResourceRequest *)request {
     NSURLSessionDataTask *op = [self GET:request.path parameters:request.parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        
         BOOL success = [request commitData:responseObject];
         if (request.shouldLog) {
             NSLog(@"Commit status %d",success);

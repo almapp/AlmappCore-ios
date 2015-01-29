@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-#import "ALMResourceTest2.h"
+#import "ALMResourceTest.h"
 
-@interface ALMAreaTest : ALMResourceTest2
+@interface ALMAreaTest : ALMResourceTest
 
 @end
 

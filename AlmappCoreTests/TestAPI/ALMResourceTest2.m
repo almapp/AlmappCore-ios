@@ -17,24 +17,69 @@
 
 @implementation ALMResourceTest2 
 
+- (void)setUp {
+    [super setUp];
+}
 
+- (void)testController {
+    [self resources:[ALMFaculty class] path:nil params:nil onSuccess:^(RLMResults *resources) {
+        NSLog(@"%@", resources);
+    }];
+    
+    [self resource:[ALMPost class] id:1 path:nil params:nil onSuccess:^(id resource) {
+        NSLog(@"%@", resource);
+    }];
+}
 
+- (void)resources:(Class)resourcesClass path:(NSString *)path params:(id)params onSuccess:(void (^)(RLMResults *))onSuccess {
+    
+    NSString *desc = [NSString stringWithFormat:@"ResourceRequest %@", resourcesClass];
+    
+    self.expectation = [self expectationWithDescription:desc];
+    
+    self.success = onSuccess;
+    
+    ALMResourceRequest *req = [ALMResourceRequest request:^(ALMResourceRequest *r) {
+        r.resourceClass = resourcesClass;
+        r.customPath = path;
+        r.parameters = params;
+        r.realmPath = [self testRealmPath];
+        r.shouldLog = YES;
+        
+    } delegate:self];
+    
+    [self.controller FETCH:req];
+    
+    [self waitForExpectationsWithTimeout:self.timeout
+                                 handler:^(NSError *error) {
+                                     // handler is called on _either_ success or failure
+                                     if (error != nil) {
+                                         XCTFail(@"timeout error: %@", error);
+                                     }
+                                 }];
+}
 
 - (void)resource:(Class)resourceClass id:(long long)resourceID path:(NSString *)path params:(id)params onSuccess:(void (^)(id))onSuccess {
     
     NSString *desc = [NSString stringWithFormat:@"ResourceRequest %@ - %lld", resourceClass, resourceID];
-    _expectation = [self expectationWithDescription:@"HTTP request"];
     
-    [self.controller FETCH:[ALMResourceRequest request:^(ALMResourceRequest *r) {
+    self.expectation = [self expectationWithDescription:desc];
+    
+    self.success = onSuccess;
+    
+    ALMResourceRequest *req = [ALMResourceRequest request:^(ALMResourceRequest *r) {
         r.resourceClass = resourceClass;
         r.resourceID = resourceID;
         r.customPath = path;
         r.parameters = params;
         r.realmPath = [self testRealmPath];
+        r.shouldLog = YES;
         
-    } delegate:self]];
+    } delegate:self];
     
-    [self waitForExpectationsWithTimeout:5
+    [self.controller FETCH:req];
+    
+    [self waitForExpectationsWithTimeout:self.timeout
                                  handler:^(NSError *error) {
                                      // handler is called on _either_ success or failure
                                      if (error != nil) {
@@ -62,7 +107,10 @@
 - (void)request:(ALMResourceRequest *)request didFetchResource:(ALMResource *)resource task:(NSURLSessionDataTask *)task {
     NSLog(@"didFetchResource: %@", resource);
     XCTAssertNotNil(resource);
-    self.success(resource);
+    XCTAssertFalse(resource.invalidated);
+    if (self.success) {
+        self.success(resource);
+    }
     
     [_expectation fulfill];
 }
@@ -71,7 +119,9 @@
     NSLog(@"didFetchResources: %@", resources);
     XCTAssertNotNil(resources);
     XCTAssertNotEqual(resources.count, 0);
-    self.success(resources);
+    if (self.success) {
+        self.success(resources);
+    }
     
     [_expectation fulfill];
 }

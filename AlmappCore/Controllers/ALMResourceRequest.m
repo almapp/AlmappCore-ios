@@ -33,6 +33,20 @@ BOOL const kRequestForceLogin = NO;
     return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    ALMResourceRequest *newReq = [[ALMResourceRequest alloc] init];
+    newReq.realmPath = self.realmPath;
+    newReq.session = self.session;
+    newReq.dispatchQueue = self.dispatchQueue;
+    newReq.customPath = self.customPath;
+    newReq.resourceID = self.resourceID;
+    newReq.resourceClass = self.resourceClass;
+    newReq.parameters = self.parameters;
+    newReq.shouldLog = self.shouldLog;
+    newReq.requestDelegate = self.requestDelegate;
+    
+    return newReq;
+}
 
 - (BOOL)isRequestingACollection {
     if (!_requestCollection) {
@@ -161,56 +175,71 @@ BOOL const kRequestForceLogin = NO;
 
 - (BOOL)commitData:(id)data {
     RLMRealm *realm = self.realm;
+    BOOL success = NO;
+    
+    [realm beginWriteTransaction];
+    
     if ([data isKindOfClass:[NSArray class]]) {
-        return [self commitMultiple:self.resourceClass data:data inRealm:realm];
+        NSArray *saved = [self commitMultiple:self.resourceClass data:data inRealm:realm];
+        self.resourcesIDs = saved;
+        success = (saved != nil && saved.count != 0);
     }
     else if ([data isKindOfClass:[NSDictionary class]]) {
-        return [self commitSingle:self.resourceClass data:data inRealm:realm];
+        id saved = [self commitSingle:self.resourceClass data:data inRealm:realm];
+        success = (saved != nil);
     }
     else {
         [self publishError:nil task:nil]; // TODO: error
         NSLog(@"Error");
-        return NO;
+        success = NO;
     }
-}
-
-- (BOOL)commitMultiple:(Class)resourceClass data:(NSArray *)data inRealm:(RLMRealm *)realm {
-    BOOL success = YES;
-    for (NSDictionary *object in data) {
-        BOOL saveObjectSuccess = [self commitSingle:resourceClass data:object inRealm:realm];
-        if (!saveObjectSuccess) {
-            success = NO;
-        }
-    }
+    
+    [realm commitWriteTransaction];
+    
     return success;
 }
 
-- (BOOL)commitSingle:(Class)resourceClass data:(NSDictionary *)data inRealm:(RLMRealm *)realm {
+- (NSArray *)commitMultiple:(Class)resourceClass data:(NSArray *)data inRealm:(RLMRealm *)realm {
+    NSMutableArray *ids = [NSMutableArray arrayWithCapacity:data.count];
+    
+    for (NSDictionary *object in data) {
+        ALMResource * saveObject = [self commitSingle:resourceClass data:object inRealm:realm];
+        if (saveObject) {
+            [ids addObject:@(saveObject.resourceID)];
+        }
+        else {
+            NSLog(@"Error on commitMultiple");
+        }
+    }
+    return ids;
+}
+
+- (ALMResource *)commitSingle:(Class)resourceClass data:(NSDictionary *)data inRealm:(RLMRealm *)realm {
     NSDictionary *finalData = data;
+    ALMResource *result = nil;
+    
     if (_requestDelegate && [_requestDelegate respondsToSelector:@selector(request:modifyData:ofType:toSaveIn:)]) {
         finalData = [_requestDelegate request:self modifyData:data ofType:resourceClass toSaveIn:realm];
     }
     
-    BOOL success = NO;
     BOOL customCommit = NO;
     if (_requestDelegate && [_requestDelegate respondsToSelector:@selector(request:shouldUseCustomCommitWitData:)]) {
         customCommit = [_requestDelegate request:self shouldUseCustomCommitWitData:finalData];
     }
     
     if (customCommit) {
-        success = [_requestDelegate request:self commit:resourceClass data:finalData inRealm:realm];
+        result = [_requestDelegate request:self commit:resourceClass data:finalData inRealm:realm];
     }
     else {
         @try {
-            id result = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:finalData];
-            success = (result != nil);
+            result = [resourceClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:) withObject:realm withObject:finalData];
         }
         @catch (NSException *exception) {
-            success = NO;
+            NSLog(@"Error creating object %@: ", exception);
         }
     }
     
-    return success;
+    return result;
 }
 
 

@@ -28,6 +28,7 @@
 + (instancetype)controllerWithURL:(NSURL *)url configuration:(NSURLSessionConfiguration *)configuration coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate;
 
 - (id)LOAD:(ALMResourceRequest *)request;
+- (void)FETCHMultiple:(NSArray *)requests;
 - (void)FETCH:(ALMResourceRequest *)request;
 - (NSURLSessionDataTask *)GET:(ALMResourceRequest *)request;
 
