@@ -20,51 +20,34 @@ PODS:
   - AFNetworking/UIKit (2.5.0):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - BlocksKit (2.2.5):
-    - BlocksKit/All (= 2.2.5)
-  - BlocksKit/All (2.2.5):
-    - BlocksKit/Core
-    - BlocksKit/DynamicDelegate
-    - BlocksKit/MessageUI
-    - BlocksKit/UIKit
-  - BlocksKit/Core (2.2.5)
-  - BlocksKit/DynamicDelegate (2.2.5)
-  - BlocksKit/MessageUI (2.2.5):
-    - BlocksKit/Core
-    - BlocksKit/DynamicDelegate
-  - BlocksKit/UIKit (2.2.5):
-    - BlocksKit/Core
-    - BlocksKit/DynamicDelegate
   - FayeCpp (HEAD based on 0.1.5)
   - Realm (0.90.3):
     - Realm/Headers (= 0.90.3)
-  - Realm+JSON (0.2.4):
-    - Realm (~> 0.89)
+  - Realm+JSON (0.2.5):
+    - Realm (~> 0.90)
   - Realm/Headers (0.90.3)
 
 DEPENDENCIES:
   - AFNetworking
-  - BlocksKit (~> 2.2)
   - FayeCpp (HEAD)
-  - Realm+JSON (from `https://github.com/mrpatiwi/Realm-JSON.git`, commit `261faf80a0aeb650982181f1562dfb7a71a3a1cc`, branch `master`)
+  - Realm+JSON (from `https://github.com/mrpatiwi/Realm-JSON.git`, commit `813d6b474848f3ebaa1f6c92562cce00e9069ac4`, branch `master`)
 
 EXTERNAL SOURCES:
   Realm+JSON:
     :branch: master
-    :commit: 261faf80a0aeb650982181f1562dfb7a71a3a1cc
+    :commit: 813d6b474848f3ebaa1f6c92562cce00e9069ac4
     :git: https://github.com/mrpatiwi/Realm-JSON.git
 
 CHECKOUT OPTIONS:
   Realm+JSON:
     :branch: master
-    :commit: 261faf80a0aeb650982181f1562dfb7a71a3a1cc
+    :commit: 813d6b474848f3ebaa1f6c92562cce00e9069ac4
     :git: https://github.com/mrpatiwi/Realm-JSON.git
 
 SPEC CHECKSUMS:
   AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
-  BlocksKit: 4439e7f30a9f90743462ca63545a15c1f4304cef
   FayeCpp: 41339030a3c6873fa3c8f9fd8efafd3bf755201b
   Realm: 47528af12cc437c6fd0edbfd4c7c980b0b6ead2c
-  Realm+JSON: 2f6fe3e758bc765512b82e953137cf7c52a296bc
+  Realm+JSON: 6e79752d27dde89c4ff188df45e52896a8cc719f
 
 COCOAPODS: 0.35.0

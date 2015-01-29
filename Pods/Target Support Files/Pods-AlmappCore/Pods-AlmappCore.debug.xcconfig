@@ -1,9 +1,9 @@
 CLANG_CXX_LANGUAGE_STANDARD = compiler-default
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/BlocksKit" "${PODS_ROOT}/Headers/Public/FayeCpp" "${PODS_ROOT}/Headers/Public/Realm" "${PODS_ROOT}/Headers/Public/Realm+JSON" "${PODS_ROOT}/Headers/Public/Realm/Realm" "${PODS_ROOT}/FayeCpp/contrib/objc" "${PODS_ROOT}/FayeCpp/libwebsockets/lib" "${PODS_ROOT}/FayeCpp/jansson/src"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/FayeCpp" "${PODS_ROOT}/Headers/Public/Realm" "${PODS_ROOT}/Headers/Public/Realm+JSON" "${PODS_ROOT}/Headers/Public/Realm/Realm" "${PODS_ROOT}/FayeCpp/contrib/objc" "${PODS_ROOT}/FayeCpp/libwebsockets/lib" "${PODS_ROOT}/FayeCpp/jansson/src"
 LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/Realm/core"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/AFNetworking" -isystem "${PODS_ROOT}/Headers/Public/BlocksKit" -isystem "${PODS_ROOT}/Headers/Public/FayeCpp" -isystem "${PODS_ROOT}/Headers/Public/Realm" -isystem "${PODS_ROOT}/Headers/Public/Realm+JSON" -isystem "${PODS_ROOT}/Headers/Public/Realm/Realm"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/AFNetworking" -isystem "${PODS_ROOT}/Headers/Public/FayeCpp" -isystem "${PODS_ROOT}/Headers/Public/Realm" -isystem "${PODS_ROOT}/Headers/Public/Realm+JSON" -isystem "${PODS_ROOT}/Headers/Public/Realm/Realm"
 OTHER_CPLUSPLUSFLAGS = -std=c++1y $(inherited) -std=c++1y $(inherited)
-OTHER_LDFLAGS = -ObjC -l"Pods-AlmappCore-AFNetworking" -l"Pods-AlmappCore-BlocksKit" -l"Pods-AlmappCore-FayeCpp" -l"Pods-AlmappCore-Realm" -l"Pods-AlmappCore-Realm+JSON" -l"c++" -l"stdc++" -l"tightdb-ios" -l"z" -framework "CoreGraphics" -framework "MessageUI" -framework "MobileCoreServices" -framework "Security" -framework "SystemConfiguration"
+OTHER_LDFLAGS = -ObjC -l"Pods-AlmappCore-AFNetworking" -l"Pods-AlmappCore-FayeCpp" -l"Pods-AlmappCore-Realm" -l"Pods-AlmappCore-Realm+JSON" -l"c++" -l"stdc++" -l"tightdb-ios" -l"z" -framework "CoreGraphics" -framework "MobileCoreServices" -framework "Security" -framework "SystemConfiguration"
 OTHER_LIBTOOLFLAGS = $(OTHER_LDFLAGS)
 PODS_ROOT = ${SRCROOT}/Pods
