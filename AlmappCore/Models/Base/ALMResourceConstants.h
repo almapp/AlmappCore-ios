@@ -46,6 +46,11 @@ extern NSString *const kAPolymorphicPostPublisher;
 extern NSString *const kAPolymorphicPostPublisherType;
 extern NSString *const kAPolymorphicPostPublisherID;
 
+extern NSString *const kAPolymorphicConversable;
+extern NSString *const kAPolymorphicConversableType;
+extern NSString *const kAPolymorphicConversableID;
+
+
 extern NSString *const kRPolymorphicArea;
 extern NSString *const kRPolymorphicAreaType;
 extern NSString *const kRPolymorphicAreaID;
@@ -69,6 +74,10 @@ extern NSString *const kRPolymorphicPostTargetableID;
 extern NSString *const kRPolymorphicPostPublisher;
 extern NSString *const kRPolymorphicPostPublisherType;
 extern NSString *const kRPolymorphicPostPublisherID;
+
+extern NSString *const kRPolymorphicConversable;
+extern NSString *const kRPolymorphicConversableType;
+extern NSString *const kRPolymorphicConversableID;
 
 #pragma mark - Basics
 

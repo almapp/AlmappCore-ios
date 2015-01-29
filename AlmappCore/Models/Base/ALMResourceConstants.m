@@ -53,6 +53,11 @@ NSString *const kAPolymorphicPostPublisher = @"entity";
 NSString *const kAPolymorphicPostPublisherType = @"entity_type";
 NSString *const kAPolymorphicPostPublisherID = @"entity_id";
 
+NSString *const kAPolymorphicConversable = @"conversable";
+NSString *const kAPolymorphicConversableType = @"conversable_type";
+NSString *const kAPolymorphicConversableID = @"conversable_id";
+
+
 NSString *const kRPolymorphicArea = @"area";
 NSString *const kRPolymorphicAreaType = @"areaType";
 NSString *const kRPolymorphicAreaID = @"areaID";
@@ -76,6 +81,10 @@ NSString *const kRPolymorphicPostTargetableID = @"targetID";
 NSString *const kRPolymorphicPostPublisher = @"entity";
 NSString *const kRPolymorphicPostPublisherType = @"entityType";
 NSString *const kRPolymorphicPostPublisherID = @"entityID";
+
+NSString *const kRPolymorphicConversable = @"conversable";
+NSString *const kRPolymorphicConversableType = @"conversableType";
+NSString *const kRPolymorphicConversableID = @"conversableID";
 
 #pragma mark - Basics
 

@@ -73,7 +73,7 @@
 - (BOOL)connectAs:(ALMSession *)session {
     FayeCppClient *client = [self clientForSession:session];
     
-    [client setExtValue:[self extValueForSession:session]];
+    // [client setExtValue:[self extValueForSession:session]];
     
     BOOL success = [client connect];
     return success;
