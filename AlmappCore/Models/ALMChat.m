@@ -8,8 +8,32 @@
 
 #import "ALMChat.h"
 #import "ALMUser.h"
+#import "ALMResourceConstants.h"
 
 @implementation ALMChat
+
++ (NSDictionary *)JSONInboundMappingDictionary {
+    return @{
+             [self jatt:kAResourceID]                   : kRResourceID,
+             [self jatt:kATitle]                        : kRTitle,
+             [self jatt:kAIsAvailable]                  : kRIsAvailable,
+             [self jatt:kAPolymorphicConversableType]   : kRPolymorphicConversableType,
+             [self jatt:kAPolymorphicConversableID]     : kRPolymorphicConversableID,
+             [self jatt:kAUpdatedAt]                    : kRUpdatedAt,
+             [self jatt:kACreatedAt]                    : kRCreatedAt
+             };
+}
+
++ (NSDictionary *)defaultPropertyValues {
+    return @{
+             kRTitle                         : kRDefaultNullString,
+             kRIsAvailable                   : kRDefaultNullString,
+             kRPolymorphicConversableType    : kRDefaultPolymorphicType,
+             kRPolymorphicConversableID      : kRDefaultPolymorphicID,
+             kRUpdatedAt                     : [NSDate defaultDate],
+             kRCreatedAt                     : [NSDate defaultDate]
+             };
+}
 
 - (void)setConversable:(ALMResource *)conversable {
     [self setConversableID:[conversable resourceID]];

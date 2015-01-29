@@ -6,11 +6,12 @@
 //  Copyright (c) 2015 almapp. All rights reserved.
 //
 
-#import "ALMResource.h"
+#import "ALMSocialResource.h"
 #import "ALMMapable.h"
+#import "ALMEventHost.h"
 
 @class ALMUser;
-@protocol ALMEventHost, ALMUser;
+@protocol ALMUser;
 
 @interface ALMEvent : ALMSocialResource <ALMMapable>
 

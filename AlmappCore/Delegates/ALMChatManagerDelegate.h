@@ -8,10 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@class ALMChatManager, ALMSession;
+@class ALMChatManager, ALMSession, ALMChat, ALMChatMessage;
 
 @protocol ALMChatManagerDelegate <NSObject>
-
 
 - (void)chatManager:(ALMChatManager *)manager error:(NSError *)error;
 

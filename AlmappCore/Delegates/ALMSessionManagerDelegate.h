@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class ALMSession;
+@class ALMSessionManager, ALMSession;
 
 @protocol ALMSessionManagerDelegate <NSObject>
 

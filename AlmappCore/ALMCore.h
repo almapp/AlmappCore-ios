@@ -11,6 +11,7 @@
 #import "ALMCoreDelegate.h"
 #import "ALMCoreModuleDelegate.h"
 
+#import "ALMSessionManager.h"
 #import "ALMRequestManager.h"
 #import "ALMChatManager.h"
 
