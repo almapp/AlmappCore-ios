@@ -13,13 +13,6 @@
 
 extern long long const kDefaultRequestID;
 
-extern NSString *const kHttpHeaderFieldApiKey;
-extern NSString *const kHttpHeaderFieldAccessToken;
-extern NSString *const kHttpHeaderFieldTokenType;
-extern NSString *const kHttpHeaderFieldExpiry;
-extern NSString *const kHttpHeaderFieldClient;
-extern NSString *const kHttpHeaderFieldUID;
-
 @class ALMRequestManager;
 
 @interface ALMRequest : NSObject

@@ -7,9 +7,12 @@
 //
 
 #import "ALMChatManager.h"
+#import "ALMRequestManager.h"
+#import "ALMHTTPHeaderHelper.h"
 
 @interface ALMChatManager ()
 
+@property (weak, nonatomic) NSURL *chatURL;
 @property (strong, nonatomic) NSMutableDictionary *clients;
 @property (strong, nonatomic) NSMutableDictionary *chats;
 
@@ -21,10 +24,9 @@
 
 #pragma mark - Constructor
 
-+ (instancetype)chatManagerWithURL:(NSURL *)url inRealm:(RLMRealm *)realm {
-    ALMChatManager *manager = [[self alloc] init];
++ (instancetype)chatManagerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate {
+    ALMChatManager *manager = [[super alloc] initWithCoreModuleDelegate:coreDelegate];
     manager.chatURL = url;
-    manager.chatRealm = realm;
     return manager;
 }
 
@@ -36,15 +38,15 @@
     if (!client) {
         client = [[FayeCppClient alloc] init];
         client.delegate = self;
-        client.urlString = url.absoluteString;
         [_clients setObject:client forKey:session.email];
     }
+    client.urlString = url.absoluteString;
 }
 
 - (ALMSession *)removeClient:(FayeCppClient *)client {
     NSString *sessionEmail = [_clients allKeysForObject:client][0];
     if (sessionEmail) {
-        ALMSession *session = [ALMSession sessionWithEmail:sessionEmail inRealm:self.chatRealm];
+        ALMSession *session = [ALMSession sessionWithEmail:sessionEmail inRealm:[self defaultRealm]];
         [_clients removeObjectForKey:sessionEmail];
         return session;
     }
@@ -52,12 +54,17 @@
 }
 
 - (FayeCppClient *)clientForSession:(ALMSession *)session {
-    return [_clients objectForKey:session];
+    FayeCppClient *client = [_clients objectForKey:session];
+    if (!client) {
+        [self addClientWithSession:session URL:self.chatURL];
+        client = [self clientForSession:session];
+    }
+    return client;
 }
 
 - (ALMSession *)sessionForClient:(FayeCppClient *)client {
     NSString *sessionEmail = [_clients allKeysForObject:client][0];
-    return (sessionEmail) ? [ALMSession sessionWithEmail:sessionEmail inRealm:self.chatRealm] : nil;
+    return (sessionEmail) ? [ALMSession sessionWithEmail:sessionEmail inRealm:[self defaultRealm]] : nil;
 }
 
 
@@ -66,9 +73,7 @@
 - (BOOL)connectAs:(ALMSession *)session {
     FayeCppClient *client = [self clientForSession:session];
     
-    if (!client.extValue || client.extValue == NULL || client.extValue == [NSNull null]) {
-        [client setExtValue:[self extValueForSession:session]];
-    }
+    [client setExtValue:[self extValueForSession:session]];
     
     BOOL success = [client connect];
     return success;
@@ -87,7 +92,8 @@
         return ext;
     }
     else {
-        return nil; // TODO: ext value
+        NSDictionary *headers = [ALMHTTPHeaderHelper createHeaderHashForSession:session apiKey:[self apiKey]];
+        return headers;
     }
 }
 

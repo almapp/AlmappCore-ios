@@ -138,21 +138,21 @@ static dispatch_once_t once_token;
 
 - (ALMRequestManager *)requestManager {
     if (!_requestManager) {
-        _requestManager = [[ALMRequestManager alloc] initWithBaseURL:_baseURL delegate:self];
+        _requestManager = [ALMRequestManager requestManagerWithURL:self.apiBaseURL coreDelegate:self];
     }
     return _requestManager;
 }
 
 - (ALMSessionManager *)sessionManager {
     if (!_sessionManager) {
-        _sessionManager = [[ALMSessionManager alloc] init];
+        _sessionManager = [ALMSessionManager sessionManagerWithCoreDelegate:self];
     }
     return _sessionManager;
 }
 
 - (ALMChatManager *)chatManager {
     if (!_chatManager) {
-        _chatManager = [ALMChatManager chatManagerWithURL:self.chatURL];
+        _chatManager = [ALMChatManager chatManagerWithURL:self.chatURL coreDelegate:self];
     }
     return _chatManager;
 }
@@ -196,27 +196,6 @@ static dispatch_once_t once_token;
 + (ALMSession *)currentSession {
     return [self sharedInstance] != nil ? [[self sharedInstance] currentSession] : nil;
 }
-
-
-#pragma mark - Controller
-
-
-+ (id)controller {
-    return nil;
-}
-
-+ (id)controller:(Class)controllerClass {
-    return ([self sharedInstance] != nil) ? [[self sharedInstance] controller:controllerClass] : nil;
-}
-
-- (id)controller:(Class)controllerClass {
-    return nil;
-}
-
-- (id)controller {
-    return nil;
-}
-
 
 
 #pragma mark - Academic
@@ -324,7 +303,7 @@ static dispatch_once_t once_token;
 }
 
 + (RLMRealm *)realmNamed:(NSString *)name {
-    NSString *path = [self writeablePathForFile:name];
+    NSString *path = [ALMUtil writeablePathForFile:name];
     return [RLMRealm realmWithPath:path];
 }
 
@@ -363,31 +342,34 @@ static dispatch_once_t once_token;
 }
 
 
-+ (NSString *)writeablePathForFile:(NSString*)fileName
-{
-#if TARGET_OS_IPHONE
-    // On iOS the Documents directory isn't user-visible, so put files there
-    NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-#else
-    // On OS X it is, so put files in Application Support. If we aren't running
-    // in a sandbox, put it in a subdirectory based on the bundle identifier
-    // to avoid accidentally sharing files between applications
-    NSString *path = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES)[0];
-    if (![[NSProcessInfo processInfo] environment][@"APP_SANDBOX_CONTAINER_ID"]) {
-        NSString *identifier = [[NSBundle mainBundle] bundleIdentifier];
-        if ([identifier length] == 0) {
-            identifier = [[[NSBundle mainBundle] executablePath] lastPathComponent];
-        }
-        path = [path stringByAppendingPathComponent:identifier];
-        
-        // create directory
-        [[NSFileManager defaultManager] createDirectoryAtPath:path
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:nil];
-    }
-#endif
-    return [path stringByAppendingPathComponent:fileName];
+#pragma mark - ALMCoreModuleDelegate implementation
+
+- (ALMSessionManager *)moduleSessionManagerFor:(Class)module {
+    return [self sessionManager];
+}
+
+- (ALMSession *)moduleCurrentSessionFor:(Class)module {
+    return [self currentSession];
+}
+
+- (NSString *)moduleApiKeyFor:(Class)module {
+    return [self apiKey];
+}
+
+- (RLMRealm *)module:(Class)module realmNamed:(NSString *)name {
+    return [self realmNamed:name];
+}
+
+- (RLMRealm *)moduleDefaultRealmFor:(Class)module {
+    return [self defaultRealm];
+}
+
+- (RLMRealm *)moduleTemporalRealmFor:(Class)module {
+    return [self temporalRealm];
+}
+
+- (RLMRealm *)moduleEncryptedRealmFor:(Class)module {
+    return [self encryptedRealm];
 }
 
 @end

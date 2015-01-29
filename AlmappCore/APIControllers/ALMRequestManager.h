@@ -11,6 +11,7 @@
 #import <Realm+JSON/RLMObject+JSON.h>
 
 #import "ALMRequestManagerDelegate.h"
+#import "ALMCoreModuleDelegate.h"
 
 #import "ALMRequest.h"
 #import "ALMSingleRequest.h"
@@ -26,10 +27,9 @@
 #pragma mark - Constructor
 
 - (id)init __attribute__((unavailable));
-- (id)initWithBaseURLString:(NSString *)urlString delegate:(id<ALMRequestManagerDelegate>)delegate;
-- (id)initWithBaseURL:(NSURL *)url delegate:(id<ALMRequestManagerDelegate>)delegate;
-- (id)initWithBaseURLString:(NSString *)urlString sessionConfiguration:(NSURLSessionConfiguration *)configuration delegate:(id<ALMRequestManagerDelegate>)delegate;
-- (id)initWithBaseURL:(NSURL *)url sessionConfiguration:(NSURLSessionConfiguration *)configuration delegate:(id<ALMRequestManagerDelegate>)delegate;
++ (instancetype)requestManagerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate;
++ (instancetype)requestManagerWithURL:(NSURL *)url configuration:(NSURLSessionConfiguration *)configuration coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate;
+
 
 #pragma mark - Managers
 

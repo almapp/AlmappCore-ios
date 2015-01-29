@@ -8,15 +8,9 @@
 
 #import "ALMRequest.h"
 #import "ALMRequestManager.h"
+#import "ALMHTTPHeaderHelper.h"
 
 long long const kDefaultRequestID = 1;
-
-NSString *const kHttpHeaderFieldApiKey = @"X-Api-Key";
-NSString *const kHttpHeaderFieldAccessToken = @"Access-Token";
-NSString *const kHttpHeaderFieldTokenType = @"Token-Type";
-NSString *const kHttpHeaderFieldExpiry = @"Expiry";
-NSString *const kHttpHeaderFieldClient = @"Client";
-NSString *const kHttpHeaderFieldUID = @"Uid";
 
 @interface ALMRequest ()
 
@@ -129,15 +123,10 @@ NSString *const kHttpHeaderFieldUID = @"Uid";
 + (NSDictionary *(^)(ALMSession *, NSString *))defaultHttpHeaders {
     return ^(ALMSession *session, NSString *apiKey) {
         if (session) {
-            return @{ @"access_token" : session.tokenAccessKey,
-                      @"token_type"   : session.tokenType,
-                      @"client"      : session.client,
-                      @"uid"         : session.uid,
-                      @"expiry"      : [NSString stringWithFormat:@"%ld", (long)session.tokenExpiration],
-                      kHttpHeaderFieldApiKey      : apiKey};
+            return [ALMHTTPHeaderHelper createHeaderHashForSession:session apiKey:apiKey];
         }
         else {
-            return @{kHttpHeaderFieldApiKey : apiKey};
+            return [ALMHTTPHeaderHelper createHeaderHashForApiKey:apiKey];
         }
     };
 }

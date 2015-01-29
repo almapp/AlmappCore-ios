@@ -11,22 +11,24 @@
 
 #import "ALMSession.h"
 #import "ALMSessionManagerDelegate.h"
+#import "ALMCoreModule.h"
 
 extern NSString *const kDefaultLoginPath;
 
-@interface ALMSessionManager : NSObject <ALMSessionManagerDelegate>
+@interface ALMSessionManager : ALMCoreModule
 
 @property (weak, nonatomic) id<ALMSessionManagerDelegate> sessionManagerDelegate;
 
-@property (strong, nonatomic) ALMSession *currentSession;
+- (void)setCurrentSession:(ALMSession *)newSession;
 
-- (instancetype)initWithDelegate:(id<ALMSessionManagerDelegate>)delegate;
++ (instancetype)sessionManagerWithCoreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate;
 
 - (RLMResults *)availableSessions;
 
 - (RLMResults *)availableSessionsInRealm:(RLMRealm *)realm;
 
 - (NSString *)loginPostPath:(ALMSession *)session;
+- (NSDictionary *)loginParams:(ALMSession *)session;
 
 
 @end
