@@ -35,6 +35,8 @@
 }
 
 - (id)initWithBaseURL:(NSURL *)url sessionConfiguration:(NSURLSessionConfiguration *)configuration {
+    NSAssert(url != nil, @"Must provide a URL");
+    
     self = [super initWithBaseURL:url sessionConfiguration:configuration];
     if (self) {
         self.requestSerializer = [AFJSONRequestSerializer serializer];
