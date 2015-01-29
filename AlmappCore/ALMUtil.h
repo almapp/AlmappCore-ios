@@ -12,4 +12,6 @@
 
 + (BOOL)validateStringURL:(NSString*)urlString;
 
++ (NSString *)writeablePathForFile:(NSString*)fileName;
+
 @end

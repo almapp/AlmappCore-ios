@@ -62,6 +62,8 @@
 		F6B3582C1A796B1B00999DCE /* ALMChatManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B3582B1A796B1B00999DCE /* ALMChatManager.m */; };
 		F6B3582F1A79723300999DCE /* ALMChatTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B3582E1A79723300999DCE /* ALMChatTest.m */; };
 		F6B358341A798B6F00999DCE /* ALMSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B358331A798B6F00999DCE /* ALMSessionManager.m */; };
+		F6B358371A79A97100999DCE /* ALMHTTPHeaderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B358361A79A97100999DCE /* ALMHTTPHeaderHelper.m */; };
+		F6B3583B1A79ADEA00999DCE /* ALMCoreModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B3583A1A79ADEA00999DCE /* ALMCoreModule.m */; };
 		F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BDE1A51B02800FD4715 /* ALMUser.m */; };
 		F6D19BED1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BEC1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.m */; };
 		F6DCAF741A62CC2D008274D7 /* ALMBuilding.m in Sources */ = {isa = PBXBuildFile; fileRef = F6DCAF731A62CC2D008274D7 /* ALMBuilding.m */; };
@@ -189,6 +191,11 @@
 		F6B358301A79850100999DCE /* ALMConversable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMConversable.h; sourceTree = "<group>"; };
 		F6B358321A798B6F00999DCE /* ALMSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMSessionManager.h; sourceTree = "<group>"; };
 		F6B358331A798B6F00999DCE /* ALMSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMSessionManager.m; sourceTree = "<group>"; };
+		F6B358351A79A97100999DCE /* ALMHTTPHeaderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMHTTPHeaderHelper.h; sourceTree = "<group>"; };
+		F6B358361A79A97100999DCE /* ALMHTTPHeaderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMHTTPHeaderHelper.m; sourceTree = "<group>"; };
+		F6B358391A79ADEA00999DCE /* ALMCoreModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCoreModule.h; sourceTree = "<group>"; };
+		F6B3583A1A79ADEA00999DCE /* ALMCoreModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCoreModule.m; sourceTree = "<group>"; };
+		F6B3583C1A79AF3600999DCE /* ALMCoreModuleDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCoreModuleDelegate.h; sourceTree = "<group>"; };
 		F6D19BDD1A51B02800FD4715 /* ALMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUser.h; sourceTree = "<group>"; };
 		F6D19BDE1A51B02800FD4715 /* ALMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUser.m; sourceTree = "<group>"; };
 		F6D19BEB1A51CF4800FD4715 /* MCJSONNonNullStringTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCJSONNonNullStringTransformer.h; sourceTree = "<group>"; };
@@ -327,6 +334,8 @@
 				F65DD4BE1A505C6E006BCAF0 /* ALMUtil.m */,
 				F6A058A71A543E27001A1E45 /* ALMCore.h */,
 				F6A058A81A543E27001A1E45 /* ALMCore.m */,
+				F6B358391A79ADEA00999DCE /* ALMCoreModule.h */,
+				F6B3583A1A79ADEA00999DCE /* ALMCoreModule.m */,
 			);
 			path = AlmappCore;
 			sourceTree = "<group>";
@@ -358,6 +367,8 @@
 			children = (
 				F63F516C1A728B110055EB35 /* ALMRequestManager.h */,
 				F63F516D1A728B110055EB35 /* ALMRequestManager.m */,
+				F6B358351A79A97100999DCE /* ALMHTTPHeaderHelper.h */,
+				F6B358361A79A97100999DCE /* ALMHTTPHeaderHelper.m */,
 				F63F51591A72669B0055EB35 /* Requests */,
 				F6FB88C51A7669860076C8F4 /* Requests Factories */,
 			);
@@ -495,6 +506,7 @@
 				F60297D11A6EAE88004C92BD /* ALMRequestManagerDelegate.h */,
 				F60297CE1A6E8547004C92BD /* ALMSessionManagerDelegate.h */,
 				F6B358281A79687100999DCE /* ALMChatManagerDelegate.h */,
+				F6B3583C1A79AF3600999DCE /* ALMCoreModuleDelegate.h */,
 			);
 			path = Delegates;
 			sourceTree = "<group>";
@@ -693,6 +705,7 @@
 				F69C66AB1A6BEA4E006F1C0E /* ALMSection.m in Sources */,
 				F64478171A58EE820078FB29 /* ALMResourceConstants.m in Sources */,
 				F60F90771A5969F2002EF807 /* ALMComment.m in Sources */,
+				F6B358371A79A97100999DCE /* ALMHTTPHeaderHelper.m in Sources */,
 				F6DCAF741A62CC2D008274D7 /* ALMBuilding.m in Sources */,
 				F6B358341A798B6F00999DCE /* ALMSessionManager.m in Sources */,
 				F645D7B51A68A6BA0054A45A /* ALMGroup.m in Sources */,
@@ -701,6 +714,7 @@
 				F6FB88C81A766A2C0076C8F4 /* ALMSectionRequest.m in Sources */,
 				F69C66A51A6BEA37006F1C0E /* ALMScheduleItem.m in Sources */,
 				F63F51681A726AA50055EB35 /* ALMNestedCollectionRequest.m in Sources */,
+				F6B3583B1A79ADEA00999DCE /* ALMCoreModule.m in Sources */,
 				F63F516E1A728B110055EB35 /* ALMRequestManager.m in Sources */,
 				F6A058A91A543E27001A1E45 /* ALMCore.m in Sources */,
 				F6B358241A7964E200999DCE /* ALMChat.m in Sources */,

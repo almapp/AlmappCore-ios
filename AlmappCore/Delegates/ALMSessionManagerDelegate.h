@@ -8,14 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ALMSession.h"
+@class ALMSession;
 
 @protocol ALMSessionManagerDelegate <NSObject>
 
-- (NSDictionary *)loginParams:(ALMSession *)session;
-- (NSString *)loginPostPath:(ALMSession *)session;
+- (NSDictionary *)sessionManager:(ALMSessionManager *)manager loginParamsFor:(ALMSession *)session;
+- (NSString *)sessionManager:(ALMSessionManager *)manager  loginPostPathFor:(ALMSession *)session;
 
-- (ALMSession *)currentSession;
-- (void)setCurrentSession:(ALMSession *)session;
+- (ALMSession *)sessionManagerGetCurrentSession;
+- (BOOL)sessionManager:(ALMSessionManager *)manager shouldChangeToSession:(ALMSession *)session;
+- (void)sessionManager:(ALMSessionManager *)manager didChangeSessionTo:(ALMSession *)session;
 
 @end

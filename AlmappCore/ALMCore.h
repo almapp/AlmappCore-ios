@@ -9,12 +9,14 @@
 #import <Foundation/Foundation.h>
 
 #import "ALMCoreDelegate.h"
+#import "ALMCoreModuleDelegate.h"
+
 #import "ALMRequestManager.h"
 #import "ALMChatManager.h"
 
 #import "ALMUtil.h"
 
-@interface ALMCore : NSObject <ALMRequestManagerDelegate>
+@interface ALMCore : NSObject <ALMCoreModuleDelegate>
 
 #pragma mark - Public constructors
 
@@ -64,19 +66,6 @@
 
 - (ALMSession *)currentSession;
 + (ALMSession *)currentSession;
-
-
-#pragma mark - Controllers
-
-
-+ (id)controller:(Class)controllerClass;
-
-+ (id)controller;
-
-- (id)controller:(Class)controllerClass;
-
-- (id)controller;
-
 
 
 #pragma mark - Academic

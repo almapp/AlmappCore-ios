@@ -10,18 +10,40 @@
 
 NSString *const kDefaultLoginPath = @"auth/sign_in";
 
+@interface ALMSessionManager ()
+
+@property (strong, nonatomic) ALMSession *actualSession;
+
+@end
+
 @implementation ALMSessionManager
 
-- (instancetype)initWithDelegate:(id<ALMSessionManagerDelegate>)delegate {
-    self = [super init];
-    if (self) {
-        self.sessionManagerDelegate = delegate;
++ (instancetype)sessionManagerWithCoreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate {
+    return [[super alloc] initWithCoreModuleDelegate:coreDelegate];
+}
+
+- (void)setCurrentSession:(ALMSession *)newSession {
+    if ([_sessionManagerDelegate respondsToSelector:@selector(sessionManager:shouldChangeToSession:)]) {
+        if (![_sessionManagerDelegate sessionManager:self shouldChangeToSession:newSession]) {
+            return;
+        }
     }
-    return self;
+    _actualSession = newSession;
+     if ([_sessionManagerDelegate respondsToSelector:@selector(sessionManager:didChangeSessionTo:)]) {
+         [_sessionManagerDelegate sessionManager:self didChangeSessionTo:newSession];
+     }
+}
+
+- (ALMSession *)currentSession {
+    return _actualSession;
 }
 
 - (RLMResults *)availableSessions {
     return [self availableSessionsInRealm:[RLMRealm defaultRealm]];
+}
+
+- (ALMSessionManager *)sessionManager  {
+    return self;
 }
 
 - (RLMResults *)availableSessionsInRealm:(RLMRealm *)realm {
@@ -29,16 +51,16 @@ NSString *const kDefaultLoginPath = @"auth/sign_in";
 }
 
 - (NSString *)loginPostPath:(ALMSession *)session {
-    if ([_sessionManagerDelegate respondsToSelector:@selector(loginPostPath:)]) {
-        return [_sessionManagerDelegate loginPostPath:session];
+    if ([_sessionManagerDelegate respondsToSelector:@selector(sessionManager:loginPostPathFor:)]) {
+        return [_sessionManagerDelegate sessionManager:self loginPostPathFor:session];
     } else {
         return kDefaultLoginPath;
     }
 }
 
 - (NSDictionary *)loginParams:(ALMSession *)session {
-    if ([_sessionManagerDelegate respondsToSelector:@selector(loginParams:)]) {
-        return [_sessionManagerDelegate loginParams:session];
+    if ([_sessionManagerDelegate respondsToSelector:@selector(sessionManager:loginParamsFor:)]) {
+        return [_sessionManagerDelegate sessionManager:self loginParamsFor:session];
     } else {
         return @{ @"email" : session.email,
                   @"password" : session.password };

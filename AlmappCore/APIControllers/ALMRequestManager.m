@@ -8,9 +8,12 @@
 
 #import "ALMRequestManager.h"
 #import "ALMResourceConstants.h"
+#import "ALMHTTPHeaderHelper.h"
+#import "ALMSessionManager.h"
 
 @interface ALMRequestManager ()
 
+@property (weak, nonatomic) id<ALMCoreModuleDelegate> coreModuleDelegate;
 @property (strong, nonatomic) NSMutableArray *taskWaitingForAuth;
 @property (strong, nonatomic) NSURLSessionDataTask *loginTask;
 @property (assign) BOOL isAuthtenticating;
@@ -21,50 +24,42 @@
 
 #pragma mark - Constructors
 
-- (id)initWithBaseURL:(NSURL *)url delegate:(id<ALMRequestManagerDelegate>)delegate {
-    self = [super initWithBaseURL:url];
-    if (self) {
-        _requestManagerDelegate = delegate;
-        self.requestSerializer = [AFJSONRequestSerializer serializer];
-        self.responseSerializer = [AFJSONResponseSerializer serializer];
-    }
-    return self;
++ (instancetype)requestManagerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate {
+    return [self requestManagerWithURL:url configuration:nil coreDelegate:coreDelegate];
 }
 
-- (id)initWithBaseURL:(NSURL *)url sessionConfiguration:(NSURLSessionConfiguration *)configuration delegate:(id<ALMRequestManagerDelegate>)delegate {
++ (instancetype)requestManagerWithURL:(NSURL *)url configuration:(NSURLSessionConfiguration *)configuration coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate {
+    ALMRequestManager *manager = [[self alloc] initWithBaseURL:url sessionConfiguration:configuration];
+    manager.coreModuleDelegate = coreDelegate;
+    return manager;
+}
+
+- (id)initWithBaseURL:(NSURL *)url sessionConfiguration:(NSURLSessionConfiguration *)configuration {
     self = [super initWithBaseURL:url sessionConfiguration:configuration];
     if (self) {
-        _requestManagerDelegate = delegate;
         self.requestSerializer = [AFJSONRequestSerializer serializer];
         self.responseSerializer = [AFJSONResponseSerializer serializer];
     }
     return self;
 }
 
-- (id)initWithBaseURLString:(NSString *)urlString delegate:(id<ALMRequestManagerDelegate>)delegate {
-    return [self initWithBaseURL:[NSURL URLWithString:urlString] delegate:delegate];
-}
-
-- (id)initWithBaseURLString:(NSString *)urlString sessionConfiguration:(NSURLSessionConfiguration *)configuration delegate:(id<ALMRequestManagerDelegate>)delegate {
-    return [self initWithBaseURL:[NSURL URLWithString:urlString] sessionConfiguration:configuration delegate:delegate];
-}
 
 #pragma mark - Delegate usage
 
 - (NSString *)apiKey {
-    return _requestManagerDelegate.apiKey;
+    return [self.coreModuleDelegate moduleApiKeyFor:[self class]];
 }
 
 - (RLMRealm*)temporalRealm {
-    return [_requestManagerDelegate temporalRealm];
+    return [self.coreModuleDelegate moduleTemporalRealmFor:[self class]];
 }
 
 - (RLMRealm*)defaultRealm {
-    return [_requestManagerDelegate defaultRealm];
+    return [self.coreModuleDelegate moduleDefaultRealmFor:[self class]];
 }
 
 - (RLMRealm *)encryptedRealm {
-    return [_requestManagerDelegate encryptedRealm];
+    return [self.coreModuleDelegate moduleEncryptedRealmFor:[self class]];
 }
 
 - (void)setHttpRequestHeaders:(NSDictionary *)headers {
@@ -199,8 +194,10 @@
     NSAssert(session.realm != nil, @"Session must be saved on a Realm");
     
     NSDictionary *headers = [ALMRequest defaultHttpHeaders](nil, self.apiKey);
-    NSString *loginPath = [_requestManagerDelegate.sessionManager loginPostPath:session];
-    NSDictionary *params = [_requestManagerDelegate.sessionManager loginParams:session];
+    
+    ALMSessionManager *manager = [self.coreModuleDelegate moduleSessionManagerFor:self.class];
+    NSString *loginPath = [manager loginPostPath:session];
+    NSDictionary *params = [manager loginParams:session];
     
     [self setHttpRequestHeaders:headers];
     
@@ -234,8 +231,8 @@
 }
 
 - (ALMSession *)parseResponseHeaders:(NSDictionary *)headers data:(id)data to:(ALMSession *)session {
-    if ([self.requestManagerDelegate respondsToSelector:@selector(parseResponseHeaders:data:to:)]) {
-        return [self.requestManagerDelegate parseResponseHeaders:headers data:data to:session];
+    if ([self.requestManagerDelegate respondsToSelector:@selector(requestManager:parseResponseHeaders:data:to:)]) {
+        return [self.requestManagerDelegate requestManager:self parseResponseHeaders:headers data:data to:session];
     }
     else {
         NSDictionary *jsonResponse = @{kAUser : data[kASession][kAUser]};
@@ -244,12 +241,7 @@
         
         [realm beginWriteTransaction];
         
-        session.uid = headers[kHttpHeaderFieldUID];
-        session.tokenAccessKey = headers[kHttpHeaderFieldAccessToken];
-        session.tokenExpiration = [[headers objectForKey:kHttpHeaderFieldExpiry] integerValue];
-        session.client = headers[kHttpHeaderFieldClient];
-        session.tokenType = headers[kHttpHeaderFieldTokenType];
-        
+        [ALMHTTPHeaderHelper setHeaders:headers to:session];
         session.user = [ALMUser createOrUpdateInRealm:realm withJSONDictionary:jsonResponse];
         
         [realm commitWriteTransaction];
