@@ -16,19 +16,11 @@
 - (void)encodeWithCoder:(NSCoder *)encoder {
     //Encode properties, other class variables, etc
     [encoder encodeObject:self.email forKey:@"email"];
-    [encoder encodeInteger:self.tokenExpiration forKey:@"tokenExpiration"];
-    [encoder encodeObject:self.client forKey:@"client"];
-    [encoder encodeObject:self.uid forKey:@"uid"];
-    [encoder encodeObject:self.tokenType forKey:@"tokenType"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
     if((self = [super init])) {
         self.email = [decoder decodeObjectForKey:@"email"];
-        self.tokenExpiration = [decoder decodeIntegerForKey:@"tokenExpiration"];
-        self.client = [decoder decodeObjectForKey:@"client"];
-        self.uid = [decoder decodeObjectForKey:@"uid"];
-        self.tokenType = [decoder decodeObjectForKey:@"tokenType"];
     }
     return self;
 }
@@ -36,7 +28,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.email = self.tokenAccessKey = self.client = self.uid = self.tokenType = @"";
+        self.email = self.password = @"";
     }
     return self;
 }

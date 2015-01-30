@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class ALMSession, ALMSessionManager, RLMRealm;
-@class ALMCoreModule;
+@class ALMCoreModule, ALMApiKey;
 
 @protocol ALMCoreModuleDelegate <NSObject>
 
@@ -17,7 +17,7 @@
 
 - (ALMSessionManager *)moduleSessionManagerFor:(Class)module;
 - (ALMSession *)moduleCurrentSessionFor:(Class)module;
-- (NSString *)moduleApiKeyFor:(Class)module;
+- (ALMApiKey *)moduleApiKeyFor:(Class)module;
 
 - (RLMRealm *)module:(Class)module realmNamed:(NSString *)name;
 - (RLMRealm *)moduleDefaultRealmFor:(Class)module;

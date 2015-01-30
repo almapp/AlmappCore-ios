@@ -12,6 +12,7 @@
 @interface ALMSession : RLMObject
 
 @property NSString *email;
+@property NSString *password;
 
 @property ALMUser *user;
 @property NSString *lastIP;
