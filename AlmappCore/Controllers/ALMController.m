@@ -94,7 +94,6 @@
 }
 
 - (void)FETCH:(ALMResourceRequest *)request {
-    __block BOOL isLogingInBlock = _isLogingIn;
     __weak typeof(self) weakSelf = self;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
@@ -122,18 +121,18 @@
         
         BOOL needsAuth = [weakSelf shouldPerformLoginTo:request];
         
-        if (isLogingInBlock && needsAuth) {
+        if (_isLogingIn && needsAuth) {
             dispatch_sync(weakSelf.concurrentQueue, ^{
                 [weakSelf GET:request];
             });
         }
         else if(needsAuth) {
-            isLogingInBlock = YES;
+            _isLogingIn = YES;
 
             dispatch_barrier_async(weakSelf.concurrentQueue, ^{
                 NSURLSessionDataTask *loginTask = [weakSelf performLoginTaskWith:request.credential saveInRealm:request.realm onSuccess:^(NSURLSessionDataTask *task, ALMSession *session) {
                     dispatch_async(weakSelf.concurrentQueue, ^{
-                        isLogingInBlock = NO;
+                        _isLogingIn = NO;
                         __strong __typeof(weakSelf) strongSelf = weakSelf;
                         if (strongSelf) {
                             [strongSelf GET:request];
@@ -233,10 +232,8 @@
                 session = [weakSelf.requestManagerDelegate requestManager:nil parseResponseHeaders:[httpResponse allHeaderFields] data:responseObject withCredential:credential];
             }
             else {
-                
-                
                 NSDictionary *userJsonResponse = @{kAUser : responseObject[kASession][kAUser]};
-                NSDictionary *privateJsonResponse = @{@"private_data" : responseObject[kASession][@"private_data"]};
+                NSDictionary *privateJsonResponse = responseObject[kASession][@"private_data"];
                 
                 [ALMHTTPHeaderHelper setHeaders:[httpResponse allHeaderFields] toCredential:blockCredential];
                 
@@ -358,7 +355,7 @@
     }
     else {
         BOOL validToken = [self isTokenValidFor:request.credential];
-        return validToken;
+        return !validToken;
     }
     
     return NO;
