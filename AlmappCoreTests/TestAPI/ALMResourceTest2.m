@@ -18,6 +18,18 @@
 
 @implementation ALMResourceTest2
 
+- (void)testAuth {
+    self.expectation = [self expectationWithDescription:@"asdasd"];
+    [self.controller setup];
+    [self waitForExpectationsWithTimeout:self.timeout
+                                 handler:^(NSError *error) {
+                                     // handler is called on _either_ success or failure
+                                     if (error != nil) {
+                                         XCTFail(@"timeout error: %@", error);
+                                     }
+                                 }];
+}
+
 - (void)testSingle {
     [self resources:[ALMFaculty class] path:nil params:nil onSuccess:^(RLMResults *resources) {
         NSLog(@"%@", resources);

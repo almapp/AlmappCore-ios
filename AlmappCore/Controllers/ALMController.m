@@ -10,6 +10,9 @@
 #import "ALMSessionManager.h"
 #import "ALMResourceConstants.h"
 
+#import <AFOAuth2Manager/AFOAuth2Manager.h>
+#import <AFOAuth2Manager/AFHTTPRequestSerializer+OAuth2.h>
+
 @implementation NSDate (Compare)
 
 -(BOOL) isLaterThanOrEqualTo:(NSDate*)date {
@@ -66,6 +69,25 @@
     return self;
 }
 
+- (void)setup {
+    NSURL *baseURL = [NSURL URLWithString:@"http://patiwi-mcburger-pro.local:3000"];
+    AFOAuth2Manager *OAuth2Manager =
+    [[AFOAuth2Manager alloc] initWithBaseURL:baseURL
+                                    clientID:@"1a747c5d5de3753129d7376c3a84a208b01a1d52dcca1c0463c8ae7d644abb6f"
+                                      secret:@"9fbdb3d5639f916d87661bf23e1688c5b45c8d207deacdcb0b1192e040792672"];
+    
+    [OAuth2Manager authenticateUsingOAuthWithURLString:@"/oauth/token"
+                                              username:@"pelopez2@uc.cl"
+                                              password:@"randompassword"
+                                                 scope:@""
+                                               success:^(AFOAuthCredential *credential) {
+                                                   NSLog(@"Token: %@", credential.accessToken);
+                                               }
+                                               failure:^(NSError *error) {
+                                                   NSLog(@"Error: %@", error);
+                                               }];
+    self.requestSerializer setAuthorizationHeaderFieldWithCredential:<#(AFOAuthCredential *)#>
+}
 
 #pragma mark - GET
 

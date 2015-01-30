@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-AlmappCore-AFOAuth2Manager.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-AlmappCore-FayeCpp.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -37,32 +42,37 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>193C685E4312AA45576CE0BD</key>
+		<key>061469D34EB314A796A846FD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5180FFC7CCC65AD76200D5CB</key>
+		<key>1C550F21CF9000AD1A06A097</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>51BBA33654F39EFB3AF135A0</key>
+		<key>1E4EC9CB3EEF20C83D01EA85</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5BF02B8A62BA958482E106E2</key>
+		<key>2E081076338EA7EE4A3D87E0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B797B6E95B0CEAC45B70B35F</key>
+		<key>33C1BEB8F8809D963795F288</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>FE1BB7D2542CB932BAB19D03</key>
+		<key>3A909655CD46B2B59F4DF09D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>AA274B6338D87B8AFEEAC0AB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
