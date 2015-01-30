@@ -34,6 +34,8 @@
 - (void)FETCH:(ALMResourceRequest *)request;
 - (NSURLSessionDataTask *)GET:(ALMResourceRequest *)request;
 
+- (void)setup;
+
 - (RLMRealm*)temporalRealm;
 - (RLMRealm*)defaultRealm;
 - (RLMRealm *)encryptedRealm;

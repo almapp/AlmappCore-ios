@@ -20,6 +20,8 @@ PODS:
   - AFNetworking/UIKit (2.5.0):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - AFOAuth2Manager (2.0.0):
+    - AFNetworking (~> 2.2)
   - FayeCpp (0.1.7)
   - Realm (0.90.3):
     - Realm/Headers (= 0.90.3)
@@ -30,6 +32,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
+  - AFOAuth2Manager
   - FayeCpp
   - Realm+JSON (from `https://github.com/mrpatiwi/Realm-JSON.git`, commit `813d6b474848f3ebaa1f6c92562cce00e9069ac4`, branch `master`)
   - UICKeyChainStore
@@ -48,6 +51,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
+  AFOAuth2Manager: a7726957cbc14c229b5d5d648c934453b6bb55b0
   FayeCpp: 8f4ac60cbcc9eb0fea16e5be2dda6b521aa2146d
   Realm: 47528af12cc437c6fd0edbfd4c7c980b0b6ead2c
   Realm+JSON: 6e79752d27dde89c4ff188df45e52896a8cc719f
