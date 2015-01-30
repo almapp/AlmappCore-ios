@@ -20,7 +20,10 @@
 
 - (void)testAuth {
     self.expectation = [self expectationWithDescription:@"asdasd"];
-    [self.controller setup];
+    
+    ALMSession *session = [self testSession];
+    
+    [self.controller setupWithEmail:session.email password:session.password];
     [self waitForExpectationsWithTimeout:self.timeout
                                  handler:^(NSError *error) {
                                      // handler is called on _either_ success or failure

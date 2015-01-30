@@ -13,7 +13,7 @@
 
 - (ALMSessionManager *)sessionManager;
 - (ALMSession *)currentSession;
-- (NSString *)apiKey;
+- (ALMApiKey *)apiKey;
 
 - (id)initWithCoreModuleDelegate:(id<ALMCoreModuleDelegate>)delegate;
 

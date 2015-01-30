@@ -20,6 +20,7 @@
 - (void)testDatabaseDrop {
     XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:@"validGetSingleResource"];
     
+    /*
     NSURLSessionDataTask *op = [self.requestManager GET:[ALMSingleRequest request:^(ALMSingleRequest *builder) {
         builder.resourceClass = [ALMUser class];
         builder.resourceID = 1;
@@ -46,6 +47,7 @@
     [self waitForExpectationsWithTimeout:7 handler:^(NSError *error) {
         [op cancel];
     }];
+     */
 }
 
 @end

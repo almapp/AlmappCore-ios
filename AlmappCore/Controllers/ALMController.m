@@ -9,9 +9,14 @@
 #import "ALMController.h"
 #import "ALMSessionManager.h"
 #import "ALMResourceConstants.h"
+#import "ALMApiKey.h"
 
 #import <AFOAuth2Manager/AFOAuth2Manager.h>
 #import <AFOAuth2Manager/AFHTTPRequestSerializer+OAuth2.h>
+
+static NSString *const kCredentialKey = @"AlmappCore-Controller";
+static NSString *const kDefaultOAuthUrl = @"/oauth/token";
+static NSString *const kDefaultOAuthScope = @"";
 
 @implementation NSDate (Compare)
 
@@ -69,25 +74,61 @@
     return self;
 }
 
-- (void)setup {
-    NSURL *baseURL = [NSURL URLWithString:@"http://patiwi-mcburger-pro.local:3000"];
-    AFOAuth2Manager *OAuth2Manager =
-    [[AFOAuth2Manager alloc] initWithBaseURL:baseURL
-                                    clientID:@"1a747c5d5de3753129d7376c3a84a208b01a1d52dcca1c0463c8ae7d644abb6f"
-                                      secret:@"9fbdb3d5639f916d87661bf23e1688c5b45c8d207deacdcb0b1192e040792672"];
+
+
+- (AFOAuthCredential *)loadCredential {
+    return [AFOAuthCredential retrieveCredentialWithIdentifier:kCredentialKey];
+}
+
+- (BOOL)saveCredential:(AFOAuthCredential *)credential {
+    return [AFOAuthCredential storeCredential:credential withIdentifier:kCredentialKey];
+}
+
+- (void)setupWithEmail:(NSString *)email password:(NSString *)password {
+    [self setupWithEmail:email password:password oauthUrl:kDefaultOAuthUrl scope:kDefaultOAuthScope];
+}
+
+- (void)setupWithEmail:(NSString *)email password:(NSString *)password oauthUrl:(NSString *)oauthUrl scope:(NSString *)scope {
+    ALMApiKey *apiKey = [self apiKey];
     
-    [OAuth2Manager authenticateUsingOAuthWithURLString:@"/oauth/token"
-                                              username:@"pelopez2@uc.cl"
-                                              password:@"randompassword"
-                                                 scope:@""
+    AFOAuth2Manager *OAuth2Manager = [[AFOAuth2Manager alloc] initWithBaseURL:self.baseURL
+                                                                     clientID:apiKey.clientID
+                                                                       secret:apiKey.clientSecret];
+    
+    /*
+     AFOAuth2Manager *OAuth2Manager =
+     [[AFOAuth2Manager alloc] initWithBaseURL:baseURL
+     clientID:@"1a747c5d5de3753129d7376c3a84a208b01a1d52dcca1c0463c8ae7d644abb6f"
+     secret:@"9fbdb3d5639f916d87661bf23e1688c5b45c8d207deacdcb0b1192e040792672"];
+     */
+    __weak __typeof(self) weakSelf = self;
+    
+    [OAuth2Manager authenticateUsingOAuthWithURLString:oauthUrl
+                                              username:email
+                                              password:password
+                                                 scope:scope
                                                success:^(AFOAuthCredential *credential) {
                                                    NSLog(@"Token: %@", credential.accessToken);
+                                                   __strong __typeof(weakSelf) strongSelf = weakSelf;
+                                                   if (strongSelf) {
+                                                       BOOL didSave = [strongSelf saveCredential:credential];
+                                                       if (didSave) {
+                                                           NSLog(@"Did Save: %@", credential.accessToken);
+                                                       }
+                                                       else {
+                                                           NSLog(@"COULD NOT SAVE TOKEN: %@", credential.accessToken);
+                                                       }
+                                                       
+                                                       [strongSelf.requestSerializer setAuthorizationHeaderFieldWithCredential:credential];
+                                                       
+                                                   }
                                                }
                                                failure:^(NSError *error) {
                                                    NSLog(@"Error: %@", error);
                                                }];
-    self.requestSerializer setAuthorizationHeaderFieldWithCredential:<#(AFOAuthCredential *)#>
 }
+
+
 
 #pragma mark - GET
 
@@ -106,12 +147,6 @@
     else {
         ALMResource *result = [ALMResource objectOfType:request.resourceClass withID:request.resourceID inRealm:realm];
         return result;
-    }
-}
-
-- (void)FETCHMultiple:(NSArray *)requests {
-    for (ALMResourceRequest *request in requests) {
-        [self FETCH:request];
     }
 }
 
@@ -138,42 +173,9 @@
             [request publishLoaded:results];
         });
         
-        NSDictionary *headers = [weakSelf getHttpRequestHeadersFor:request.credential];
-        [ALMHTTPHeaderHelper setHttpRequestHeaders:headers toSerializer:self.requestSerializer];
-        
-        BOOL needsAuth = [weakSelf shouldPerformLoginTo:request];
-        
-        if (_isLogingIn && needsAuth) {
-            dispatch_sync(weakSelf.concurrentQueue, ^{
-                [weakSelf GET:request];
-            });
-        }
-        else if(needsAuth) {
-            _isLogingIn = YES;
-
-            dispatch_barrier_async(weakSelf.concurrentQueue, ^{
-                NSURLSessionDataTask *loginTask = [weakSelf performLoginTaskWith:request.credential saveInRealm:request.realm onSuccess:^(NSURLSessionDataTask *task, ALMSession *session) {
-                    dispatch_async(weakSelf.concurrentQueue, ^{
-                        _isLogingIn = NO;
-                        __strong __typeof(weakSelf) strongSelf = weakSelf;
-                        if (strongSelf) {
-                            [strongSelf GET:request];
-                        }
-                    });
-                } onFail:^(NSURLSessionDataTask *task, NSError *error) {
-                    dispatch_async(request.dispatchQueue, ^{
-                        [request publishError:[ALMError errorWithCode:ALMErrorCodeInvalidRequest] task:nil];
-                    });
-                }];
-                
-                NSLog(@"Login task: %@", loginTask);
-            });
-        }
-        else {
-            dispatch_async(weakSelf.concurrentQueue, ^{
-                [weakSelf GET:request];
-            });
-        }
+        dispatch_async(weakSelf.concurrentQueue, ^{
+            [weakSelf GET:request];
+        });
     });
 }
 
@@ -208,109 +210,10 @@
     return op;
 }
 
-- (NSURLSessionDataTask *)LOGIN:(ALMCredential *)credential onSuccess:(void (^)(NSURLSessionDataTask *, ALMSession *))onSuccess onFail:(void (^)(NSURLSessionDataTask *, NSError *))onFail {
-    
-    return [self performLoginTaskWith:credential saveInRealm:nil onSuccess:^(NSURLSessionDataTask *task, ALMSession *session) { // TODO: Realm param
-        if (onSuccess) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                onSuccess(task, nil); // TODO: get session
-            });
-        }
-    } onFail:^(NSURLSessionDataTask *task, NSError *error) {
-        if (onFail) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                onFail(task, error);
-            });
-        }
-    }];
-}
-
-- (NSURLSessionDataTask *)performLoginTaskWith:(ALMCredential *)credential
-                                   saveInRealm:(RLMRealm *)realm
-                                          onSuccess:(void (^)(NSURLSessionDataTask *task, ALMSession *session))onSuccess
-                                             onFail:(void (^)(NSURLSessionDataTask *task, NSError *error))onFail {
-    
-    NSDictionary *headers = [self getHttpRequestHeadersFor:nil];
-    [ALMHTTPHeaderHelper setHttpRequestHeaders:headers toSerializer:self.requestSerializer];
-    
-    ALMSessionManager *manager = [self.coreModuleDelegate moduleSessionManagerFor:self.class];
-    NSString *loginPath = [manager loginPostPath:[self baseURL]];
-    NSDictionary *params = [manager loginParams:credential];
-    
-    [self setHttpRequestHeaders:headers];
-    
-    __block ALMCredential * blockCredential = credential;
-    __weak typeof(self) weakSelf = self;
-    __block NSURLSessionDataTask *operation = nil;
-    
-    operation = [self POST:loginPath parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
-        
-        if ([task.response isKindOfClass:[NSHTTPURLResponse class]]) {
-            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-            
-            ALMSession *session = nil;
-            
-            if ([weakSelf.requestManagerDelegate respondsToSelector:@selector(requestManager:parseResponseHeaders:data:withCredential:)]) {
-                session = [weakSelf.requestManagerDelegate requestManager:nil parseResponseHeaders:[httpResponse allHeaderFields] data:responseObject withCredential:credential];
-            }
-            else {
-                NSDictionary *userJsonResponse = @{kAUser : responseObject[kASession][kAUser]};
-                NSDictionary *privateJsonResponse = responseObject[kASession][@"private_data"];
-                
-                [ALMHTTPHeaderHelper setHeaders:[httpResponse allHeaderFields] toCredential:blockCredential];
-                
-                [realm beginWriteTransaction];
-                
-                ALMUser *user = [ALMUser createOrUpdateInRealm:realm withJSONDictionary:userJsonResponse];
-                
-                session = [[ALMSession alloc] init];
-                session.email = blockCredential.email;
-                session.lastIP = privateJsonResponse[@"last_sign_in_ip"];
-                session.currentIP = privateJsonResponse[@"current_sign_in_ip"];
-                session.user = user;
-                
-                session = [ALMSession createOrUpdateInRealm:realm withObject:session];
-                session.credential = blockCredential;
-                
-                [realm commitWriteTransaction];
-            }
-            
-            if (onSuccess) {
-                onSuccess(operation, session);
-            }
-        }
-        else if (onFail) {
-            onFail(operation, nil);
-        }
-    
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"Could not perform login, error: %@", error);
-        if (onFail) {
-            onFail(task, error);
-        }
-    }];
-    
-    return operation;
-}
-
-
-- (NSDictionary *)getHttpRequestHeadersFor:(ALMCredential *)credential {
-    if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:httpRequestHeardersWithApiKey:as:)]) {
-        NSDictionary *headers = [_requestManagerDelegate requestManager:nil httpRequestHeardersWithApiKey:[self apiKey] as:credential];
-        return headers;
-    }
-    else {
-        NSDictionary *headers = [ALMHTTPHeaderHelper createHeaderHashForCredential:credential apiKey:[self apiKey]];
-        return headers;
-    }
-}
-
-
-
 
 #pragma mark - Delegate usage
 
-- (NSString *)apiKey {
+- (ALMApiKey *)apiKey {
     return [self.coreModuleDelegate moduleApiKeyFor:[self class]];
 }
 
@@ -334,63 +237,33 @@
 }
 
 - (void)publishWillPerformLoginAs:(ALMSession *)session {
-    if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:willPerformLoginAs:)]) {
+    /*if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:willPerformLoginAs:)]) {
         [_requestManagerDelegate requestManager:nil willPerformLoginAs:session];
-    }
+    }*/
 }
 
 - (void)publishSuccessfulLoginAs:(ALMSession *)session {
-    if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:loggedAs:)]) {
+    /*if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:loggedAs:)]) {
         [_requestManagerDelegate requestManager:nil loggedAs:session];
-    }
+    }*/
 }
 
 - (void)publishFailedLoginAs:(ALMCredential *)credentials error:(NSError *)error {
-    if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:authError:withCredentials:)]) {
+    /*if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:authError:withCredentials:)]) {
         [_requestManagerDelegate requestManager:nil authError:error withCredentials:credentials];
-    }
+    }*/
 }
 
 - (BOOL)validate:(ALMResourceRequest *)request {
-    if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:validate:)]) {
+    /*if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:validate:)]) {
         return [_requestManagerDelegate requestManager:nil validate:request];
     }
     else {
         return YES;
     }
-}
+     */
+    return YES;
 
-- (BOOL)shouldPerformLoginTo:(ALMResourceRequest *)request {
-    if (!request.credential) {
-        return NO;
-    }
-    
-    if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(request:shouldForceLogin:)]) {
-        if([_requestManagerDelegate request:request shouldForceLogin:request.credential]) {
-            return YES;
-        }
-    }
-    
-    if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(request:isTokenValidFor:)]) {
-        BOOL validToken = [_requestManagerDelegate request:request isTokenValidFor:request.credential];
-        return validToken;
-    }
-    else {
-        BOOL validToken = [self isTokenValidFor:request.credential];
-        return !validToken;
-    }
-    
-    return NO;
-}
-
-- (BOOL)isTokenValidFor:(ALMCredential *)credential {
-    if (!credential.tokenAccessKey || credential.tokenAccessKey.length == 0) {
-        return NO;
-    }
-    
-    NSDate *expiracyDate = [NSDate dateWithTimeIntervalSince1970:credential.tokenExpiration];
-    NSDate *now = [NSDate date];
-    return [now isEarlierThan:expiracyDate];
 }
 
 

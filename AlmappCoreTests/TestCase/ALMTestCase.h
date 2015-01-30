@@ -19,8 +19,6 @@
 
 @property (readonly) NSString* testRealmPath;
 
-@property (readonly) ALMRequestManager *requestManager;
-
 @property (readonly) ALMController *controller;
 
 @property (readonly) NSTimeInterval timeout;
