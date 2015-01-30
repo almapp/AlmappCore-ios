@@ -67,20 +67,20 @@ long long const kDefaultRequestID = 1;
 
 #pragma mark - Validations
 
-- (BOOL (^)(ALMSession*))tokenValidationOperation {
+- (BOOL (^)(ALMCredential*))tokenValidationOperation {
     if (!_tokenValidationOperation) {
         _tokenValidationOperation = [self.class defaultTokenValidationOperation];
     }
     return _tokenValidationOperation;
 }
 
-+ (BOOL (^)(ALMSession*))defaultTokenValidationOperation {
-    return ^(ALMSession *session) {
-        if (!session.tokenAccessKey || session.tokenAccessKey.length == 0) {
++ (BOOL (^)(ALMCredential*))defaultTokenValidationOperation {
+    return ^(ALMCredential *credential) {
+        if (!credential.tokenAccessKey || credential.tokenAccessKey.length == 0) {
             return NO;
         }
         
-        NSDate *expiracyDate = [NSDate dateWithTimeIntervalSince1970:session.tokenExpiration];
+        NSDate *expiracyDate = [NSDate dateWithTimeIntervalSince1970:credential.tokenExpiration];
         NSDate *now = [NSDate date];
         return [now isEarlierThan:expiracyDate];
     };
@@ -123,7 +123,7 @@ long long const kDefaultRequestID = 1;
 + (NSDictionary *(^)(ALMSession *, NSString *))defaultHttpHeaders {
     return ^(ALMSession *session, NSString *apiKey) {
         if (session) {
-            return [ALMHTTPHeaderHelper createHeaderHashForSession:session apiKey:apiKey];
+            return [ALMHTTPHeaderHelper createHeaderHashForCredential:session apiKey:apiKey];
         }
         else {
             return [ALMHTTPHeaderHelper createHeaderHashForApiKey:apiKey];

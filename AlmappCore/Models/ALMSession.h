@@ -7,20 +7,16 @@
 //
 
 #import "ALMUser.h"
+#import "ALMCredential.h"
 
 @interface ALMSession : RLMObject
 
 @property NSString *email;
-@property NSString *password;
 
 @property ALMUser *user;
-@property NSString *tokenAccessKey;
-@property NSInteger tokenExpiration;
-@property NSString *client;
-@property NSString *uid;
-@property NSString *tokenType;
 @property NSString *lastIP;
 @property NSString *currentIP;
+@property ALMCredential *credential;
 
 + (instancetype)sessionWithEmail:(NSString *)email inRealm:(RLMRealm *)realm;
 + (instancetype)sessionWithEmail:(NSString *)email;

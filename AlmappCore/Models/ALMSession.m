@@ -18,15 +18,13 @@
 + (NSDictionary *)defaultPropertyValues {
     return @{
              kREmail                    : kRDefaultNullString,
-             @"password"                : kRDefaultNullString,
-             @"tokenAccessKey"                       : kRDefaultNullString,
-             @"tokenExpiration"                       : @0,
-             @"client"                       : kRDefaultNullString,
-             @"uid"                       : kRDefaultNullString,
-             @"tokenType"                       : kRDefaultNullString,
              @"lastIP"                       : kRDefaultNullString,
              @"currentIP"                       : kRDefaultNullString,
              };
+}
+
++ (NSArray *)ignoredProperties {
+    return @[@"credential"];
 }
 
 + (NSString *)primaryKey {

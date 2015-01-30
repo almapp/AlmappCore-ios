@@ -24,25 +24,25 @@ NSString *const kOutgoingHttpHeaderFieldUID = @"uid";
 
 @implementation ALMHTTPHeaderHelper
 
-+ (void)setHeaders:(NSDictionary *)headers to:(ALMSession *)session {
-    session.uid             = headers[kIncommingHttpHeaderFieldUID];
-    session.tokenAccessKey  = headers[kIncommingHttpHeaderFieldAccessToken];
-    session.tokenExpiration = [[headers objectForKey:kIncommingHttpHeaderFieldExpiry] integerValue];
-    session.client          = headers[kIncommingHttpHeaderFieldClient];
-    session.tokenType       = headers[kIncommingHttpHeaderFieldTokenType];
++ (void)setHeaders:(NSDictionary *)headers toCredential:(ALMCredential *)credential {
+    credential.uid             = headers[kIncommingHttpHeaderFieldUID];
+    credential.tokenAccessKey  = headers[kIncommingHttpHeaderFieldAccessToken];
+    credential.tokenExpiration = [[headers objectForKey:kIncommingHttpHeaderFieldExpiry] integerValue];
+    credential.client          = headers[kIncommingHttpHeaderFieldClient];
+    credential.tokenType       = headers[kIncommingHttpHeaderFieldTokenType];
 }
 
 + (NSDictionary *)createHeaderHashForApiKey:(NSString *)apiKey {
     return @{kOutgoingHttpHeaderFieldApiKey : apiKey};
 }
 
-+ (NSDictionary *)createHeaderHashForSession:(ALMSession *)session apiKey:(NSString *)apiKey {
-    if (session) {
-        return @{ kOutgoingHttpHeaderFieldAccessToken : session.tokenAccessKey,
-                  kOutgoingHttpHeaderFieldTokenType   : session.tokenType,
-                  kOutgoingHttpHeaderFieldClient      : session.client,
-                  kOutgoingHttpHeaderFieldUID         : session.uid,
-                  kOutgoingHttpHeaderFieldExpiry      : [NSString stringWithFormat:@"%ld", (long)session.tokenExpiration],
++ (NSDictionary *)createHeaderHashForCredential:(ALMCredential *)credential apiKey:(NSString *)apiKey {
+    if (credential) {
+        return @{ kOutgoingHttpHeaderFieldAccessToken : credential.tokenAccessKey,
+                  kOutgoingHttpHeaderFieldTokenType   : credential.tokenType,
+                  kOutgoingHttpHeaderFieldClient      : credential.client,
+                  kOutgoingHttpHeaderFieldUID         : credential.uid,
+                  kOutgoingHttpHeaderFieldExpiry      : [NSString stringWithFormat:@"%ld", (long)credential.tokenExpiration],
                   kOutgoingHttpHeaderFieldApiKey      : apiKey};
     }
     else {

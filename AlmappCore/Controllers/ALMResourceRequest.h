@@ -21,7 +21,8 @@ extern BOOL const kRequestForceLogin;
 @property (readonly) RLMRealm *realm;
 - (void)setRealm:(RLMRealm *)realm;
 
-@property (weak, nonatomic) ALMSession *session;
+@property (strong, nonatomic) ALMCredential *credential;
+// @property (weak, nonatomic) ALMSession *session;
 
 @property (nonatomic, strong) dispatch_queue_t dispatchQueue;
 

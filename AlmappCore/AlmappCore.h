@@ -30,6 +30,7 @@
 #import "ALMRequestManager.h"
 #import "ALMSectionRequest.h"
 #import "ALMChatManager.h"
+#import "ALMController.h"
 
 #import "ALMArea.h"
 #import "ALMOrganization.h"

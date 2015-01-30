@@ -50,20 +50,20 @@ NSString *const kDefaultLoginPath = @"auth/sign_in";
     return [ALMSession allObjectsInRealm:realm];
 }
 
-- (NSString *)loginPostPath:(ALMSession *)session {
+- (NSString *)loginPostPath:(NSURL *)url {
     if ([_sessionManagerDelegate respondsToSelector:@selector(sessionManager:loginPostPathFor:)]) {
-        return [_sessionManagerDelegate sessionManager:self loginPostPathFor:session];
+        return [_sessionManagerDelegate sessionManager:self loginPostPathFor:url];
     } else {
         return kDefaultLoginPath;
     }
 }
 
-- (NSDictionary *)loginParams:(ALMSession *)session {
+- (NSDictionary *)loginParams:(ALMCredential *)credential {
     if ([_sessionManagerDelegate respondsToSelector:@selector(sessionManager:loginParamsFor:)]) {
-        return [_sessionManagerDelegate sessionManager:self loginParamsFor:session];
+        return [_sessionManagerDelegate sessionManager:self loginParamsFor:credential];
     } else {
-        return @{ @"email" : session.email,
-                  @"password" : session.password };
+        return @{ @"email" : credential.email,
+                  @"password" : credential.password };
     }
 }
 

@@ -26,8 +26,8 @@ extern NSString *const kOutgoingHttpHeaderFieldUID;
 
 @interface ALMHTTPHeaderHelper : NSObject
 
-+ (void)setHeaders:(NSDictionary *)headers to:(ALMSession *)session;
++ (void)setHeaders:(NSDictionary *)headers toCredential:(ALMCredential *)credential;
 + (NSDictionary *)createHeaderHashForApiKey:(NSString *)apiKey;
-+ (NSDictionary *)createHeaderHashForSession:(ALMSession *)session apiKey:(NSString *)apiKey;
++ (NSDictionary *)createHeaderHashForCredential:(ALMCredential *)credential apiKey:(NSString *)apiKey;
 + (void)setHttpRequestHeaders:(NSDictionary *)headers toSerializer:(AFHTTPRequestSerializer *)requestSerializer;
 @end

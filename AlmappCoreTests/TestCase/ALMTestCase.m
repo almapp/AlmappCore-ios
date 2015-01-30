@@ -42,4 +42,19 @@
     return 20;
 }
 
+- (ALMSession *)testSession {
+    if (!_testSession) {
+        ALMSession *session = [[ALMSession alloc] init];
+        
+        session.email = @"pelopez2@uc.cl";
+        session.password = @"randompassword";
+        
+        RLMRealm *realm = self.testRealm;
+        [realm beginWriteTransaction];
+        _testSession = [ALMSession createOrUpdateInRealm:realm withObject:session];
+        [realm commitWriteTransaction];
+    }
+    return _testSession;
+}
+
 @end

@@ -33,6 +33,7 @@
 		F63F51681A726AA50055EB35 /* ALMNestedCollectionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F63F51671A726AA50055EB35 /* ALMNestedCollectionRequest.m */; };
 		F63F516B1A726E2C0055EB35 /* ALMCollectionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F63F516A1A726E2C0055EB35 /* ALMCollectionRequest.m */; };
 		F63F516E1A728B110055EB35 /* ALMRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F63F516D1A728B110055EB35 /* ALMRequestManager.m */; };
+		F64204C91A7B09B700666DBE /* ALMCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = F64204C81A7B09B700666DBE /* ALMCredential.m */; };
 		F64478131A58ECB60078FB29 /* ALMCareer.m in Sources */ = {isa = PBXBuildFile; fileRef = F64478121A58ECB60078FB29 /* ALMCareer.m */; };
 		F64478171A58EE820078FB29 /* ALMResourceConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F64478161A58EE820078FB29 /* ALMResourceConstants.m */; };
 		F645D7B51A68A6BA0054A45A /* ALMGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = F645D7B41A68A6BA0054A45A /* ALMGroup.m */; };
@@ -136,6 +137,10 @@
 		F63F516A1A726E2C0055EB35 /* ALMCollectionRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCollectionRequest.m; sourceTree = "<group>"; };
 		F63F516C1A728B110055EB35 /* ALMRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMRequestManager.h; sourceTree = "<group>"; };
 		F63F516D1A728B110055EB35 /* ALMRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMRequestManager.m; sourceTree = "<group>"; };
+		F64204C61A7AFAAE00666DBE /* ALMNestedRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMNestedRequestDelegate.h; sourceTree = "<group>"; };
+		F64204C71A7B09B700666DBE /* ALMCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCredential.h; sourceTree = "<group>"; };
+		F64204C81A7B09B700666DBE /* ALMCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCredential.m; sourceTree = "<group>"; };
+		F64204CA1A7BABA300666DBE /* ALMChatListenerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMChatListenerDelegate.h; sourceTree = "<group>"; };
 		F64478111A58ECB60078FB29 /* ALMCareer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCareer.h; sourceTree = "<group>"; };
 		F64478121A58ECB60078FB29 /* ALMCareer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCareer.m; sourceTree = "<group>"; };
 		F64478151A58EE820078FB29 /* ALMResourceConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMResourceConstants.h; sourceTree = "<group>"; };
@@ -452,6 +457,8 @@
 			children = (
 				F6B358321A798B6F00999DCE /* ALMSessionManager.h */,
 				F6B358331A798B6F00999DCE /* ALMSessionManager.m */,
+				F64204C71A7B09B700666DBE /* ALMCredential.h */,
+				F64204C81A7B09B700666DBE /* ALMCredential.m */,
 			);
 			path = Session;
 			sourceTree = "<group>";
@@ -527,8 +534,10 @@
 				F60297D11A6EAE88004C92BD /* ALMRequestManagerDelegate.h */,
 				F60297CE1A6E8547004C92BD /* ALMSessionManagerDelegate.h */,
 				F6B358281A79687100999DCE /* ALMChatManagerDelegate.h */,
+				F64204CA1A7BABA300666DBE /* ALMChatListenerDelegate.h */,
 				F6B3583C1A79AF3600999DCE /* ALMCoreModuleDelegate.h */,
 				F6D652CD1A7A69ED000620A4 /* ALMRequestDelegate.h */,
+				F64204C61A7AFAAE00666DBE /* ALMNestedRequestDelegate.h */,
 			);
 			path = Delegates;
 			sourceTree = "<group>";
@@ -727,6 +736,7 @@
 				F69C66A81A6BEA47006F1C0E /* ALMCourse.m in Sources */,
 				F6647B5E1A56ED6A00D8C814 /* ALMOrganization.m in Sources */,
 				F649C7AE1A66C5A200CF64AA /* ALMResourceIndex.m in Sources */,
+				F64204C91A7B09B700666DBE /* ALMCredential.m in Sources */,
 				F6A058B31A5480C8001A1E45 /* ALMFaculty.m in Sources */,
 				F6A058AC1A54523C001A1E45 /* ALMCampus.m in Sources */,
 				F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */,

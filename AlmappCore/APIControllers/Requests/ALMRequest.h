@@ -32,8 +32,8 @@ extern long long const kDefaultRequestID;
 
 @property (copy, nonatomic) void (^onError)(NSURLSessionDataTask *task, NSError* error);
 
-@property (copy, nonatomic) BOOL (^tokenValidationOperation)(ALMSession *session);
-@property (readonly, copy, nonatomic) BOOL (^defaultTokenValidationOperation)(ALMSession *session);
+@property (copy, nonatomic) BOOL (^tokenValidationOperation)(ALMCredential *credential);
+@property (readonly, copy, nonatomic) BOOL (^defaultTokenValidationOperation)(ALMCredential *credential);
 
 @property (copy, nonatomic) NSDictionary* (^configureHttpRequestHeaders)(ALMSession *session, NSString *apiKey);
 + (NSDictionary *(^)(ALMSession *, NSString *))defaultHttpHeaders;

@@ -10,39 +10,70 @@
 
 @interface ALMResourceTest2 ()
 
+@property (copy, nonatomic) void (^successForNested)(id parent, RLMResults *collection);
 @property (copy, nonatomic) void (^success)(id result);
 @property (strong, nonatomic) XCTestExpectation *expectation;
 
 @end
 
-@implementation ALMResourceTest2 
+@implementation ALMResourceTest2
 
-- (void)setUp {
-    [super setUp];
-}
-
-- (void)testController {
+- (void)testSingle {
     [self resources:[ALMFaculty class] path:nil params:nil onSuccess:^(RLMResults *resources) {
         NSLog(@"%@", resources);
     }];
-    
+}
+
+- (void)testCollection {
     [self resource:[ALMPost class] id:1 path:nil params:nil onSuccess:^(id resource) {
         NSLog(@"%@", resource);
     }];
 }
 
-- (void)nestedResources:(Class)resourcesClass on:(Class)parentClass id:(long long)parentID path:(NSString *)path params:(id)params onSuccess:(void (^)(id, RLMArray *))onSuccess {
+- (void)testNested {
+    [self nestedResources:[ALMPlace class] on:[ALMFaculty class] id:1 path:nil params:nil onSuccess:^(id parent, RLMArray *results) {
+        NSLog(@"%@", parent);
+        NSLog(@"%@", results);
+    }];
+}
+
+- (void)testLogin {
+    NSString *desc = [NSString stringWithFormat:@"session"];
+    
+    self.expectation = [self expectationWithDescription:desc];
+    
+    ALMResourceRequest *req = [ALMResourceRequest request:^(ALMResourceRequest *r) {
+        r.credential = self.testSession.credential;
+        r.resourceClass = [ALMUser class];
+        r.customPath = @"/me";
+        r.realmPath = [self testRealmPath];
+        r.shouldLog = YES;
+        
+    } delegate:self];
+    
+    [self.controller FETCH:req];
+    
+    [self waitForExpectationsWithTimeout:self.timeout
+                                 handler:^(NSError *error) {
+                                     // handler is called on _either_ success or failure
+                                     if (error != nil) {
+                                         XCTFail(@"timeout error: %@", error);
+                                     }
+                                 }];
+
+}
+
+- (void)nestedResources2:(Class)resourcesClass on:(Class)parentClass id:(long long)parentID path:(NSString *)path params:(id)params onSuccess:(void (^)(id, RLMResults *))onSuccess {
     NSString *desc = [NSString stringWithFormat:@"ResourceRequest %@ - %lld / %@" , parentClass, parentID, resourcesClass];
     
     self.expectation = [self expectationWithDescription:desc];
     
-    ALMNestedResourceRequest *req = [ALMNestedResourceRequest requestNested:^(ALMNestedResourceRequest *r) {
-        
-    } delegate:self];
+    self.successForNested = onSuccess;
     
-    ALMNestedResourceRequest *req = [ALMNestedResourceRequest request:^(ALMNestedResourceRequest *r) {
+    ALMNestedResourceRequest *req = [ALMNestedResourceRequest requestNested:^(ALMNestedResourceRequest *r) {
         r.resourceClass = resourcesClass;
-        r.
+        r.parentClass = parentClass;
+        r.parentID = parentID;
         r.customPath = path;
         r.parameters = params;
         r.realmPath = [self testRealmPath];
@@ -157,6 +188,18 @@
     [_expectation fulfill];
 }
 
+- (void)request:(ALMResourceRequest *)request didFetchParent:(id)parent nestedCollection:(RLMResults *)collection {
+    NSLog(@"didFetchParent %@ : %@", parent, collection);
+    XCTAssertNotNil(parent);
+    XCTAssertNotEqual(collection.count, 0);
+    
+    if (self.successForNested) {
+        self.successForNested(parent, collection);
+    }
+    
+    [_expectation fulfill];
+}
+
 - (void)request:(ALMResourceRequest *)request sortOrFilter:(RLMResults *)resources {
     NSLog(@"sortOrFilter %@", resources);
 }
@@ -170,9 +213,6 @@
     return NO;
 }
 
-- (BOOL)request:(ALMResourceRequest *)request commit:(Class)resourceClass data:(NSDictionary *)data inRealm:(RLMRealm *)realm {
-    return NO;
-}
 
 
 @end

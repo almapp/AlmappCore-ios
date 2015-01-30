@@ -16,12 +16,12 @@
 
 @implementation ALMNestedResourceRequest
 
-+ (ALMNestedResourceRequest *)requestNested:(void (^)(ALMNestedResourceRequest *))builderBlock delegate:(id<ALMRequestDelegate>)delegate {
++ (ALMNestedResourceRequest *)requestNested:(void (^)(ALMNestedResourceRequest *))builderBlock delegate:(id<ALMNestedRequestDelegate>)delegate {
     
     NSParameterAssert(builderBlock);
     
     ALMNestedResourceRequest *request = [[self alloc] init];
-    request.requestDelegate = delegate;
+    request.nestedRequestDelegate = delegate;
     
     builderBlock(request);
     
@@ -35,7 +35,7 @@
             r.resourceID = self.parentID;
             r.customPath = self.parentCustomPath;
             r.realmPath = self.realmPath;
-            r.session = self.session;
+            r.credential = self.credential;
             r.shouldLog = self.shouldLog;
             r.dispatchQueue = self.dispatchQueue;
             
@@ -52,7 +52,7 @@
             r.resourceID = self.resourceID;
             r.customPath = self.customPath;
             r.realmPath = self.realmPath;
-            r.session = self.session;
+            r.credential = self.credential;
             r.shouldLog = self.shouldLog;
             r.dispatchQueue = self.dispatchQueue;
             r.parameters = self.parameters;
@@ -69,10 +69,23 @@
 
 - (void)request:(ALMResourceRequest *)request didLoadResource:(ALMResource *)resource {
     [self publishLoaded:resource];
+    
+    /*
+    NSString *nestedCollectionName = [self.resourceClass performSelector:@selector(realmPluralForm)];
+    SEL collectionSelector = NSSelectorFromString([NSString stringWithFormat:@"%@", nestedCollectionName]);
+    
+    if ([resource respondsToSelector:collectionSelector]) {
+        IMP imp = [resource methodForSelector:collectionSelector];
+        RLMArray* (*func)(id, SEL) = (void*)imp;
+        RLMArray *parentNestedResourcecollection = func(resource, collectionSelector);
+        
+        
+    }
+     */
 }
 
 - (void)request:(ALMResourceRequest *)request didLoadResources:(RLMResults *)resources {
-    [self publishLoaded:resources];
+    
 }
 
 - (void)request:(ALMResourceRequest *)request didFetchResource:(ALMResource *)resource task:(NSURLSessionDataTask *)task {
@@ -105,8 +118,8 @@
 - (BOOL)relateParent:(ALMResource *)parent with:(RLMResults *)collection {
     RLMRealm *realm = self.realm;
     
-    NSString *nestedCollectionName = [self.resourceClass performSelector:@selector(realmPluralForm)];
-    NSString *resourceParentName = [[parent class] performSelector:@selector(realmSingleForm)];
+    NSString *nestedCollectionName = (_nestedCollectionAlias) ? _nestedCollectionAlias : [self.resourceClass performSelector:@selector(realmPluralForm)];
+    NSString *resourceParentName = (_parentAlias) ? _parentAlias : [self.parentClass performSelector:@selector(realmSingleForm)];
     
     // http://stackoverflow.com/questions/7017281/performselector-may-cause-a-leak-because-its-selector-is-unknown
     SEL collectionSelector = NSSelectorFromString([NSString stringWithFormat:@"%@", nestedCollectionName]);
@@ -132,6 +145,11 @@
     }
     
     [realm commitWriteTransaction];
+    
+    if (_nestedRequestDelegate && [_nestedRequestDelegate respondsToSelector:@selector(request:didFetchParent:nestedCollection:)]) {
+        [_nestedRequestDelegate request:self didFetchParent:parent nestedCollection:collection];
+    }
+    
     return YES;
 }
 
