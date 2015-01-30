@@ -25,4 +25,6 @@
 
 @property (readonly) NSTimeInterval timeout;
 
+@property (strong, nonatomic) ALMSession *testSession;
+
 @end

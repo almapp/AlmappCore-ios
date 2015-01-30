@@ -11,12 +11,14 @@
 
 #import "ALMCoreModule.h"
 #import "ALMChatManagerDelegate.h"
+#import "ALMChatListenerDelegate.h"
 #import "ALMSession.h"
 #import "ALMChat.h"
 
 @interface ALMChatManager : ALMCoreModule <FayeCppClientDelegate>
 
 @property (weak, nonatomic) id<ALMChatManagerDelegate> chatManagerDelegate;
+@property (weak, nonatomic) id<ALMChatListenerDelegate> chatListenerDelegate;
 @property (assign, nonatomic) BOOL shouldLog;
 
 - (id)init __attribute__((unavailable));

@@ -198,8 +198,8 @@
     NSDictionary *headers = [ALMRequest defaultHttpHeaders](nil, self.apiKey);
     
     ALMSessionManager *manager = [self.coreModuleDelegate moduleSessionManagerFor:self.class];
-    NSString *loginPath = [manager loginPostPath:session];
-    NSDictionary *params = [manager loginParams:session];
+    NSString *loginPath = [manager loginPostPath:self.baseURL];
+    NSDictionary *params = [manager loginParams:session.credential];
     
     [self setHttpRequestHeaders:headers];
     
@@ -233,8 +233,8 @@
 }
 
 - (ALMSession *)parseResponseHeaders:(NSDictionary *)headers data:(id)data to:(ALMSession *)session {
-    if ([self.requestManagerDelegate respondsToSelector:@selector(requestManager:parseResponseHeaders:data:to:)]) {
-        return [self.requestManagerDelegate requestManager:self parseResponseHeaders:headers data:data to:session];
+    if ([self.requestManagerDelegate respondsToSelector:@selector(requestManager:parseResponseHeaders:data:withCredential:)]) {
+        return [self.requestManagerDelegate requestManager:self parseResponseHeaders:headers data:data withCredential:session.credential];
     }
     else {
         NSDictionary *jsonResponse = @{kAUser : data[kASession][kAUser]};
@@ -243,7 +243,7 @@
         
         [realm beginWriteTransaction];
         
-        [ALMHTTPHeaderHelper setHeaders:headers to:session];
+        [ALMHTTPHeaderHelper setHeaders:headers toCredential:session.credential];
         session.user = [ALMUser createOrUpdateInRealm:realm withJSONDictionary:jsonResponse];
         
         [realm commitWriteTransaction];

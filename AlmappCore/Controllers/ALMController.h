@@ -10,6 +10,7 @@
 #import <Realm+JSON/RLMObject+JSON.h>
 
 #import "ALMRequestManagerDelegate.h"
+#import "ALMNestedRequestDelegate.h"
 #import "ALMCoreModuleDelegate.h"
 #import "ALMError.h"
 

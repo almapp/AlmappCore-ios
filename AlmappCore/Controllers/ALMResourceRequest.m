@@ -36,7 +36,7 @@ BOOL const kRequestForceLogin = NO;
 - (id)copyWithZone:(NSZone *)zone {
     ALMResourceRequest *newReq = [[ALMResourceRequest alloc] init];
     newReq.realmPath = self.realmPath;
-    newReq.session = self.session;
+    newReq.credential = self.credential;
     newReq.dispatchQueue = self.dispatchQueue;
     newReq.customPath = self.customPath;
     newReq.resourceID = self.resourceID;

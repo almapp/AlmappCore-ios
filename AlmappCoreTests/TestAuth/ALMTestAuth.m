@@ -20,17 +20,7 @@
 @implementation ALMTestAuth
 
 - (ALMSession *)session {
-    ALMSession *session = [[ALMSession alloc] init];
-    
-    session.email = @"pelopez2@uc.cl";
-    session.password = @"randompassword";
-    
-    RLMRealm *realm = self.testRealm;
-    [realm beginWriteTransaction];
-    session = [ALMSession createOrUpdateInRealm:realm withObject:session];
-    [realm commitWriteTransaction];
-    
-    return session;
+    return self.testSession;
 }
 
 - (void)testLogin {

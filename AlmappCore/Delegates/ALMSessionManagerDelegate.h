@@ -12,8 +12,8 @@
 
 @protocol ALMSessionManagerDelegate <NSObject>
 
-- (NSDictionary *)sessionManager:(ALMSessionManager *)manager loginParamsFor:(ALMSession *)session;
-- (NSString *)sessionManager:(ALMSessionManager *)manager  loginPostPathFor:(ALMSession *)session;
+- (NSDictionary *)sessionManager:(ALMSessionManager *)manager loginParamsFor:(ALMCredential *)credential;
+- (NSString *)sessionManager:(ALMSessionManager *)manager loginPostPathFor:(NSURL *)url;
 
 - (ALMSession *)sessionManagerGetCurrentSession;
 - (BOOL)sessionManager:(ALMSessionManager *)manager shouldChangeToSession:(ALMSession *)session;
