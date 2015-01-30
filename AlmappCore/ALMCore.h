@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UICKeyChainStore/UICKeyChainStore.h>
 
 #import "ALMCoreDelegate.h"
 #import "ALMCoreModuleDelegate.h"
@@ -17,6 +18,8 @@
 #import "ALMChatManager.h"
 
 #import "ALMUtil.h"
+
+extern NSString *const kFrameworkIdentifier;
 
 @interface ALMCore : NSObject <ALMCoreModuleDelegate>
 
@@ -51,6 +54,7 @@
 @property (strong, nonatomic) NSURL *chatURL;
 
 @property (strong, nonatomic) NSString *apiKey;
+@property (assign, nonatomic) BOOL shouldSyncToCloud;
 
 @property (strong, nonatomic) ALMRequestManager *requestManager;
 @property (strong, nonatomic) ALMController *controller;
@@ -70,6 +74,12 @@
 
 - (ALMSession *)currentSession;
 + (ALMSession *)currentSession;
+
+
+#pragma mark - Keychain
+
+- (UICKeyChainStore *)keyStore;
++ (UICKeyChainStore *)keyStore;
 
 
 #pragma mark - Academic

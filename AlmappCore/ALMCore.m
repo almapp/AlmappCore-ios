@@ -8,9 +8,12 @@
 
 #import "ALMCore.h"
 
+NSString *const kFrameworkIdentifier = @"com.almapp.almappcore-ios";
+
 static NSString *const kMemoryRealmPath = @"temporal.realm";
 static NSString *const kDefaultRealmPath = @"realm_v1.realm";
 static NSString *const kEncryptedRealmPath = @"encrypted_realm_v1.realm";
+static BOOL const kDefaultSyncToCloud = YES;
 
 static short const kDefaultApiVersion = 1;
 static short const kDefaultSemesterDividerMonth = 7;
@@ -48,6 +51,7 @@ static short const kDefaultSemesterDividerMonth = 7;
         _apiKey = apiKey;
         _apiVersion = version;
         _controllers = [NSMutableDictionary dictionary];
+        _shouldSyncToCloud = kDefaultSyncToCloud;
     }
     return self;
 }
@@ -205,7 +209,20 @@ static dispatch_once_t once_token;
 }
 
 + (ALMSession *)currentSession {
-    return [self sharedInstance] != nil ? [[self sharedInstance] currentSession] : nil;
+    return [self isAlive] ? [[self sharedInstance] currentSession] : nil;
+}
+
+
+#pragma mark - Keychain
+
+- (UICKeyChainStore *)keyStore {
+    UICKeyChainStore *keychain = [UICKeyChainStore keyChainStoreWithService:kFrameworkIdentifier];
+    keychain.synchronizable = self.shouldSyncToCloud;
+    return keychain;
+}
+
++ (UICKeyChainStore *)keyStore {
+    return [self isAlive] ? [[self sharedInstance] keyStore] : nil;
 }
 
 

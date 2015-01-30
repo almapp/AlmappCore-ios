@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ALMCredential : NSObject
+@interface ALMCredential : NSObject <NSCoding>
 
 @property (strong, nonatomic) NSString *email;
 @property (strong, nonatomic) NSString *password;
@@ -18,5 +18,9 @@
 @property (strong, nonatomic) NSString *client;
 @property (strong, nonatomic) NSString *uid;
 @property (strong, nonatomic) NSString *tokenType;
+
++ (instancetype)credentialForEmail:(NSString *)email;
+
+- (void)save;
 
 @end

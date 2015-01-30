@@ -31,6 +31,32 @@
     return kREmail;
 }
 
+- (ALMCredential *)credential {
+    if (!_credential) {
+        _credential = [ALMCredential credentialForEmail:self.email];
+        if (!_credential) {
+            _credential = [[ALMCredential alloc] init];
+            _credential.email = self.email;
+        }
+    }
+    return _credential;
+}
+
++ (instancetype)sessionWithEmail:(NSString *)email password:(NSString *)password inRealm:(RLMRealm *)realm {
+    ALMSession *session = [self sessionWithEmail:email inRealm:realm];
+    if (session) {
+        return session;
+    }
+    session = [[self alloc] init];
+    session.email = email;
+    session.credential.email = email;
+    session.credential.password = password;
+    [realm beginWriteTransaction];
+    session = [self createInRealm:realm withObject:session];
+    [realm commitWriteTransaction];
+    return session;
+}
+
 + (instancetype)sessionWithEmail:(NSString *)email inRealm:(RLMRealm *)realm{
     return [self objectInRealm:realm forPrimaryKey:email];
     
