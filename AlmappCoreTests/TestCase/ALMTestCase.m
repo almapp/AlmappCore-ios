@@ -39,7 +39,7 @@
 }
 
 - (NSTimeInterval)timeout {
-    return 20;
+    return 3000;
 }
 
 - (ALMSession *)testSession {
