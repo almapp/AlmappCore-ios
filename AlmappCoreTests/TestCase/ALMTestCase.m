@@ -44,15 +44,8 @@
 
 - (ALMSession *)testSession {
     if (!_testSession) {
-        ALMSession *session = [[ALMSession alloc] init];
-        
-        session.email = @"pelopez2@uc.cl";
-        session.password = @"randompassword";
-        
         RLMRealm *realm = self.testRealm;
-        [realm beginWriteTransaction];
-        _testSession = [ALMSession createOrUpdateInRealm:realm withObject:session];
-        [realm commitWriteTransaction];
+        _testSession = [ALMSession sessionWithEmail:@"pelopez2@uc.cl" password:@"randompassword" inRealm:realm];
     }
     return _testSession;
 }

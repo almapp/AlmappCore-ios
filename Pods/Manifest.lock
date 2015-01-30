@@ -26,11 +26,13 @@ PODS:
   - Realm+JSON (0.2.5):
     - Realm (~> 0.90)
   - Realm/Headers (0.90.3)
+  - UICKeyChainStore (2.0.2)
 
 DEPENDENCIES:
   - AFNetworking
   - FayeCpp
   - Realm+JSON (from `https://github.com/mrpatiwi/Realm-JSON.git`, commit `813d6b474848f3ebaa1f6c92562cce00e9069ac4`, branch `master`)
+  - UICKeyChainStore
 
 EXTERNAL SOURCES:
   Realm+JSON:
@@ -49,5 +51,6 @@ SPEC CHECKSUMS:
   FayeCpp: 8f4ac60cbcc9eb0fea16e5be2dda6b521aa2146d
   Realm: 47528af12cc437c6fd0edbfd4c7c980b0b6ead2c
   Realm+JSON: 6e79752d27dde89c4ff188df45e52896a8cc719f
+  UICKeyChainStore: 14bf8cb308432c2ca7c1b8b600398d4d6af8cb8d
 
 COCOAPODS: 0.35.0

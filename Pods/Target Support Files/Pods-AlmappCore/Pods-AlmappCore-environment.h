@@ -72,3 +72,9 @@
 #define COCOAPODS_VERSION_MINOR_Realm_Headers 90
 #define COCOAPODS_VERSION_PATCH_Realm_Headers 3
 
+// UICKeyChainStore
+#define COCOAPODS_POD_AVAILABLE_UICKeyChainStore
+#define COCOAPODS_VERSION_MAJOR_UICKeyChainStore 2
+#define COCOAPODS_VERSION_MINOR_UICKeyChainStore 0
+#define COCOAPODS_VERSION_PATCH_UICKeyChainStore 2
+

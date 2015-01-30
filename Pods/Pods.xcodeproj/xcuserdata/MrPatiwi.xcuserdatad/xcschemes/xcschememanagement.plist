@@ -24,6 +24,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-AlmappCore-UICKeyChainStore.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-AlmappCore.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,27 +37,32 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>822C6FB8F5AF331195B96028</key>
+		<key>193C685E4312AA45576CE0BD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8E92D24B05B250D97C85F1C0</key>
+		<key>5180FFC7CCC65AD76200D5CB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AB3009B6A58F2BD6CCA7CFF7</key>
+		<key>51BBA33654F39EFB3AF135A0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>ACDAA288ED7A0D9185C28FA4</key>
+		<key>5BF02B8A62BA958482E106E2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B59EF4ABD88F8D6B9FFCAF98</key>
+		<key>B797B6E95B0CEAC45B70B35F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FE1BB7D2542CB932BAB19D03</key>
 		<dict>
 			<key>primary</key>
 			<true/>

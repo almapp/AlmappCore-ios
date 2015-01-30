@@ -16,8 +16,12 @@
 @property ALMUser *user;
 @property NSString *lastIP;
 @property NSString *currentIP;
-@property ALMCredential *credential;
+@property (strong, nonatomic) ALMCredential *credential;
 
+// For creating or loading if present
++ (instancetype)sessionWithEmail:(NSString *)email password:(NSString *)password inRealm:(RLMRealm *)realm;
+
+// For loading
 + (instancetype)sessionWithEmail:(NSString *)email inRealm:(RLMRealm *)realm;
 + (instancetype)sessionWithEmail:(NSString *)email;
 
