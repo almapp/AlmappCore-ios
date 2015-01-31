@@ -171,12 +171,14 @@ static NSString *const kDefaultOAuthScope = @"";
                 return;
             }
             
+            /*
             if (![weakSelf validate:request]) {
                 dispatch_async(request.dispatchQueue, ^{
                     [request publishError:[ALMError errorWithCode:ALMErrorCodeInvalidRequest] task:nil];
                 });
                 return;
             }
+             */
             
             dispatch_async(request.dispatchQueue, ^{
                 [weakSelf LOAD:request].then(^(id loaded) {
