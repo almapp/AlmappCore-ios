@@ -21,6 +21,16 @@
     return request;
 }
 
++ (instancetype)request:(void (^)(ALMResourceRequestBlock *))builderBlock onLoad:(void (^)(id))onLoad onFetch:(void (^)(id, NSURLSessionDataTask *))onFetch onError:(void (^)(NSError *, NSURLSessionDataTask *))onError {
+    
+    ALMResourceRequestBlock *request = [self request:builderBlock];
+    request.onFetchResource = onFetch;
+    request.onFetchResources = onFetch;
+    request.onLoadResource = onLoad;
+    request.onLoadResources = onLoad;
+    return request;
+}
+
 - (void)request:(ALMResourceRequest *)request error:(NSError *)error task:(NSURLSessionDataTask *)task {
     if (_onError) {
         _onError(error, task);

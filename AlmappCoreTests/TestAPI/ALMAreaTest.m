@@ -18,7 +18,7 @@
 @implementation ALMAreaTest
 
 - (NSArray*)areaSubclasses {
-    return @[/*[ALMOrganization class],*/ [ALMCampus class], [ALMBuilding class], [ALMFaculty class], [ALMAcademicUnity class]];
+    return @[/*[ALMOrganization class], [ALMCampus class],*/ [ALMBuilding class], [ALMFaculty class], [ALMAcademicUnity class]];
 }
 
 - (void)testAreaRequests {
@@ -44,8 +44,9 @@
 }
 
 - (void)testNestedPlacesOn:(Class)areaSubclass id:(long long)areaSubclassID {
-    [self nestedResources:[ALMPlace class] on:[ALMCampus class] id:2 path:nil params:nil onSuccess:^(id parent, RLMArray *results) {
-        
+    [self nestedResources:[ALMPlace class] as:nil on:areaSubclass id:areaSubclassID as:@"area" path:nil params:nil onSuccess:^(id parent, RLMResults *results) {
+        NSLog(@"Parent: %@", parent);
+        NSLog(@"Collection: %@", results);
     }];
 }
 

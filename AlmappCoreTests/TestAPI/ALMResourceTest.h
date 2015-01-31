@@ -10,7 +10,7 @@
 
 @interface ALMResourceTest : ALMTestCase
 
-- (void(^)(NSURLSessionDataTask *, NSError *)) errorBlock:(XCTestExpectation *)expectation class:(Class)resourceClass;
+- (void(^)(NSError *, NSURLSessionDataTask *))errorBlock:(XCTestExpectation *)expectation class:(Class)resourceClass;
 
 - (void)resource:(Class)resourceClass
               id:(long long)resourceID
@@ -24,10 +24,12 @@
         onSuccess:(void(^)(RLMResults *resources))onSuccess;
 
 - (void)nestedResources:(Class)resourcesClass
+                     as:(NSString *)collectionAlias
                      on:(Class)parentClass
                      id:(long long)parentID
+                     as:(NSString *)parentAlias
                    path:(NSString *)path
                  params:(id)params
-              onSuccess:(void (^)(id parent, RLMArray *results))onSuccess;
+              onSuccess:(void (^)(id parent, RLMResults *results))onSuccess;
 
 @end

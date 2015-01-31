@@ -24,6 +24,15 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
     return total;
 }
 
++ (NSDictionary *)invert:(NSDictionary *)dictionary {
+    NSMutableDictionary *new = [NSMutableDictionary dictionaryWithCapacity:dictionary.count];
+    
+    for (NSString *key in [dictionary allKeys]) {
+        new[dictionary[key]] = key;
+    }
+    return new;
+}
+
 @end
 
 #pragma mark - String Category
@@ -82,6 +91,10 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
     return @{
              [self jatt:kAResourceID]     : kRResourceID
              };
+}
+
++ (NSDictionary *)JSONOutboundMappingDictionary {
+    return [NSDictionary invert:[self JSONInboundMappingDictionary]];
 }
 
 #pragma mark - Attributes helpers
@@ -214,6 +227,48 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
     [collection addObjects:newObjects];
 }
 
+- (RLMResults *)hasMany:(RLMResults *)resources {
+    NSString *nestedCollectionName = [[resources.firstObject class] performSelector:@selector(realmPluralForm)];
+    return [self hasMany:resources as:nestedCollectionName];
+}
+
+- (RLMResults *)hasMany:(RLMResults *)resources as:(NSString *)collectionProperty {
+    NSString *resourceParentName = [self.class performSelector:@selector(realmSingleForm)];
+    return [self hasMany:resources as:collectionProperty belongsToAs:resourceParentName];
+}
+
+- (RLMResults *)hasMany:(RLMResults *)resources as:(NSString *)collectionProperty belongsToAs:(NSString *)parentName {
+    
+    SEL collectionSelector = NSSelectorFromString([NSString stringWithFormat:@"%@", collectionProperty]);
+    SEL parentSelector = NSSelectorFromString([NSString stringWithFormat:@"set%@:", [parentName capitalizedString]]);
+    
+    RLMRealm *realm = self.realm;
+    
+    [realm beginWriteTransaction];
+    
+    if ([self respondsToSelector:collectionSelector]) {
+        IMP imp = [self methodForSelector:collectionSelector];
+        RLMArray* (*func)(id, SEL) = (void*)imp;
+        RLMArray *parentNestedResourcecollection = func(self, collectionSelector);
+        
+        [parentNestedResourcecollection removeAllObjects];
+        [parentNestedResourcecollection addObjects:resources];
+    }
+    
+    for (ALMResource *resource in resources) {
+        if([resource respondsToSelector:parentSelector]) {
+            IMP imp = [resource methodForSelector:parentSelector];
+            void (*func)(id, SEL, ALMResource*) = (void*)imp;
+            func(resource, parentSelector, self);
+        }
+    }
+    
+    [realm commitWriteTransaction];
+    
+    return resources;
+}
+
+
 + (instancetype)createOrUpdateInRealm:(RLMRealm *)realm withJSONDictionary:(NSDictionary *)dictionary {
     ALMResource *result = [super createOrUpdateInRealm:realm withJSONDictionary:dictionary];
     
@@ -325,19 +380,19 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
 }
 
 
-+ (id)allObjectsOfType:(Class)resourceClass {
++ (RLMResults *)allObjectsOfType:(Class)resourceClass {
     return [self allObjectsOfType:resourceClass inRealm:[RLMRealm defaultRealm]];
 }
 
-+ (id)allObjectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm {
++ (RLMResults *)allObjectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm {
     return [resourceClass allObjectsInRealm:realm];
 }
 
-+ (id)objectsOfType:(Class)resourceClass where:(NSString *)query {
++ (RLMResults *)objectsOfType:(Class)resourceClass where:(NSString *)query {
     return [self objectsOfType:resourceClass inRealm:[RLMRealm defaultRealm] where:query];
 }
 
-+ (id)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm where:(NSString *)query {
++ (RLMResults *)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm where:(NSString *)query {
     if (query && query.length > 0) {
         return [resourceClass objectsInRealm:realm where:query];
     }
@@ -346,12 +401,20 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
     }
 }
 
-+ (RLMResults *)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm withIDs:(NSArray *)array {
++ (RLMResults *)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm withProperty:(NSString *)property in:(NSArray *)array {
     NSString *query = [[array valueForKey:@"description"] componentsJoinedByString:@", "];
     query = [NSString stringWithFormat:@"{ %@ }", query];
-    query = [NSString stringWithFormat:@"%@ IN %@", kRResourceID, query];
+    query = [NSString stringWithFormat:@"%@ IN %@", property, query];
     return [ALMResource objectsOfType:resourceClass inRealm:realm where:query];
-    
+}
+
++ (RLMResults *)objectsInRealm:(RLMRealm *)realm withProperty:(NSString *)property in:(NSArray *)array {
+    return [self objectsOfType:self.class inRealm:realm withProperty:property in:array];
+}
+
+
++ (RLMResults *)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm withIDs:(NSArray *)array {
+    return [self objectsOfType:resourceClass inRealm:realm withProperty:kRResourceID in:array];
 }
 
 + (RLMResults *)objectsInRealm:(RLMRealm *)realm withIDs:(NSArray *)array {

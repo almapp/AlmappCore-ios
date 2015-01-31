@@ -18,23 +18,20 @@
 @implementation ALMManagerTests
 
 - (void)testInvalidClassRequest {
-    /*
-    ALMRequestManager* manager = [self requestManager];
-    [manager GET:[ALMSingleRequest request:^(ALMSingleRequest *builder) {
-        builder.resourceClass = [NSString class];
+    
+    [self.controller FETCH:[ALMResourceRequestBlock request:^(ALMResourceRequestBlock *r) {
+        r.resourceClass = [NSString class];
         
-    } onLoad:^(ALMResource *loadedResource) {
+    } onLoad:^(id result) {
         XCTFail(@"This not should be executed");
         
-    } onFinish:^(NSURLSessionDataTask *task, id resource) {
+    } onFetch:^(id result, NSURLSessionDataTask *task) {
         XCTFail(@"This not should be executed");
         
-    } onError:^(NSURLSessionDataTask *task, NSError *error) {
+    } onError:^(NSError *error, NSURLSessionDataTask *task) {
         NSLog(@"%@", error);
         XCTAssertNotNil(error, @"Must return an error");
-        
     }]];
-     */
 }
 
 @end

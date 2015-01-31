@@ -15,7 +15,6 @@
 @optional
 
 - (void)controllerWillRefreshTokenForCredential:(ALMCredential *)credential;
-- (void)controllerDidRefreshTokenForCredential:(ALMCredential *)credential;
 - (void)controllerSuccessfullyLoggedWithCredential:(ALMCredential *)credential;
 - (void)controllerFailedLoginWith:(ALMCredential *)credential error:(NSError *)error;
 

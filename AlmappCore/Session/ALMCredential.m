@@ -55,7 +55,8 @@
 + (instancetype)credentialForEmail:(NSString *)email {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *encodedObject = [defaults objectForKey:email];
-    return [NSKeyedUnarchiver unarchiveObjectWithData:encodedObject];
+    id loaded = [NSKeyedUnarchiver unarchiveObjectWithData:encodedObject];
+    return loaded;
 }
 
 @end

@@ -53,6 +53,10 @@ extern ALMPersistMode const kPersistModeDefault;
 
 - (NSString *)className;
 
+- (RLMResults *)hasMany:(RLMResults *)resources;
+- (RLMResults *)hasMany:(RLMResults *)resources as:(NSString *)collectionProperty;
+- (RLMResults *)hasMany:(RLMResults *)resources as:(NSString *)collectionProperty belongsToAs:(NSString *)parentName;
+
 #pragma mark - Attributes helpers
 
 + (NSString*)apiSingleForm;
@@ -104,11 +108,14 @@ extern ALMPersistMode const kPersistModeDefault;
 + (id)objectOfType:(Class)resourceClass withID:(long long)resourceID;
 + (id)objectOfType:(Class)resourceClass withID:(long long)resourceID inRealm:(RLMRealm *)realm;
 
-+ (id)allObjectsOfType:(Class)resourceClass;
-+ (id)allObjectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm;
++ (RLMResults *)allObjectsOfType:(Class)resourceClass;
++ (RLMResults *)allObjectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm;
 
-+ (id)objectsOfType:(Class)resourceClass where:(NSString *)query;
-+ (id)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm where:(NSString *)query;
++ (RLMResults *)objectsOfType:(Class)resourceClass where:(NSString *)query;
++ (RLMResults *)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm where:(NSString *)query;
+
++ (RLMResults *)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm withProperty:(NSString *)property in:(NSArray *)array;
++ (RLMResults *)objectsInRealm:(RLMRealm *)realm withProperty:(NSString *)property in:(NSArray *)array;
 
 + (RLMResults *)objectsInRealm:(RLMRealm *)realm withIDs:(NSArray *)array;
 + (RLMResults *)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm withIDs:(NSArray *)array;

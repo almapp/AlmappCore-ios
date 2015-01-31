@@ -70,6 +70,7 @@ static NSString *const kDefaultOAuthScope = @"";
 - (AFOAuthCredential *)OAuthCredential {
     if (!_OAuthCredential) {
         _OAuthCredential = [self.class loadCredential];
+        [self.requestSerializer setAuthorizationHeaderFieldWithCredential:_OAuthCredential];
     }
     return _OAuthCredential;
 }
@@ -81,8 +82,6 @@ static NSString *const kDefaultOAuthScope = @"";
         _OAuth2Manager = [[AFOAuth2Manager alloc] initWithBaseURL:self.baseURL
                                                              clientID:apiKey.clientID
                                                                secret:apiKey.clientSecret];
-        
-        [self.requestSerializer setAuthorizationHeaderFieldWithCredential:self.OAuthCredential];
     }
     return _OAuth2Manager;
 }
@@ -102,6 +101,10 @@ static NSString *const kDefaultOAuthScope = @"";
     if (self.OAuthCredential.isExpired) {
         [self publishWillGetTokensWith:credential];
         _authPromise = [self AUTH:credential];
+    } else {
+        _authPromise = [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+            fulfiller(@YES);
+        }];
     }
 
     return _authPromise;
@@ -161,37 +164,41 @@ static NSString *const kDefaultOAuthScope = @"";
 }
 
 - (PMKPromise *)FETCH:(ALMResourceRequest *)request {
-    __weak typeof(self) weakSelf = self;
+    //__weak typeof(self) weakSelf = self;
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
             if (!request) {
-                dispatch_async(request.dispatchQueue, ^{
-                    [request publishError:[ALMError errorWithCode:ALMErrorCodeInvalidRequest] task:nil];
-                });
+                //dispatch_async(request.dispatchQueue, ^{
+                    NSError *error = [ALMError errorWithCode:ALMErrorCodeInvalidRequest];
+                    [request publishError:error task:nil];
+                    rejecter(PMKManifold(request, error));
+                //});
                 return;
             }
             
-            /*
-            if (![weakSelf validate:request]) {
-                dispatch_async(request.dispatchQueue, ^{
+        
+            if (![self validateRequest:request]) {
+                //dispatch_async(request.dispatchQueue, ^{
                     [request publishError:[ALMError errorWithCode:ALMErrorCodeInvalidRequest] task:nil];
-                });
+                //});
                 return;
             }
-             */
             
-            dispatch_async(request.dispatchQueue, ^{
-                [weakSelf LOAD:request].then(^(id loaded) {
+            //dispatch_async(request.dispatchQueue, ^{
+                [self LOAD:request].then(^(id loaded) {
                     [request publishLoaded:loaded];
                 });
-            });
+            //});
             
-            dispatch_async(weakSelf.concurrentQueue, ^{
-                [weakSelf GET:request].then(^(id fetched, NSURLSessionDataTask *task) {
-                    [request publishFetched:fetched task:task];
+            //dispatch_async(weakSelf.concurrentQueue, ^{
+                [self GET:request].then(^(id fetched, NSURLSessionDataTask *task) {
+                    fulfiller(PMKManifold(fetched));
+                    
+                }).catch(^(ALMResourceRequest *request, NSError *error){
+                   rejecter(PMKManifold(request, error));
                 });
-            });
-        });
+            //});
+        //});
     }];
 }
 
@@ -205,6 +212,7 @@ static NSString *const kDefaultOAuthScope = @"";
                 }
                 
                 [self LOAD:request].then(^(id loaded) {
+                    [request publishFetched:loaded task:task];
                     fulfiller(PMKManifold(loaded, task));
                 });
                 
@@ -212,6 +220,7 @@ static NSString *const kDefaultOAuthScope = @"";
                 if (request.shouldLog) {
                     NSLog(@"Error %@", error);
                 }
+                [request publishError:error task:nil];
                 rejecter(PMKManifold(request, error));
             });
             
@@ -219,6 +228,7 @@ static NSString *const kDefaultOAuthScope = @"";
             if (request.shouldLog) {
                 NSLog(@"Error %@", error);
             }
+            [request publishError:error task:nil];
             rejecter(PMKManifold(request, error));
         });
         
@@ -282,5 +292,17 @@ static NSString *const kDefaultOAuthScope = @"";
     }
 }
 
+- (BOOL)validateRequest:(ALMResourceRequest *)request {
+    if (![request.resourceClass isSubclassOfClass:[ALMResource class]]) {
+        return NO;
+    }
+    if (request.resourceID < 0) {
+        return NO;
+    }
+    if (!request.realmPath || request.realmPath.length == 0) {
+        return NO;
+    }
+    return YES;
+}
 
 @end
