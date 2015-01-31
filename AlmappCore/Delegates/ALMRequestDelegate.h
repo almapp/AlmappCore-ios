@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class ALMSession, ALMSessionManager, RLMRealm, RLMResults, ALMResource;
+@class RLMRealm, RLMResults, ALMResource;
 @class ALMController, ALMResourceRequest;
 
 @protocol ALMRequestDelegate <NSObject>

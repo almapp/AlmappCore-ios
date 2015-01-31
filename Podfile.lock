@@ -76,7 +76,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
-  - AFOAuth2Manager
+  - AFOAuth2Manager (from `https://github.com/iamcam/AFOAuth2Manager`, commit `7470a389ea74034923999202eedfc04f036b3d37`)
   - FayeCpp
   - PromiseKit
   - PromiseKit-AFNetworking
@@ -84,12 +84,18 @@ DEPENDENCIES:
   - UICKeyChainStore
 
 EXTERNAL SOURCES:
+  AFOAuth2Manager:
+    :commit: 7470a389ea74034923999202eedfc04f036b3d37
+    :git: https://github.com/iamcam/AFOAuth2Manager
   Realm+JSON:
     :branch: master
     :commit: 813d6b474848f3ebaa1f6c92562cce00e9069ac4
     :git: https://github.com/mrpatiwi/Realm-JSON.git
 
 CHECKOUT OPTIONS:
+  AFOAuth2Manager:
+    :commit: 7470a389ea74034923999202eedfc04f036b3d37
+    :git: https://github.com/iamcam/AFOAuth2Manager
   Realm+JSON:
     :branch: master
     :commit: 813d6b474848f3ebaa1f6c92562cce00e9069ac4
@@ -97,7 +103,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
-  AFOAuth2Manager: a7726957cbc14c229b5d5d648c934453b6bb55b0
+  AFOAuth2Manager: 6d76c16b475b707cd41aae5580c9b71123e472fd
   FayeCpp: 8f4ac60cbcc9eb0fea16e5be2dda6b521aa2146d
   OMGHTTPURLRQ: f8c515dfd2f57a5d74c710978f600231f52afec5
   PromiseKit: 812643bdf837142e98d4becfb2a69d8f35e5aa6b

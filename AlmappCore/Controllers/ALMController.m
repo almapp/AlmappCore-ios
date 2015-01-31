@@ -6,51 +6,37 @@
 //  Copyright (c) 2015 almapp. All rights reserved.
 //
 
+#import <AFOAuth2Manager/AFOAuth2Manager.h>
+#import <AFOAuth2Manager/AFHTTPRequestSerializer+OAuth2.h>
+
 #import "ALMController.h"
 #import "ALMSessionManager.h"
 #import "ALMResourceConstants.h"
 #import "ALMApiKey.h"
 
-#import <AFOAuth2Manager/AFOAuth2Manager.h>
-#import <AFOAuth2Manager/AFHTTPRequestSerializer+OAuth2.h>
-
 static NSString *const kCredentialKey = @"AlmappCore-Controller";
 static NSString *const kDefaultOAuthUrl = @"/oauth/token";
 static NSString *const kDefaultOAuthScope = @"";
-
-@implementation NSDate (Compare)
-
--(BOOL) isLaterThanOrEqualTo:(NSDate*)date {
-    return !([self compare:date] == NSOrderedAscending);
-}
-
--(BOOL) isEarlierThanOrEqualTo:(NSDate*)date {
-    return !([self compare:date] == NSOrderedDescending);
-}
--(BOOL) isLaterThan:(NSDate*)date {
-    return ([self compare:date] == NSOrderedDescending);
-    
-}
--(BOOL) isEarlierThan:(NSDate*)date {
-    return ([self compare:date] == NSOrderedAscending);
-}
-
-@end
 
 
 
 @interface ALMController ()
 
 @property (weak, nonatomic) id<ALMCoreModuleDelegate> coreModuleDelegate;
+
 @property (strong, nonatomic) AFOAuth2Manager *OAuth2Manager;
-@property (strong, nonatomic) dispatch_queue_t concurrentQueue;
+@property (strong, nonatomic) AFOAuthCredential *OAuthCredential;
 @property (strong, nonatomic) PMKPromise *authPromise;
+
+@property (strong, nonatomic) dispatch_queue_t concurrentQueue;
 
 @end
 
 
 
 @implementation ALMController
+
+#pragma mark - Constructor
 
 + (instancetype)controllerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate {
     return [self controllerWithURL:url coreDelegate:coreDelegate configuration:nil];
@@ -73,58 +59,52 @@ static NSString *const kDefaultOAuthScope = @"";
         self.requestSerializer = [AFJSONRequestSerializer serializer];
         self.responseSerializer = [AFJSONResponseSerializer serializer];
         
-        ALMApiKey *apiKey = [self apiKey];
-        
-        self.OAuth2Manager = [[AFOAuth2Manager alloc] initWithBaseURL:self.baseURL
-                                                                         clientID:apiKey.clientID
-                                                                           secret:apiKey.clientSecret];
+
     }
     return self;
 }
 
 
+#pragma mark - OAuth Credentials
 
-- (AFOAuthCredential *)loadCredential {
+- (AFOAuthCredential *)OAuthCredential {
+    if (!_OAuthCredential) {
+        _OAuthCredential = [self.class loadCredential];
+    }
+    return _OAuthCredential;
+}
+
+- (AFOAuth2Manager *)OAuth2Manager {
+    if (!_OAuth2Manager) {
+        ALMApiKey *apiKey = [self apiKey];
+        
+        _OAuth2Manager = [[AFOAuth2Manager alloc] initWithBaseURL:self.baseURL
+                                                             clientID:apiKey.clientID
+                                                               secret:apiKey.clientSecret];
+        
+        [self.requestSerializer setAuthorizationHeaderFieldWithCredential:self.OAuthCredential];
+    }
+    return _OAuth2Manager;
+}
+
++ (AFOAuthCredential *)loadCredential {
     return [AFOAuthCredential retrieveCredentialWithIdentifier:kCredentialKey];
 }
 
-- (BOOL)saveCredential:(AFOAuthCredential *)credential {
++ (BOOL)saveCredential:(AFOAuthCredential *)credential {
     return [AFOAuthCredential storeCredential:credential withIdentifier:kCredentialKey];
 }
 
-- (void)setupWithEmail:(NSString *)email password:(NSString *)password {
-    [self setupWithEmail:email password:password oauthUrl:kDefaultOAuthUrl scope:kDefaultOAuthScope];
-}
 
-- (void)setupWithEmail:(NSString *)email password:(NSString *)password oauthUrl:(NSString *)oauthUrl scope:(NSString *)scope {
-    ALMApiKey *apiKey = [self apiKey];
-    
-    AFOAuth2Manager *OAuth2Manager = [[AFOAuth2Manager alloc] initWithBaseURL:self.baseURL
-                                                                     clientID:apiKey.clientID
-                                                                       secret:apiKey.clientSecret];
-    
-    __weak __typeof(self) weakSelf = self;
-    
-    [OAuth2Manager authenticateUsingOAuthWithURLString:oauthUrl username:email password:password scope:scope success:^(AFOAuthCredential *credential) {
-        NSLog(@"Token: %@", credential.accessToken);
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            BOOL didSave = [strongSelf saveCredential:credential];
-            if (didSave) {
-                NSLog(@"Did Save: %@", credential.accessToken);
-            }
-            else {
-                NSLog(@"COULD NOT SAVE TOKEN: %@", credential.accessToken);
-            }
-            
-            [strongSelf.requestSerializer setAuthorizationHeaderFieldWithCredential:credential];
-            
-            //[strongSelf.]
-            
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
+#pragma mark - Auth
+
+- (PMKPromise *)authPromiseWithCredential:(ALMCredential *)credential {
+    if (self.OAuthCredential.isExpired) {
+        [self publishWillGetTokensWith:credential];
+        _authPromise = [self AUTH:credential];
+    }
+
+    return _authPromise;
 }
 
 - (PMKPromise *)AUTH:(ALMCredential *)credential {
@@ -135,7 +115,7 @@ static NSString *const kDefaultOAuthScope = @"";
     PMKPromise *promise = [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         [self.OAuth2Manager authenticateUsingOAuthWithURLString:oauthUrl username:credential.email password:credential.password scope:scope success:^(AFOAuthCredential *OAuthcredential) {
             
-            BOOL didSave = [self saveCredential:OAuthcredential];
+            BOOL didSave = [self.class saveCredential:OAuthcredential];
             if (didSave) {
                 NSLog(@"Did Save: %@", OAuthcredential.accessToken);
             }
@@ -144,56 +124,21 @@ static NSString *const kDefaultOAuthScope = @"";
             }
             
             [self.requestSerializer setAuthorizationHeaderFieldWithCredential:OAuthcredential];
+            [self publishSuccessfulLoginWith:credential];
             
             fulfiller(@YES);
             
         } failure:^(NSError *error) {
+            [self publishFailedLoginWith:credential error:error];
             rejecter(PMKManifold(credential, error));
         }];
     }];
-    self.authPromise = promise;
     
     return promise;
 }
 
-- (PMKPromise *)authPromiseWithCredential:(ALMCredential *)credential {
-    BOOL tokenIsExpiredOrMissing = YES;
-    if (tokenIsExpiredOrMissing) {
-        _authPromise = [self AUTH:credential];
-    }
-    return _authPromise;
-}
 
-- (PMKPromise *)GET:(ALMResourceRequest *)request {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        [self authPromiseWithCredential:request.credential].then(^{
-            [self GET:request.path parameters:request.parameters].then(^(id responseObject, NSURLSessionDataTask *task){
-                BOOL success = [request commitData:responseObject];
-                if (request.shouldLog) {
-                    NSLog(@"Commit status %d",success);
-                }
-                
-                [self LOAD:request].then(^(id loaded) {
-                    fulfiller(PMKManifold(loaded, task));
-                });
-                
-            }).catch(^(NSError *error) {
-                if (request.shouldLog) {
-                    NSLog(@"Error %@", error);
-                }
-                rejecter(PMKManifold(request, error));
-            });
-
-        }).catch(^(ALMCredential *credential, NSError *error) {
-            if (request.shouldLog) {
-                NSLog(@"Error %@", error);
-            }
-            rejecter(PMKManifold(request, error));
-        });
-        
-        //[PMKPromise when:self.authPromise].then(^{
-    }];
-}
+#pragma mark - Methods
 
 - (PMKPromise *)LOAD:(ALMResourceRequest *)request {
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
@@ -248,6 +193,49 @@ static NSString *const kDefaultOAuthScope = @"";
     }];
 }
 
+- (PMKPromise *)GET:(ALMResourceRequest *)request {
+    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+        [self authPromiseWithCredential:request.credential].then(^{
+            [self GET:request.path parameters:request.parameters].then(^(id responseObject, NSURLSessionDataTask *task){
+                BOOL success = [request commitData:responseObject];
+                if (request.shouldLog) {
+                    NSLog(@"Commit status %d",success);
+                }
+                
+                [self LOAD:request].then(^(id loaded) {
+                    fulfiller(PMKManifold(loaded, task));
+                });
+                
+            }).catch(^(NSError *error) {
+                if (request.shouldLog) {
+                    NSLog(@"Error %@", error);
+                }
+                rejecter(PMKManifold(request, error));
+            });
+            
+        }).catch(^(ALMCredential *credential, NSError *error) {
+            if (request.shouldLog) {
+                NSLog(@"Error %@", error);
+            }
+            rejecter(PMKManifold(request, error));
+        });
+        
+        //[PMKPromise when:self.authPromise].then(^{
+    }];
+}
+
+- (PMKPromise *)POST:(ALMResourceRequest *)request {
+    return nil;
+}
+
+- (PMKPromise *)DELETE:(ALMResourceRequest *)request {
+    return nil;
+}
+
+- (PMKPromise *)PUT:(ALMResourceRequest *)request {
+    return nil;
+}
+
 
 #pragma mark - Delegate usage
 
@@ -274,34 +262,22 @@ static NSString *const kDefaultOAuthScope = @"";
     }
 }
 
-- (void)publishWillPerformLoginAs:(ALMSession *)session {
-    /*if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:willPerformLoginAs:)]) {
-        [_requestManagerDelegate requestManager:nil willPerformLoginAs:session];
-    }*/
-}
-
-- (void)publishSuccessfulLoginAs:(ALMSession *)session {
-    /*if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:loggedAs:)]) {
-        [_requestManagerDelegate requestManager:nil loggedAs:session];
-    }*/
-}
-
-- (void)publishFailedLoginAs:(ALMCredential *)credentials error:(NSError *)error {
-    /*if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:authError:withCredentials:)]) {
-        [_requestManagerDelegate requestManager:nil authError:error withCredentials:credentials];
-    }*/
-}
-
-- (BOOL)validate:(ALMResourceRequest *)request {
-    /*if (_requestManagerDelegate && [_requestManagerDelegate respondsToSelector:@selector(requestManager:validate:)]) {
-        return [_requestManagerDelegate requestManager:nil validate:request];
+- (void)publishWillGetTokensWith:(ALMCredential *)credential {
+    if (_controllerDelegate && [_controllerDelegate respondsToSelector:@selector(controllerWillRefreshTokenForCredential:)]) {
+        [_controllerDelegate controllerWillRefreshTokenForCredential:credential];
     }
-    else {
-        return YES;
-    }
-     */
-    return YES;
+}
 
+- (void)publishSuccessfulLoginWith:(ALMCredential *)credential {
+    if (_controllerDelegate && [_controllerDelegate respondsToSelector:@selector(controllerWillRefreshTokenForCredential:)]) {
+        [_controllerDelegate controllerSuccessfullyLoggedWithCredential:credential];
+    }
+}
+
+- (void)publishFailedLoginWith:(ALMCredential *)credential error:(NSError *)error {
+    if (_controllerDelegate && [_controllerDelegate respondsToSelector:@selector(controllerFailedLoginWith:error:)]) {
+        [_controllerDelegate controllerFailedLoginWith:credential error:error];
+    }
 }
 
 
