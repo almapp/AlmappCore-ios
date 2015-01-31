@@ -491,10 +491,10 @@
 			isa = PBXGroup;
 			children = (
 				F6D19BEF1A51D81200FD4715 /* ALMCoreDelegate.h */,
+				F6B3583C1A79AF3600999DCE /* ALMCoreModuleDelegate.h */,
 				F60297CE1A6E8547004C92BD /* ALMSessionManagerDelegate.h */,
 				F6B358281A79687100999DCE /* ALMChatManagerDelegate.h */,
 				F64204CA1A7BABA300666DBE /* ALMChatListenerDelegate.h */,
-				F6B3583C1A79AF3600999DCE /* ALMCoreModuleDelegate.h */,
 				F6D652CD1A7A69ED000620A4 /* ALMRequestDelegate.h */,
 				F64204C61A7AFAAE00666DBE /* ALMNestedRequestDelegate.h */,
 			);
