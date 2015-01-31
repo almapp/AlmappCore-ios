@@ -27,8 +27,6 @@ extern NSString *const kDefaultLoginPath;
 
 - (RLMResults *)availableSessionsInRealm:(RLMRealm *)realm;
 
-- (NSString *)loginPostPath:(NSURL *)url;
-- (NSDictionary *)loginParams:(ALMCredential *)credential;
-
+- (void)successfullyLoggedWithEmail:(NSString *)email didSave:(BOOL)saved;
 
 @end

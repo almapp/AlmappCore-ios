@@ -12,11 +12,13 @@
 
 @protocol ALMSessionManagerDelegate <NSObject>
 
-- (NSDictionary *)sessionManager:(ALMSessionManager *)manager loginParamsFor:(ALMCredential *)credential;
-- (NSString *)sessionManager:(ALMSessionManager *)manager loginPostPathFor:(NSURL *)url;
+@optional
 
 - (ALMSession *)sessionManagerGetCurrentSession;
 - (BOOL)sessionManager:(ALMSessionManager *)manager shouldChangeToSession:(ALMSession *)session;
 - (void)sessionManager:(ALMSessionManager *)manager didChangeSessionTo:(ALMSession *)session;
+- (RLMRealm *)sessionManagerSessionsStoreRealm:(ALMSessionManager *)manager;
+
+- (void)sessionManager:(ALMSessionManager *)manager successfullyLoggedAs:(ALMSession *)session;
 
 @end
