@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@class ALMSession;
-
 @protocol ALMCoreDelegate <NSObject>
 
 @optional

@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ALMApiKey.h"
 
 @interface ALMTestsConstants : NSObject
 
 extern NSString * const kTestingBaseURL;
-extern NSString * const kTestingApiKey;
 extern short const kTestingApiVersion;
+
++ (ALMApiKey *)testingApiKey;
 
 @end

@@ -26,6 +26,7 @@
           params:(id)params
        onSuccess:(void(^)(id resource))onSuccess {
     
+    /*
     XCTestExpectation *expectation = [self expectationWithDescription:@"validGetSingleResource"];
     
     __weak typeof(self) weakSelf = self;
@@ -54,13 +55,14 @@
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         [op cancel];
     }];
+     */
 }
 
 - (void)resources:(Class)resourcesClass
             path:(NSString *)path
           params:(id)params
         onSuccess:(void (^)(RLMResults *))onSuccess {
-    
+    /*
     XCTestExpectation *expectation = [self expectationWithDescription:@"validGetMultipleResource"];
     
     __weak typeof(self) weakSelf = self;
@@ -86,7 +88,7 @@
     
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         [op cancel];
-    }];
+    }];*/
 }
 
 - (void)nestedResources:(Class)resourcesClass
@@ -95,7 +97,7 @@
                    path:(NSString *)path
                  params:(id)params
               onSuccess:(void (^)(id parent, RLMArray *results))onSuccess {
-    
+    /*
     XCTestExpectation *expectation = [self expectationWithDescription:@"validGetMultipleResource"];
     
     __weak typeof(self) weakSelf = self;
@@ -127,7 +129,7 @@
     
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         [op cancel];
-    }];
+    }];*/
 }
 
 

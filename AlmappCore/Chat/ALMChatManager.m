@@ -7,8 +7,6 @@
 //
 
 #import "ALMChatManager.h"
-#import "ALMRequestManager.h"
-#import "ALMHTTPHeaderHelper.h"
 
 @interface ALMChatManager ()
 
@@ -92,8 +90,9 @@
         return ext;
     }
     else {
-        NSDictionary *headers = [ALMHTTPHeaderHelper createHeaderHashForCredential:session.credential apiKey:[self apiKey]];
-        return headers;
+        //NSDictionary *headers = [ALMHTTPHeaderHelper createHeaderHashForCredential:session.credential apiKey:[self apiKey]];
+        //return headers;
+        return nil; // TODO FAYE AUTH
     }
 }
 

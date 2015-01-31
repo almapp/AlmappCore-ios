@@ -49,11 +49,11 @@
     }
     session = [[self alloc] init];
     session.email = email;
-    session.credential.email = email;
-    session.credential.password = password;
     [realm beginWriteTransaction];
     session = [self createInRealm:realm withObject:session];
     [realm commitWriteTransaction];
+    session.credential.email = email;
+    session.credential.password = password;
     return session;
 }
 

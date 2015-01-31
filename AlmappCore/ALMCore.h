@@ -14,10 +14,10 @@
 
 #import "ALMSessionManager.h"
 #import "ALMController.h"
-#import "ALMRequestManager.h"
 #import "ALMChatManager.h"
 
 #import "ALMUtil.h"
+#import "ALMApiKey.h"
 
 extern NSString *const kFrameworkIdentifier;
 
@@ -27,12 +27,12 @@ extern NSString *const kFrameworkIdentifier;
 
 + (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
                          baseURL:(NSURL *)baseURL
-                          apiKey:(NSString *)apiKey
-                         version:(short)version;
+                         apiVersion:(short)version
+                          apiKey:(ALMApiKey *)apiKey;
 
 + (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
                          baseURL:(NSURL *)baseURL
-                          apiKey:(NSString *)apiKey;
+                          apiKey:(ALMApiKey *)apiKey;
 
 
 #pragma mark - Singleton methods
@@ -53,21 +53,16 @@ extern NSString *const kFrameworkIdentifier;
 @property (strong, nonatomic) NSURL *apiBaseURL;
 @property (strong, nonatomic) NSURL *chatURL;
 
-@property (strong, nonatomic) NSString *apiKey;
+@property (strong, nonatomic) ALMApiKey *apiKey;
 @property (assign, nonatomic) BOOL shouldSyncToCloud;
 
-@property (strong, nonatomic) ALMRequestManager *requestManager;
 @property (strong, nonatomic) ALMController *controller;
 @property (strong, nonatomic) ALMSessionManager *sessionManager;
 @property (strong, nonatomic) ALMChatManager *chatManager;
 
-+ (ALMRequestManager *)requestManager;
 + (ALMController *)controller;
 + (ALMSessionManager *)sessionManager;
 + (ALMChatManager *)chatManager;
-
-- (id<ALMRequestManagerDelegate>) requestManagerDelegate;
-- (void) setRequestManagerDelegate:(id<ALMRequestManagerDelegate>)delegate;
 
 - (id<ALMSessionManagerDelegate>)sessionManagerDelegate;
 - (void)setSessionManagerDelegate:(id<ALMSessionManagerDelegate>)sessionManagerDelegate;
@@ -85,30 +80,24 @@ extern NSString *const kFrameworkIdentifier;
 #pragma mark - Academic
 
 + (short)currentAcademicYear;
-
 - (short)currentAcademicYear;
 
 + (short)currentAcademicPeriod;
-
 - (short)currentAcademicPeriod;
 
 
 #pragma mark - Persistence
 
 + (RLMRealm *)realmNamed:(NSString *)name;
-
 - (RLMRealm *)realmNamed:(NSString *)name;
 
 + (RLMRealm *)defaultRealm;
-
 - (RLMRealm *)defaultRealm;
 
 + (RLMRealm *)temporalRealm;
-
 - (RLMRealm *)temporalRealm;
 
 + (RLMRealm *)encryptedRealm;
-
 - (RLMRealm *)encryptedRealm;
 
 - (void)dropDatabaseNamed:(NSString *)name;
