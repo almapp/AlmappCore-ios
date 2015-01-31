@@ -6,6 +6,8 @@ target 'AlmappCore' do
     pod 'FayeCpp'
     pod 'UICKeyChainStore'
     pod 'AFOAuth2Manager'
+    pod 'PromiseKit'
+    pod 'PromiseKit-AFNetworking'
 end
 
 target 'AlmappCoreTests' do

@@ -7,6 +7,10 @@
 //
 
 #import <AFNetworking/AFNetworking.h>
+#import "AFNetworking+PromiseKit.h"
+#import <PromiseKit.h>
+
+
 #import <Realm+JSON/RLMObject+JSON.h>
 
 #import "ALMNestedRequestDelegate.h"
@@ -24,11 +28,15 @@
 
 - (id)init __attribute__((unavailable));
 + (instancetype)controllerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate;
-+ (instancetype)controllerWithURL:(NSURL *)url configuration:(NSURLSessionConfiguration *)configuration coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate;
++ (instancetype)controllerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate configuration:(NSURLSessionConfiguration *)configuration;
 
-- (id)LOAD:(ALMResourceRequest *)request;
-- (void)FETCH:(ALMResourceRequest *)request;
-- (NSURLSessionDataTask *)GET:(ALMResourceRequest *)request;
+- (PMKPromise *)LOAD:(ALMResourceRequest *)request;
+- (PMKPromise *)FETCH:(ALMResourceRequest *)request;
+
+- (PMKPromise *)GET:(ALMResourceRequest *)request;
+- (PMKPromise *)POST:(ALMResourceRequest *)request;
+- (PMKPromise *)DELETE:(ALMResourceRequest *)request;
+- (PMKPromise *)PUT:(ALMResourceRequest *)request;
 
 - (void)setupWithEmail:(NSString *)email password:(NSString *)password;
 - (void)setupWithEmail:(NSString *)email password:(NSString *)password oauthUrl:(NSString *)oauthUrl scope:(NSString *)scope;

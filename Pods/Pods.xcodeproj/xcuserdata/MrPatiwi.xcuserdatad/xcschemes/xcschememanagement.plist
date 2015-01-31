@@ -19,6 +19,21 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-AlmappCore-OMGHTTPURLRQ.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-AlmappCore-PromiseKit-AFNetworking.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-AlmappCore-PromiseKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-AlmappCore-Realm+JSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,37 +57,52 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>061469D34EB314A796A846FD</key>
+		<key>21557A84906A6D7D4AFA6787</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1C550F21CF9000AD1A06A097</key>
+		<key>602CEA7E3011EF81E48B2788</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1E4EC9CB3EEF20C83D01EA85</key>
+		<key>94C8D3FA75B8B6C6535D2AE1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2E081076338EA7EE4A3D87E0</key>
+		<key>AE099A707BB470809EE047CB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>33C1BEB8F8809D963795F288</key>
+		<key>CCB1A5184EFCF976A225B40C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3A909655CD46B2B59F4DF09D</key>
+		<key>CFACCFE2A48E1CA91EA94899</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AA274B6338D87B8AFEEAC0AB</key>
+		<key>D5AA873514B8AF10302E2EB7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F92AF3CB5C67AC876002AB30</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F9D5F31B9A011BD054FAD545</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FD55C590989E2C569C9D599A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
