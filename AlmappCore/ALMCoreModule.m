@@ -34,7 +34,7 @@
     return [_coreModuleDelegate moduleCurrentSessionFor:[self class]];
 }
 
-- (NSString *)apiKey {
+- (ALMApiKey *)apiKey {
     return [_coreModuleDelegate moduleApiKeyFor:[self class]];
 }
 

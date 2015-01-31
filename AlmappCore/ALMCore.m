@@ -8,9 +8,12 @@
 
 #import "ALMCore.h"
 
+NSString *const kFrameworkIdentifier = @"com.almapp.almappcore-ios";
+
 static NSString *const kMemoryRealmPath = @"temporal.realm";
 static NSString *const kDefaultRealmPath = @"realm_v1.realm";
 static NSString *const kEncryptedRealmPath = @"encrypted_realm_v1.realm";
+static BOOL const kDefaultSyncToCloud = YES;
 
 static short const kDefaultApiVersion = 1;
 static short const kDefaultSemesterDividerMonth = 7;
@@ -23,7 +26,7 @@ static short const kDefaultSemesterDividerMonth = 7;
 @property (weak, nonatomic) id<ALMCoreDelegate> coreDelegate;
 @property (strong, nonatomic) RLMRealm* inMemoryRealm;
 
-- (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL apiKey:(NSString *)apiKey version:(short)version;
+- (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL*)baseURL version:(short)version apiKey:(ALMApiKey *)apiKey;
 
 - (void)dropRealm:(RLMRealm*)realm;
 - (BOOL)deleteRealmWithPath:(NSString *)realmPath;
@@ -36,11 +39,7 @@ static short const kDefaultSemesterDividerMonth = 7;
 
 #pragma mark - Private Constructor
 
-- (id)initWithDelegate:(id<ALMCoreDelegate>)delegate
-               baseURL:(NSURL*)baseURL
-                apiKey:(NSString *)apiKey
-               version:(short)version {
-    
+- (id)initWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL *)baseURL version:(short)version apiKey:(ALMApiKey *)apiKey {
     self = [super init];
     if (self) {
         _coreDelegate = delegate;
@@ -48,6 +47,7 @@ static short const kDefaultSemesterDividerMonth = 7;
         _apiKey = apiKey;
         _apiVersion = version;
         _controllers = [NSMutableDictionary dictionary];
+        _shouldSyncToCloud = kDefaultSyncToCloud;
     }
     return self;
 }
@@ -58,15 +58,15 @@ static short const kDefaultSemesterDividerMonth = 7;
 static ALMCore *_sharedInstance = nil;
 static dispatch_once_t once_token;
 
-+ (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
-                         baseURL:(NSURL*)baseURL
-                          apiKey:(NSString *)apiKey
-                         version:(short)version {
-    
++ (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL *)baseURL apiKey:(ALMApiKey *)apiKey {
+    return [self coreWithDelegate:delegate baseURL:baseURL apiVersion:kDefaultApiVersion apiKey:apiKey];
+}
+
++ (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate baseURL:(NSURL *)baseURL apiVersion:(short)version apiKey:(ALMApiKey *)apiKey {
     if (baseURL != nil && delegate != nil){
         dispatch_once(&once_token, ^{
             if (_sharedInstance == nil) {
-                _sharedInstance = [[self alloc] initWithDelegate:delegate baseURL:baseURL apiKey:apiKey version:version];
+                _sharedInstance = [[self alloc] initWithDelegate:delegate baseURL:baseURL version:version apiKey:apiKey];
             }
         });
         return _sharedInstance;
@@ -74,14 +74,6 @@ static dispatch_once_t once_token;
         return nil;
     }
 }
-
-+ (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
-                         baseURL:(NSURL *)baseURL
-                          apiKey:(NSString *)apiKey {
-    
-    return [self coreWithDelegate:delegate baseURL:baseURL apiKey:apiKey version:kDefaultApiVersion];
-}
-
 
 + (BOOL)isAlive {
     return [self sharedInstance] != nil;
@@ -125,22 +117,23 @@ static dispatch_once_t once_token;
     return _chatURL;
 }
 
-- (NSString *)apiKey {
+- (ALMApiKey *)apiKey {
     if (!_apiKey) {
         NSException* myException = [NSException
                                     exceptionWithName:@"ApiKeyNotFound"
-                                    reason:@"Api-Key string has not been set on core singleton class"
+                                    reason:@"Must set an Api Key"
                                     userInfo:nil];
         @throw myException;
     }
     return _apiKey;
 }
 
-- (ALMRequestManager *)requestManager {
-    if (!_requestManager) {
-        _requestManager = [ALMRequestManager requestManagerWithURL:self.apiBaseURL coreDelegate:self];
+
+- (ALMController *)controller {
+    if (!_controller) {
+        _controller = [ALMController controllerWithURL:self.apiBaseURL coreDelegate:self];
     }
-    return _requestManager;
+    return _controller;
 }
 
 - (ALMSessionManager *)sessionManager {
@@ -157,8 +150,8 @@ static dispatch_once_t once_token;
     return _chatManager;
 }
 
-+ (ALMRequestManager *)requestManager {
-    return [self isAlive] ? [[self sharedInstance] requestManager] : nil;
++ (ALMController *)controller {
+    return [self isAlive] ? [[self sharedInstance] controller] : nil;
 }
 
 + (ALMSessionManager *)sessionManager {
@@ -169,13 +162,6 @@ static dispatch_once_t once_token;
     return [self isAlive] ? [[self sharedInstance] chatManager] : nil;
 }
 
-- (void)setRequestManagerDelegate:(id<ALMRequestManagerDelegate>)delegate {
-    self.requestManager.requestManagerDelegate = delegate;
-}
-
-- (id<ALMRequestManagerDelegate>)requestManagerDelegate {
-    return self.requestManager.requestManagerDelegate;
-}
 
 - (void)setSessionManagerDelegate:(id<ALMSessionManagerDelegate>)sessionManagerDelegate {
     self.sessionManager.sessionManagerDelegate = sessionManagerDelegate;
@@ -184,6 +170,7 @@ static dispatch_once_t once_token;
 - (id<ALMSessionManagerDelegate>)sessionManagerDelegate {
     return self.sessionManager.sessionManagerDelegate;
 }
+
 
 - (void)setCurrentSession:(ALMSession *)session {
     self.sessionManager.currentSession = session;
@@ -194,7 +181,20 @@ static dispatch_once_t once_token;
 }
 
 + (ALMSession *)currentSession {
-    return [self sharedInstance] != nil ? [[self sharedInstance] currentSession] : nil;
+    return [self isAlive] ? [[self sharedInstance] currentSession] : nil;
+}
+
+
+#pragma mark - Keychain
+
+- (UICKeyChainStore *)keyStore {
+    UICKeyChainStore *keychain = [UICKeyChainStore keyChainStoreWithService:kFrameworkIdentifier];
+    keychain.synchronizable = self.shouldSyncToCloud;
+    return keychain;
+}
+
++ (UICKeyChainStore *)keyStore {
+    return [self isAlive] ? [[self sharedInstance] keyStore] : nil;
 }
 
 
@@ -268,7 +268,7 @@ static dispatch_once_t once_token;
 }
 
 - (BOOL)deleteDatabaseNamed:(NSString *)name {
-    NSString *path = [self.class writeablePathForFile:name];
+    NSString *path = [ALMUtil writeablePathForFile:name];
     return [self deleteRealmWithPath:path];
 }
 
@@ -335,7 +335,7 @@ static dispatch_once_t once_token;
     
     // TODO, INCOMPLETE
     
-    //NSString *realmPath = [self.class writeablePathForFile:kEncryptedRealmPath];
+    //NSString *realmPath = [ALMUtil writeablePathForFile:kEncryptedRealmPath];
     //return [RLMRealm encryptedRealmWithPath:realmPath key:nil readOnly:NO error:nil];
     
     return self.defaultRealm;
@@ -352,7 +352,7 @@ static dispatch_once_t once_token;
     return [self currentSession];
 }
 
-- (NSString *)moduleApiKeyFor:(Class)module {
+- (ALMApiKey *)moduleApiKeyFor:(Class)module {
     return [self apiKey];
 }
 

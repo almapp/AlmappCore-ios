@@ -13,7 +13,7 @@
 - (void)setUp {
     [super setUp];
     
-    _core = [ALMCore coreWithDelegate:self baseURL:[NSURL URLWithString:kTestingBaseURL] apiKey:kTestingApiKey];
+    _core = [ALMCore coreWithDelegate:self baseURL:[NSURL URLWithString:kTestingBaseURL] apiVersion:kTestingApiVersion apiKey:[ALMTestsConstants testingApiKey]];
     [_core deleteTemporalDatabase];
 }
 
@@ -30,12 +30,20 @@
     return self.testRealm.path;
 }
 
-- (ALMRequestManager *)requestManager {
-    return [_core requestManager];
+- (ALMController *)controller {
+    return [_core controller];
 }
 
 - (NSTimeInterval)timeout {
-    return 20;
+    return 3000;
+}
+
+- (ALMSession *)testSession {
+    if (!_testSession) {
+        RLMRealm *realm = self.testRealm;
+        _testSession = [ALMSession sessionWithEmail:@"pelopez2@uc.cl" password:@"randompassword" inRealm:realm];
+    }
+    return _testSession;
 }
 
 @end

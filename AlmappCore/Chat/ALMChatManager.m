@@ -7,8 +7,6 @@
 //
 
 #import "ALMChatManager.h"
-#import "ALMRequestManager.h"
-#import "ALMHTTPHeaderHelper.h"
 
 @interface ALMChatManager ()
 
@@ -92,8 +90,9 @@
         return ext;
     }
     else {
-        NSDictionary *headers = [ALMHTTPHeaderHelper createHeaderHashForSession:session apiKey:[self apiKey]];
-        return headers;
+        //NSDictionary *headers = [ALMHTTPHeaderHelper createHeaderHashForCredential:session.credential apiKey:[self apiKey]];
+        //return headers;
+        return nil; // TODO FAYE AUTH
     }
 }
 
@@ -126,8 +125,8 @@
 }
 
 - (BOOL)sendMessage:(ALMChatMessage *)message to:(ALMChat *)chat as:(ALMSession *)session {
-    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:shouldSendMessage:to:as:)]) {
-        if (![self.chatManagerDelegate chatManager:self shouldSendMessage:message to:chat as:session]){
+    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:shouldSendMessage:to:as:)]) {
+        if (![self.chatListenerDelegate chatManager:self shouldSendMessage:message to:chat as:session]){
             return NO;
         }
     }
@@ -204,6 +203,10 @@
     if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:error:)]) {
         [self.chatManagerDelegate chatManager:self error:error];
     }
+    
+    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:error:)]) {
+        [self.chatListenerDelegate chatManager:self error:error];
+    }
 }
 
 - (void)onFayeClient:(FayeCppClient *)client receivedMessage:(NSDictionary *)message fromChannel:(NSString *)channel {
@@ -215,8 +218,8 @@
     ALMChat *chat = [self chatForChannel:channel];
     ALMChatMessage *parsedMessage = [self parseIncommingMessage:message from:chat];
     
-    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:didRecieveMessage:)]) {
-        [self.chatManagerDelegate chatManager:self didRecieveMessage:parsedMessage];
+    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:didRecieveMessage:)]) {
+        [self.chatListenerDelegate chatManager:self didRecieveMessage:parsedMessage];
     }
 }
 
@@ -228,8 +231,8 @@
     ALMChat *chat = [self chatForChannel:channel];
     ALMSession *session = [self sessionForClient:client];
     
-    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:subscribedTo:as:)]) {
-        [self.chatManagerDelegate chatManager:self subscribedTo:chat as:session];
+    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:subscribedTo:as:)]) {
+        [self.chatListenerDelegate chatManager:self subscribedTo:chat as:session];
     }
 }
 
@@ -243,8 +246,8 @@
 
     [_chats removeObjectForKey:channel];
     
-    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:unsubscribedFrom:as:)]) {
-        [self.chatManagerDelegate chatManager:self unsubscribedFrom:chat as:session];
+    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:unsubscribedFrom:as:)]) {
+        [self.chatListenerDelegate chatManager:self unsubscribedFrom:chat as:session];
     }
 }
 
@@ -255,8 +258,8 @@
     
     ALMSession *session = [self sessionForClient:client];
     
-    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:connectedAs:)]) {
-        [self.chatManagerDelegate chatManager:self connectedAs:session];
+    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:connectedAs:)]) {
+        [self.chatListenerDelegate chatManager:self connectedAs:session];
     }
 }
 
@@ -267,8 +270,8 @@
     
     ALMSession *session = [self removeClient:client];
     
-    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:disconnectedAs:)]) {
-        [self.chatManagerDelegate chatManager:self disconnectedAs:session];
+    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:disconnectedAs:)]) {
+        [self.chatListenerDelegate chatManager:self disconnectedAs:session];
     }
 }
 
