@@ -9,7 +9,27 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-AlmappCore-AFOAuth2Manager.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-AlmappCore-FayeCpp.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-AlmappCore-OMGHTTPURLRQ.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-AlmappCore-PromiseKit-AFNetworking.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-AlmappCore-PromiseKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -37,32 +57,52 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>193C685E4312AA45576CE0BD</key>
+		<key>290366CFFB78F23B10F0268B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5180FFC7CCC65AD76200D5CB</key>
+		<key>3755B2A151472C8A66215C93</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>51BBA33654F39EFB3AF135A0</key>
+		<key>3B50105EE8A738AF1F723DF1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5BF02B8A62BA958482E106E2</key>
+		<key>637B476E5C824285D324AEC8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B797B6E95B0CEAC45B70B35F</key>
+		<key>67951FAF180A64EB0142F55A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>FE1BB7D2542CB932BAB19D03</key>
+		<key>6ABB98720B38A65A5E80B716</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6E5E8FD6343084E7264972E5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8733CEB446BE3CE2456C86A5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9A07CF04D82F60ABC6535A79</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A3C9949D27BFE8F3D4E2ED74</key>
 		<dict>
 			<key>primary</key>
 			<true/>

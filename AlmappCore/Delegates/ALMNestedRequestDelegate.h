@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ALMRequestDelegate.h"
 
-@class ALMSession, ALMSessionManager, RLMRealm, RLMResults, ALMResource;
+@class RLMRealm, RLMResults, ALMResource;
 @class ALMController, ALMResourceRequest;
 
 @protocol ALMNestedRequestDelegate <ALMRequestDelegate>
