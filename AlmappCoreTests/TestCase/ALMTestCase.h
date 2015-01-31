@@ -10,6 +10,7 @@
 
 #import "AlmappCore.h"
 #import "ALMTestsConstants.h"
+#import "ALMController+Nested.h"
 
 @interface ALMTestCase : XCTestCase <ALMCoreDelegate>
 

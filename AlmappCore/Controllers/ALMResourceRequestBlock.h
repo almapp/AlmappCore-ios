@@ -11,6 +11,10 @@
 @interface ALMResourceRequestBlock : ALMResourceRequest <ALMRequestDelegate>
 
 + (instancetype)request:(void(^)(ALMResourceRequestBlock *r))builderBlock;
++ (instancetype)request:(void(^)(ALMResourceRequestBlock *r))builderBlock
+                 onLoad:(void (^)(id result))onLoad
+                onFetch:(void (^)(id result, NSURLSessionDataTask *task))onFetch
+                onError:(void (^)(NSError *error, NSURLSessionDataTask *task))onError;
 
 @property (nonatomic, copy) void (^onError)(NSError *error, NSURLSessionDataTask *task);
 

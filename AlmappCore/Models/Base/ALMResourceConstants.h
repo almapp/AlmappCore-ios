@@ -218,6 +218,9 @@ extern NSString *const kRIsAnonymous;
 extern NSString *const kAValuation;
 extern NSString *const kRValuation;
 
+extern NSString *const kAIsFlagged;
+extern NSString *const kRIsFlagged;
+
 #pragma mark - Academic
 
 extern NSString *const kACurriculumURL;

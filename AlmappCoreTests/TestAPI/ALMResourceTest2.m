@@ -55,12 +55,6 @@
     }];
 }
 
-- (void)testNested {
-    [self nestedResources:[ALMPlace class] on:[ALMFaculty class] id:1 path:nil params:nil onSuccess:^(id parent, RLMArray *results) {
-        NSLog(@"%@", parent);
-        NSLog(@"%@", results);
-    }];
-}
 
 - (void)testLogin {
     NSString *desc = [NSString stringWithFormat:@"session"];

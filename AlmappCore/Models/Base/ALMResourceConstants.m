@@ -225,6 +225,9 @@ NSString *const kRIsAnonymous = @"isAnonymous";
 NSString *const kAValuation = @"valuation";
 NSString *const kRValuation = @"valuation";
 
+NSString *const kAIsFlagged = @"flagged";
+NSString *const kRIsFlagged = @"isFlagged";
+
 #pragma mark - Academic
 
 NSString *const kACurriculumURL = @"curriculum_url";
