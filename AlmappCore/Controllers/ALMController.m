@@ -87,7 +87,8 @@ static NSString *const kDefaultOAuthScope = @"";
 }
 
 + (AFOAuthCredential *)loadCredential {
-    return [AFOAuthCredential retrieveCredentialWithIdentifier:kCredentialKey];
+    AFOAuthCredential *credential = [AFOAuthCredential retrieveCredentialWithIdentifier:kCredentialKey];
+    return credential;
 }
 
 + (BOOL)saveCredential:(AFOAuthCredential *)credential {
@@ -98,7 +99,7 @@ static NSString *const kDefaultOAuthScope = @"";
 #pragma mark - Auth
 
 - (PMKPromise *)authPromiseWithCredential:(ALMCredential *)credential {
-    if (self.OAuthCredential.isExpired) {
+    if (!self.OAuthCredential || self.OAuthCredential.isExpired) {
         [self publishWillGetTokensWith:credential];
         _authPromise = [self AUTH:credential];
     } else {
