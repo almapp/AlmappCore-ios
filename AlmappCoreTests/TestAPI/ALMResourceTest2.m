@@ -43,20 +43,20 @@
                                  }];
 }
 
-- (void)testSingle {
+- (void)testCollection {
     [self resources:[ALMFaculty class] path:nil params:nil onSuccess:^(RLMResults *resources) {
         NSLog(@"%@", resources);
     }];
 }
 
-- (void)testCollection {
+- (void)testSingle {
     [self resource:[ALMPost class] id:1 path:nil params:nil onSuccess:^(id resource) {
         NSLog(@"%@", resource);
     }];
 }
 
 
-- (void)testLogin {
+- (void)testPrivateResource {
     NSString *desc = [NSString stringWithFormat:@"session"];
     
     self.expectation = [self expectationWithDescription:desc];
@@ -64,7 +64,7 @@
     ALMResourceRequest *req = [ALMResourceRequest request:^(ALMResourceRequest *r) {
         r.credential = self.testSession.credential;
         r.resourceClass = [ALMUser class];
-        r.customPath = @"/me";
+        r.customPath = @"me";
         r.realmPath = [self testRealmPath];
         r.shouldLog = YES;
         
