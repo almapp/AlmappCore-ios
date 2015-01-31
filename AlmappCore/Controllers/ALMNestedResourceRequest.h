@@ -11,7 +11,18 @@
 
 @interface ALMNestedResourceRequest : ALMResourceRequest <ALMRequestDelegate>
 
+
+#pragma mark - Constructor
+
++ (instancetype)requestNested:(void(^)(ALMNestedResourceRequest *r))builderBlock delegate:(id<ALMNestedRequestDelegate>)delegate;
+
+
+#pragma mark - Delegate
+
 @property (weak, nonatomic) id<ALMNestedRequestDelegate> nestedRequestDelegate;
+
+
+#pragma mark - Resource parent
 
 @property (strong, nonatomic) ALMResource *parent;
 @property (strong, nonatomic) Class parentClass;
@@ -24,7 +35,8 @@
 @property (strong, nonatomic) ALMResourceRequest *parentRequest;
 @property (strong, nonatomic) ALMResourceRequest *nestedCollectionRequest;
 
-+ (instancetype)requestNested:(void(^)(ALMNestedResourceRequest *r))builderBlock delegate:(id<ALMNestedRequestDelegate>)delegate;
+
+#pragma mark - Path
 
 + (NSString *)intuitedPathFor:(Class)resourceClass inParent:(Class)parentClass parentID:(long long)parentID;
 

@@ -19,6 +19,4 @@
 - (void)sessionManager:(ALMSessionManager *)manager didChangeSessionTo:(ALMSession *)session;
 - (RLMRealm *)sessionManagerSessionsStoreRealm:(ALMSessionManager *)manager;
 
-- (void)sessionManager:(ALMSessionManager *)manager successfullyLoggedAs:(ALMSession *)session;
-
 @end

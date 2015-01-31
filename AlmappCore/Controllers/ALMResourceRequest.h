@@ -15,36 +15,14 @@ extern BOOL const kRequestForceLogin;
 
 @interface ALMResourceRequest : NSObject <NSCopying>
 
-@property (weak, nonatomic) id<ALMRequestDelegate> requestDelegate;
-
-@property (strong, nonatomic) NSString *realmPath;
-@property (readonly) RLMRealm *realm;
-- (void)setRealm:(RLMRealm *)realm;
-
-@property (strong, nonatomic) ALMCredential *credential;
-// @property (weak, nonatomic) ALMSession *session;
-
-@property (nonatomic, strong) dispatch_queue_t dispatchQueue;
-
-@property (strong, nonatomic) NSString *customPath;
-@property (copy, readonly) NSString *intuitedPath;
-@property (readonly) NSString *path;
-
-@property (strong, nonatomic) NSArray *resourcesIDs;
-- (void)setResourcesIDsWith:(RLMResults *)resourcesIDs;
-
-@property (assign, nonatomic) long long resourceID;
-@property (strong, nonatomic) Class resourceClass;
-@property (strong, nonatomic) id parameters;
-
-@property (assign, nonatomic) BOOL shouldLog;
-@property (assign, nonatomic, getter=isRequestingACollection) BOOL requestCollection;
+#pragma mark - Constructor
 
 + (instancetype)request:(void(^)(ALMResourceRequest *r))builderBlock delegate:(id<ALMRequestDelegate>)delegate;
 
-+ (NSString *)intuitedPathFor:(Class)resourceClass;
-+ (NSString *)intuitedPathFor:(Class)resourceClass withID:(long long)resourceID;
 
+#pragma mark - Delegate
+
+@property (weak, nonatomic) id<ALMRequestDelegate> requestDelegate;
 
 - (void)publishError:(NSError *)error task:(NSURLSessionDataTask *)task;
 
@@ -52,17 +30,43 @@ extern BOOL const kRequestForceLogin;
 
 - (void)publishLoaded:(id)object;
 
-// - (void)publishLoadedResource:(ALMResource *)resource;
-// - (void)publishLoadedResources:(RLMResults *)resources;
-
 - (void)publishFetched:(id)object task:(NSURLSessionDataTask *)task;
-
-// - (void)publishFetchedResource:(ALMResource *)resource task:(NSURLSessionDataTask *)task;
-// - (void)publishFetchedResources:(RLMResults *)resources task:(NSURLSessionDataTask *)task;
 
 - (BOOL)commitData:(id)data;
 
-// - (BOOL)commitMultiple:(Class)resourceClass data:(NSArray *)data inRealm:(RLMRealm *)realm;
-// - (BOOL)commitSingle:(Class)resourceClass data:(NSDictionary *)data inRealm:(RLMRealm *)realm;
+
+#pragma mark - Realm
+
+@property (strong, nonatomic) NSString *realmPath;
+- (RLMRealm *)realm;
+- (void)setRealm:(RLMRealm *)realm;
+
+
+#pragma mark - Paths
+
+@property (strong, nonatomic) NSString *customPath;
+@property (copy, readonly) NSString *intuitedPath;
+@property (readonly) NSString *path;
+
++ (NSString *)intuitedPathFor:(Class)resourceClass;
++ (NSString *)intuitedPathFor:(Class)resourceClass withID:(long long)resourceID;
+
+
+#pragma mark - Resources
+
+@property (assign, nonatomic) long long resourceID;
+@property (strong, nonatomic) Class resourceClass;
+@property (strong, nonatomic) NSArray *resourcesIDs;
+- (void)setResourcesIDsWith:(RLMResults *)resourcesIDs;
+
+
+#pragma mark - Other
+
+@property (strong, nonatomic) ALMCredential *credential;
+@property (nonatomic, strong) dispatch_queue_t dispatchQueue;
+
+@property (strong, nonatomic) id parameters;
+@property (assign, nonatomic) BOOL shouldLog;
+@property (assign, nonatomic, getter=isRequestingACollection) BOOL requestCollection;
 
 @end
