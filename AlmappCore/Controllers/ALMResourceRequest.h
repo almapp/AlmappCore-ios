@@ -32,6 +32,8 @@ extern BOOL const kRequestForceLogin;
 
 - (void)publishFetched:(id)object task:(NSURLSessionDataTask *)task;
 
+- (void)publishFetchedResources:(RLMResults *)resources withParent:(id)parent;
+
 - (BOOL)commitData:(id)data;
 
 

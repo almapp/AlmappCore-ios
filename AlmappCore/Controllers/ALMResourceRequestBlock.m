@@ -59,7 +59,12 @@
     if (_onFetchResources) {
         _onFetchResources(resources, task);
     }
+}
 
+- (void)request:(ALMResourceRequest *)request didFetchResources:(RLMResults *)resources withParent:(id)parent {
+    if (_onFetchResourcesWithParent) {
+        _onFetchResourcesWithParent(parent, resources);
+    }
 }
 
 - (void)request:(ALMResourceRequest *)request sortOrFilter:(RLMResults *)resources {

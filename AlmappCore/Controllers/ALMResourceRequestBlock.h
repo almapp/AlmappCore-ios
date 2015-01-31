@@ -23,6 +23,7 @@
 
 @property (nonatomic, copy) void (^onFetchResource)(ALMResource *resource, NSURLSessionDataTask *task);
 @property (nonatomic, copy) void (^onFetchResources)(RLMResults *resources, NSURLSessionDataTask *task);
+@property (nonatomic, copy) void (^onFetchResourcesWithParent)(id parent, RLMResults *resources);
 
 @property (nonatomic, copy) void (^sortAndFilterBlock)(RLMResults *resources);
 
