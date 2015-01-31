@@ -167,6 +167,12 @@ BOOL const kRequestForceLogin = NO;
     }
 }
 
+- (void)publishFetchedResources:(RLMResults *)resources withParent:(id)parent {
+    if(_requestDelegate && [_requestDelegate respondsToSelector:@selector(request:didFetchResources:withParent:)]) {
+        [_requestDelegate request:self didFetchResources:resources withParent:parent];
+    }
+}
+
 - (void)sortOrFilterResources:(RLMResults *)resources {
     if (_requestDelegate && [_requestDelegate respondsToSelector:@selector(request:sortOrFilter:)]) {
         [_requestDelegate request:self sortOrFilter:resources];

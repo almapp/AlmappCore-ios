@@ -64,6 +64,8 @@
             RLMResults *collection = results[1];
             [parent hasMany:collection as:nestedCollectionName belongsToAs:resourceParentName];
             
+            [request publishFetchedResources:collection withParent:parent];
+            
             fulfiller(PMKManifold(parent, collection));
         });
     }];
