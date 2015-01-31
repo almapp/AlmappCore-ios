@@ -110,4 +110,7 @@ extern ALMPersistMode const kPersistModeDefault;
 + (id)objectsOfType:(Class)resourceClass where:(NSString *)query;
 + (id)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm where:(NSString *)query;
 
++ (RLMResults *)objectsInRealm:(RLMRealm *)realm withIDs:(NSArray *)array;
++ (RLMResults *)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm withIDs:(NSArray *)array;
+
 @end

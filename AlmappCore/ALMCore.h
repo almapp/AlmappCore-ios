@@ -7,15 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UICKeyChainStore/UICKeyChainStore.h>
 
 #import "ALMCoreDelegate.h"
 #import "ALMCoreModuleDelegate.h"
 
 #import "ALMSessionManager.h"
-#import "ALMRequestManager.h"
+#import "ALMController.h"
 #import "ALMChatManager.h"
 
 #import "ALMUtil.h"
+#import "ALMApiKey.h"
+
+extern NSString *const kFrameworkIdentifier;
 
 @interface ALMCore : NSObject <ALMCoreModuleDelegate>
 
@@ -23,12 +27,12 @@
 
 + (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
                          baseURL:(NSURL *)baseURL
-                          apiKey:(NSString *)apiKey
-                         version:(short)version;
+                         apiVersion:(short)version
+                          apiKey:(ALMApiKey *)apiKey;
 
 + (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
                          baseURL:(NSURL *)baseURL
-                          apiKey:(NSString *)apiKey;
+                          apiKey:(ALMApiKey *)apiKey;
 
 
 #pragma mark - Singleton methods
@@ -49,18 +53,16 @@
 @property (strong, nonatomic) NSURL *apiBaseURL;
 @property (strong, nonatomic) NSURL *chatURL;
 
-@property (strong, nonatomic) NSString *apiKey;
+@property (strong, nonatomic) ALMApiKey *apiKey;
+@property (assign, nonatomic) BOOL shouldSyncToCloud;
 
-@property (strong, nonatomic) ALMRequestManager *requestManager;
+@property (strong, nonatomic) ALMController *controller;
 @property (strong, nonatomic) ALMSessionManager *sessionManager;
 @property (strong, nonatomic) ALMChatManager *chatManager;
 
-+ (ALMRequestManager *)requestManager;
++ (ALMController *)controller;
 + (ALMSessionManager *)sessionManager;
 + (ALMChatManager *)chatManager;
-
-- (id<ALMRequestManagerDelegate>) requestManagerDelegate;
-- (void) setRequestManagerDelegate:(id<ALMRequestManagerDelegate>)delegate;
 
 - (id<ALMSessionManagerDelegate>)sessionManagerDelegate;
 - (void)setSessionManagerDelegate:(id<ALMSessionManagerDelegate>)sessionManagerDelegate;
@@ -69,33 +71,33 @@
 + (ALMSession *)currentSession;
 
 
+#pragma mark - Keychain
+
+- (UICKeyChainStore *)keyStore;
++ (UICKeyChainStore *)keyStore;
+
+
 #pragma mark - Academic
 
 + (short)currentAcademicYear;
-
 - (short)currentAcademicYear;
 
 + (short)currentAcademicPeriod;
-
 - (short)currentAcademicPeriod;
 
 
 #pragma mark - Persistence
 
 + (RLMRealm *)realmNamed:(NSString *)name;
-
 - (RLMRealm *)realmNamed:(NSString *)name;
 
 + (RLMRealm *)defaultRealm;
-
 - (RLMRealm *)defaultRealm;
 
 + (RLMRealm *)temporalRealm;
-
 - (RLMRealm *)temporalRealm;
 
 + (RLMRealm *)encryptedRealm;
-
 - (RLMRealm *)encryptedRealm;
 
 - (void)dropDatabaseNamed:(NSString *)name;

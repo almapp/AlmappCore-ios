@@ -13,6 +13,7 @@
 #import <Foundation/Foundation.h>
 
 #import "ALMCore.h"
+#import "ALMError.h"
 
 #import "ALMCoreDelegate.h"
 
@@ -26,9 +27,8 @@
 
 #import "ALMSession.h"
 #import "ALMSessionManager.h"
-#import "ALMRequestManager.h"
-#import "ALMSectionRequest.h"
 #import "ALMChatManager.h"
+#import "ALMController.h"
 
 #import "ALMArea.h"
 #import "ALMOrganization.h"

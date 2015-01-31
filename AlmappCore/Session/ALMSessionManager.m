@@ -8,8 +8,6 @@
 
 #import "ALMSessionManager.h"
 
-NSString *const kDefaultLoginPath = @"auth/sign_in";
-
 @interface ALMSessionManager ()
 
 @property (strong, nonatomic) ALMSession *actualSession;
@@ -20,6 +18,22 @@ NSString *const kDefaultLoginPath = @"auth/sign_in";
 
 + (instancetype)sessionManagerWithCoreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate {
     return [[super alloc] initWithCoreModuleDelegate:coreDelegate];
+}
+
+- (void)successfullyLoggedWithEmail:(NSString *)email didSave:(BOOL)saved {
+    RLMRealm *realm = nil;
+    if (_sessionManagerDelegate && [_sessionManagerDelegate respondsToSelector:@selector(sessionManagerSessionsStoreRealm:)]) {
+        realm = [_sessionManagerDelegate sessionManagerSessionsStoreRealm:self];
+    }
+    else {
+        realm = [RLMRealm defaultRealm];
+    }
+    
+    ALMSession *newSession = [ALMSession objectInRealm:realm forPrimaryKey:email];
+    
+    if ([_sessionManagerDelegate respondsToSelector:@selector(sessionManager:successfullyLoggedAs:)]) {
+        //[_sessionManagerDelegate sessionManager:self successfullyLoggedAs:<#(ALMSession *)#>];
+    }
 }
 
 - (void)setCurrentSession:(ALMSession *)newSession {
@@ -50,21 +64,5 @@ NSString *const kDefaultLoginPath = @"auth/sign_in";
     return [ALMSession allObjectsInRealm:realm];
 }
 
-- (NSString *)loginPostPath:(ALMSession *)session {
-    if ([_sessionManagerDelegate respondsToSelector:@selector(sessionManager:loginPostPathFor:)]) {
-        return [_sessionManagerDelegate sessionManager:self loginPostPathFor:session];
-    } else {
-        return kDefaultLoginPath;
-    }
-}
-
-- (NSDictionary *)loginParams:(ALMSession *)session {
-    if ([_sessionManagerDelegate respondsToSelector:@selector(sessionManager:loginParamsFor:)]) {
-        return [_sessionManagerDelegate sessionManager:self loginParamsFor:session];
-    } else {
-        return @{ @"email" : session.email,
-                  @"password" : session.password };
-    }
-}
 
 @end
