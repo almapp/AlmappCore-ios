@@ -8,16 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-@class ALMChatManager, ALMSession, ALMChat, ALMChatMessage;
+@class ALMChatManager, ALMCredential, ALMChat, ALMChatMessage;
 
 @protocol ALMChatManagerDelegate <NSObject>
 
 - (void)chatManager:(ALMChatManager *)manager error:(NSError *)error;
 
-- (NSString *)chatManager:(ALMChatManager *)manager channelNameForChat:(ALMChat *)chat as:(ALMSession *)session;
+- (NSString *)chatManager:(ALMChatManager *)manager channelNameForChat:(ALMChat *)chat with:(ALMCredential *)credential;
 
-- (NSDictionary *)chatManager:(ALMChatManager *)manager parseOutgoingMessage:(ALMChatMessage *)message in:(ALMChat *)chat as:(ALMSession *)session;
+- (NSDictionary *)chatManager:(ALMChatManager *)manager parseOutgoingMessage:(ALMChatMessage *)message in:(ALMChat *)chat with:(ALMCredential *)credential;
 - (ALMChatMessage *)chatManager:(ALMChatManager *)manager parseIncommingMessage:(NSDictionary *)message from:(ALMChat *)chat;
-- (id)chatManager:(ALMChatManager *)manager extValueFor:(ALMSession *)session;
+
 
 @end

@@ -7,6 +7,11 @@
 //
 
 #import "ALMChatManager.h"
+#import "ALMCore.h"
+#import "ALMController.h"
+#import "ALMConstants.h"
+
+
 
 @interface ALMChatManager ()
 
@@ -14,9 +19,11 @@
 @property (strong, nonatomic) NSMutableDictionary *clients;
 @property (strong, nonatomic) NSMutableDictionary *chats;
 
-- (NSString *)channelNameForChat:(ALMChat *)chat as:(ALMSession *)session;
+- (NSString *)channelNameForChat:(ALMChat *)chat with:(ALMCredential *)credential;
 
 @end
+
+
 
 @implementation ALMChatManager 
 
@@ -25,86 +32,87 @@
 + (instancetype)chatManagerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate {
     ALMChatManager *manager = [[super alloc] initWithCoreModuleDelegate:coreDelegate];
     manager.chatURL = url;
+    manager.shouldLog = YES;
+    
     return manager;
 }
 
 
 #pragma mark - Clients
 
-- (void)addClientWithSession:(ALMSession *)session URL:(NSURL *)url {
-    FayeCppClient *client = [_clients objectForKey:session.email];
+- (void)addClientWithCredential:(ALMCredential *)credential {
+    return [self addClientWithCredential:credential URL:self.chatURL];
+}
+
+- (void)addClientWithCredential:(ALMCredential *)credential URL:(NSURL *)url {
+    FayeCppClient *client = [_clients objectForKey:credential.email];
     if (!client) {
         client = [[FayeCppClient alloc] init];
         client.delegate = self;
-        [_clients setObject:client forKey:session.email];
+        [_clients setObject:client forKey:credential.email];
     }
-    client.urlString = url.absoluteString;
+    NSString *absUrl = url.absoluteString;
+    [client setUrlString:absUrl];
 }
 
-- (ALMSession *)removeClient:(FayeCppClient *)client {
+- (void)removeClient:(FayeCppClient *)client {
     NSString *sessionEmail = [_clients allKeysForObject:client][0];
-    if (sessionEmail) {
-        ALMSession *session = [ALMSession sessionWithEmail:sessionEmail inRealm:[self defaultRealm]];
-        [_clients removeObjectForKey:sessionEmail];
-        return session;
-    }
-    return nil;
+    [_clients removeObjectForKey:sessionEmail];
 }
 
-- (FayeCppClient *)clientForSession:(ALMSession *)session {
-    FayeCppClient *client = [_clients objectForKey:session];
+- (FayeCppClient *)clientForCredential:(ALMCredential *)credential {
+    FayeCppClient *client = [_clients objectForKey:credential.email];
     if (!client) {
-        [self addClientWithSession:session URL:self.chatURL];
-        client = [self clientForSession:session];
+        [self addClientWithCredential:credential URL:self.chatURL];
+        client = [self clientForCredential:credential];
     }
     return client;
 }
 
-- (ALMSession *)sessionForClient:(FayeCppClient *)client {
-    NSString *sessionEmail = [_clients allKeysForObject:client][0];
-    return (sessionEmail) ? [ALMSession sessionWithEmail:sessionEmail inRealm:[self defaultRealm]] : nil;
+- (ALMCredential *)credentialForClient:(FayeCppClient *)client {
+    NSString *credentialEmail = [_clients allKeysForObject:client][0];
+    return (credentialEmail) ? [ALMCredential credentialForEmail:credentialEmail] : nil;
 }
 
+- (PMKPromise *)doAuthedWith:(ALMCredential *)credential {
+    PMKPromise *promise = [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+        [[ALMCore controller] authPromiseWithCredential:credential].then(^(NSString *token) {
+            FayeCppClient *client = [self clientForCredential:credential];
+            [client setExtValue:@{@"token" : token}];
+            fulfiller(client);
+            
+        }).catch(^(NSError *error) {
+            rejecter(error);
+        });
+    }];
+    return promise;
+}
 
 #pragma mark - Connection
 
-- (BOOL)connectAs:(ALMSession *)session {
-    FayeCppClient *client = [self clientForSession:session];
-    
-    [client setExtValue:[self extValueForSession:session]];
-    
-    BOOL success = [client connect];
-    return success;
+- (PMKPromise *)connectWith:(ALMCredential *)credential {
+    return [self doAuthedWith:credential].then(^(FayeCppClient *client) {
+        BOOL success = [client connect];
+        return success;
+    });
 }
 
-- (BOOL)disconnectAs:(ALMSession *)session {
-    FayeCppClient *client = [self clientForSession:session];
-    [client disconnect];
-    BOOL success = [client isFayeConnected];
-    return success;
-}
-
-- (id)extValueForSession:(ALMSession *)session {
-    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:extValueFor:)]) {
-        id ext = [self.chatManagerDelegate chatManager:self extValueFor:session];
-        return ext;
-    }
-    else {
-        //NSDictionary *headers = [ALMHTTPHeaderHelper createHeaderHashForCredential:session.credential apiKey:[self apiKey]];
-        //return headers;
-        return nil; // TODO FAYE AUTH
-    }
+- (PMKPromise *)disconnectWith:(ALMCredential *)credential {
+    return [self doAuthedWith:credential].then(^(FayeCppClient *client) {
+        [client disconnect];
+        BOOL success = [client isFayeConnected];
+        return success;
+    });
 }
 
 
 #pragma mark - Messaging
 
-- (NSDictionary *)parseOutgoingMessage:(ALMChatMessage *)message in:(ALMChat *)chat as:(ALMSession *)session {
-    message.user = session.user;
+- (NSDictionary *)parseOutgoingMessage:(ALMChatMessage *)message in:(ALMChat *)chat with:(ALMCredential *)credential {
     message.chat = chat;
     
-    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:parseOutgoingMessage:in:as:)]) {
-        return [self.chatManagerDelegate chatManager:self parseOutgoingMessage:message in:chat as:session];
+    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:parseOutgoingMessage:in:with:)]) {
+        return [self.chatManagerDelegate chatManager:self parseOutgoingMessage:message in:chat with:credential];
     }
     else {
         NSDictionary *jsonDictionary = message.JSONDictionary;
@@ -114,7 +122,7 @@
 
 - (ALMChatMessage *)parseIncommingMessage:(NSDictionary *)data from:(ALMChat *)chat {
 
-    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:parseOutgoingMessage:in:as:)]) {
+    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:parseIncommingMessage:from:)]) {
         return [self.chatManagerDelegate chatManager:self parseIncommingMessage:data from:chat];
     }
     else {
@@ -124,18 +132,20 @@
     }
 }
 
-- (BOOL)sendMessage:(ALMChatMessage *)message to:(ALMChat *)chat as:(ALMSession *)session {
-    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:shouldSendMessage:to:as:)]) {
-        if (![self.chatListenerDelegate chatManager:self shouldSendMessage:message to:chat as:session]){
-            return NO;
+- (PMKPromise *)sendMessage:(ALMChatMessage *)message to:(ALMChat *)chat with:(ALMCredential *)credential {
+    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:shouldSendMessage:to:with:)]) {
+        if (![self.chatListenerDelegate chatManager:self shouldSendMessage:message to:chat with:credential]) {
+            return nil;
         }
     }
     
-    NSDictionary *jsonMessage = [self parseOutgoingMessage:message in:chat as:session];
-    NSString *channel = [self channelNameForChat:chat as:session];
-    
-    BOOL success = [[self clientForSession:session] sendMessage:jsonMessage toChannel:channel];
-    return success;
+    return [self doAuthedWith:credential].then(^(FayeCppClient *client) {
+        NSDictionary *jsonMessage = [self parseOutgoingMessage:message in:chat with:credential];
+        NSString *channel = [self channelNameForChat:chat with:credential];
+
+        BOOL success = [client sendMessage:jsonMessage toChannel:channel];
+        return success;
+    });
 }
 
 
@@ -145,9 +155,9 @@
     return _chats[channel];
 }
 
-- (NSString *)channelNameForChat:(ALMChat *)chat as:(ALMSession *)session {
-    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:channelNameForChat:as:)]) {
-        NSString *channelName = [self.chatManagerDelegate chatManager:self channelNameForChat:chat as:session];
+- (NSString *)channelNameForChat:(ALMChat *)chat with:(ALMCredential *)credential {
+    if (self.chatManagerDelegate && [self.chatManagerDelegate respondsToSelector:@selector(chatManager:channelNameForChat:with:)]) {
+        NSString *channelName = [self.chatManagerDelegate chatManager:self channelNameForChat:chat with:credential];
         if ([[channelName substringToIndex:1] isEqualToString:@"/"]) {
             return channelName;
         } else {
@@ -159,37 +169,46 @@
     }
 }
 
-- (NSDictionary *)subscribeToChats:(NSArray *)chats as:(ALMSession *)session {
-    NSMutableDictionary *successHash = [NSMutableDictionary dictionaryWithCapacity:chats.count];
+- (PMKPromise *)subscribeToChats:(NSArray *)chats with:(ALMCredential *)credential {
+    NSMutableArray *successHash = [NSMutableArray arrayWithCapacity:chats.count];
     for (ALMChat *chat in chats) {
-        BOOL success = [self subscribeToChat:chat as:session];
-        [successHash setObject:@(success) forKey:chat];
+        PMKPromise* promise = [self subscribeToChat:chat with:credential];
+        [successHash addObject:promise];
     }
-    return successHash;
+    return [PMKPromise when:successHash];
 }
 
-- (BOOL)subscribeToChat:(ALMChat *)chat as:(ALMSession *)session {
-    NSString *channelName = [self channelNameForChat:chat as:session];
-    BOOL success = [[self clientForSession:session] subscribeToChannel:channelName];
-    if (success) {
-        [_chats setObject:chat forKey:channelName];
-    }
-    return success;
+- (PMKPromise *)subscribeToChat:(ALMChat *)chat with:(ALMCredential *)credential {
+    return [self doAuthedWith:credential].then(^(FayeCppClient *client) {
+        NSString *channelName = [self channelNameForChat:chat with:credential];
+        BOOL success = [client subscribeToChannel:channelName];
+        if (success) {
+            [_chats setObject:chat forKey:channelName];
+            return YES;
+        }
+        return success;
+    });
 }
 
-- (NSDictionary *)unsubscribeFromChats:(NSArray *)chats as:(ALMSession *)session {
-    NSMutableDictionary *successHash = [NSMutableDictionary dictionaryWithCapacity:chats.count];
+- (PMKPromise *)unsubscribeFromChats:(NSArray *)chats with:(ALMCredential *)credential {
+    NSMutableArray *successHash = [NSMutableArray arrayWithCapacity:chats.count];
     for (ALMChat *chat in chats) {
-        BOOL success = [self unsubscribeFromChat:chat as:session];
-        [successHash setObject:@(success) forKey:chat];
+        PMKPromise* promise = [self unsubscribeFromChat:chat with:credential];
+        [successHash addObject:promise];
     }
-    return successHash;
+    return [PMKPromise when:successHash];
 }
 
-- (BOOL)unsubscribeFromChat:(ALMChat *)chat as:(ALMSession *)session {
-    NSString *channelName = [self channelNameForChat:chat as:session];
-    BOOL success = [[self clientForSession:session] unsubscribeFromChannel:channelName];
-    return success;
+- (PMKPromise *)unsubscribeFromChat:(ALMChat *)chat with:(ALMCredential *)credential {
+    return [self doAuthedWith:credential].then(^(FayeCppClient *client) {
+        NSString *channelName = [self channelNameForChat:chat with:credential];
+        BOOL success = [client unsubscribeFromChannel:channelName];
+        if (success) {
+            [_chats setObject:chat forKey:channelName];
+            return YES;
+        }
+        return success;
+    });
 }
 
 
@@ -229,10 +248,10 @@
     }
     
     ALMChat *chat = [self chatForChannel:channel];
-    ALMSession *session = [self sessionForClient:client];
+    ALMCredential *credential = [self credentialForClient:client];
     
-    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:subscribedTo:as:)]) {
-        [self.chatListenerDelegate chatManager:self subscribedTo:chat as:session];
+    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:subscribedTo:with:)]) {
+        [self.chatListenerDelegate chatManager:self subscribedTo:chat with:credential];
     }
 }
 
@@ -242,12 +261,12 @@
     }
     
     ALMChat *chat = [self chatForChannel:channel];
-    ALMSession *session = [self sessionForClient:client];
+    ALMCredential *credential = [self credentialForClient:client];
 
     [_chats removeObjectForKey:channel];
     
-    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:unsubscribedFrom:as:)]) {
-        [self.chatListenerDelegate chatManager:self unsubscribedFrom:chat as:session];
+    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:unsubscribedFrom:with:)]) {
+        [self.chatListenerDelegate chatManager:self unsubscribedFrom:chat with:credential];
     }
 }
 
@@ -256,10 +275,10 @@
         NSLog(@"FayeClientConnected");
     }
     
-    ALMSession *session = [self sessionForClient:client];
+    ALMCredential *credential = [self credentialForClient:client];
     
-    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:connectedAs:)]) {
-        [self.chatListenerDelegate chatManager:self connectedAs:session];
+    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:connectedWith:)]) {
+        [self.chatListenerDelegate chatManager:self connectedWith:credential];
     }
 }
 
@@ -268,10 +287,11 @@
         NSLog(@"FayeClientDisconnected");
     }
     
-    ALMSession *session = [self removeClient:client];
+    ALMCredential *credential = [self credentialForClient:client];
+    [self removeClient:client];
     
-    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:disconnectedAs:)]) {
-        [self.chatListenerDelegate chatManager:self disconnectedAs:session];
+    if (self.chatListenerDelegate && [self.chatListenerDelegate respondsToSelector:@selector(chatManager:disconnectedWith:)]) {
+        [self.chatListenerDelegate chatManager:self disconnectedWith:credential];
     }
 }
 

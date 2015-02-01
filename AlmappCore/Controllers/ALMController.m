@@ -104,7 +104,7 @@ static NSString *const kDefaultOAuthScope = @"";
         _authPromise = [self AUTH:credential];
     } else {
         _authPromise = [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-            fulfiller(@YES);
+            fulfiller(self.OAuthCredential.accessToken);
         }];
     }
 
@@ -128,9 +128,9 @@ static NSString *const kDefaultOAuthScope = @"";
             }
             
             [self.requestSerializer setAuthorizationHeaderFieldWithCredential:OAuthcredential];
-            [self publishSuccessfulLoginWith:credential];
+            [self publishDidRefreshTokenWith:credential];
             
-            fulfiller(@YES);
+            fulfiller(OAuthcredential.accessToken);
             
         } failure:^(NSError *error) {
             [self publishFailedLoginWith:credential error:error];
@@ -276,14 +276,14 @@ static NSString *const kDefaultOAuthScope = @"";
 }
 
 - (void)publishWillGetTokensWith:(ALMCredential *)credential {
-    if (_controllerDelegate && [_controllerDelegate respondsToSelector:@selector(controllerWillRefreshTokenForCredential:)]) {
-        [_controllerDelegate controllerWillRefreshTokenForCredential:credential];
+    if (_controllerDelegate && [_controllerDelegate respondsToSelector:@selector(controllerWillRefreshTokenWithCredential:)]) {
+        [_controllerDelegate controllerWillRefreshTokenWithCredential:credential];
     }
 }
 
-- (void)publishSuccessfulLoginWith:(ALMCredential *)credential {
-    if (_controllerDelegate && [_controllerDelegate respondsToSelector:@selector(controllerWillRefreshTokenForCredential:)]) {
-        [_controllerDelegate controllerSuccessfullyLoggedWithCredential:credential];
+- (void)publishDidRefreshTokenWith:(ALMCredential *)credential {
+    if (_controllerDelegate && [_controllerDelegate respondsToSelector:@selector(controllerDidRefreshTokenWithCredential:)]) {
+        [_controllerDelegate controllerDidRefreshTokenWithCredential:credential];
     }
 }
 

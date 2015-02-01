@@ -27,6 +27,4 @@ extern NSString *const kDefaultLoginPath;
 
 - (RLMResults *)availableSessionsInRealm:(RLMRealm *)realm;
 
-- (void)successfullyLoggedWithEmail:(NSString *)email didSave:(BOOL)saved;
-
 @end

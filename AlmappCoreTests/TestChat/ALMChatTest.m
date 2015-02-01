@@ -13,29 +13,59 @@
 
 @interface ALMChatTest : ALMTestCase
 
+@property (strong, nonatomic) ALMChatManager *chatManager;
+@property (strong, nonatomic) ALMChatManagerBlock *chatBlock;
+@property (strong, nonatomic) ALMCredential *credential;
+@property (strong, nonatomic) ALMChat *chat;
+
 @end
 
 @implementation ALMChatTest
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    self.chatManager = [self.core chatManager];
+    self.chatBlock = [[ALMChatManagerBlock alloc] init];
+    self.chatManager.chatListenerDelegate = self.chatBlock;
+    self.credential = [self testSession].credential;
 }
 
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
+- (ALMChat *)chat {
+    if (!_chat) {
+        _chat = [[ALMChat alloc] init];
+        _chat.resourceID = 1;
+    }
+    return _chat;
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    XCTAssert(YES, @"Pass");
-}
+- (void)testChat {
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Test chat"];
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
+    [_chatBlock setOnError:^(NSError *error) {
+        NSLog(@"%@", error);
+        [expectation fulfill];
+    }];
+    [_chatBlock setOnConnectedWith:^(ALMCredential *credential) {
+        NSLog(@"%@", credential);
+    }];
+    [_chatBlock setOnSubscribedTo:^(ALMChat *chat, ALMCredential *credential) {
+        NSLog(@"%@", chat);
+    }];
+    [_chatBlock setOnMessageSent:^(ALMChatMessage *message) {
+        NSLog(@"%@", message);
+        [expectation fulfill];
+    }];
+    [_chatBlock setOnMessageRecieve:^(ALMChatMessage *message) {
+        NSLog(@"%@", message);
+    }];
+    
+    [_chatManager addClientWithCredential:_credential];
+    [_chatManager connectWith:_credential];
+    [_chatManager subscribeToChat:self.chat with:_credential];
+    
+    [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
+        NSLog(@"%@", error);
     }];
 }
 

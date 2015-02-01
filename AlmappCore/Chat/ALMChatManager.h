@@ -8,34 +8,36 @@
 
 #import <Foundation/Foundation.h>
 #import <FayeCpp/FayeCppClient.h>
+#import <PromiseKit/PromiseKit.h>
 
 #import "ALMCoreModule.h"
 #import "ALMChatManagerDelegate.h"
 #import "ALMChatListenerDelegate.h"
-#import "ALMSession.h"
+#import "ALMCredential.h"
 #import "ALMChat.h"
 
 @interface ALMChatManager : ALMCoreModule <FayeCppClientDelegate>
 
 @property (weak, nonatomic) id<ALMChatManagerDelegate> chatManagerDelegate;
 @property (weak, nonatomic) id<ALMChatListenerDelegate> chatListenerDelegate;
+@property (strong, nonatomic) NSMutableDictionary *extValues;
 @property (assign, nonatomic) BOOL shouldLog;
 
 - (id)init __attribute__((unavailable));
 + (instancetype)chatManagerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate;
 
-- (void)addClientWithSession:(ALMSession *)session URL:(NSURL *)url;
+- (void)addClientWithCredential:(ALMCredential *)credential;
+- (void)addClientWithCredential:(ALMCredential *)credential URL:(NSURL *)url;
 
-- (BOOL)connectAs:(ALMSession *)session;
-- (BOOL)disconnectAs:(ALMSession *)session;
-- (id)extValueForSession:(ALMSession *)session;
+- (PMKPromise *)connectWith:(ALMCredential *)credential;
+- (PMKPromise *)disconnectWith:(ALMCredential *)credential;
 
-- (NSDictionary *)subscribeToChats:(NSArray *)chats as:(ALMSession *)session;
-- (BOOL)subscribeToChat:(ALMChat *)chat as:(ALMSession *)session;
+- (PMKPromise *)subscribeToChats:(NSArray *)chats with:(ALMCredential *)credential;
+- (PMKPromise *)subscribeToChat:(ALMChat *)chat with:(ALMCredential *)credential;
 
-- (NSDictionary *)unsubscribeFromChats:(NSArray *)chats as:(ALMSession *)session;
-- (BOOL)unsubscribeFromChat:(ALMChat *)chat as:(ALMSession *)session;
+- (PMKPromise *)unsubscribeFromChats:(NSArray *)chats with:(ALMCredential *)credential;
+- (PMKPromise *)unsubscribeFromChat:(ALMChat *)chat with:(ALMCredential *)credential;
 
-- (BOOL)sendMessage:(ALMChatMessage *)message to:(ALMChat *)chat as:(ALMSession *)session;
+- (PMKPromise *)sendMessage:(ALMChatMessage *)message to:(ALMChat *)chat with:(ALMCredential *)credential;
 
 @end
