@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <FayeCpp/FayeCppClient.h>
 #import <PromiseKit/PromiseKit.h>
+#import <PromiseKit/Promise+When.h>
 
 #import "ALMCoreModule.h"
 #import "ALMChatManagerDelegate.h"

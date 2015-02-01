@@ -9,6 +9,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "AFNetworking+PromiseKit.h"
 #import <PromiseKit.h>
+#import <PromiseKit/Promise+When.h>
 #import <Realm+JSON/RLMObject+JSON.h>
 
 #import "ALMControllerDelegate.h"
