@@ -33,6 +33,8 @@
     ALMChatManager *manager = [[super alloc] initWithCoreModuleDelegate:coreDelegate];
     manager.chatURL = url;
     manager.shouldLog = YES;
+    manager.clients = [NSMutableDictionary dictionary];
+    manager.chats = [NSMutableDictionary dictionary];
     
     return manager;
 }
@@ -41,17 +43,17 @@
 #pragma mark - Clients
 
 - (void)addClientWithCredential:(ALMCredential *)credential {
-    return [self addClientWithCredential:credential URL:self.chatURL];
+    return [self addClientWithCredential:credential URL:nil];
 }
 
 - (void)addClientWithCredential:(ALMCredential *)credential URL:(NSURL *)url {
-    FayeCppClient *client = [_clients objectForKey:credential.email];
+    FayeCppClient *client = [self clientForCredential:credential];
     if (!client) {
         client = [[FayeCppClient alloc] init];
         client.delegate = self;
         [_clients setObject:client forKey:credential.email];
     }
-    NSString *absUrl = url.absoluteString;
+    NSString *absUrl = @"http://almapp.me:80/faye";//(url) ? url.absoluteString : self.chatURL.absoluteString;
     [client setUrlString:absUrl];
 }
 
@@ -62,10 +64,6 @@
 
 - (FayeCppClient *)clientForCredential:(ALMCredential *)credential {
     FayeCppClient *client = [_clients objectForKey:credential.email];
-    if (!client) {
-        [self addClientWithCredential:credential URL:self.chatURL];
-        client = [self clientForCredential:credential];
-    }
     return client;
 }
 
@@ -78,7 +76,9 @@
     PMKPromise *promise = [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         [[ALMCore controller] authPromiseWithCredential:credential].then(^(NSString *token) {
             FayeCppClient *client = [self clientForCredential:credential];
-            [client setExtValue:@{@"token" : token}];
+            
+            //[client setExtValue:@{@"token" : token}]; // TODO EXT
+            
             fulfiller(client);
             
         }).catch(^(NSError *error) {
@@ -143,7 +143,7 @@
         NSDictionary *jsonMessage = [self parseOutgoingMessage:message in:chat with:credential];
         NSString *channel = [self channelNameForChat:chat with:credential];
 
-        BOOL success = [client sendMessage:jsonMessage toChannel:channel];
+        BOOL success = [client sendMessage:@{@"data":@"data"} toChannel:@"/chat/A3"];
         return success;
     });
 }

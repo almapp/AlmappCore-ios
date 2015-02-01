@@ -61,8 +61,9 @@
     }];
     
     [_chatManager addClientWithCredential:_credential];
-    [_chatManager connectWith:_credential];
-    [_chatManager subscribeToChat:self.chat with:_credential];
+    //[_chatManager connectWith:_credential];
+    //[_chatManager subscribeToChat:self.chat with:_credential];
+    [_chatManager sendMessage:nil to:self.chat with:_credential];
     
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         NSLog(@"%@", error);

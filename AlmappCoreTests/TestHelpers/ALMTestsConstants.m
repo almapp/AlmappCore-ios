@@ -14,8 +14,8 @@ NSString * const kTestingBaseURL = @"http://almapp.me"; //@"http://patiwi-mcburg
 short const kTestingApiVersion = 1;
 
 + (ALMApiKey *)testingApiKey {
-    return [ALMApiKey apiKeyWithClient:@"b94e4d9be176d67bb42a2972a2bf96f538d5ff51096ecac7a6b88ea975093585"
-                                secret:@"80ad86434af326d43f8eb0e16b928451090225583b3f2151f256f1c2ebff5d4f"];
+    return [ALMApiKey apiKeyWithClient:@"c970e1f8282992baa673e3609753dc8bd746c4d7931b9a65ab1cab073be1f03e"
+                                secret:@"3d834a31a2a65a8a0aa5a7c46d25a149b4c7282fc7d6d04977375ad4ae469459"];
 }
 
 @end
