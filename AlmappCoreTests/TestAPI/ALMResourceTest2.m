@@ -82,36 +82,6 @@
 
 }
 
-- (void)nestedResources2:(Class)resourcesClass on:(Class)parentClass id:(long long)parentID path:(NSString *)path params:(id)params onSuccess:(void (^)(id, RLMResults *))onSuccess {
-    NSString *desc = [NSString stringWithFormat:@"ResourceRequest %@ - %lld / %@" , parentClass, parentID, resourcesClass];
-    
-    self.expectation = [self expectationWithDescription:desc];
-    
-    self.successForNested = onSuccess;
-    
-    ALMNestedResourceRequest *req = [ALMNestedResourceRequest requestNested:^(ALMNestedResourceRequest *r) {
-        r.resourceClass = resourcesClass;
-        r.parentClass = parentClass;
-        r.parentID = parentID;
-        r.customPath = path;
-        r.parameters = params;
-        r.realmPath = [self testRealmPath];
-        r.shouldLog = YES;
-        
-    } delegate:self];
-    
-    [self.controller FETCH:req];
-    
-    [self waitForExpectationsWithTimeout:self.timeout
-                                 handler:^(NSError *error) {
-                                     // handler is called on _either_ success or failure
-                                     if (error != nil) {
-                                         XCTFail(@"timeout error: %@", error);
-                                     }
-                                 }];
-
-}
-
 - (void)resources:(Class)resourcesClass path:(NSString *)path params:(id)params onSuccess:(void (^)(RLMResults *))onSuccess {
     
     NSString *desc = [NSString stringWithFormat:@"ResourceRequest %@", resourcesClass];

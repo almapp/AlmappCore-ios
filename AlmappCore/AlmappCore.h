@@ -28,6 +28,7 @@
 #import "ALMSession.h"
 #import "ALMSessionManager.h"
 #import "ALMChatManager.h"
+#import "ALMChatManagerBlock.h"
 #import "ALMController.h"
 
 #import "ALMArea.h"

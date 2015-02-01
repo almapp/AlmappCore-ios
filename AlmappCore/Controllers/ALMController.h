@@ -19,7 +19,6 @@
 
 #import "ALMResourceRequest.h"
 #import "ALMResourceRequestBlock.h"
-#import "ALMNestedResourceRequest.h"
 
 @interface ALMController : AFHTTPSessionManager
 
@@ -37,6 +36,8 @@
 
 
 #pragma mark - Auth
+
+- (PMKPromise *)authPromiseWithCredential:(ALMCredential *)credential;
 
 - (PMKPromise *)AUTH:(ALMCredential *)credential;
 - (PMKPromise *)AUTH:(ALMCredential *)credential oauthUrl:(NSString *)oauthUrl scope:(NSString *)scope;

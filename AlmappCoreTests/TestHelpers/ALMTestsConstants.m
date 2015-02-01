@@ -10,7 +10,7 @@
 
 @implementation ALMTestsConstants
 
-NSString * const kTestingBaseURL = @"http://patiwi-mcburger-pro.local:3000";
+NSString * const kTestingBaseURL = @"http://almapp.me"; //@"http://patiwi-mcburger-pro.local:3000";
 short const kTestingApiVersion = 1;
 
 + (ALMApiKey *)testingApiKey {
