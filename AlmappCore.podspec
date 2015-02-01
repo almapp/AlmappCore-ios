@@ -133,6 +133,6 @@ Pod::Spec.new do |s|
   s.dependency "AFNetworking", "~> 2.5"
   s.dependency "FayeCpp", "~> 0.1.5"
   s.dependency "UICKeyChainStore"
-  s.dependency "PromiseKit"
   s.dependency "PromiseKit-AFNetworking"
+  s.dependency "PromiseKit", "~> 1.2.2"
 end

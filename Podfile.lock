@@ -78,7 +78,7 @@ DEPENDENCIES:
   - AFNetworking
   - AFOAuth2Manager (from `https://github.com/iamcam/AFOAuth2Manager`, commit `7470a389ea74034923999202eedfc04f036b3d37`)
   - FayeCpp
-  - PromiseKit
+  - PromiseKit (~> 1.2.2)
   - PromiseKit-AFNetworking
   - Realm+JSON (from `https://github.com/mrpatiwi/Realm-JSON.git`, commit `813d6b474848f3ebaa1f6c92562cce00e9069ac4`, branch `master`)
   - UICKeyChainStore

@@ -6,8 +6,8 @@ target 'AlmappCore' do
     pod 'FayeCpp'
     pod 'UICKeyChainStore'
     pod 'AFOAuth2Manager', :git => 'https://github.com/iamcam/AFOAuth2Manager', :commit => '7470a389ea74034923999202eedfc04f036b3d37'
-    pod 'PromiseKit'
     pod 'PromiseKit-AFNetworking'
+    pod 'PromiseKit', '~> 1.2.2'
 end
 
 target 'AlmappCoreTests' do
