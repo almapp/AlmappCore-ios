@@ -8,6 +8,8 @@
 
 #import "RLMObject.h"
 #import "RLMObject+JSON.h"
+#import "RLMResults+Select.h"
+#import "NSArray+Query.h"
 
 #pragma mark - Persistence Declarations
 

@@ -25,6 +25,54 @@
     }];
 }
 
+- (void)testUserSchedule {
+    NSString *description = [NSString stringWithFormat:@"GET: %@", @"schedule"];
+    XCTestExpectation *expectation = [self expectationWithDescription:description];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [self.controller FETCH:[ALMResourceRequestBlock request:^(ALMResourceRequestBlock *builder) {
+        builder.resourceClass = [ALMScheduleModule class];
+        builder.realmPath = [weakSelf testRealmPath];
+        builder.shouldLog = YES;
+        builder.credential = [weakSelf testSession].credential;
+        
+    } onLoad:^(id result) {
+        NSLog(@"Loaded: %@", result);
+        
+    } onFetch:^(id result, NSURLSessionDataTask *task) {
+        [weakSelf.controller FETCH:[ALMResourceRequestBlock request:^(ALMResourceRequestBlock *r) {
+            r.resourceClass = [ALMSection class];
+            r.realmPath = [weakSelf testRealmPath];
+            r.customPath = @"me/sections";
+            r.shouldLog = YES;
+            r.credential = [weakSelf testSession].credential;
+            
+        } onLoad:^(id result) {
+            
+        } onFetch:^(id result, NSURLSessionDataTask *task) {
+            for (ALMSection *section in result) {
+                for (int i = ALMScheduleDayMonday; i <= ALMScheduleDaySunday; i++) {
+                    RLMResults *inDay = [section scheduleItemsInDay:i];
+                    NSLog(@"%@", inDay);
+                    for (ALMScheduleItem *item in inDay) {
+                        XCTAssertEqual(item.scheduleModule.day, i);
+                    }
+                }
+            }
+            [expectation fulfill];
+            
+        } onError:^(NSError *error, NSURLSessionDataTask *task) {
+            
+        }]];
+        
+    } onError:[self errorBlock:expectation class:[ALMScheduleModule class]]]];
+    
+    [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
 - (void)testSectionCourse {
     [self resource:[ALMSection class] id:30 path:nil params:nil onSuccess:^(ALMSection* resource) {
         XCTAssertNotNil(resource.course);

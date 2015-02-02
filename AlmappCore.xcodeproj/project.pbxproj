@@ -54,6 +54,9 @@
 		F6A058B31A5480C8001A1E45 /* ALMFaculty.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058B21A5480C8001A1E45 /* ALMFaculty.m */; };
 		F6A058B61A5481B6001A1E45 /* ALMArea.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058B51A5481B6001A1E45 /* ALMArea.m */; };
 		F6A058B91A548588001A1E45 /* ALMPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A058B81A548588001A1E45 /* ALMPlace.m */; };
+		F6A0F45A1A7FBBE100380EE1 /* RLMResults+Select.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A0F4591A7FBBE100380EE1 /* RLMResults+Select.m */; };
+		F6A0F45C1A7FBEAE00380EE1 /* ALMSelectTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A0F45B1A7FBEAE00380EE1 /* ALMSelectTest.m */; };
+		F6A0F45F1A7FC22E00380EE1 /* NSArray+Query.m in Sources */ = {isa = PBXBuildFile; fileRef = F6A0F45E1A7FC22E00380EE1 /* NSArray+Query.m */; };
 		F6B0CEA71A745EE70004B570 /* ALMAreaTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B0CEA41A745EE70004B570 /* ALMAreaTest.m */; };
 		F6B0CEA81A745EE70004B570 /* ALMResourceTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B0CEA61A745EE70004B570 /* ALMResourceTest.m */; };
 		F6B358241A7964E200999DCE /* ALMChat.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B358231A7964E200999DCE /* ALMChat.m */; };
@@ -180,6 +183,11 @@
 		F6A058B51A5481B6001A1E45 /* ALMArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMArea.m; sourceTree = "<group>"; };
 		F6A058B71A548588001A1E45 /* ALMPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMPlace.h; sourceTree = "<group>"; };
 		F6A058B81A548588001A1E45 /* ALMPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMPlace.m; sourceTree = "<group>"; };
+		F6A0F4581A7FBBE100380EE1 /* RLMResults+Select.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMResults+Select.h"; sourceTree = "<group>"; };
+		F6A0F4591A7FBBE100380EE1 /* RLMResults+Select.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMResults+Select.m"; sourceTree = "<group>"; };
+		F6A0F45B1A7FBEAE00380EE1 /* ALMSelectTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMSelectTest.m; sourceTree = "<group>"; };
+		F6A0F45D1A7FC22E00380EE1 /* NSArray+Query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Query.h"; sourceTree = "<group>"; };
+		F6A0F45E1A7FC22E00380EE1 /* NSArray+Query.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Query.m"; sourceTree = "<group>"; };
 		F6B0CEA41A745EE70004B570 /* ALMAreaTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMAreaTest.m; sourceTree = "<group>"; };
 		F6B0CEA51A745EE70004B570 /* ALMResourceTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMResourceTest.h; sourceTree = "<group>"; };
 		F6B0CEA61A745EE70004B570 /* ALMResourceTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMResourceTest.m; sourceTree = "<group>"; };
@@ -380,6 +388,10 @@
 				F64478161A58EE820078FB29 /* ALMResourceConstants.m */,
 				F649C7AC1A66C5A200CF64AA /* ALMResourceIndex.h */,
 				F649C7AD1A66C5A200CF64AA /* ALMResourceIndex.m */,
+				F6A0F4581A7FBBE100380EE1 /* RLMResults+Select.h */,
+				F6A0F4591A7FBBE100380EE1 /* RLMResults+Select.m */,
+				F6A0F45D1A7FC22E00380EE1 /* NSArray+Query.h */,
+				F6A0F45E1A7FC22E00380EE1 /* NSArray+Query.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -533,6 +545,7 @@
 			isa = PBXGroup;
 			children = (
 				F6E72E621A7D91D7004988C9 /* ALMChatMessageTest.m */,
+				F6A0F45B1A7FBEAE00380EE1 /* ALMSelectTest.m */,
 			);
 			path = TestModels;
 			sourceTree = "<group>";
@@ -707,8 +720,10 @@
 				F6E32D5B1A6D959D00ED3AD0 /* ALMSocialResource.m in Sources */,
 				F6A058B91A548588001A1E45 /* ALMPlace.m in Sources */,
 				F64478131A58ECB60078FB29 /* ALMCareer.m in Sources */,
+				F6A0F45F1A7FC22E00380EE1 /* NSArray+Query.m in Sources */,
 				F6D652D01A7A6AE5000620A4 /* ALMResourceRequest.m in Sources */,
 				F63683061A58C8D000DBCC6A /* ALMEvent.m in Sources */,
+				F6A0F45A1A7FBBE100380EE1 /* RLMResults+Select.m in Sources */,
 				F694DD561A7A9BA8005D9AE7 /* ALMError.m in Sources */,
 				F6B3582C1A796B1B00999DCE /* ALMChatManager.m in Sources */,
 				F649C7A21A659CD900CF64AA /* ALMPost.m in Sources */,
@@ -761,6 +776,7 @@
 				F6B3582F1A79723300999DCE /* ALMChatTest.m in Sources */,
 				F6FB88CA1A76815C0076C8F4 /* ALMScheduleItemTest.m in Sources */,
 				F694DD591A7ABBD2005D9AE7 /* ALMResourceTest2.m in Sources */,
+				F6A0F45C1A7FBEAE00380EE1 /* ALMSelectTest.m in Sources */,
 				F6F573D91A741C4900D19FC4 /* ALMCoreSingletonTests.m in Sources */,
 				F603D02E1A73111600913806 /* ALMTestCase.m in Sources */,
 			);

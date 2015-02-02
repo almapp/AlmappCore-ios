@@ -402,9 +402,7 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
 }
 
 + (RLMResults *)objectsOfType:(Class)resourceClass inRealm:(RLMRealm *)realm withProperty:(NSString *)property in:(NSArray *)array {
-    NSString *query = [[array valueForKey:@"description"] componentsJoinedByString:@", "];
-    query = [NSString stringWithFormat:@"{ %@ }", query];
-    query = [NSString stringWithFormat:@"%@ IN %@", property, query];
+    NSString *query = [NSString stringWithFormat:@"%@ IN %@", property, [array toRealmStringArray]];
     return [ALMResource objectsOfType:resourceClass inRealm:realm where:query];
 }
 

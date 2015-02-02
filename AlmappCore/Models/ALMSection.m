@@ -72,4 +72,18 @@
 }
 
 
+
+- (RLMResults *)scheduleItemsInDay:(ALMScheduleDay)day {
+    RLMResults *modulesInDay = [ALMScheduleModule scheduleModulesOfDay:day inRealm:self.realm];
+    if (modulesInDay.count != 0) {
+        NSString *query = [NSString stringWithFormat:@"scheduleModuleID IN %@", [modulesInDay select:kRResourceID].toRealmStringArray];
+        id ewe = [self.scheduleItems objectsWhere:query];
+        return ewe;
+    }
+    else {
+        return nil;
+    }
+}
+
+
 @end

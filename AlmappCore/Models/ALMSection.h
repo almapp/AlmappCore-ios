@@ -28,5 +28,7 @@
 @property NSDate *updatedAt;
 @property NSDate *createdAt;
 
+- (RLMResults *)scheduleItemsInDay:(ALMScheduleDay)day;
+
 @end
 RLM_ARRAY_TYPE(ALMSection)
