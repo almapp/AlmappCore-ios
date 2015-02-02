@@ -15,6 +15,8 @@
 
 @interface ALMSection : ALMSocialResource
 
+@property NSString *identifier;
+@property int vacancy;
 @property int number;
 @property int year;
 @property int period;

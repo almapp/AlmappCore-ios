@@ -304,7 +304,8 @@ static dispatch_once_t once_token;
 
 + (RLMRealm *)realmNamed:(NSString *)name {
     NSString *path = [ALMUtil writeablePathForFile:name];
-    return [RLMRealm realmWithPath:path];
+    RLMRealm *realm = [RLMRealm realmWithPath:path];
+    return realm;
 }
 
 - (RLMRealm *)realmNamed:(NSString *)name {

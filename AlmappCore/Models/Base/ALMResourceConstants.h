@@ -246,6 +246,9 @@ extern NSString *const kRSectionNumber;
 extern NSString *const kACredits;
 extern NSString *const kRCredits;
 
+extern NSString *const kAVacancy;
+extern NSString *const kRVacancy;
+
 extern NSString *const kADay;
 extern NSString *const kRDay;
 

@@ -18,6 +18,17 @@
 @implementation ALMTestSections
 
 - (void)testSection {
+    [self nestedResources:[ALMSection class] as:nil on:[ALMCourse class] id:1 as:nil path:nil params:nil onSuccess:^(id parent, RLMResults *results) {
+        for (ALMSection *section in results) {
+            XCTAssertNotNil(section.course);
+        }
+    }];
+}
+
+- (void)testSectionCourse {
+    [self resource:[ALMSection class] id:30 path:nil params:nil onSuccess:^(ALMSection* resource) {
+        XCTAssertNotNil(resource.course);
+    }];
     /*
     XCTestExpectation *expectation = [self expectationWithDescription:@"validGetSingleResource"];
     

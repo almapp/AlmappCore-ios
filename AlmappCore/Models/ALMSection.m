@@ -17,6 +17,8 @@
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
              [self jatt:kAResourceID]       : kRResourceID,
+             [self jatt:kAIdentifier]       : kRIdentifier,
+             [self jatt:kAVacancy]          : kRVacancy,
              [self jatt:kASectionNumber]    : kRSectionNumber,
              [self jatt:kAYear]             : kRYear,
              [self jatt:kAPeriod]           : kRPeriod,
@@ -27,6 +29,8 @@
 
 + (NSDictionary *)defaultPropertyValues {
     return @{
+             kRIdentifier               : kRDefaultNullString,
+             kRVacancy                  : @0,
              kRSectionNumber            : @0,
              kRYear                     : @0,
              kRPeriod                   : @0,
@@ -37,14 +41,14 @@
 
 + (NSDictionary *)JSONNestedResourceInboundMappingDictionary {
     return @{
-             //[ALMCourse apiSingleForm] : [ALMCourse realmSingleForm]
+             // [ALMCourse apiSingleForm] : [ALMCourse realmSingleForm]
              };
 }
 
 + (NSDictionary *)JSONNestedResourceCollectionInboundMappingDictionary {
     return @{
              [ALMScheduleItem apiPluralForm] : [ALMScheduleItem realmPluralForm],
-             [ALMTeacher apiPluralForm] : [ALMTeacher apiPluralForm],
+             [ALMTeacher apiPluralForm] : [ALMTeacher realmPluralForm],
              @"assistants" : kRStudents
              };
 }

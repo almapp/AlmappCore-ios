@@ -253,6 +253,9 @@ NSString *const kRSectionNumber = @"number";
 NSString *const kACredits = @"credits";
 NSString *const kRCredits = @"credits";
 
+NSString *const kAVacancy = @"vacancy";
+NSString *const kRVacancy = @"vacancy";
+
 NSString *const kADay = @"day";
 NSString *const kRDay = @"dayNumber";
 
