@@ -46,7 +46,7 @@
         request.customPath = [NSString stringWithFormat:@"%@/%@", parentRequest.path, request.path];
     }
     
-    NSString *resourceParentName = (belongsToAlias) ? belongsToAlias : [self.class performSelector:@selector(realmSingleForm)];
+    NSString *resourceParentName = (belongsToAlias) ? belongsToAlias : [parentRequest.resourceClass performSelector:@selector(realmSingleForm)];
     NSString *nestedCollectionName = (collectionName) ? collectionName : [request.resourceClass performSelector:@selector(realmPluralForm)];
     
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
