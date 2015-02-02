@@ -41,7 +41,7 @@
 
 + (NSDictionary *)JSONNestedResourceInboundMappingDictionary {
     return @{
-             // [ALMCourse apiSingleForm] : [ALMCourse realmSingleForm]
+             [ALMCourse apiSingleForm] : [ALMCourse realmSingleForm]
              };
 }
 
@@ -71,8 +71,5 @@
     }
 }
 
-- (ALMCourse *)course {
-    return [self linkingObjectsOfClass:[ALMCourse className] forProperty:self.realmPluralForm].firstObject;
-}
 
 @end

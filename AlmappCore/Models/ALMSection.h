@@ -20,14 +20,13 @@
 @property int number;
 @property int year;
 @property int period;
+@property ALMCourse *course;
 @property RLMArray<ALMScheduleItem> *scheduleItems;
 @property RLMArray<ALMUser> *students;
 @property RLMArray<ALMTeacher> *teachers;
 
 @property NSDate *updatedAt;
 @property NSDate *createdAt;
-
-@property (readonly) ALMCourse *course;
 
 @end
 RLM_ARRAY_TYPE(ALMSection)
