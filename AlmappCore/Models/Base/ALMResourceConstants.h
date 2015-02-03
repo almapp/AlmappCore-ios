@@ -287,8 +287,8 @@ extern NSString *const kRIsLoginRequired;
 extern NSString *const kAShouldOpenInBrowser;
 extern NSString *const kRShouldOpenInBrowser;
 
-extern NSString *const kABaseUrl;
-extern NSString *const kRBaseUrl;
+extern NSString *const kALoginUrl;
+extern NSString *const kRLoginUrl;
 
 extern NSString *const kAHomeUrl;
 extern NSString *const kRHomeUrl;

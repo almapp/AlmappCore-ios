@@ -294,8 +294,8 @@ NSString *const kRIsLoginRequired = @"isLoginRequired";
 NSString *const kAShouldOpenInBrowser = @"should_open_in_browser";
 NSString *const kRShouldOpenInBrowser = @"shouldOpenInBrowser";
 
-NSString *const kABaseUrl = @"base_url";
-NSString *const kRBaseUrl = @"baseUrl";
+NSString *const kALoginUrl = @"login_url";
+NSString *const kRLoginUrl = @"loginUrl";
 
 NSString *const kAHomeUrl = @"home_url";
 NSString *const kRHomeUrl = @"homeUrl";

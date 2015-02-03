@@ -25,7 +25,7 @@
              [self jatt:kAIsLoginRequired]          : kRIsLoginRequired,
              [self jatt:kAShouldOpenInBrowser]      : kRShouldOpenInBrowser,
              [self jatt:kAHomeUrl]                  : kRHomeUrl,
-             [self jatt:kABaseUrl]                  : kRBaseUrl,
+             [self jatt:kALoginUrl]                 : kRLoginUrl,
              [self jatt:kAUpdatedAt]                : kRUpdatedAt,
              [self jatt:kACreatedAt]                : kRCreatedAt
              };
@@ -44,7 +44,7 @@
     return @{
              kROwner                    : kRDefaultNullString,
              kRInformation              : kRDefaultNullString,
-             kRBaseUrl                  : kRDefaultNullString,
+             kRLoginUrl                 : kRDefaultNullString,
              kRHomeUrl                  : kRDefaultNullString,
              kRUpdatedAt                : [NSDate defaultDate],
              kRCreatedAt                : [NSDate defaultDate]

@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger, ALMWebPageType) {
 @property BOOL isLoginRequired;
 @property BOOL shouldOpenInBrowser;
 @property NSString* homeUrl;
-@property NSString* baseUrl;
+@property NSString* loginUrl;
 
 @property NSDate *updatedAt;
 @property NSDate *createdAt;
