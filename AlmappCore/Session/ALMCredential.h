@@ -10,6 +10,7 @@
 
 @interface ALMCredential : NSObject <NSCoding>
 
+@property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSString *email;
 @property (strong, nonatomic) NSString *password;
 

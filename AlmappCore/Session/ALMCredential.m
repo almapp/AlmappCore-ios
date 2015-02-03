@@ -16,11 +16,13 @@
 - (void)encodeWithCoder:(NSCoder *)encoder {
     //Encode properties, other class variables, etc
     [encoder encodeObject:self.email forKey:@"email"];
+    [encoder encodeObject:self.username forKey:@"username"];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
     if((self = [super init])) {
         self.email = [decoder decodeObjectForKey:@"email"];
+        self.username = [decoder decodeObjectForKey:@"username"];
     }
     return self;
 }
@@ -39,6 +41,13 @@
 
 - (NSString *)password {
     return self.keyStore[self.email];
+}
+
+- (NSString *)username {
+    if (!_username) {
+        _username = [self.email componentsSeparatedByString:@"@"][0];
+    }
+    return _username;
 }
 
 - (UICKeyChainStore *)keyStore {
