@@ -204,35 +204,51 @@
 }
 
 - (NSDate *)startTime {
-    return [self.class dateTimeForDay:self.day hour:self.startHour minutes:self.startMinute];
+    return [self startTimeWithAnticipation:NO];
 }
 
 - (NSDate *)endTime {
-    return [self.class dateTimeForDay:self.day hour:self.endHour minutes:self.endMinute];
+    return [self endTimeWithAnticipation:NO];
+}
+
+- (NSDate *)startTimeWithAnticipation:(BOOL)anticipation {
+    return [self.class dateTimeForDay:self.day hour:self.endHour minutes:self.endMinute anticipation:((anticipation) ? self.anticipationMinutes : 0)];
+}
+
+- (NSDate *)endTimeWithAnticipation:(BOOL)anticipation {
+    return [self.class dateTimeForDay:self.day hour:self.endHour minutes:self.endMinute anticipation:((anticipation) ? self.anticipationMinutes : 0)];
+}
+
+- (NSDate *)incomingStartTimeWithAnticipation:(BOOL)anticipation{
+    NSDate *incoming = [self startTimeWithAnticipation:anticipation];
+    NSDate *now = [NSDate date];
+    
+    if ([now compare:incoming] == NSOrderedDescending) {
+        return [incoming dateByAddingTimeInterval:60*60*24*7];
+    }
+    else {
+        return incoming;
+    }
+}
+
+- (NSDate *)incomingEndTimeWithAnticipation:(BOOL)anticipation {
+    NSDate *incoming = [self endTimeWithAnticipation:anticipation];
+    NSDate *now = [NSDate date];
+    
+    if ([now compare:incoming] == NSOrderedDescending) {
+        return [incoming dateByAddingTimeInterval:60*60*24*7];
+    }
+    else {
+        return incoming;
+    }
 }
 
 - (NSDate *)incomingStartTime {
-    NSDate *incoming = self.startTime;
-    NSDate *now = [NSDate date];
-    
-    if ([now compare:incoming] == NSOrderedDescending) {
-        return [incoming dateByAddingTimeInterval:60*60*24*7];
-    }
-    else {
-        return incoming;
-    }
+    return [self incomingStartTimeWithAnticipation:NO];
 }
 
 - (NSDate *)incomingEndTime {
-    NSDate *incoming = self.endTime;
-    NSDate *now = [NSDate date];
-    
-    if ([now compare:incoming] == NSOrderedDescending) {
-        return [incoming dateByAddingTimeInterval:60*60*24*7];
-    }
-    else {
-        return incoming;
-    }
+    return [self incomingEndTimeWithAnticipation:NO];
 }
 
 
@@ -308,14 +324,14 @@
 
 #pragma mark - Non-persistent information
 
-+ (NSDate *)dateTimeForDay:(ALMScheduleDay)day hour:(int)hour minutes:(int)minutes {
++ (NSDate *)dateTimeForDay:(ALMScheduleDay)day hour:(int)hour minutes:(int)minutes anticipation:(NSInteger)anticipation{
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
     
     NSDateComponents* comps = [gregorian components:NSYearForWeekOfYearCalendarUnit |NSYearCalendarUnit|NSMonthCalendarUnit|NSWeekCalendarUnit|NSWeekdayCalendarUnit fromDate:[NSDate date]];
     
     [comps setWeekday:2]; // 2: monday
     NSDate *firstDayOfTheWeek = [gregorian dateFromComponents:comps];
-    NSInteger seconds = minutes*60 + hour*60*60 + 60*60*24*(day-1);
+    NSInteger seconds = minutes*60 + hour*60*60 + 60*60*24*(day-1) - anticipation*60;
     
     return [firstDayOfTheWeek dateByAddingTimeInterval:seconds];
 }

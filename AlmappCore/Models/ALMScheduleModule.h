@@ -59,12 +59,19 @@ typedef NS_ENUM(NSUInteger, ALMScheduleDay) {
 #pragma mark - Non-persistent information
 
 @property (readonly, assign) ALMScheduleDay day;
+
 @property (readonly) NSDate *startTime;
 @property (readonly) NSDate *endTime;
+
+- (NSDate *)startTimeWithAnticipation:(BOOL)anticipation;
+- (NSDate *)endTimeWithAnticipation:(BOOL)anticipation;
 
 // Always return the next (non-past) datetime
 @property (readonly) NSDate *incomingStartTime;
 @property (readonly) NSDate *incomingEndTime;
+
+- (NSDate *)incomingStartTimeWithAnticipation:(BOOL)anticipation;
+- (NSDate *)incomingEndTimeWithAnticipation:(BOOL)anticipation;
 
 
 #pragma mark - Non-persistent information
