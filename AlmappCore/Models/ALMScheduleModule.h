@@ -38,6 +38,8 @@ typedef NS_ENUM(NSUInteger, ALMScheduleDay) {
 - (instancetype)nextModuleOnSameDay;
 - (instancetype)previousModuleOnSameDay;
 
++ (int)defaultMinutesOfAnticipation;
+
 + (RLMResults *)scheduleModulesOfDay:(ALMScheduleDay)day;
 + (RLMResults *)scheduleModulesOfDay:(ALMScheduleDay)day inRealm:(RLMRealm*)realm;
 
@@ -51,6 +53,7 @@ typedef NS_ENUM(NSUInteger, ALMScheduleDay) {
 @property int startMinute;
 @property int endHour;
 @property int endMinute;
+@property int anticipationMinutes;
 
 
 #pragma mark - Non-persistent information

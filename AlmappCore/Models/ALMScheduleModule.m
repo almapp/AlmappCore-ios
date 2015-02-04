@@ -50,6 +50,7 @@
 + (NSDictionary *)defaultPropertyValues {
     return @{
              kRInitials                     : kRDefaultNullString,
+             @"anticipationMinutes"         : @([self defaultMinutesOfAnticipation]),
              kRDay                          : @0,
              kRBlock                        : @0,
              kRStartTimeHour                : @0,
@@ -173,6 +174,10 @@
 - (instancetype)previousModuleOnSameDay {
     ALMScheduleModule *previous = [self previousModule];
     return (previous.day == self.day) ? previous : nil;
+}
+
++ (int)defaultMinutesOfAnticipation {
+    return 5;
 }
 
 + (RLMResults *)scheduleModulesOfDay:(ALMScheduleDay)day {
