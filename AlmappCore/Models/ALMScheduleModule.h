@@ -59,6 +59,10 @@ typedef NS_ENUM(NSUInteger, ALMScheduleDay) {
 @property (readonly) NSDate *startTime;
 @property (readonly) NSDate *endTime;
 
+// Always return the next (non-past) datetime
+@property (readonly) NSDate *incomingStartTime;
+@property (readonly) NSDate *incomingEndTime;
+
 
 #pragma mark - Non-persistent information
 

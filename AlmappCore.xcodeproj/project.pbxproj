@@ -42,6 +42,7 @@
 		F65DD4BF1A505C6E006BCAF0 /* ALMUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4BE1A505C6E006BCAF0 /* ALMUtil.m */; };
 		F6647B5E1A56ED6A00D8C814 /* ALMOrganization.m in Sources */ = {isa = PBXBuildFile; fileRef = F6647B5D1A56ED6A00D8C814 /* ALMOrganization.m */; };
 		F66B93471A63DF2D0048DACD /* ALMWebPage.m in Sources */ = {isa = PBXBuildFile; fileRef = F66B93461A63DF2D0048DACD /* ALMWebPage.m */; };
+		F67F80041A82CD3A00E20802 /* ALMScheduleModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F67F80031A82CD3A00E20802 /* ALMScheduleModuleTest.m */; };
 		F694DD561A7A9BA8005D9AE7 /* ALMError.m in Sources */ = {isa = PBXBuildFile; fileRef = F694DD551A7A9BA8005D9AE7 /* ALMError.m */; };
 		F694DD591A7ABBD2005D9AE7 /* ALMResourceTest2.m in Sources */ = {isa = PBXBuildFile; fileRef = F694DD581A7ABBD2005D9AE7 /* ALMResourceTest2.m */; };
 		F69C66A51A6BEA37006F1C0E /* ALMScheduleItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F69C66A41A6BEA37006F1C0E /* ALMScheduleItem.m */; };
@@ -159,6 +160,7 @@
 		F6647B5D1A56ED6A00D8C814 /* ALMOrganization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMOrganization.m; sourceTree = "<group>"; };
 		F66B93451A63DF2D0048DACD /* ALMWebPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMWebPage.h; sourceTree = "<group>"; };
 		F66B93461A63DF2D0048DACD /* ALMWebPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMWebPage.m; sourceTree = "<group>"; };
+		F67F80031A82CD3A00E20802 /* ALMScheduleModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMScheduleModuleTest.m; sourceTree = "<group>"; };
 		F694DD541A7A9BA8005D9AE7 /* ALMError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMError.h; sourceTree = "<group>"; };
 		F694DD551A7A9BA8005D9AE7 /* ALMError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMError.m; sourceTree = "<group>"; };
 		F694DD571A7ABBD2005D9AE7 /* ALMResourceTest2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMResourceTest2.h; sourceTree = "<group>"; };
@@ -546,6 +548,7 @@
 			children = (
 				F6E72E621A7D91D7004988C9 /* ALMChatMessageTest.m */,
 				F6A0F45B1A7FBEAE00380EE1 /* ALMSelectTest.m */,
+				F67F80031A82CD3A00E20802 /* ALMScheduleModuleTest.m */,
 			);
 			path = TestModels;
 			sourceTree = "<group>";
@@ -777,6 +780,7 @@
 				F6FB88CA1A76815C0076C8F4 /* ALMScheduleItemTest.m in Sources */,
 				F694DD591A7ABBD2005D9AE7 /* ALMResourceTest2.m in Sources */,
 				F6A0F45C1A7FBEAE00380EE1 /* ALMSelectTest.m in Sources */,
+				F67F80041A82CD3A00E20802 /* ALMScheduleModuleTest.m in Sources */,
 				F6F573D91A741C4900D19FC4 /* ALMCoreSingletonTests.m in Sources */,
 				F603D02E1A73111600913806 /* ALMTestCase.m in Sources */,
 			);

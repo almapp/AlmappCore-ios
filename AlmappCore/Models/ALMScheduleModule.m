@@ -185,16 +185,49 @@
 
 #pragma mark - Non-persistent information
 
+- (int)dayIniOS {
+    if (self.day == ALMScheduleDaySunday) {
+        return 1;
+    }
+    else {
+        return self.dayNumber + 1;
+    }
+}
+
 - (ALMScheduleDay)day {
     return self.dayNumber;
 }
 
 - (NSDate *)startTime {
-    return [self.class dateTimeForHour:self.startHour minutes:self.startMinute];
+    return [self.class dateTimeForDay:self.day hour:self.startHour minutes:self.startMinute];
 }
 
 - (NSDate *)endTime {
-    return [self.class dateTimeForHour:self.endHour minutes:self.endMinute];
+    return [self.class dateTimeForDay:self.day hour:self.endHour minutes:self.endMinute];
+}
+
+- (NSDate *)incomingStartTime {
+    NSDate *incoming = self.startTime;
+    NSDate *now = [NSDate date];
+    
+    if ([now compare:incoming] == NSOrderedDescending) {
+        return [incoming dateByAddingTimeInterval:60*60*24*7];
+    }
+    else {
+        return incoming;
+    }
+}
+
+- (NSDate *)incomingEndTime {
+    NSDate *incoming = self.endTime;
+    NSDate *now = [NSDate date];
+    
+    if ([now compare:incoming] == NSOrderedDescending) {
+        return [incoming dateByAddingTimeInterval:60*60*24*7];
+    }
+    else {
+        return incoming;
+    }
 }
 
 
@@ -270,12 +303,25 @@
 
 #pragma mark - Non-persistent information
 
++ (NSDate *)dateTimeForDay:(ALMScheduleDay)day hour:(int)hour minutes:(int)minutes {
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
+    
+    NSDateComponents* comps = [gregorian components:NSYearForWeekOfYearCalendarUnit |NSYearCalendarUnit|NSMonthCalendarUnit|NSWeekCalendarUnit|NSWeekdayCalendarUnit fromDate:[NSDate date]];
+    
+    [comps setWeekday:2]; // 2: monday
+    NSDate *firstDayOfTheWeek = [gregorian dateFromComponents:comps];
+    NSInteger seconds = minutes*60 + hour*60*60 + 60*60*24*(day-1);
+    
+    return [firstDayOfTheWeek dateByAddingTimeInterval:seconds];
+}
+
 + (NSDate *)dateTimeForHour:(int)hour minutes:(int)minutes {
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
     NSUInteger timeComps = (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit);
     NSDateComponents *components = [gregorian components: timeComps fromDate: [NSDate date]];
     [components setHour: hour];
     [components setMinute: minutes];
+    [components setSecond:0];
     
     return [gregorian dateFromComponents: components];
 }
