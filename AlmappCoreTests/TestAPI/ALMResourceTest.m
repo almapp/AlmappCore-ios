@@ -134,7 +134,10 @@
         }
         
         [expectation fulfill];
-        
+    }).catch(^(NSError *error) {
+        NSLog(@"Error %@", error);
+        XCTFail(@"Error on nested request");
+        [expectation fulfill];
     });
     
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {

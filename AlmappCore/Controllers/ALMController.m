@@ -53,13 +53,12 @@ static NSString *const kDefaultOAuthScope = @"";
     self = [super initWithBaseURL:url sessionConfiguration:configuration];
     if (self) {
         self.coreModuleDelegate = coreDelegate;
-        self.concurrentQueue = dispatch_queue_create("com.almappcore.controller.requestQueue",
-                                                          DISPATCH_QUEUE_CONCURRENT);
+        self.concurrentQueue = dispatch_queue_create("com.almappcore.controller.requestQueue", DISPATCH_QUEUE_CONCURRENT);
         
         self.requestSerializer = [AFJSONRequestSerializer serializer];
         self.responseSerializer = [AFJSONResponseSerializer serializer];
         
-
+        
     }
     return self;
 }
@@ -80,8 +79,8 @@ static NSString *const kDefaultOAuthScope = @"";
         ALMApiKey *apiKey = [self apiKey];
         
         _OAuth2Manager = [[AFOAuth2Manager alloc] initWithBaseURL:self.baseURL
-                                                             clientID:apiKey.clientID
-                                                               secret:apiKey.clientSecret];
+                                                         clientID:apiKey.clientID
+                                                           secret:apiKey.clientSecret];
     }
     return _OAuth2Manager;
 }
@@ -107,7 +106,7 @@ static NSString *const kDefaultOAuthScope = @"";
             fulfiller(self.OAuthCredential.accessToken);
         }];
     }
-
+    
     return _authPromise;
 }
 
@@ -116,10 +115,11 @@ static NSString *const kDefaultOAuthScope = @"";
 }
 
 - (PMKPromise *)AUTH:(ALMCredential *)credential oauthUrl:(NSString *)oauthUrl scope:(NSString *)scope {
-    PMKPromise *promise = [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+        __weak __typeof(self) weakSelf = self;
         [self.OAuth2Manager authenticateUsingOAuthWithURLString:oauthUrl username:credential.email password:credential.password scope:scope success:^(AFOAuthCredential *OAuthcredential) {
             
-            BOOL didSave = [self.class saveCredential:OAuthcredential];
+            BOOL didSave = [ALMController saveCredential:OAuthcredential];
             if (didSave) {
                 NSLog(@"Did Save: %@", OAuthcredential.accessToken);
             }
@@ -127,18 +127,16 @@ static NSString *const kDefaultOAuthScope = @"";
                 NSLog(@"COULD NOT SAVE TOKEN: %@", OAuthcredential.accessToken);
             }
             
-            [self.requestSerializer setAuthorizationHeaderFieldWithCredential:OAuthcredential];
-            [self publishDidRefreshTokenWith:credential];
+            [weakSelf.requestSerializer setAuthorizationHeaderFieldWithCredential:OAuthcredential];
+            [weakSelf publishDidRefreshTokenWith:credential];
             
             fulfiller(OAuthcredential.accessToken);
             
         } failure:^(NSError *error) {
-            [self publishFailedLoginWith:credential error:error];
-            rejecter(PMKManifold(credential, error));
+            [weakSelf publishFailedLoginWith:credential error:error];
+            rejecter(error);
         }];
     }];
-    
-    return promise;
 }
 
 
@@ -153,9 +151,7 @@ static NSString *const kDefaultOAuthScope = @"";
             [ALMResource objectsOfType:request.resourceClass inRealm:realm withIDs:request.resourcesIDs] :
             [ALMResource allObjectsOfType:request.resourceClass inRealm:realm];
             
-            [request sortOrFilterResources:results];
-            
-            fulfiller(results);
+            fulfiller([request sortOrFilterResources:results]);
         }
         else {
             ALMResource *result = [ALMResource objectOfType:request.resourceClass withID:request.resourceID inRealm:realm];
@@ -166,47 +162,42 @@ static NSString *const kDefaultOAuthScope = @"";
 
 - (PMKPromise *)FETCH:(ALMResourceRequest *)request {
     //__weak typeof(self) weakSelf = self;
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            if (!request) {
-                //dispatch_async(request.dispatchQueue, ^{
-                    NSError *error = [ALMError errorWithCode:ALMErrorCodeInvalidRequest];
-                    [request publishError:error task:nil];
-                    rejecter(PMKManifold(request, error));
-                //});
-                return;
-            }
-            
-        
-            if (![self validateRequest:request]) {
-                //dispatch_async(request.dispatchQueue, ^{
-                    [request publishError:[ALMError errorWithCode:ALMErrorCodeInvalidRequest] task:nil];
-                //});
-                return;
-            }
-            
-            //dispatch_async(request.dispatchQueue, ^{
-                [self LOAD:request].then(^(id loaded) {
-                    [request publishLoaded:loaded];
-                });
-            //});
-            
-            //dispatch_async(weakSelf.concurrentQueue, ^{
-                [self GET:request].then(^(id fetched, NSURLSessionDataTask *task) {
-                    fulfiller(PMKManifold(fetched));
-                    
-                }).catch(^(ALMResourceRequest *request, NSError *error){
-                   rejecter(PMKManifold(request, error));
-                });
-            //});
+    //return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+    if (!request) {
+        //dispatch_async(request.dispatchQueue, ^{
+        NSError *error = [ALMError errorWithCode:ALMErrorCodeInvalidRequest];
+        [request publishError:error task:nil];
         //});
-    }];
+        return nil;
+    }
+    
+    
+    if (![self validateRequest:request]) {
+        //dispatch_async(request.dispatchQueue, ^{
+        [request publishError:[ALMError errorWithCode:ALMErrorCodeInvalidRequest] task:nil];
+        //});
+        return nil;
+    }
+    
+    //dispatch_async(request.dispatchQueue, ^{
+    [self LOAD:request].then(^(id loaded) {
+        [request publishLoaded:loaded];
+    });
+    //});
+    
+    //dispatch_async(weakSelf.concurrentQueue, ^{
+    return [self GET:request];
+    //});
+    //});
+    //}];
 }
 
 - (PMKPromise *)GET:(ALMResourceRequest *)request {
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         [self authPromiseWithCredential:request.credential].then(^{
-            [self GET:request.path parameters:request.parameters].then(^(id responseObject, NSURLSessionDataTask *task){
+            NSString *path = request.path;
+            [self GET:path parameters:request.parameters].then(^(id responseObject, NSURLSessionDataTask *task){
                 BOOL success = [request commitData:responseObject];
                 if (request.shouldLog) {
                     NSLog(@"Commit status %d",success);
@@ -222,18 +213,16 @@ static NSString *const kDefaultOAuthScope = @"";
                     NSLog(@"Error %@", error);
                 }
                 [request publishError:error task:nil];
-                rejecter(PMKManifold(request, error));
+                rejecter(error);
             });
             
-        }).catch(^(ALMCredential *credential, NSError *error) {
+        }).catch(^(NSError *error) {
             if (request.shouldLog) {
                 NSLog(@"Error %@", error);
             }
             [request publishError:error task:nil];
-            rejecter(PMKManifold(request, error));
+            rejecter(error);
         });
-        
-        //[PMKPromise when:self.authPromise].then(^{
     }];
 }
 

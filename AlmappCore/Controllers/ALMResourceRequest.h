@@ -26,7 +26,7 @@ extern BOOL const kRequestForceLogin;
 
 - (void)publishError:(NSError *)error task:(NSURLSessionDataTask *)task;
 
-- (void)sortOrFilterResources:(RLMResults *)resources;
+- (RLMResults *)sortOrFilterResources:(RLMResults *)resources;
 
 - (void)publishLoaded:(id)object;
 

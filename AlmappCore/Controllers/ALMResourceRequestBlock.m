@@ -67,9 +67,12 @@
     }
 }
 
-- (void)request:(ALMResourceRequest *)request sortOrFilter:(RLMResults *)resources {
+- (RLMResults *)request:(ALMResourceRequest *)request sortOrFilter:(RLMResults *)resources {
     if (_sortAndFilterBlock) {
-        _sortAndFilterBlock(resources);
+        return _sortAndFilterBlock(resources);
+    }
+    else {
+        return resources;
     }
 }
 

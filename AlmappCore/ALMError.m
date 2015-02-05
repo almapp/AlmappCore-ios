@@ -11,7 +11,16 @@
 @implementation ALMError
 
 + (instancetype)errorWithCode:(ALMErrorCode)code {
-    return [self errorWithDomain:@"ewe" code:code userInfo:nil];
+    switch (code) {
+        case ALMErrorCodeInvalidRequest:
+            return [self errorWithDomain:@"Controller" code:code userInfo:@{NSLocalizedDescriptionKey : @"Invalid request"}];
+            
+        case ALMErrorCodeNestedRequestFail:
+            return [self errorWithDomain:@"Controller" code:ALMErrorCodeNestedRequestFail userInfo:@{NSLocalizedDescriptionKey : @"Could not fetch parent and nested resources"}];
+            
+        default:
+            return [self errorWithDomain:@"AlmappCore" code:ALMErrorCodeNestedRequestFail userInfo:@{NSLocalizedDescriptionKey : @"Some bad has happend"}];
+    }
 }
 
 @end

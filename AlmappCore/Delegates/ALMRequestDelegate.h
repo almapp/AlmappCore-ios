@@ -24,7 +24,7 @@
 
 - (void)request:(ALMResourceRequest *)request didFetchResources:(RLMResults *)resources withParent:(id)parent;
 
-- (void)request:(ALMResourceRequest *)request sortOrFilter:(RLMResults *)resources;
+- (RLMResults *)request:(ALMResourceRequest *)request sortOrFilter:(RLMResults *)resources;
 
 - (NSDictionary *)request:(ALMResourceRequest *)request modifyData:(NSDictionary *)data ofType:(Class)resourceClass toSaveIn:(RLMRealm *)realm;
 - (BOOL)request:(ALMResourceRequest *)request shouldUseCustomCommitWitData:(NSDictionary *)data;

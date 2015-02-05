@@ -173,9 +173,12 @@ BOOL const kRequestForceLogin = NO;
     }
 }
 
-- (void)sortOrFilterResources:(RLMResults *)resources {
+- (RLMResults *)sortOrFilterResources:(RLMResults *)resources {
     if (_requestDelegate && [_requestDelegate respondsToSelector:@selector(request:sortOrFilter:)]) {
-        [_requestDelegate request:self sortOrFilter:resources];
+        return [_requestDelegate request:self sortOrFilter:resources];
+    }
+    else {
+        return resources;
     }
 }
 

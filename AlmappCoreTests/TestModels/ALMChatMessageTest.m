@@ -18,7 +18,7 @@
 @implementation ALMChatMessageTest
 
 - (void)testJsonParse {
-    ALMChatMessage *message = [[ALMChatMessage alloc] init];
+    //ALMChatMessage *message = [[ALMChatMessage alloc] init];
     
 }
 

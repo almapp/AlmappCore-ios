@@ -140,8 +140,8 @@
     }
     
     return [self doAuthedWith:credential].then(^(FayeCppClient *client) {
-        NSDictionary *jsonMessage = [self parseOutgoingMessage:message in:chat with:credential];
-        NSString *channel = [self channelNameForChat:chat with:credential];
+        //NSDictionary *jsonMessage = [self parseOutgoingMessage:message in:chat with:credential];
+        //NSString *channel = [self channelNameForChat:chat with:credential];
 
         BOOL success = [client sendMessage:@{@"data":@"data"} toChannel:@"/chat/A3"];
         return success;

@@ -50,23 +50,26 @@
     NSString *nestedCollectionName = (collectionName) ? collectionName : [request.resourceClass performSelector:@selector(realmPluralForm)];
     
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        PMKPromise *parentPromise = [self FETCH:parentRequest].catch(^(NSError *error) {
-            rejecter(PMKManifold(request, error));
-        });
+        PMKPromise *parentPromise = [self FETCH:parentRequest];
         
-        PMKPromise *nestedPromise = [self FETCH:request].catch(^(NSError *error) {
-            rejecter(PMKManifold(request, error));
-        });
+        PMKPromise *nestedPromise = [self FETCH:request];
         
         
         [PMKPromise when:@[parentPromise, nestedPromise]].then(^(NSArray *results){
-            ALMResource *parent = results[0];
-            RLMResults *collection = results[1];
-            [parent hasMany:collection as:nestedCollectionName belongsToAs:resourceParentName];
-            
-            [request publishFetchedResources:collection withParent:parent];
-            
-            fulfiller(PMKManifold(parent, collection));
+            if (parentPromise.rejected || nestedPromise.rejected) {
+                rejecter([ALMError errorWithCode:ALMErrorCodeNestedRequestFail]);
+            }
+            else {
+                ALMResource *parent = results[0];
+                RLMResults *collection = results[1];
+                [parent hasMany:collection as:nestedCollectionName belongsToAs:resourceParentName];
+                
+                [request publishFetchedResources:collection withParent:parent];
+                
+                fulfiller(PMKManifold(parent, collection));
+            }
+        }).catch(^(NSError *error) {
+            rejecter(error);
         });
     }];
 }

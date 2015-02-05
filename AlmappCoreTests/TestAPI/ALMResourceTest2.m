@@ -189,8 +189,9 @@
     [_expectation fulfill];
 }
 
-- (void)request:(ALMResourceRequest *)request sortOrFilter:(RLMResults *)resources {
+- (RLMResults *)request:(ALMResourceRequest *)request sortOrFilter:(RLMResults *)resources {
     NSLog(@"sortOrFilter %@", resources);
+    return resources;
 }
 
 - (NSDictionary *)request:(ALMResourceRequest *)request modifyData:(NSDictionary *)data ofType:(Class)resourceClass toSaveIn:(RLMRealm *)realm {

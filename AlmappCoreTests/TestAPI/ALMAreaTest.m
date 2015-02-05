@@ -37,6 +37,12 @@
     }
 }
 
+- (void)testPlaces {
+    [self resources:[ALMPlace class] path:@"buildings/1/places" params:nil onSuccess:^(RLMResults *resources) {
+        NSLog(@"%@", resources);
+    }];
+}
+
 - (void)testAreasLocalization {
     for (Class areaClass in self.areaSubclasses) {
         [self testAreaLocalization:areaClass id:1];

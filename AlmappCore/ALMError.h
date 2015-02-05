@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, ALMErrorCode) {
-    ALMErrorCodeInvalidRequest
+    ALMErrorCodeInvalidRequest,
+    ALMErrorCodeNestedRequestFail
 };
 
 @interface ALMError : NSError
