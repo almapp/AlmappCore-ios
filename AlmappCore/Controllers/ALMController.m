@@ -94,6 +94,10 @@ static NSString *const kDefaultOAuthScope = @"";
     return [AFOAuthCredential storeCredential:credential withIdentifier:kCredentialKey];
 }
 
++ (BOOL)deleteCredential {
+    return [AFOAuthCredential deleteCredentialWithIdentifier:kCredentialKey];
+}
+
 
 #pragma mark - Auth
 
@@ -133,6 +137,7 @@ static NSString *const kDefaultOAuthScope = @"";
             fulfiller(OAuthcredential.accessToken);
             
         } failure:^(NSError *error) {
+            [ALMController deleteCredential];
             [weakSelf publishFailedLoginWith:credential error:error];
             rejecter(error);
         }];
@@ -196,6 +201,7 @@ static NSString *const kDefaultOAuthScope = @"";
 - (PMKPromise *)GET:(ALMResourceRequest *)request {
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         [self authPromiseWithCredential:request.credential].then(^{
+            __weak __typeof(self) weakSelf = self;
             NSString *path = request.path;
             [self GET:path parameters:request.parameters].then(^(id responseObject, NSURLSessionDataTask *task){
                 BOOL success = [request commitData:responseObject];
@@ -211,6 +217,10 @@ static NSString *const kDefaultOAuthScope = @"";
             }).catch(^(NSError *error) {
                 if (request.shouldLog) {
                     NSLog(@"Error %@", error);
+                }
+                if ([error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey] statusCode] == 401) {
+                    [ALMController deleteCredential];
+                    [weakSelf publishFailedLoginWith:request.credential error:error];
                 }
                 [request publishError:error task:nil];
                 rejecter(error);
