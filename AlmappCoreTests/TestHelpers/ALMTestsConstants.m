@@ -14,8 +14,8 @@ NSString * const kTestingBaseURL = @"http://patiwi-mcburger-pro.local:3000";
 short const kTestingApiVersion = 1;
 
 + (ALMApiKey *)testingApiKey {
-    return [ALMApiKey apiKeyWithClient:@"2756ccf6fb36b39266f0c3e14011ff00a59bc8b3fbc79edad74b657155a0f017"
-                                secret:@"d05024a3f4f57c1dbb7b3f46ec1b5310d69a5682103f80ea1c0bb226327f367a"];
+    return [ALMApiKey apiKeyWithClient:@"f1328a3ccd975185990322e0d1a02c34c014933018818fc4c4bf93f9e83f458e"
+                                secret:@"36ab39dfeb5065562c0427673d43f3d08cd39dd891d2eea0e4af2f5c2611073d"];
 }
 
 @end

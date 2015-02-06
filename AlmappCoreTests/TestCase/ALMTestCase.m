@@ -41,7 +41,7 @@
 - (ALMSession *)testSession {
     if (!_testSession) {
         RLMRealm *realm = self.testRealm;
-        _testSession = [ALMSession sessionWithEmail:@"pelopez2@uc.cl" password:@"randompassword" inRealm:realm];
+        _testSession = [ALMSession sessionWithEmail:@"lorem1@uc.cl" password:@"randompassword" inRealm:realm];
     }
     return _testSession;
 }
