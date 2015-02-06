@@ -28,6 +28,7 @@
     request.onFetchResources = onFetch;
     request.onLoadResource = onLoad;
     request.onLoadResources = onLoad;
+    request.onError = onError;
     return request;
 }
 
