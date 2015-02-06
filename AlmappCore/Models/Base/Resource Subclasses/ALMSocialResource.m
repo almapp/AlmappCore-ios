@@ -12,13 +12,6 @@
 @implementation ALMSocialResource
 
 @synthesize likes = _likes, comments = _comments;
-
-- (NSUInteger)positiveLikeCount {
-    return [ALMLike positiveLikeCountFor:self];
-}
-
-- (NSUInteger)negativeLikeCount {
-    return [ALMLike negativeLikeCountFor:self];
-}
+@synthesize likesCount = _likesCount, dislikesCount = _dislikesCount, commentsCount = _commentsCount;
 
 @end

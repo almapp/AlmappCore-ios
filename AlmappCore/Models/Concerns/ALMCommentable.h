@@ -14,5 +14,6 @@
 @protocol ALMCommentable <NSObject>
 
 @property RLMArray<ALMComment> *comments;
+@property NSInteger commentsCount;
 
 @end

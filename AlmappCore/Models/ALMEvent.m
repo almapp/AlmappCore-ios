@@ -26,6 +26,9 @@
              [self jatt:kAToDate]       : kRToDate,
              [self jatt:kAFacebookURL]  : kRFacebookURL,
              [self jatt:kAURL]          : kRURL,
+             [self jatt:kALikesCount]     : kRLikesCount,
+             [self jatt:kADislikesCount]  : kRDislikesCount,
+             [self jatt:kACommentsCount]  : kRCommentsCount,
              [self jatt:kAUpdatedAt]    : kRUpdatedAt,
              [self jatt:kACreatedAt]    : kRCreatedAt
              };
@@ -43,6 +46,9 @@
              kRPolymorphicHostID        : kRDefaultPolymorphicID,
              kRFacebookURL              : kRDefaultNullString,
              kRURL                      : kRDefaultNullString,
+             kRLikesCount                   : @0,
+             kRDislikesCount                : @0,
+             kRCommentsCount                : @0,
              kRUpdatedAt                : [NSDate defaultEventDate],
              kRCreatedAt                : [NSDate defaultEventDate]
              };

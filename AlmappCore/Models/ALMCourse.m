@@ -20,6 +20,9 @@
              [self jatt:kACredits]      : kRCredits,
              [self jatt:kAIsAvailable]  : kRIsAvailable,
              [self jatt:kAInformation]  : kRInformation,
+             [self jatt:kALikesCount]     : kRLikesCount,
+             [self jatt:kADislikesCount]  : kRDislikesCount,
+             [self jatt:kACommentsCount]  : kRCommentsCount,
              [self jatt:kAUpdatedAt]    : kRUpdatedAt,
              [self jatt:kACreatedAt]    : kRCreatedAt
              };
@@ -32,6 +35,9 @@
              kRCredits                  : @0,
              kRIsAvailable              : @YES,
              kRInformation              : kRDefaultNullString,
+             kRLikesCount                   : @0,
+             kRDislikesCount                : @0,
+             kRCommentsCount                : @0,
              kRUpdatedAt                : [NSDate defaultDate],
              kRCreatedAt                : [NSDate defaultDate]
              };

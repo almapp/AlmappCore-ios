@@ -228,6 +228,15 @@ NSString *const kRValuation = @"valuation";
 NSString *const kAIsFlagged = @"flagged";
 NSString *const kRIsFlagged = @"isFlagged";
 
+NSString *const kALikesCount = @"likes_count";
+NSString *const kRLikesCount = @"likesCount";
+
+NSString *const kADislikesCount = @"dislikes_count";
+NSString *const kRDislikesCount = @"dislikesCount";
+
+NSString *const kACommentsCount = @"comments_count";
+NSString *const kRCommentsCount = @"commentsCount";
+
 #pragma mark - Academic
 
 NSString *const kACurriculumURL = @"curriculum_url";

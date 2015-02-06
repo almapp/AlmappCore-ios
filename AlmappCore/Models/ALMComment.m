@@ -14,6 +14,7 @@
 @implementation ALMComment
 
 @synthesize likes = _likes;
+@synthesize likesCount = _likesCount, dislikesCount = _dislikesCount;
 
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{

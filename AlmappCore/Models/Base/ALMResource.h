@@ -10,6 +10,7 @@
 #import "RLMObject+JSON.h"
 #import "RLMResults+Select.h"
 #import "NSArray+Query.h"
+#import "NSDictionary+Util.h"
 
 #pragma mark - Persistence Declarations
 
@@ -21,14 +22,6 @@ typedef NS_ENUM(NSUInteger, ALMPersistMode) {
 };
 
 extern ALMPersistMode const kPersistModeDefault;
-
-#pragma mark - Dictionary Category
-
-@interface NSDictionary (ALMResource)
-
-+ (NSDictionary*)merge:(NSDictionary*)dictionary1 with:(NSDictionary*)dictionary2;
-
-@end
 
 #pragma mark - String Category
 

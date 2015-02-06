@@ -22,6 +22,9 @@
              [self jatt:kASectionNumber]    : kRSectionNumber,
              [self jatt:kAYear]             : kRYear,
              [self jatt:kAPeriod]           : kRPeriod,
+             [self jatt:kALikesCount]     : kRLikesCount,
+             [self jatt:kADislikesCount]  : kRDislikesCount,
+             [self jatt:kACommentsCount]  : kRCommentsCount,
              [self jatt:kAUpdatedAt]        : kRUpdatedAt,
              [self jatt:kACreatedAt]        : kRCreatedAt
              };
@@ -34,6 +37,9 @@
              kRSectionNumber            : @0,
              kRYear                     : @0,
              kRPeriod                   : @0,
+             kRLikesCount                   : @0,
+             kRDislikesCount                : @0,
+             kRCommentsCount                : @0,
              kRUpdatedAt                : [NSDate defaultDate],
              kRCreatedAt                : [NSDate defaultDate]
              };

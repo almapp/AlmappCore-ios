@@ -14,26 +14,7 @@
 
 ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
 
-#pragma mark - Dictionary Category
 
-@implementation NSDictionary (ALMResource)
-
-+ (NSDictionary *)merge:(NSDictionary *)dictionary1 with:(NSDictionary *)dictionary2 {
-    NSMutableDictionary* total = [NSMutableDictionary dictionaryWithDictionary:dictionary1];
-    [total addEntriesFromDictionary: dictionary2];
-    return total;
-}
-
-+ (NSDictionary *)invert:(NSDictionary *)dictionary {
-    NSMutableDictionary *new = [NSMutableDictionary dictionaryWithCapacity:dictionary.count];
-    
-    for (NSString *key in [dictionary allKeys]) {
-        new[dictionary[key]] = key;
-    }
-    return new;
-}
-
-@end
 
 #pragma mark - String Category
 
@@ -53,6 +34,9 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
 
 @end
 
+
+
+
 #pragma mark - Date Category
 
 @implementation NSDate (ALMResource)
@@ -67,6 +51,9 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
 
 @end
 
+
+
+
 #pragma mark - Resource interface
 
 @interface ALMResource ()
@@ -74,6 +61,9 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
 + (void)append:(NSArray*)newObjects to:(RLMArray*)collection;
 
 @end
+
+
+
 
 #pragma mark - Resource body
 
@@ -94,7 +84,7 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
 }
 
 + (NSDictionary *)JSONOutboundMappingDictionary {
-    return [NSDictionary invert:[self JSONInboundMappingDictionary]];
+    return [[self JSONInboundMappingDictionary] invert];
 }
 
 #pragma mark - Attributes helpers

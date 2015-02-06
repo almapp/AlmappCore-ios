@@ -14,8 +14,7 @@
 @protocol ALMLikeable <NSObject>
 
 @property RLMArray<ALMLike> *likes;
-
-- (NSUInteger)positiveLikeCount;
-- (NSUInteger)negativeLikeCount;
+@property NSInteger likesCount;
+@property NSInteger dislikesCount;
 
 @end

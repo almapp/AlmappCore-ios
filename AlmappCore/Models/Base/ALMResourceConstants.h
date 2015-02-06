@@ -221,6 +221,15 @@ extern NSString *const kRValuation;
 extern NSString *const kAIsFlagged;
 extern NSString *const kRIsFlagged;
 
+extern NSString *const kALikesCount;
+extern NSString *const kRLikesCount;
+
+extern NSString *const kADislikesCount;
+extern NSString *const kRDislikesCount;
+
+extern NSString *const kACommentsCount;
+extern NSString *const kRCommentsCount;
+
 #pragma mark - Academic
 
 extern NSString *const kACurriculumURL;

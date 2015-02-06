@@ -22,6 +22,9 @@
              [self jatt:kAContent]          : kRContent,
              [self jatt:kAIsHidden]         : kRIsHidden,
              [self jatt:kAShouldNotify]     : kRShouldNotify,
+             [self jatt:kALikesCount]     : kRLikesCount,
+             [self jatt:kADislikesCount]  : kRDislikesCount,
+             [self jatt:kACommentsCount]  : kRCommentsCount,
              [self jatt:kAUpdatedAt]        : kRUpdatedAt,
              [self jatt:kACreatedAt]        : kRCreatedAt
              };
@@ -36,6 +39,9 @@
              kRPolymorphicPostPublisherID       : kRDefaultPolymorphicID,
              kRPolymorphicPostTargetableType    : kRDefaultPolymorphicType,
              kRPolymorphicPostTargetableID      : kRDefaultPolymorphicID,
+             kRLikesCount                   : @0,
+             kRDislikesCount                : @0,
+             kRCommentsCount                : @0,
              kRUpdatedAt                        : [NSDate defaultDate],
              kRCreatedAt                        : [NSDate defaultDate]
              };

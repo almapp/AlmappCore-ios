@@ -9,6 +9,7 @@
 #import "ALMResource.h"
 #import "ALMPostPublisher.h"
 #import "ALMSection.h"
+#import "ALMCourse.h"
 #import "ALMGroup.h"
 #import "ALMEvent.h"
 #import "ALMChat.h"
@@ -27,6 +28,7 @@
 
 @property RLMArray<ALMChat> *chats;
 @property RLMArray<ALMSection> *sections;
+@property RLMArray<ALMCourse> *courses;
 @property RLMArray<ALMGroup> *subscribedGroups;
 @property RLMArray<ALMEvent> *attendingEvents;
 

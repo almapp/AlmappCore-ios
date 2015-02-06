@@ -23,6 +23,9 @@
              [self jatt:kAFacebookURL]    : kRFacebookURL,
              [self jatt:kATwitterURL]     : kRTwitterURL,
              [self jatt:kAInformation]    : kRInformation,
+             [self jatt:kALikesCount]     : kRLikesCount,
+             [self jatt:kADislikesCount]  : kRDislikesCount,
+             [self jatt:kACommentsCount]  : kRCommentsCount,
              [self jatt:kAUpdatedAt]      : kRUpdatedAt,
              [self jatt:kACreatedAt]      : kRCreatedAt
              };
@@ -35,6 +38,9 @@
              kRURL                        : kRDefaultNullString,
              kRFacebookURL                : kRDefaultNullString,
              kRTwitterURL                 : kRDefaultNullString,
+             kRLikesCount                   : @0,
+             kRDislikesCount                : @0,
+             kRCommentsCount                : @0,
              kRInformation                : [NSDate defaultDate],
              kRUpdatedAt                  : [NSDate defaultDate],
              kRCreatedAt                  : [NSDate defaultDate]

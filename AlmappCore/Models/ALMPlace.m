@@ -25,6 +25,9 @@
              [self jatt:kALongitude]    : kRLongitude,
              [self jatt:kAFloor]        : kRFloor,
              [self jatt:kAInformation]  : kRInformation,
+             [self jatt:kALikesCount]     : kRLikesCount,
+             [self jatt:kADislikesCount]  : kRDislikesCount,
+             [self jatt:kACommentsCount]  : kRCommentsCount,
              [self jatt:kAUpdatedAt]    : kRUpdatedAt,
              [self jatt:kACreatedAt]    : kRCreatedAt
              };
@@ -43,6 +46,9 @@
              kRAngle                    : @0.0f,
              kRLatitude                 : @0.0f,
              kRLongitude                : @0.0f,
+             kRLikesCount                   : @0,
+             kRDislikesCount                : @0,
+             kRCommentsCount                : @0,
              kRUpdatedAt                : [NSDate defaultDate],
              kRCreatedAt                : [NSDate defaultDate]
              };
