@@ -14,6 +14,8 @@
 #import "ALMResourceConstants.h"
 #import "ALMApiKey.h"
 
+NSString *const kControllerSearchParams = @"q";
+
 static NSString *const kCredentialKey = @"AlmappCore-Controller";
 static NSString *const kDefaultOAuthUrl = @"/oauth/token";
 static NSString *const kDefaultOAuthScope = @"";
@@ -196,6 +198,21 @@ static NSString *const kDefaultOAuthScope = @"";
     //});
     //});
     //}];
+}
+
+- (PMKPromise *)SEARCH:(ALMResourceRequest *)request query:(NSString *)query {
+    return [self SEARCH:request params:@{kControllerSearchParams : query}];
+}
+
+- (PMKPromise *)SEARCH:(ALMResourceRequest *)request params:(NSDictionary *)params {
+    if (request.parameters) {
+        request.parameters = [request.parameters merge:params];
+    }
+    else {
+        request.parameters = params;
+    }
+    request.customPath = [NSString stringWithFormat:@"%@/%@", request.path, @"search"];
+    return [self GET:request];
 }
 
 - (PMKPromise *)GET:(ALMResourceRequest *)request {

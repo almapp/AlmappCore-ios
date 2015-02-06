@@ -21,6 +21,8 @@
 #import "ALMResourceRequest.h"
 #import "ALMResourceRequestBlock.h"
 
+extern NSString *const kControllerSearchParams;
+
 @interface ALMController : AFHTTPSessionManager
 
 
@@ -48,6 +50,10 @@
 
 - (PMKPromise *)LOAD:(ALMResourceRequest *)request;
 - (PMKPromise *)FETCH:(ALMResourceRequest *)request;
+
+- (PMKPromise *)SEARCH:(ALMResourceRequest *)request params:(NSDictionary *)params;
+- (PMKPromise *)SEARCH:(ALMResourceRequest *)request query:(NSString *)query;
+
 
 - (PMKPromise *)GET:(ALMResourceRequest *)request;
 - (PMKPromise *)POST:(ALMResourceRequest *)request;
