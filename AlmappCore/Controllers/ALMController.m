@@ -16,7 +16,7 @@
 
 NSString *const kControllerSearchParams = @"q";
 
-static NSString *const kCredentialKey = @"AlmappCore-Controller";
+static NSString *const kCredentialKey = @"AlmappCoreController";
 static NSString *const kDefaultOAuthUrl = @"/oauth/token";
 static NSString *const kDefaultOAuthScope = @"";
 
@@ -126,22 +126,25 @@ static NSString *const kDefaultOAuthScope = @"";
         
         void(^success)(AFOAuthCredential *OAuthcredential) = ^(AFOAuthCredential *OAuthcredential) {
             BOOL didSave = [ALMController saveCredential:OAuthcredential];
-            if (didSave) {
-                NSLog(@"Did Save: %@", OAuthcredential.accessToken);
-            }
-            else {
+            if (!didSave) {
                 NSLog(@"COULD NOT SAVE TOKEN: %@", OAuthcredential.accessToken);
             }
             
-            [weakSelf.requestSerializer setAuthorizationHeaderFieldWithCredential:OAuthcredential];
-            [weakSelf publishDidRefreshTokenWith:credential];
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf) {
+                [strongSelf.requestSerializer setAuthorizationHeaderFieldWithCredential:OAuthcredential];
+                [strongSelf publishDidRefreshTokenWith:credential];
+            }
             
             fulfiller(OAuthcredential.accessToken);
         };
         
         void(^fail)(NSError *error) = ^(NSError *error) {
-            [ALMController deleteCredential];
-            [weakSelf publishFailedLoginWith:credential error:error];
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf) {
+                [strongSelf onAuthFailure:error credential:credential];
+            }
+            
             rejecter(error);
         };
         
@@ -150,11 +153,21 @@ static NSString *const kDefaultOAuthScope = @"";
         }
         
         else {
-            [self.OAuth2Manager authenticateUsingOAuthWithURLString:oauthUrl parameters:nil success:success failure:fail];
+            [self.OAuth2Manager authenticateUsingOAuthWithURLString:oauthUrl parameters:@{@"grant_type" : @"client_credentials"} success:success failure:fail];
         }
     }];
 }
 
+- (void)onAuthFailure:(NSError *)error credential:(ALMCredential *)credential {
+    [self setOAuthCredential:nil];
+    
+    BOOL didDelete = [ALMController deleteCredential];
+    if (!didDelete) {
+        NSLog(@"COULD NOT DELETE INVALID TOKEN");
+    }
+    
+    [self publishFailedLoginWith:credential error:error];
+}
 
 #pragma mark - Methods
 
@@ -220,7 +233,11 @@ static NSString *const kDefaultOAuthScope = @"";
     else {
         request.parameters = params;
     }
-    request.customPath = [NSString stringWithFormat:@"%@/%@", request.path, @"search"];
+
+    if ([request.customPath rangeOfString:@"search"].location == NSNotFound) { // TODO check only ending
+        request.customPath = [NSString stringWithFormat:@"%@/%@", request.path, @"search"];
+    }
+    
     return [self GET:request];
 }
 
@@ -245,8 +262,10 @@ static NSString *const kDefaultOAuthScope = @"";
                     NSLog(@"Error %@", error);
                 }
                 if ([error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey] statusCode] == 401) {
-                    [ALMController deleteCredential];
-                    [weakSelf publishFailedLoginWith:request.credential error:error];
+                    __strong __typeof(weakSelf) strongSelf = weakSelf;
+                    if (strongSelf) {
+                        [strongSelf onAuthFailure:error credential:request.credential];
+                    }
                 }
                 [request publishError:error task:nil];
                 rejecter(error);
