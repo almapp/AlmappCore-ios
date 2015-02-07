@@ -10,6 +10,8 @@
 
 @implementation ALMResourceTest
 
+
+
 - (void(^)(NSError *, NSURLSessionDataTask *)) errorBlock:(XCTestExpectation *)expectation class:(__unsafe_unretained Class)resourceClass {
     __block XCTestExpectation *blockExpectation = expectation;
     
@@ -20,11 +22,16 @@
     };
 }
 
+- (void)resource:(Class)resourceClass id:(long long)resourceID path:(NSString *)path params:(id)params onSuccess:(void (^)(id))onSuccess {
+    return [self resource:resourceClass id:resourceID path:path params:params credential:nil onSuccess:onSuccess];
+}
+
 - (void)resource:(Class)resourceClass
               id:(long long)resourceID
             path:(NSString *)path
           params:(id)params
-       onSuccess:(void(^)(id resource))onSuccess {
+      credential:(ALMCredential *)credential
+       onSuccess:(void (^)(id))onSuccess {
     
     NSString *description = [NSString stringWithFormat:@"GET: %@ - %lldll", resourceClass, resourceID];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
@@ -35,7 +42,7 @@
         builder.resourceClass = resourceClass;
         builder.resourceID = resourceID;
         builder.realmPath = [weakSelf testRealmPath];
-        builder.credential = [weakSelf testSession].credential;
+        builder.credential = credential;
         builder.customPath = path;
         builder.parameters = params;
         builder.shouldLog = YES;
@@ -58,9 +65,14 @@
     }];
 }
 
+- (void)resources:(Class)resourcesClass path:(NSString *)path params:(id)params onSuccess:(void (^)(RLMResults *))onSuccess {
+    return [self resources:resourcesClass path:path params:params credential:nil onSuccess:onSuccess];
+}
+
 - (void)resources:(Class)resourcesClass
             path:(NSString *)path
-          params:(id)params
+           params:(id)params
+       credential:(ALMCredential *)credential
         onSuccess:(void (^)(RLMResults *))onSuccess {
     
     NSString *description = [NSString stringWithFormat:@"GET: %@", resourcesClass];
@@ -74,7 +86,7 @@
         builder.customPath = path;
         builder.parameters = params;
         builder.shouldLog = YES;
-        builder.credential = [weakSelf testSession].credential;
+        builder.credential = credential;
         
     } onLoad:^(id result) {
         NSLog(@"Loaded: %@", result);
@@ -94,6 +106,11 @@
     }];
 }
 
+- (void)nestedResources:(Class)resourcesClass as:(NSString *)collectionAlias on:(Class)parentClass id:(long long)parentID as:(NSString *)parentAlias path:(NSString *)path params:(id)params onSuccess:(void (^)(id, RLMResults *))onSuccess {
+    
+    return [self nestedResources:resourcesClass as:collectionAlias on:parentClass id:parentID as:parentAlias path:path params:params credential:nil onSuccess:onSuccess];
+}
+
 - (void)nestedResources:(Class)resourcesClass
                      as:(NSString *)collectionAlias
                      on:(Class)parentClass
@@ -101,7 +118,8 @@
                      as:(NSString *)parentAlias
                    path:(NSString *)path
                  params:(id)params
-              onSuccess:(void (^)(id parent, RLMResults *results))onSuccess {
+             credential:(ALMCredential *)credential
+              onSuccess:(void (^)(id, RLMResults *))onSuccess {
     
     NSString *description = [NSString stringWithFormat:@"GET: %@ - %lld / %@", parentClass, parentID, resourcesClass];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
@@ -113,14 +131,14 @@
         r.realmPath = [weakSelf testRealmPath];
         r.parameters = params;
         r.shouldLog = YES;
-        r.credential = [weakSelf testSession].credential;
+        r.credential = credential;
         
     }] withParent:[ALMResourceRequestBlock request:^(ALMResourceRequestBlock *r) {
         r.resourceClass = parentClass;
         r.resourceID = parentID;
         r.shouldLog = YES;
         r.realmPath = [weakSelf testRealmPath];
-        r.credential = [weakSelf testSession].credential;
+        r.credential = credential;
         
     }] as:collectionAlias belongsToAs:parentAlias].then(^(id parent, RLMResults *collection) {
         NSLog(@"Loaded parent: %@", parent);

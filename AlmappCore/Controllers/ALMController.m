@@ -123,8 +123,8 @@ static NSString *const kDefaultOAuthScope = @"";
 - (PMKPromise *)AUTH:(ALMCredential *)credential oauthUrl:(NSString *)oauthUrl scope:(NSString *)scope {
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         __weak __typeof(self) weakSelf = self;
-        [self.OAuth2Manager authenticateUsingOAuthWithURLString:oauthUrl username:credential.email password:credential.password scope:scope success:^(AFOAuthCredential *OAuthcredential) {
-            
+        
+        void(^success)(AFOAuthCredential *OAuthcredential) = ^(AFOAuthCredential *OAuthcredential) {
             BOOL didSave = [ALMController saveCredential:OAuthcredential];
             if (didSave) {
                 NSLog(@"Did Save: %@", OAuthcredential.accessToken);
@@ -137,12 +137,21 @@ static NSString *const kDefaultOAuthScope = @"";
             [weakSelf publishDidRefreshTokenWith:credential];
             
             fulfiller(OAuthcredential.accessToken);
-            
-        } failure:^(NSError *error) {
+        };
+        
+        void(^fail)(NSError *error) = ^(NSError *error) {
             [ALMController deleteCredential];
             [weakSelf publishFailedLoginWith:credential error:error];
             rejecter(error);
-        }];
+        };
+        
+        if (credential) {
+            [self.OAuth2Manager authenticateUsingOAuthWithURLString:oauthUrl username:credential.email password:credential.password scope:scope success:success failure:fail];
+        }
+        
+        else {
+            [self.OAuth2Manager authenticateUsingOAuthWithURLString:oauthUrl parameters:nil success:success failure:fail];
+        }
     }];
 }
 
