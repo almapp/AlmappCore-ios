@@ -37,6 +37,55 @@
     }
 }
 
+- (void)testEwe {
+    RLMRealm *realm =  self.testRealm;
+    
+    [realm beginWriteTransaction];
+    
+    ALMCampus *campus = [[ALMCampus alloc] init];
+    campus.resourceID = 1;
+
+    ALMPlace *place = [[ALMPlace alloc] init];
+    place.resourceID = 1;
+    place.identifier = @"place";
+    place.area = campus;
+    
+    [realm addObjects:@[campus, place]];
+    
+    [campus.places addObject:place];
+    
+    ALMCategory *category = [[ALMCategory alloc] init];
+    category.category = @"classroom";
+    
+    place = [ALMPlace objectInRealm:realm withID:1];
+    [place.categories addObject:category];
+    
+    [realm commitWriteTransaction];
+    
+    RLMResults *results = [campus placesWithCategoryValue:@"classroom"];
+    XCTAssertNotEqual(results.count, 0);
+}
+
+- (void)testCategory {
+    NSDictionary *data = @{@"category" : @"bath"};
+    RLMRealm *realm =  self.testRealm;
+    
+    [realm beginWriteTransaction];
+    id resource = [ALMCategory createOrUpdateInRealm:self.testRealm withJSONDictionary:data];
+    XCTAssertNotNil(resource);
+    [realm commitWriteTransaction];
+    
+    
+    [self resource:[ALMPlace class] id:1 path:nil params:nil onSuccess:^(ALMPlace *resource) {
+        NSLog(@"%@", resource);
+        
+        XCTAssertNotNil(resource.categories);
+        XCTAssertNotEqual(resource.categories.count, 0);
+        
+        
+    }];
+}
+
 - (void)testPlaces {
     [self resources:[ALMPlace class] path:@"buildings/1/places" params:nil onSuccess:^(RLMResults *resources) {
         NSLog(@"%@", resources);

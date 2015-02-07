@@ -42,6 +42,7 @@
 #import "ALMBuilding.h"
 #import "ALMAcademicUnity.h"
 #import "ALMPlace.h"
+#import "ALMCategory.h"
 
 #import "ALMEvent.h"
 #import "ALMCareer.h"

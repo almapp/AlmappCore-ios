@@ -30,5 +30,8 @@
 @property NSDate *updatedAt;
 @property NSDate *createdAt;
 
+- (RLMResults *)placesWithCategory:(ALMCategory *)category;
+- (RLMResults *)placesWithCategoryValue:(NSString *)category;
+
 @end
 RLM_ARRAY_TYPE(ALMArea)

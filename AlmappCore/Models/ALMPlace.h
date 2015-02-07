@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 almapp. All rights reserved.
 //
 
-#import "ALMSocialResource.h"
 #import <CoreGraphics/CGBase.h>
+
+#import "ALMSocialResource.h"
+#import "ALMCategory.h"
 
 @class ALMArea;
 
@@ -25,6 +27,7 @@
 @property CGFloat longitude;
 @property NSString *floor;
 @property NSString *information;
+@property RLMArray<ALMCategory> *categories;
 
 @property NSDate *updatedAt;
 @property NSDate *createdAt;
@@ -34,3 +37,4 @@
 
 @end
 RLM_ARRAY_TYPE(ALMPlace)
+

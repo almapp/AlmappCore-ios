@@ -271,7 +271,15 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
         
         Class propertyClass = [self propertyTypeForKRConstant:resourceCollectionPropertyName];
         for (NSDictionary* rawDic in nestedResourceCollectionInResponse) {
-            NSDictionary* resourceDic = [self renameResourceRootOf:rawDic to:[propertyClass jsonRoot]];
+            
+            NSDictionary* resourceDic = nil;
+            if ([propertyClass isSubclassOfClass:[ALMResource class]]) {
+                resourceDic = [self renameResourceRootOf:rawDic to:[propertyClass jsonRoot]];
+            }
+            else {
+                resourceDic = rawDic;
+            }
+            
             id nestedProperty = [propertyClass performSelector:@selector(createOrUpdateInRealm:withJSONDictionary:)
                                                     withObject:realm
                                                     withObject:resourceDic];

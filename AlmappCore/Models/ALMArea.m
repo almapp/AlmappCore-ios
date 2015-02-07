@@ -79,6 +79,16 @@
     }
 }
 
+- (RLMResults *)placesWithCategory:(ALMCategory *)category {
+    return [self placesWithCategoryValue:category.category];
+}
+
+- (RLMResults *)placesWithCategoryValue:(NSString *)category {
+    RLMArray<ALMPlace> *places = self.places;
+    NSString *query = [NSString stringWithFormat:@"ANY categories.category == '%@'", category];
+    return [places objectsWhere:query];
+}
+
 + (ALMPersistMode)persistMode {
     return ALMPersistModeForever;
 }

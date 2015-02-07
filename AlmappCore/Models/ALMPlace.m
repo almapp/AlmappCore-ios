@@ -54,6 +54,21 @@
              };
 }
 
++ (NSDictionary *)JSONNestedResourceCollectionInboundMappingDictionary {
+    return @{
+             @"categories"             : @"categories"
+             };
+}
+
++ (Class)propertyTypeForKRConstant:(NSString *)kr {
+    if([kr isEqualToString:@"categories"]) {
+        return [ALMCategory class];
+    }
+    else {
+        return [super propertyTypeForKRConstant:kr];
+    }
+}
+
 - (void)setArea:(ALMArea *)area {
     [self setAreaID:[area resourceID]];
     [self setAreaType:[area className]];

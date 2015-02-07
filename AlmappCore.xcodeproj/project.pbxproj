@@ -68,6 +68,7 @@
 		F6B3582F1A79723300999DCE /* ALMChatTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B3582E1A79723300999DCE /* ALMChatTest.m */; };
 		F6B358341A798B6F00999DCE /* ALMSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B358331A798B6F00999DCE /* ALMSessionManager.m */; };
 		F6B3583B1A79ADEA00999DCE /* ALMCoreModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B3583A1A79ADEA00999DCE /* ALMCoreModule.m */; };
+		F6B7267C1A86A2D700461E17 /* ALMCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7267B1A86A2D700461E17 /* ALMCategory.m */; };
 		F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BDE1A51B02800FD4715 /* ALMUser.m */; };
 		F6D652CC1A7A65FD000620A4 /* ALMController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D652CB1A7A65FD000620A4 /* ALMController.m */; };
 		F6D652D01A7A6AE5000620A4 /* ALMResourceRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D652CF1A7A6AE5000620A4 /* ALMResourceRequest.m */; };
@@ -212,6 +213,8 @@
 		F6B358391A79ADEA00999DCE /* ALMCoreModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCoreModule.h; sourceTree = "<group>"; };
 		F6B3583A1A79ADEA00999DCE /* ALMCoreModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCoreModule.m; sourceTree = "<group>"; };
 		F6B3583C1A79AF3600999DCE /* ALMCoreModuleDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCoreModuleDelegate.h; sourceTree = "<group>"; };
+		F6B7267A1A86A2D700461E17 /* ALMCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCategory.h; sourceTree = "<group>"; };
+		F6B7267B1A86A2D700461E17 /* ALMCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCategory.m; sourceTree = "<group>"; };
 		F6D19BDD1A51B02800FD4715 /* ALMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUser.h; sourceTree = "<group>"; };
 		F6D19BDE1A51B02800FD4715 /* ALMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUser.m; sourceTree = "<group>"; };
 		F6D19BEF1A51D81200FD4715 /* ALMCoreDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCoreDelegate.h; sourceTree = "<group>"; };
@@ -484,6 +487,8 @@
 				F6A058B51A5481B6001A1E45 /* ALMArea.m */,
 				F6A058B71A548588001A1E45 /* ALMPlace.h */,
 				F6A058B81A548588001A1E45 /* ALMPlace.m */,
+				F6B7267A1A86A2D700461E17 /* ALMCategory.h */,
+				F6B7267B1A86A2D700461E17 /* ALMCategory.m */,
 				F6647B5C1A56ED6A00D8C814 /* ALMOrganization.h */,
 				F6647B5D1A56ED6A00D8C814 /* ALMOrganization.m */,
 				F650A82F1A58A69A000C41B4 /* ALMAcademicUnity.h */,
@@ -766,6 +771,7 @@
 				F6D652CC1A7A65FD000620A4 /* ALMController.m in Sources */,
 				F69C66AB1A6BEA4E006F1C0E /* ALMSection.m in Sources */,
 				F65458D41A7D21AB00641FFE /* ALMResourceRequestBlock.m in Sources */,
+				F6B7267C1A86A2D700461E17 /* ALMCategory.m in Sources */,
 				F64478171A58EE820078FB29 /* ALMResourceConstants.m in Sources */,
 				F60F90771A5969F2002EF807 /* ALMComment.m in Sources */,
 				F6DCAF741A62CC2D008274D7 /* ALMBuilding.m in Sources */,
