@@ -35,6 +35,8 @@
 #import "ALMController.h"
 #import "ALMController+Nested.h"
 
+#import "ALMScheduleController.h"
+
 #import "ALMArea.h"
 #import "ALMOrganization.h"
 #import "ALMCampus.h"

@@ -70,6 +70,7 @@
 		F6B3583B1A79ADEA00999DCE /* ALMCoreModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B3583A1A79ADEA00999DCE /* ALMCoreModule.m */; };
 		F6B7267C1A86A2D700461E17 /* ALMCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7267B1A86A2D700461E17 /* ALMCategory.m */; };
 		F6B7269F1A87144F00461E17 /* RLMArray+Select.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7269E1A87144F00461E17 /* RLMArray+Select.m */; };
+		F6B726A31A871B4200461E17 /* ALMScheduleController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B726A21A871B4200461E17 /* ALMScheduleController.m */; };
 		F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BDE1A51B02800FD4715 /* ALMUser.m */; };
 		F6D652CC1A7A65FD000620A4 /* ALMController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D652CB1A7A65FD000620A4 /* ALMController.m */; };
 		F6D652D01A7A6AE5000620A4 /* ALMResourceRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D652CF1A7A6AE5000620A4 /* ALMResourceRequest.m */; };
@@ -218,6 +219,8 @@
 		F6B7267B1A86A2D700461E17 /* ALMCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCategory.m; sourceTree = "<group>"; };
 		F6B7269D1A87144F00461E17 /* RLMArray+Select.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMArray+Select.h"; sourceTree = "<group>"; };
 		F6B7269E1A87144F00461E17 /* RLMArray+Select.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMArray+Select.m"; sourceTree = "<group>"; };
+		F6B726A11A871B4200461E17 /* ALMScheduleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMScheduleController.h; sourceTree = "<group>"; };
+		F6B726A21A871B4200461E17 /* ALMScheduleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMScheduleController.m; sourceTree = "<group>"; };
 		F6D19BDD1A51B02800FD4715 /* ALMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUser.h; sourceTree = "<group>"; };
 		F6D19BDE1A51B02800FD4715 /* ALMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUser.m; sourceTree = "<group>"; };
 		F6D19BEF1A51D81200FD4715 /* ALMCoreDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCoreDelegate.h; sourceTree = "<group>"; };
@@ -351,7 +354,6 @@
 				F6D19BEE1A51D81200FD4715 /* Delegates */,
 				F6D19BDC1A51B01100FD4715 /* Models */,
 				F6D652C91A7A65EE000620A4 /* Controllers */,
-				F65DD4D71A509130006BCAF0 /* APIControllers */,
 				F6B358311A798B6F00999DCE /* Session */,
 				F65DD4A01A50405D006BCAF0 /* AlmappCore.h */,
 				F65DD4BD1A505C6E006BCAF0 /* ALMUtil.h */,
@@ -390,14 +392,6 @@
 				F65DD4AE1A50405D006BCAF0 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		F65DD4D71A509130006BCAF0 /* APIControllers */ = {
-			isa = PBXGroup;
-			children = (
-				F6FB88C51A7669860076C8F4 /* Requests Factories */,
-			);
-			path = APIControllers;
 			sourceTree = "<group>";
 		};
 		F6A058AD1A545E50001A1E45 /* Base */ = {
@@ -471,6 +465,15 @@
 				F64204C81A7B09B700666DBE /* ALMCredential.m */,
 			);
 			path = Session;
+			sourceTree = "<group>";
+		};
+		F6B726A01A871B3400461E17 /* Custom Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F6B726A11A871B4200461E17 /* ALMScheduleController.h */,
+				F6B726A21A871B4200461E17 /* ALMScheduleController.m */,
+			);
+			path = "Custom Controllers";
 			sourceTree = "<group>";
 		};
 		F6D19BDC1A51B01100FD4715 /* Models */ = {
@@ -554,6 +557,7 @@
 				F6D652CF1A7A6AE5000620A4 /* ALMResourceRequest.m */,
 				F65458D21A7D21AB00641FFE /* ALMResourceRequestBlock.h */,
 				F65458D31A7D21AB00641FFE /* ALMResourceRequestBlock.m */,
+				F6B726A01A871B3400461E17 /* Custom Controllers */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -596,13 +600,6 @@
 				F6F573DB1A741C5F00D19FC4 /* ALMManagerTests.m */,
 			);
 			path = TestCore;
-			sourceTree = "<group>";
-		};
-		F6FB88C51A7669860076C8F4 /* Requests Factories */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Requests Factories";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -758,6 +755,7 @@
 				F6B3582C1A796B1B00999DCE /* ALMChatManager.m in Sources */,
 				F649C7A21A659CD900CF64AA /* ALMPost.m in Sources */,
 				F64204CD1A7BB3ED00666DBE /* ALMSession.m in Sources */,
+				F6B726A31A871B4200461E17 /* ALMScheduleController.m in Sources */,
 				F69C66A81A6BEA47006F1C0E /* ALMCourse.m in Sources */,
 				F6647B5E1A56ED6A00D8C814 /* ALMOrganization.m in Sources */,
 				F649C7AE1A66C5A200CF64AA /* ALMResourceIndex.m in Sources */,
