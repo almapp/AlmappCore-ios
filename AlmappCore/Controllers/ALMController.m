@@ -107,15 +107,17 @@ static NSString *const kDefaultOAuthScope = @"";
     if (_authPromise.pending) {
         return _authPromise;
     }
-    else if (!self.OAuthCredential || self.OAuthCredential.isExpired) {
-        [self publishWillGetTokensWith:credential];
-        _authPromise = [self AUTH:credential];
-        return _authPromise;
-    }
-    else {
+    BOOL present = self.OAuthCredential != nil;
+    BOOL expired = self.OAuthCredential.isExpired;
+    if (present && !expired) {
         return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
             fulfiller(self.OAuthCredential.accessToken);
         }];
+    }
+    else  {
+        [self publishWillGetTokensWith:credential];
+        _authPromise = [self AUTH:credential];
+        return _authPromise;
     }
 }
 
@@ -135,6 +137,7 @@ static NSString *const kDefaultOAuthScope = @"";
             
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (strongSelf) {
+                [strongSelf setOAuthCredential:OAuthcredential];
                 [strongSelf.requestSerializer setAuthorizationHeaderFieldWithCredential:OAuthcredential];
                 [strongSelf publishDidRefreshTokenWith:credential];
             }
@@ -236,7 +239,7 @@ static NSString *const kDefaultOAuthScope = @"";
     else {
         request.parameters = params;
     }
-
+    
     if ([request.customPath rangeOfString:@"search"].location == NSNotFound) { // TODO check only ending
         request.customPath = [NSString stringWithFormat:@"%@/%@", request.path, @"search"];
     }
