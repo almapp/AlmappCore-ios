@@ -104,16 +104,19 @@ static NSString *const kDefaultOAuthScope = @"";
 #pragma mark - Auth
 
 - (PMKPromise *)authPromiseWithCredential:(ALMCredential *)credential {
-    if (!self.OAuthCredential || self.OAuthCredential.isExpired) {
+    if (_authPromise.pending) {
+        return _authPromise;
+    }
+    else if (!self.OAuthCredential || self.OAuthCredential.isExpired) {
         [self publishWillGetTokensWith:credential];
         _authPromise = [self AUTH:credential];
-    } else {
-        _authPromise = [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+        return _authPromise;
+    }
+    else {
+        return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
             fulfiller(self.OAuthCredential.accessToken);
         }];
     }
-    
-    return _authPromise;
 }
 
 - (PMKPromise *)AUTH:(ALMCredential *)credential {
