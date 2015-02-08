@@ -253,7 +253,7 @@ NSString *const kRClassType = @"classType";
 NSString *const kAYear = @"year";
 NSString *const kRYear = @"year";
 
-NSString *const kAPeriod = @"semester";
+NSString *const kAPeriod = @"period";
 NSString *const kRPeriod = @"period";
 
 NSString *const kASectionNumber = @"number";
