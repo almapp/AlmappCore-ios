@@ -212,11 +212,13 @@
 }
 
 - (NSDate *)startTimeWithAnticipation:(BOOL)anticipation {
-    return [self.class dateTimeForDay:self.day hour:self.endHour minutes:self.endMinute anticipation:((anticipation) ? self.anticipationMinutes : 0)];
+    NSInteger anticipationValue = (anticipation) ? self.anticipationMinutes : 0;
+    return [self.class dateTimeForDay:self.day hour:self.startHour minutes:self.startMinute anticipation:anticipationValue];
 }
 
 - (NSDate *)endTimeWithAnticipation:(BOOL)anticipation {
-    return [self.class dateTimeForDay:self.day hour:self.endHour minutes:self.endMinute anticipation:((anticipation) ? self.anticipationMinutes : 0)];
+    NSInteger anticipationValue = (anticipation) ? self.anticipationMinutes : 0;
+    return [self.class dateTimeForDay:self.day hour:self.endHour minutes:self.endMinute anticipation:anticipationValue];
 }
 
 - (NSDate *)incomingStartTimeWithAnticipation:(BOOL)anticipation{
