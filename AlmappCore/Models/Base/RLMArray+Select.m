@@ -1,15 +1,16 @@
 //
-//  RLMResults+Select.m
+//  RLMArray+Select.m
 //  AlmappCore
 //
-//  Created by Patricio López on 02-02-15.
+//  Created by Patricio López on 08-02-15.
 //  Copyright (c) 2015 almapp. All rights reserved.
 //
 
+#import "RLMArray+Select.h"
 #import "RLMResults+Select.h"
 #import <Realm+JSON/RLMObject+JSON.h>
 
-@implementation RLMResults (Select)
+@implementation RLMArray (Select)
 
 - (NSArray *)select:(NSString *)column {
     //return [self valueForKeyPath:column];
@@ -32,5 +33,3 @@
 }
 
 @end
-
-

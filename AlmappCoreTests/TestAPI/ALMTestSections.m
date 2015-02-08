@@ -51,6 +51,9 @@
         } onLoad:^(id result) {
             
         } onFetch:^(id result, NSURLSessionDataTask *task) {
+            ALMUser *user = [self testSession].user;
+            [user hasMany:result];
+            
             for (ALMSection *section in result) {
                 for (int i = ALMScheduleDayMonday; i <= ALMScheduleDaySunday; i++) {
                     RLMResults *inDay = [section scheduleItemsInDay:i];
@@ -60,6 +63,16 @@
                     }
                 }
             }
+            
+            RLMResults *sections = [user sectionsInYear:2014 period:1];
+            XCTAssertEqual(sections.count, 0, @"Must be empty for old period");
+            
+            sections = [user sectionsInYear:2015 period:1];
+            XCTAssertNotEqual(sections.count, 0);
+            
+            RLMResults *teachers = [user teachersInYear:2015 period:1];
+            XCTAssertNotEqual(teachers.count, 0);
+            
             [expectation fulfill];
             
         } onError:^(NSError *error, NSURLSessionDataTask *task) {

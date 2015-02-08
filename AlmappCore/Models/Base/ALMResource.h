@@ -9,6 +9,7 @@
 #import "RLMObject.h"
 #import "RLMObject+JSON.h"
 #import "RLMResults+Select.h"
+#import "RLMArray+Select.h"
 #import "NSArray+Query.h"
 #import "NSDictionary+Util.h"
 

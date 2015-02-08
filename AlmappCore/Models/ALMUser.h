@@ -35,5 +35,9 @@
 @property NSDate *updatedAt;
 @property NSDate *createdAt;
 
+- (RLMResults *)sectionsInYear:(short)year period:(short)period;
+- (RLMResults *)coursesInYear:(short)year period:(short)period;
+- (RLMResults *)teachersInYear:(short)year period:(short)period;
+
 @end
 RLM_ARRAY_TYPE(ALMUser)

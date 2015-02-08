@@ -42,6 +42,21 @@
     if (!_testSession) {
         RLMRealm *realm = self.testRealm;
         _testSession = [ALMSession sessionWithEmail:@"lorem1@uc.cl" password:@"randompassword" inRealm:realm];
+        
+        ALMUser *user = [[ALMUser alloc] init];
+        user.name = @"Lorema Ipsum";
+        user.username = @"lorem1";
+        user.country = @"Chile";
+        user.email = @"lorem1@uc.cl";
+        user.isFindeable = YES;
+        user.isMale = NO;
+        user.studentID = @"126332331";
+        
+        [realm transactionWithBlock:^{
+            [realm addOrUpdateObject:user];
+            _testSession.user = user;
+        }];
+
     }
     return _testSession;
 }

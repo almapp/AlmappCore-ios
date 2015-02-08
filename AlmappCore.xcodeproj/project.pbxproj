@@ -69,6 +69,7 @@
 		F6B358341A798B6F00999DCE /* ALMSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B358331A798B6F00999DCE /* ALMSessionManager.m */; };
 		F6B3583B1A79ADEA00999DCE /* ALMCoreModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B3583A1A79ADEA00999DCE /* ALMCoreModule.m */; };
 		F6B7267C1A86A2D700461E17 /* ALMCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7267B1A86A2D700461E17 /* ALMCategory.m */; };
+		F6B7269F1A87144F00461E17 /* RLMArray+Select.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7269E1A87144F00461E17 /* RLMArray+Select.m */; };
 		F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BDE1A51B02800FD4715 /* ALMUser.m */; };
 		F6D652CC1A7A65FD000620A4 /* ALMController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D652CB1A7A65FD000620A4 /* ALMController.m */; };
 		F6D652D01A7A6AE5000620A4 /* ALMResourceRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D652CF1A7A6AE5000620A4 /* ALMResourceRequest.m */; };
@@ -215,6 +216,8 @@
 		F6B3583C1A79AF3600999DCE /* ALMCoreModuleDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCoreModuleDelegate.h; sourceTree = "<group>"; };
 		F6B7267A1A86A2D700461E17 /* ALMCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCategory.h; sourceTree = "<group>"; };
 		F6B7267B1A86A2D700461E17 /* ALMCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCategory.m; sourceTree = "<group>"; };
+		F6B7269D1A87144F00461E17 /* RLMArray+Select.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RLMArray+Select.h"; sourceTree = "<group>"; };
+		F6B7269E1A87144F00461E17 /* RLMArray+Select.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMArray+Select.m"; sourceTree = "<group>"; };
 		F6D19BDD1A51B02800FD4715 /* ALMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUser.h; sourceTree = "<group>"; };
 		F6D19BDE1A51B02800FD4715 /* ALMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUser.m; sourceTree = "<group>"; };
 		F6D19BEF1A51D81200FD4715 /* ALMCoreDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCoreDelegate.h; sourceTree = "<group>"; };
@@ -409,6 +412,8 @@
 				F649C7AD1A66C5A200CF64AA /* ALMResourceIndex.m */,
 				F6A0F4581A7FBBE100380EE1 /* RLMResults+Select.h */,
 				F6A0F4591A7FBBE100380EE1 /* RLMResults+Select.m */,
+				F6B7269D1A87144F00461E17 /* RLMArray+Select.h */,
+				F6B7269E1A87144F00461E17 /* RLMArray+Select.m */,
 				F6A0F45D1A7FC22E00380EE1 /* NSArray+Query.h */,
 				F6A0F45E1A7FC22E00380EE1 /* NSArray+Query.m */,
 			);
@@ -745,6 +750,7 @@
 				F6A058B91A548588001A1E45 /* ALMPlace.m in Sources */,
 				F64478131A58ECB60078FB29 /* ALMCareer.m in Sources */,
 				F6A0F45F1A7FC22E00380EE1 /* NSArray+Query.m in Sources */,
+				F6B7269F1A87144F00461E17 /* RLMArray+Select.m in Sources */,
 				F6D652D01A7A6AE5000620A4 /* ALMResourceRequest.m in Sources */,
 				F63683061A58C8D000DBCC6A /* ALMEvent.m in Sources */,
 				F6A0F45A1A7FBBE100380EE1 /* RLMResults+Select.m in Sources */,
