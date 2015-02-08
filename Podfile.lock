@@ -67,12 +67,12 @@ PODS:
     - PromiseKit/When
   - PromiseKit/When (1.2.2):
     - PromiseKit/Promise
-  - Realm (0.90.4):
-    - Realm/Headers (= 0.90.4)
+  - Realm (0.90.5):
+    - Realm/Headers (= 0.90.5)
   - Realm+JSON (0.2.5):
     - Realm (~> 0.90)
-  - Realm/Headers (0.90.4)
-  - UICKeyChainStore (2.0.2)
+  - Realm/Headers (0.90.5)
+  - UICKeyChainStore (2.0.3)
 
 DEPENDENCIES:
   - AFNetworking
@@ -108,8 +108,8 @@ SPEC CHECKSUMS:
   OMGHTTPURLRQ: f8c515dfd2f57a5d74c710978f600231f52afec5
   PromiseKit: 812643bdf837142e98d4becfb2a69d8f35e5aa6b
   PromiseKit-AFNetworking: 16db750b394dcd12aa8527eb1bb9f209a36a49f7
-  Realm: 43ec5595f51849fabccd2213cfad90bc4ff9a3c0
+  Realm: aea25534b97be77995650c2339aa6ed010dfcc8a
   Realm+JSON: 6e79752d27dde89c4ff188df45e52896a8cc719f
-  UICKeyChainStore: 14bf8cb308432c2ca7c1b8b600398d4d6af8cb8d
+  UICKeyChainStore: 9b6ce74b89fc24e1879257eb51c002f7cc4a5b9b
 
 COCOAPODS: 0.35.0
