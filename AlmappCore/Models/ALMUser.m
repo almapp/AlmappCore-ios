@@ -53,8 +53,12 @@
 }
 
 - (RLMResults *)coursesInYear:(short)year period:(short)period {
-    NSString *query = [NSString stringWithFormat:@"ANY %@.%@ == %hd AND %@.%@ == %hd", [ALMSection realmPluralForm], kRYear, year, [ALMSection realmPluralForm], kRPeriod, period];
-    return [self.courses objectsWhere:query];
+    NSMutableArray *ids = [NSMutableArray array];
+    for (ALMSection *section in [self sectionsInYear:year period:period]) {
+        [ids addObject:@(section.course.resourceID)];
+    }
+    NSString *query = [NSString stringWithFormat:@"%@ IN %@", kRResourceID, [ids toRealmStringArray]];
+    return [ALMCourse objectsInRealm:self.realm where:query];
 }
 
 - (RLMResults *)teachersInYear:(short)year period:(short)period {

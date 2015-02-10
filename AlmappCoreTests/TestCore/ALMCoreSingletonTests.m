@@ -26,17 +26,17 @@
 - (ALMCore *)getCore {
     [ALMCore setSharedInstance:nil];
     
-    return [ALMCore coreWithDelegate:self baseURL:[NSURL URLWithString:kTestingBaseURL] apiVersion:kTestingApiVersion apiKey:[ALMTestsConstants testingApiKey]];
+    return [ALMCore coreWithDelegate:self baseURL:[NSURL URLWithString:kTestingBaseURL] apiVersion:kTestingApiVersion apiKey:[ALMTestsConstants testingApiKey] organization:kTestingOrganization];
 }
 
 - (void)testSetup {
-    ALMCore *core = [ALMCore coreWithDelegate:nil baseURL:nil apiKey:[ALMTestsConstants testingApiKey]];
+    ALMCore *core = [ALMCore coreWithDelegate:nil baseURL:nil apiKey:[ALMTestsConstants testingApiKey] organization:kTestingOrganization];
     XCTAssertNil(core, @"Cannot create singleton with invalid params");
     
-    core = [ALMCore coreWithDelegate:self baseURL:nil apiKey:[ALMTestsConstants testingApiKey]];
+    core = [ALMCore coreWithDelegate:self baseURL:nil apiKey:[ALMTestsConstants testingApiKey] organization:kTestingOrganization];
     XCTAssertNil(core, @"Cannot create singleton with invalid params");
     
-    core = [ALMCore coreWithDelegate:self baseURL:[NSURL URLWithString:kTestingBaseURL] apiKey:[ALMTestsConstants testingApiKey]];
+    core = [ALMCore coreWithDelegate:self baseURL:[NSURL URLWithString:kTestingBaseURL] apiKey:[ALMTestsConstants testingApiKey] organization:kTestingOrganization];
     XCTAssertNotNil(core, @"Cannot find AlmappCore instance for valid params");
     
     core = nil;
@@ -46,7 +46,7 @@
 
 - (void)testMissingApiKey {
     [ALMCore setSharedInstance:nil];
-    ALMCore *core = [ALMCore coreWithDelegate:self baseURL:[NSURL URLWithString:kTestingBaseURL] apiKey:nil];
+    ALMCore *core = [ALMCore coreWithDelegate:self baseURL:[NSURL URLWithString:kTestingBaseURL] apiKey:nil  organization:kTestingOrganization];
     XCTAssertThrows(core.apiKey, @"Must throw exception");
 }
 

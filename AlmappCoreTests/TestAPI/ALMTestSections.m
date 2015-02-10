@@ -25,6 +25,35 @@
     }];
 }
 
+- (void)testScheduleController {
+    NSString *description = [NSString stringWithFormat:@"GET: %@", @"schedule"];
+    XCTestExpectation *expectation = [self expectationWithDescription:description];
+    
+    __block ALMSession *session = self.testSession;
+    
+    ALMScheduleController *controller = [ALMScheduleController scheduleForSession:session year:2015 period:1];
+    
+    XCTAssertNotNil(controller.user);
+    
+    [controller promiseLoaded].then( ^(RLMResults *sections) {
+        NSLog(@"%@", sections);
+        
+        XCTAssertNotEqual(session.user.sections.count, 0);
+        XCTAssertNotEqual(session.user.courses.count, 0);
+        
+        XCTAssertEqual(session.user.sections.count, controller.sections.count);
+        XCTAssertEqual(session.user.courses.count, controller.courses.count);
+        
+        XCTAssertNotEqual(controller.teachers.count, 0);
+        
+        [expectation fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
 - (void)testUserSchedule {
     NSString *description = [NSString stringWithFormat:@"GET: %@", @"schedule"];
     XCTestExpectation *expectation = [self expectationWithDescription:description];

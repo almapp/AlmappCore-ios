@@ -25,8 +25,14 @@
 @property (readonly) PMKPromise *promiseSectionsLoaded;
 @property (readonly) PMKPromise *promiseCoursesLoaded;
 
-+ (instancetype)scheduleFor:(ALMUser *)user withCredential:(ALMCredential *)credential year:(short)year period:(short)period;
-+ (instancetype)scheduleForSession:(ALMSession *)session year:(short)year period:(short)period;
++ (instancetype)scheduleFor:(ALMUser *)user
+             withCredential:(ALMCredential *)credential
+                       year:(short)year
+                     period:(short)period;
+
++ (instancetype)scheduleForSession:(ALMSession *)session
+                              year:(short)year
+                            period:(short)period;
 
 - (NSArray *)scheduleItemsAtDay:(ALMScheduleDay)day;
 

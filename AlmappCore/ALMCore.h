@@ -28,11 +28,13 @@ extern NSString *const kFrameworkIdentifier;
 + (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
                          baseURL:(NSURL *)baseURL
                          apiVersion:(short)version
-                          apiKey:(ALMApiKey *)apiKey;
+                          apiKey:(ALMApiKey *)apiKey
+                    organization:(NSString *)organization;
 
 + (instancetype)coreWithDelegate:(id<ALMCoreDelegate>)delegate
                          baseURL:(NSURL *)baseURL
-                          apiKey:(ALMApiKey *)apiKey;
+                          apiKey:(ALMApiKey *)apiKey
+                    organization:(NSString *)organization;
 
 
 #pragma mark - Singleton methods
@@ -52,6 +54,7 @@ extern NSString *const kFrameworkIdentifier;
 @property (strong, nonatomic) NSURL *baseURL;
 @property (strong, nonatomic) NSURL *apiBaseURL;
 @property (strong, nonatomic) NSURL *chatURL;
+@property (strong, nonatomic) NSString *organizationIdentifier;
 
 @property (strong, nonatomic) ALMApiKey *apiKey;
 @property (assign, nonatomic) BOOL shouldSyncToCloud;

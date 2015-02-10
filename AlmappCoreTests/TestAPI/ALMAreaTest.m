@@ -37,7 +37,7 @@
     }
 }
 
-- (void)testEwe {
+- (void)testCategories {
     RLMRealm *realm =  self.testRealm;
     
     [realm beginWriteTransaction];

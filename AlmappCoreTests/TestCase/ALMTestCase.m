@@ -13,7 +13,7 @@
 - (void)setUp {
     [super setUp];
     
-    _core = [ALMCore coreWithDelegate:self baseURL:[NSURL URLWithString:kTestingBaseURL] apiVersion:kTestingApiVersion apiKey:[ALMTestsConstants testingApiKey]];
+    _core = [ALMCore coreWithDelegate:self baseURL:[NSURL URLWithString:kTestingBaseURL] apiVersion:kTestingApiVersion apiKey:[ALMTestsConstants testingApiKey]  organization:kTestingOrganization];
     [_core deleteTemporalDatabase];
 }
 

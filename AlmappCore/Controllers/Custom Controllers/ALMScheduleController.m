@@ -48,10 +48,11 @@
 
 - (PMKPromise *)promiseScheduleModulesLoaded {
     if (!self.didLoadScheduleModules) {
+        __weak __typeof(self) weakSelf = self;
         return [self.controller GET:[ALMResourceRequest request:^(ALMResourceRequest *r) {
-            r.credential = self.credential;
+            r.credential = weakSelf.credential;
             r.resourceClass = [ALMScheduleModule class];
-            r.realmPath = self.user.realm.path;
+            r.realmPath = weakSelf.user.realm.path;
             
         } delegate:nil]];
     }
@@ -89,21 +90,25 @@
 
 
 - (PMKPromise *)promiseLoaded {
-    PMKPromise *promise = nil;
-    if (self.shouldUpdate) {
-        __weak __typeof(self) weakSelf = self;
-        [self promiseScheduleModulesLoaded].then(^ {
-            return [weakSelf promiseSectionsLoaded];
-        }).then(^(RLMResults *sections, NSURLSessionDataTask *task) {
-            [weakSelf.user hasMany:sections];
-            return sections;
-        });
-    }
-    else {
-        promise = [PMKPromise instaSuccess];
-    }
-    
-    return promise;
+    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+        if (self.shouldUpdate) {
+            [self promiseScheduleModulesLoaded].then( ^{
+                return [self promiseCoursesLoaded];
+            }).then(^(RLMResults *courses, NSURLSessionDataTask *task) {
+                [self.user hasMany:courses];
+                return [self promiseSectionsLoaded];
+            }).then(^(RLMResults *sections, NSURLSessionDataTask *task) {
+                [self.user hasMany:sections];
+                fulfiller(sections);
+            }).catch( ^(NSError *error) {
+                NSLog(@"Error %@", error);
+                rejecter(error);
+            });
+        }
+        else {
+            fulfiller(self.sections);
+        }
+    }];
 }
 
 - (NSArray *)scheduleItemsAtDay:(ALMScheduleDay)day {

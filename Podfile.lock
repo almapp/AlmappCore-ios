@@ -1,46 +1,46 @@
 PODS:
-  - AFNetworking (2.5.0):
-    - AFNetworking/NSURLConnection (= 2.5.0)
-    - AFNetworking/NSURLSession (= 2.5.0)
-    - AFNetworking/Reachability (= 2.5.0)
-    - AFNetworking/Security (= 2.5.0)
-    - AFNetworking/Serialization (= 2.5.0)
-    - AFNetworking/UIKit (= 2.5.0)
-  - AFNetworking/NSURLConnection (2.5.0):
+  - AFNetworking (2.5.1):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.5.0):
+    - AFNetworking/UIKit
+  - AFNetworking/NSURLConnection (2.5.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (2.5.0)
-  - AFNetworking/Security (2.5.0)
-  - AFNetworking/Serialization (2.5.0)
-  - AFNetworking/UIKit (2.5.0):
+  - AFNetworking/NSURLSession (2.5.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.5.1)
+  - AFNetworking/Security (2.5.1)
+  - AFNetworking/Serialization (2.5.1)
+  - AFNetworking/UIKit (2.5.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - AFOAuth2Manager (2.0.0):
     - AFNetworking (~> 2.2)
   - FayeCpp (0.1.7)
   - OMGHTTPURLRQ (2.1):
-    - OMGHTTPURLRQ/RQ (= 2.1)
+    - OMGHTTPURLRQ/RQ
   - OMGHTTPURLRQ/FormURLEncode (2.1)
   - OMGHTTPURLRQ/RQ (2.1):
     - OMGHTTPURLRQ/FormURLEncode
     - OMGHTTPURLRQ/UserAgent
   - OMGHTTPURLRQ/UserAgent (2.1)
   - PromiseKit (1.2.2):
-    - PromiseKit/CALayer (= 1.2.2)
-    - PromiseKit/NSNotificationCenter (= 1.2.2)
-    - PromiseKit/NSURLConnection (= 1.2.2)
-    - PromiseKit/Pause (= 1.2.2)
-    - PromiseKit/UIActionSheet (= 1.2.2)
-    - PromiseKit/UIAlertView (= 1.2.2)
-    - PromiseKit/UIView (= 1.2.2)
-    - PromiseKit/UIViewController (= 1.2.2)
-    - PromiseKit/Until (= 1.2.2)
-    - PromiseKit/When (= 1.2.2)
+    - PromiseKit/CALayer
+    - PromiseKit/NSNotificationCenter
+    - PromiseKit/NSURLConnection
+    - PromiseKit/Pause
+    - PromiseKit/UIActionSheet
+    - PromiseKit/UIAlertView
+    - PromiseKit/UIView
+    - PromiseKit/UIViewController
+    - PromiseKit/Until
+    - PromiseKit/When
   - PromiseKit-AFNetworking (0.1.5):
     - AFNetworking (~> 2.0)
     - PromiseKit/Promise
@@ -68,7 +68,7 @@ PODS:
   - PromiseKit/When (1.2.2):
     - PromiseKit/Promise
   - Realm (0.90.5):
-    - Realm/Headers (= 0.90.5)
+    - Realm/Headers
   - Realm+JSON (0.2.5):
     - Realm (~> 0.90)
   - Realm/Headers (0.90.5)
@@ -92,17 +92,8 @@ EXTERNAL SOURCES:
     :commit: 813d6b474848f3ebaa1f6c92562cce00e9069ac4
     :git: https://github.com/mrpatiwi/Realm-JSON.git
 
-CHECKOUT OPTIONS:
-  AFOAuth2Manager:
-    :commit: 7470a389ea74034923999202eedfc04f036b3d37
-    :git: https://github.com/iamcam/AFOAuth2Manager
-  Realm+JSON:
-    :branch: master
-    :commit: 813d6b474848f3ebaa1f6c92562cce00e9069ac4
-    :git: https://github.com/mrpatiwi/Realm-JSON.git
-
 SPEC CHECKSUMS:
-  AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
+  AFNetworking: 8bee59492a6ff15d69130efa4d0dc67e0094a52a
   AFOAuth2Manager: 6d76c16b475b707cd41aae5580c9b71123e472fd
   FayeCpp: 8f4ac60cbcc9eb0fea16e5be2dda6b521aa2146d
   OMGHTTPURLRQ: f8c515dfd2f57a5d74c710978f600231f52afec5
@@ -112,4 +103,4 @@ SPEC CHECKSUMS:
   Realm+JSON: 6e79752d27dde89c4ff188df45e52896a8cc719f
   UICKeyChainStore: 9b6ce74b89fc24e1879257eb51c002f7cc4a5b9b
 
-COCOAPODS: 0.35.0
+COCOAPODS: 0.34.4

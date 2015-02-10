@@ -10,12 +10,13 @@
 
 @implementation ALMTestsConstants
 
-NSString * const kTestingBaseURL = @"http://patiwi-mcburger-pro.local:3000";
+NSString * const kTestingBaseURL = @"https://almapp.me";
+NSString * const kTestingOrganization = @"UC";
 short const kTestingApiVersion = 1;
 
 + (ALMApiKey *)testingApiKey {
-    return [ALMApiKey apiKeyWithClient:@"f1328a3ccd975185990322e0d1a02c34c014933018818fc4c4bf93f9e83f458e"
-                                secret:@"36ab39dfeb5065562c0427673d43f3d08cd39dd891d2eea0e4af2f5c2611073d"];
+    return [ALMApiKey apiKeyWithClient:@"21152d48ce94f7afd7a60cbf97e33608b8b43732c58559c059fb74b5269917a2"
+                                secret:@"f45b7301260954f4723f69c2f6dab09c1eb7f3b9ff11c93a2eb0bcbef696609d"];
 }
 
 @end
