@@ -163,8 +163,8 @@ extern NSString *const kRStudentID;
 extern NSString *const kALocalization;
 extern NSString *const kRLocalization;
 
-extern NSString *const kAIsService;
-extern NSString *const kRIsService;
+extern NSString *const kACategory;
+extern NSString *const kRCategory;
 
 extern NSString *const kAZoom;
 extern NSString *const kRZoom;

@@ -17,7 +17,6 @@
              [self jatt:kAResourceID]   : kRResourceID,
              [self jatt:kAName]         : kRName,
              [self jatt:kAIdentifier]   : kRIdentifier,
-             [self jatt:kAIsService]    : kRIsService,
              [self jatt:kAZoom]         : kRZoom,
              [self jatt:kAAngle]        : kRAngle,
              [self jatt:kATilt]         : kRTilt,
@@ -37,7 +36,6 @@
     return @{
              kRName                     : kRDefaultNullString,
              kRInformation              : kRDefaultNullString,
-             kRIsService                : @NO,
              kRPolymorphicAreaType      : kRDefaultPolymorphicType,
              kRPolymorphicAreaID        : kRDefaultPolymorphicID,
              kRFloor                    : kRDefaultUnknownFloor,

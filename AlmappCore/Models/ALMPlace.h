@@ -17,7 +17,6 @@
 
 @property NSString *name;
 @property NSString *identifier;
-@property BOOL isService;
 @property NSString *areaType; // Owner type
 @property long long areaID;   // Owner ID (no polymorhpic assosiations)
 @property CGFloat zoom;

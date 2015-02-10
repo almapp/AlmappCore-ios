@@ -170,8 +170,8 @@ NSString *const kRStudentID = @"studentID";
 NSString *const kALocalization = @"localization";
 NSString *const kRLocalization = @"localization";
 
-NSString *const kAIsService = @"service";
-NSString *const kRIsService = @"isService";
+NSString *const kACategory = @"category";
+NSString *const kRCategory = @"category";
 
 NSString *const kAZoom = @"zoom";
 NSString *const kRZoom = @"zoom";

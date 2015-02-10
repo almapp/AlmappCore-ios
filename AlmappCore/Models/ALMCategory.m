@@ -7,19 +7,20 @@
 //
 
 #import "ALMCategory.h"
+#import "ALMResourceConstants.h"
 
 @implementation ALMCategory
 
 + (NSDictionary *)JSONInboundMappingDictionary {
-    return @{@"category" : @"category"};
+    return @{kACategory : kRCategory};
 }
 
 + (NSString *)primaryKey {
-    return @"category";
+    return kRCategory;
 }
 
 + (NSDictionary *)defaultPropertyValues {
-    return @{@"category" : @""};
+    return @{kRCategory : kRDefaultNullString};
 }
 
 @end
