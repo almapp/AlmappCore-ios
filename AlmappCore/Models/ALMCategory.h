@@ -8,9 +8,31 @@
 
 #import "ALMResource.h"
 
+typedef NS_ENUM(NSInteger, ALMCategoryType) {
+    ALMCategoryTypeNone = 0,
+    ALMCategoryTypeClassroom,
+    ALMCategoryTypeArea,
+    ALMCategoryTypeBathMen,
+    ALMCategoryTypeBathWomen,
+    ALMCategoryTypeTrash,
+    ALMCategoryTypeParkBicycle,
+    ALMCategoryTypeParkCar,
+    ALMCategoryTypeStudy,
+    ALMCategoryTypeFoodLunch,
+    ALMCategoryTypeFoodStand,
+    ALMCategoryTypeFoodMachine,
+    ALMCategoryTypePrinter,
+    ALMCategoryTypeComputers,
+    ALMCategoryTypePhotocopy,
+    ALMCategoryTypeCashMachine,
+    ALMCategoryTypeBank,
+    ALMCategoryTypeLibrary,
+    ALMCategoryTypeOther
+};
+
 @interface ALMCategory : RLMObject
 
-@property NSString *category;
+@property ALMCategoryType category;
 
 @end
 RLM_ARRAY_TYPE(ALMCategory)

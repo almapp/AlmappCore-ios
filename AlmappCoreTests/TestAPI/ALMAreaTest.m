@@ -55,14 +55,14 @@
     [campus.places addObject:place];
     
     ALMCategory *category = [[ALMCategory alloc] init];
-    category.category = @"classroom";
+    category.category = ALMCategoryTypeClassroom;
     
     place = [ALMPlace objectInRealm:realm withID:1];
     [place.categories addObject:category];
     
     [realm commitWriteTransaction];
     
-    RLMResults *results = [campus placesWithCategoryValue:@"classroom"];
+    RLMResults *results = [campus placesWithCategory:ALMCategoryTypeClassroom];
     XCTAssertNotEqual(results.count, 0);
 }
 

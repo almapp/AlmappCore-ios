@@ -79,13 +79,9 @@
     }
 }
 
-- (RLMResults *)placesWithCategory:(ALMCategory *)category {
-    return [self placesWithCategoryValue:category.category];
-}
-
-- (RLMResults *)placesWithCategoryValue:(NSString *)category {
+- (RLMResults *)placesWithCategory:(ALMCategoryType)categoryType {
     RLMArray<ALMPlace> *places = self.places;
-    NSString *query = [NSString stringWithFormat:@"ANY categories.category == '%@'", category];
+    NSString *query = [NSString stringWithFormat:@"ANY categories.category == %ld", categoryType];
     return [places objectsWhere:query];
 }
 
