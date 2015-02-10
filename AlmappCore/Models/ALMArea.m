@@ -81,7 +81,7 @@
 
 - (RLMResults *)placesWithCategory:(ALMCategoryType)categoryType {
     RLMArray<ALMPlace> *places = self.places;
-    NSString *query = [NSString stringWithFormat:@"ANY categories.category == %ld", categoryType];
+    NSString *query = [NSString stringWithFormat:@"ANY categories.category == %ld", (long)categoryType];
     return [places objectsWhere:query];
 }
 

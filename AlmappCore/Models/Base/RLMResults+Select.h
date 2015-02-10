@@ -11,7 +11,10 @@
 @interface RLMResults (Select)
 
 - (NSArray *)select:(NSString *)column;
+- (NSArray *)select:(NSString *)column distinct:(BOOL)distinct;
+
 - (NSArray *)select:(NSString *)column ascending:(BOOL)ascending;
+- (NSArray *)select:(NSString *)column ascending:(BOOL)ascending distinct:(BOOL)distinct;
 
 @end
 
