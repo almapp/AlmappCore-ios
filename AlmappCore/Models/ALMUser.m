@@ -47,6 +47,19 @@
              };
 }
 
++ (NSDictionary *)JSONNestedResourceCollectionInboundMappingDictionary {
+    return @{[ALMCareer apiPluralForm] : [ALMCareer realmPluralForm]};
+}
+
++ (Class)propertyTypeForKRConstant:(NSString *)kr {
+    if([kr isEqualToString:[ALMCareer realmPluralForm]]) {
+        return [ALMCareer class];
+    }
+    else {
+        return [super propertyTypeForKRConstant:kr];
+    }
+}
+
 - (RLMResults *)sectionsInYear:(short)year period:(short)period {
     NSString *query = [NSString stringWithFormat:@"%@ = %hd AND %@ = %hd", kRYear, year, kRPeriod, period];
     return [self.sections objectsWhere:query];

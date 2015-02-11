@@ -15,7 +15,7 @@
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
              [self jatt:kAResourceID]   : kRResourceID,
-             [self jatt:kAName]         : kRTitle,
+             [self jatt:kAName]         : kRName,
              [self jatt:kAURL]          : kRURL,
              [self jatt:kACurriculumURL]: kRCurriculumURL,
              [self jatt:kAInformation]  : kRInformation,

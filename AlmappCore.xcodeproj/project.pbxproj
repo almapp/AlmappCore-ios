@@ -39,6 +39,7 @@
 		F65458D41A7D21AB00641FFE /* ALMResourceRequestBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = F65458D31A7D21AB00641FFE /* ALMResourceRequestBlock.m */; };
 		F6568C301A853ACB00BB7415 /* NSDictionary+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = F6568C2F1A853ACB00BB7415 /* NSDictionary+Util.m */; };
 		F6568C331A8540F900BB7415 /* ALMSearchTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6568C321A8540F900BB7415 /* ALMSearchTest.m */; };
+		F65B2D6D1A8B8B7F0097542C /* ALMUserTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F65B2D6C1A8B8B7F0097542C /* ALMUserTest.m */; };
 		F65DD4A11A50405D006BCAF0 /* AlmappCore.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = F65DD4A01A50405D006BCAF0 /* AlmappCore.h */; };
 		F65DD4A91A50405D006BCAF0 /* libAlmappCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F65DD49D1A50405D006BCAF0 /* libAlmappCore.a */; };
 		F65DD4BF1A505C6E006BCAF0 /* ALMUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F65DD4BE1A505C6E006BCAF0 /* ALMUtil.m */; };
@@ -158,6 +159,7 @@
 		F6568C2E1A853ACB00BB7415 /* NSDictionary+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Util.h"; sourceTree = "<group>"; };
 		F6568C2F1A853ACB00BB7415 /* NSDictionary+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Util.m"; sourceTree = "<group>"; };
 		F6568C321A8540F900BB7415 /* ALMSearchTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMSearchTest.m; sourceTree = "<group>"; };
+		F65B2D6C1A8B8B7F0097542C /* ALMUserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUserTest.m; sourceTree = "<group>"; };
 		F65DD49D1A50405D006BCAF0 /* libAlmappCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAlmappCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F65DD4A01A50405D006BCAF0 /* AlmappCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlmappCore.h; sourceTree = "<group>"; };
 		F65DD4A81A50405D006BCAF0 /* AlmappCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlmappCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -424,6 +426,7 @@
 				F6B0CEA41A745EE70004B570 /* ALMAreaTest.m */,
 				F6FB88C91A76815C0076C8F4 /* ALMScheduleItemTest.m */,
 				F6FB88CB1A76905F0076C8F4 /* ALMTestSections.m */,
+				F65B2D6C1A8B8B7F0097542C /* ALMUserTest.m */,
 			);
 			path = TestAPI;
 			sourceTree = "<group>";
@@ -797,6 +800,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F603D0281A73015F00913806 /* ALMTestsConstants.m in Sources */,
+				F65B2D6D1A8B8B7F0097542C /* ALMUserTest.m in Sources */,
 				F6FB88CC1A76905F0076C8F4 /* ALMTestSections.m in Sources */,
 				F6E72E631A7D91D7004988C9 /* ALMChatMessageTest.m in Sources */,
 				F6B0CEA81A745EE70004B570 /* ALMResourceTest.m in Sources */,
