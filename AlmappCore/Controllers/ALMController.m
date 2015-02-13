@@ -16,7 +16,7 @@
 
 NSString *const kControllerSearchParams = @"q";
 
-static NSString *const kCredentialKey = @"AlmappCoreController";
+static NSString *const kCredentialKey = @"AlmappCore";
 static NSString *const kDefaultOAuthUrl = @"/oauth/token";
 static NSString *const kDefaultOAuthScope = @"";
 
