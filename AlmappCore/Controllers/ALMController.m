@@ -17,7 +17,7 @@
 NSString *const kControllerSearchParams = @"q";
 
 static NSString *const kCredentialKey = @"AlmappCore";
-static NSString *const kDefaultOAuthUrl = @"/oauth/token";
+// static NSString *const kDefaultOAuthUrl = @"/oauth/token";
 static NSString *const kDefaultOAuthScope = @"";
 
 
@@ -122,7 +122,8 @@ static NSString *const kDefaultOAuthScope = @"";
 }
 
 - (PMKPromise *)AUTH:(ALMCredential *)credential {
-    return [self AUTH:credential oauthUrl:kDefaultOAuthUrl scope:kDefaultOAuthScope];
+    NSString *oauth = [NSString stringWithFormat:@"/%@/oauth2/token", [self organizationSlug]];
+    return [self AUTH:credential oauthUrl:oauth scope:kDefaultOAuthScope];
 }
 
 - (PMKPromise *)AUTH:(ALMCredential *)credential oauthUrl:(NSString *)oauthUrl scope:(NSString *)scope {
@@ -304,6 +305,10 @@ static NSString *const kDefaultOAuthScope = @"";
 
 - (ALMApiKey *)apiKey {
     return [self.coreModuleDelegate moduleApiKeyFor:[self class]];
+}
+
+- (NSString *)organizationSlug {
+    return [self.coreModuleDelegate organizationSlugFor:[self class]];
 }
 
 - (RLMRealm*)temporalRealm {

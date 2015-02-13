@@ -14,6 +14,7 @@
 - (ALMSessionManager *)sessionManager;
 - (ALMSession *)currentSession;
 - (ALMApiKey *)apiKey;
+- (NSString *)organizationSlug;
 
 - (id)initWithCoreModuleDelegate:(id<ALMCoreModuleDelegate>)delegate;
 

@@ -18,6 +18,7 @@
 - (ALMSessionManager *)moduleSessionManagerFor:(Class)module;
 - (ALMSession *)moduleCurrentSessionFor:(Class)module;
 - (ALMApiKey *)moduleApiKeyFor:(Class)module;
+- (NSString *)organizationSlugFor:(Class)module;
 
 - (RLMRealm *)module:(Class)module realmNamed:(NSString *)name;
 - (RLMRealm *)moduleDefaultRealmFor:(Class)module;

@@ -38,6 +38,10 @@
     return [_coreModuleDelegate moduleApiKeyFor:[self class]];
 }
 
+- (NSString *)organizationSlug {
+    return [_coreModuleDelegate organizationSlugFor:[self class]];
+}
+
 - (RLMRealm *)realmNamed:(NSString *)name {
     return [_coreModuleDelegate module:[self class] realmNamed:name];
 }

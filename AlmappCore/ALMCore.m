@@ -110,6 +110,9 @@ static dispatch_once_t once_token;
     _sharedInstance = instance;
 }
 
+- (NSString *)organizationIdentifier {
+    return _organizationIdentifier.lowercaseString;
+}
 
 #pragma mark - Web & Session
 
@@ -120,7 +123,7 @@ static dispatch_once_t once_token;
 
 - (NSURL *)apiBaseURL {
     if (!_apiBaseURL) {
-        _apiBaseURL = [[self.baseURL URLByAppendingPathComponent:@"/api/v1"] URLByAppendingPathComponent:self.organizationIdentifier.lowercaseString];;
+        _apiBaseURL = [[self.baseURL URLByAppendingPathComponent:self.organizationIdentifier] URLByAppendingPathComponent:@"/api/v1"];
     }
     return _apiBaseURL;
 }
@@ -370,6 +373,10 @@ static dispatch_once_t once_token;
 
 - (ALMApiKey *)moduleApiKeyFor:(Class)module {
     return [self apiKey];
+}
+
+- (NSString *)organizationSlugFor:(Class)module {
+    return self.organizationIdentifier;
 }
 
 - (RLMRealm *)module:(Class)module realmNamed:(NSString *)name {
