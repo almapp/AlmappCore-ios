@@ -252,8 +252,11 @@ static NSString *const kDefaultOAuthScope = @"";
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         [self authPromiseWithCredential:request.credential].then(^{
             __weak __typeof(self) weakSelf = self;
-            NSString *path = request.path;
-            [self GET:path parameters:request.parameters].then(^(id responseObject, NSURLSessionDataTask *task){
+            if (request.shouldLog) {
+                NSLog(@"Will perform GET to path: %@", request.path);
+            }
+            
+            [self GET:request.path parameters:request.parameters].then(^(id responseObject, NSURLSessionDataTask *task){
                 BOOL success = [request commitData:responseObject];
                 if (request.shouldLog) {
                     NSLog(@"Commit status %d",success);
@@ -288,8 +291,40 @@ static NSString *const kDefaultOAuthScope = @"";
     }];
 }
 
-- (PMKPromise *)POST:(ALMResourceRequest *)request {
-    return nil;
+- (PMKPromise *)POST:(ALMResourceResponse *)response {
+    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+        [self authPromiseWithCredential:response.credential].then(^{
+            __weak __typeof(self) weakSelf = self;
+            if (response.shouldLog) {
+                NSLog(@"Will perform POST to path: %@", response.path);
+            }
+            
+            [self POST:response.path parameters:response.serialize].then(^(id responseObject, NSURLSessionDataTask *task){
+                [response publishSuccess:responseObject task:task];
+                fulfiller(PMKManifold(responseObject, task));
+                
+            }).catch(^(NSError *error) {
+                if (response.shouldLog) {
+                    NSLog(@"Error %@", error);
+                }
+                if ([error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey] statusCode] == 401) {
+                    __strong __typeof(weakSelf) strongSelf = weakSelf;
+                    if (strongSelf) {
+                        [strongSelf onAuthFailure:error credential:response.credential];
+                    }
+                }
+                [response publishError:error task:nil];
+                rejecter(error);
+
+            });
+        }).catch(^(NSError *error) {
+            if (response.shouldLog) {
+                NSLog(@"Error %@", error);
+            }
+            [response publishError:error task:nil];
+            rejecter(error);
+        });
+    }];
 }
 
 - (PMKPromise *)DELETE:(ALMResourceRequest *)request {

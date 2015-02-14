@@ -22,6 +22,41 @@
     };
 }
 
+
+
+- (void)POST:(ALMResource *)resource
+            path:(NSString *)path
+      credential:(ALMCredential *)credential
+       onSuccess:(void (^)(id result))onSuccess {
+    
+    NSString *description = [NSString stringWithFormat:@"GET: %@", resource];
+    XCTestExpectation *expectation = [self expectationWithDescription:description];
+    
+
+    [self.controller POST:[ALMResourceResponseBlock response:^(ALMResourceResponseBlock *builder) {
+        builder.resource = resource;
+        builder.credential = credential;
+        builder.customPath = path;
+        builder.shouldLog = YES;
+        
+    } onSuccess:^(id result, NSURLSessionDataTask *task) {
+        NSLog(@"Finished with: %@", result);
+        XCTAssertNotNil(result, @"Should exist");
+        if (onSuccess) {
+            onSuccess(result);
+        }
+        [expectation fulfill];
+        
+    } onError:[self errorBlock:expectation class:resource.class]]];
+    
+    [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
+
+
+
 - (void)resource:(Class)resourceClass id:(long long)resourceID path:(NSString *)path params:(id)params onSuccess:(void (^)(id))onSuccess {
     return [self resource:resourceClass id:resourceID path:path params:params credential:nil onSuccess:onSuccess];
 }

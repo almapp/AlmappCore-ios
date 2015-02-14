@@ -15,8 +15,8 @@ NSString * const kTestingOrganization = @"UC";
 short const kTestingApiVersion = 1;
 
 + (ALMApiKey *)testingApiKey {
-    return [ALMApiKey apiKeyWithClient:@"ee15d02a0a6a1cd6e1222109db844942b5f4decc99c1e02d573648a73e6833b4"
-                                secret:@"8507e90ad502e52ece94391409fb5882acdaf6bffe82a5600b1806791f384452"];
+    return [ALMApiKey apiKeyWithClient:@"f225e4889aee29c2d3f0e81dd2dd72b219c502ecb2f1e2bb57b63440e50f009a"
+                                secret:@"cb835b51f079a6fa4ed52832c0e409f24c4e29987f2069c709b092580d77cd49"];
 }
 
 @end

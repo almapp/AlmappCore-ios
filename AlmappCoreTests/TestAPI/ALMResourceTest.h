@@ -12,6 +12,11 @@
 
 - (void(^)(NSError *, NSURLSessionDataTask *))errorBlock:(XCTestExpectation *)expectation class:(Class)resourceClass;
 
+- (void)POST:(ALMResource *)resource
+        path:(NSString *)path
+  credential:(ALMCredential *)credential
+   onSuccess:(void (^)(id result))onSuccess;
+
 - (void)resource:(Class)resourceClass
               id:(long long)resourceID
             path:(NSString *)path

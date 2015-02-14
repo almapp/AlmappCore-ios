@@ -20,6 +20,8 @@
 
 #import "ALMResourceRequest.h"
 #import "ALMResourceRequestBlock.h"
+#import "ALMResourceResponse.h"
+#import "ALMResourceResponseBlock.h"
 
 extern NSString *const kControllerSearchParams;
 
@@ -56,7 +58,7 @@ extern NSString *const kControllerSearchParams;
 
 
 - (PMKPromise *)GET:(ALMResourceRequest *)request;
-- (PMKPromise *)POST:(ALMResourceRequest *)request;
+- (PMKPromise *)POST:(ALMResourceResponse *)response;
 - (PMKPromise *)DELETE:(ALMResourceRequest *)request;
 - (PMKPromise *)PUT:(ALMResourceRequest *)request;
 
