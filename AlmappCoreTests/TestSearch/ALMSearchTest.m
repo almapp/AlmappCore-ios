@@ -21,25 +21,14 @@
     NSString *description = [NSString stringWithFormat:@"SEARCH"];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
-    __weak typeof(self) weakSelf = self;
-    
-    [self.controller SEARCH:[ALMResourceRequestBlock request:^(ALMResourceRequestBlock *builder) {
-        builder.resourceClass = [ALMCourse class];
-        builder.realmPath = [weakSelf testRealmPath];
-        builder.credential = [weakSelf testSession].credential;
-        builder.shouldLog = YES;
-        
-    } onLoad:^(id result) {
-        
-    } onFetch:^(id result, NSURLSessionDataTask *task) {
+    [self.controller SEARCH:@"IIC" ofType:[ALMCourse class]].then(^(id result, NSURLSessionDataTask *task) {
         NSLog(@"%@", result);
         [expectation fulfill];
         
-    } onError:^(NSError *error, NSURLSessionDataTask *task) {
+    }).catch(^(NSError *error) {
         NSLog(@"%@", error);
         [expectation fulfill];
-        
-    }] query:@"IIC"];
+    });
     
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         NSLog(@"%@", error);

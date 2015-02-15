@@ -34,6 +34,10 @@
     return [_core controller];
 }
 
+- (ALMController *)controllerWithAuth {
+    return [_core controllerWithCredential:self.testSession.credential];
+}
+
 - (NSTimeInterval)timeout {
     return 3000;
 }

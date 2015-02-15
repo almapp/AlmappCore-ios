@@ -33,7 +33,6 @@
 #import "ALMChatManager.h"
 #import "ALMChatManagerBlock.h"
 #import "ALMController.h"
-#import "ALMController+Nested.h"
 
 #import "ALMScheduleController.h"
 

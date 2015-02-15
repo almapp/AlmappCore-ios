@@ -13,15 +13,11 @@
 #import <Realm+JSON/RLMObject+JSON.h>
 
 #import "ALMControllerDelegate.h"
+#import "ALMResource.h"
 
-#import "ALMNestedRequestDelegate.h"
 #import "ALMCoreModuleDelegate.h"
 #import "ALMError.h"
 
-#import "ALMResourceRequest.h"
-#import "ALMResourceRequestBlock.h"
-#import "ALMResourceResponse.h"
-#import "ALMResourceResponseBlock.h"
 
 extern NSString *const kControllerSearchParams;
 
@@ -31,8 +27,14 @@ extern NSString *const kControllerSearchParams;
 #pragma mark - Constructor
 
 - (id)init __attribute__((unavailable));
-+ (instancetype)controllerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate;
-+ (instancetype)controllerWithURL:(NSURL *)url coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate configuration:(NSURLSessionConfiguration *)configuration;
++ (instancetype)controllerWithURL:(NSURL *)url
+                     coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate
+                       credential:(ALMCredential *)credential;
+
++ (instancetype)controllerWithURL:(NSURL *)url
+                     coreDelegate:(id<ALMCoreModuleDelegate>)coreDelegate
+                    configuration:(NSURLSessionConfiguration *)configuration
+                       credential:(ALMCredential *)credential;
 
 
 #pragma mark - Delegate
@@ -40,38 +42,46 @@ extern NSString *const kControllerSearchParams;
 @property (weak, nonatomic) id<ALMControllerDelegate> controllerDelegate;
 
 
+#pragma mark - Credential
+
+@property (strong, nonatomic) ALMCredential *credential;
+@property (strong, nonatomic) NSString *OAuthPath;
+@property (strong, nonatomic) NSString *OAuthScope;
+
+
+#pragma mark - Options
+
+@property (strong, nonatomic) RLMRealm *realm;
+@property (assign, nonatomic) BOOL saveToRealm;
+
+
 #pragma mark - Auth
 
-- (PMKPromise *)authPromiseWithCredential:(ALMCredential *)credential;
-
-- (PMKPromise *)AUTH:(ALMCredential *)credential;
-- (PMKPromise *)AUTH:(ALMCredential *)credential oauthUrl:(NSString *)oauthUrl scope:(NSString *)scope;
+- (PMKPromise *)afterAuth;
+- (PMKPromise *)AUTH;
 
 
 #pragma mark - Methods
 
-- (PMKPromise *)LOAD:(ALMResourceRequest *)request;
-- (PMKPromise *)FETCH:(ALMResourceRequest *)request;
+- (PMKPromise *)SEARCH:(NSString *)query ofType:(Class)resourceClass on:(ALMResource *)parent;
+- (PMKPromise *)SEARCH:(NSString *)query ofType:(Class)resourceClass;
+- (PMKPromise *)SEARCH:(NSString *)query path:(NSString *)path;
 
-- (PMKPromise *)SEARCH:(ALMResourceRequest *)request params:(NSDictionary *)params;
-- (PMKPromise *)SEARCH:(ALMResourceRequest *)request query:(NSString *)query;
+- (PMKPromise *)GETResource:(ALMResource *)resource parameters:(id)parameters;
+- (PMKPromise *)GETResource:(Class)resourceClass id:(long long)resourceId parameters:(id)parameters;
+- (PMKPromise *)GETResources:(Class)resourceClass parameters:(id)parameters;
+- (PMKPromise *)GETResources:(Class)resourceClass path:(NSString *)path parameters:(id)parameters;
+- (PMKPromise *)GETResources:(Class)resourceClass on:(ALMResource *)parent parameters:(id)parameters;
+- (PMKPromise *)GET:(NSString *)urlString parameters:(id)parameters;
 
-
-- (PMKPromise *)GET:(ALMResourceRequest *)request;
-- (PMKPromise *)POST:(ALMResourceResponse *)response;
-- (PMKPromise *)DELETE:(ALMResourceRequest *)request;
-- (PMKPromise *)PUT:(ALMResourceRequest *)request;
+- (PMKPromise *)POSTResource:(ALMResource *)resource;
+- (PMKPromise *)POSTResource:(ALMResource *)resource path:(NSString *)path parameters:(id)parameters;
+- (PMKPromise *)POST:(NSString *)urlString parameters:(id)parameters;
 
 
 #pragma mark - Properties
 
-@property (assign, nonatomic) BOOL isLogingIn;
+@property (readonly) BOOL isLogingIn;
 
-
-#pragma mark - Realm
-
-- (RLMRealm*)temporalRealm;
-- (RLMRealm*)defaultRealm;
-- (RLMRealm *)encryptedRealm;
 
 @end

@@ -31,24 +31,23 @@
     
     NSString *description = [NSString stringWithFormat:@"GET: %@", resource];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
-    
 
-    [self.controller POST:[ALMResourceResponseBlock response:^(ALMResourceResponseBlock *builder) {
-        builder.resource = resource;
-        builder.credential = credential;
-        builder.customPath = path;
-        builder.shouldLog = YES;
-        
-    } onSuccess:^(id result, NSURLSessionDataTask *task) {
+    self.controller.realm = [self testRealm];
+    self.controller.saveToRealm = YES;
+    
+    [self.controller POSTResource:resource path:path parameters:nil].then(^(id result, NSURLSessionDataTask *task) {
         NSLog(@"Finished with: %@", result);
         XCTAssertNotNil(result, @"Should exist");
         if (onSuccess) {
             onSuccess(result);
         }
         [expectation fulfill];
-        
-    } onError:[self errorBlock:expectation class:resource.class]]];
-    
+    }).catch(^(NSError *error) {
+        NSLog(@"%@", error);
+        XCTFail();
+        [expectation fulfill];
+    });
+
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         NSLog(@"%@", error);
     }];
@@ -71,29 +70,22 @@
     NSString *description = [NSString stringWithFormat:@"GET: %@ - %lldll", resourceClass, resourceID];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
-    __weak typeof(self) weakSelf = self;
+    self.controller.realm = [self testRealm];
+    self.controller.saveToRealm = YES;
     
-    [self.controller FETCH:[ALMResourceRequestBlock request:^(ALMResourceRequestBlock *builder) {
-        builder.resourceClass = resourceClass;
-        builder.resourceID = resourceID;
-        builder.realmPath = [weakSelf testRealmPath];
-        builder.credential = credential;
-        builder.customPath = path;
-        builder.parameters = params;
-        builder.shouldLog = YES;
-        
-    } onLoad:^(id result) {
-        NSLog(@"Loaded: %@", result);
-        
-    } onFetch:^(id result, NSURLSessionDataTask *task) {
+    [self.controller GETResource:resourceClass id:resourceID parameters:params].then(^(id result, NSURLSessionDataTask *task) {
         NSLog(@"Finished with: %@", result);
         XCTAssertNotNil(result, @"Should exist");
         if (onSuccess) {
             onSuccess(result);
         }
         [expectation fulfill];
-        
-    } onError:[self errorBlock:expectation class:resourceClass]]];
+    }).catch(^(NSError *error) {
+        NSLog(@"%@", error);
+        XCTFail();
+        [expectation fulfill];
+    });
+
     
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         NSLog(@"%@", error);
@@ -113,28 +105,36 @@
     NSString *description = [NSString stringWithFormat:@"GET: %@", resourcesClass];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
-    __weak typeof(self) weakSelf = self;
+    if (path) {
+        [self.controller GETResources:resourcesClass path:path parameters:params].then(^(id result, NSURLSessionDataTask *task) {
+            NSLog(@"Finished with: %@", result);
+            XCTAssertNotNil(result, @"Should exist");
+            if (onSuccess) {
+                onSuccess(result);
+            }
+            [expectation fulfill];
+        }).catch(^(NSError *error) {
+            NSLog(@"%@", error);
+            XCTFail();
+            [expectation fulfill];
+        });
+    }
+    else {
+        [self.controller GETResources:resourcesClass parameters:params].then(^(id result, NSURLSessionDataTask *task) {
+            NSLog(@"Finished with: %@", result);
+            XCTAssertNotNil(result, @"Should exist");
+            if (onSuccess) {
+                onSuccess(result);
+            }
+            [expectation fulfill];
+        }).catch(^(NSError *error) {
+            NSLog(@"%@", error);
+            XCTFail();
+            [expectation fulfill];
+        });
+    }
     
-    [self.controller FETCH:[ALMResourceRequestBlock request:^(ALMResourceRequestBlock *builder) {
-        builder.resourceClass = resourcesClass;
-        builder.realmPath = [weakSelf testRealmPath];
-        builder.customPath = path;
-        builder.parameters = params;
-        builder.shouldLog = YES;
-        builder.credential = credential;
-        
-    } onLoad:^(id result) {
-        NSLog(@"Loaded: %@", result);
-        
-    } onFetch:^(id result, NSURLSessionDataTask *task) {
-        NSLog(@"Finished with: %@", result);
-        XCTAssertNotNil(result, @"Should exist");
-        if (onSuccess) {
-            onSuccess(result);
-        }
-        [expectation fulfill];
-        
-    } onError:[self errorBlock:expectation class:resourcesClass]]];
+    
     
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         NSLog(@"%@", error);
@@ -156,6 +156,7 @@
              credential:(ALMCredential *)credential
               onSuccess:(void (^)(id, RLMResults *))onSuccess {
     
+    /*
     NSString *description = [NSString stringWithFormat:@"GET: %@ - %lld / %@", parentClass, parentID, resourcesClass];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
@@ -196,6 +197,7 @@
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         NSLog(@"%@", error);
     }];
+     */
 }
 
 

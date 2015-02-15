@@ -17,13 +17,38 @@
 @implementation ALMPostTest
 
 - (void)testPost {
-    
     ALMPost *post = [[ALMPost alloc] init];
     post.content = @"Hola que hace";
     
     [self POST:post path:nil credential:[self testSession].credential onSuccess:^(id result) {
         NSLog(@"%@", result);
+        
+        
     }];
 }
+
+- (void)testLikes {
+    NSString *description = [NSString stringWithFormat:@"POST"];
+    XCTestExpectation *expectation = [self expectationWithDescription:description];
+    
+    self.controller.realm = [self testRealm];
+    self.controller.saveToRealm = YES;
+    
+    [self.controllerWithAuth POST:@"posts/1/like" parameters:nil].then(^(id result, NSURLSessionDataTask *task) {
+        NSLog(@"Finished with: %@", result);
+        XCTAssertNotNil(result, @"Should exist");
+        [expectation fulfill];
+    }).catch(^(NSError *error) {
+        
+        NSLog(@"%@", error);
+        XCTFail();
+        [expectation fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
 
 @end

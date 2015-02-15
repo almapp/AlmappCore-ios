@@ -21,6 +21,7 @@ static short const kDefaultSemesterDividerMonth = 7;
 
 @interface ALMCore ()
 
+@property (strong, nonatomic) ALMController *controller;
 @property (strong, nonatomic) NSMutableDictionary* controllers;
 
 @property (weak, nonatomic) id<ALMCoreDelegate> coreDelegate;
@@ -146,12 +147,20 @@ static dispatch_once_t once_token;
     return _apiKey;
 }
 
-
 - (ALMController *)controller {
     if (!_controller) {
-        _controller = [ALMController controllerWithURL:self.apiBaseURL coreDelegate:self];
+        _controller = [ALMController controllerWithURL:self.apiBaseURL coreDelegate:self credential:nil];
     }
     return _controller;
+}
+
+- (ALMController *)controllerWithCredential:(ALMCredential *)credential {
+    ALMController *controller = self.controllers[credential.email];
+    if (!controller) {
+        controller = [ALMController controllerWithURL:self.apiBaseURL coreDelegate:self credential:credential];
+        self.controllers[credential.email] = controller;
+    }
+    return controller;
 }
 
 - (ALMSessionManager *)sessionManager {
@@ -170,6 +179,10 @@ static dispatch_once_t once_token;
 
 + (ALMController *)controller {
     return [self isAlive] ? [[self sharedInstance] controller] : nil;
+}
+
++ (ALMController *)controllerWithCredential:(ALMCredential *)credential {
+    return [self isAlive] ? [[self sharedInstance] controllerWithCredential:credential] : nil;
 }
 
 + (ALMSessionManager *)sessionManager {

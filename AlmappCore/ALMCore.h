@@ -59,11 +59,15 @@ extern NSString *const kFrameworkIdentifier;
 @property (strong, nonatomic) ALMApiKey *apiKey;
 @property (assign, nonatomic) BOOL shouldSyncToCloud;
 
-@property (strong, nonatomic) ALMController *controller;
 @property (strong, nonatomic) ALMSessionManager *sessionManager;
 @property (strong, nonatomic) ALMChatManager *chatManager;
 
+- (ALMController *)controller;
 + (ALMController *)controller;
+
+- (ALMController *)controllerWithCredential:(ALMCredential *)credential;
++ (ALMController *)controllerWithCredential:(ALMCredential *)credential;
+
 + (ALMSessionManager *)sessionManager;
 + (ALMChatManager *)chatManager;
 

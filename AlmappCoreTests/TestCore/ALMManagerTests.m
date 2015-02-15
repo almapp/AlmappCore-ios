@@ -19,19 +19,6 @@
 
 - (void)testInvalidClassRequest {
     
-    [self.controller FETCH:[ALMResourceRequestBlock request:^(ALMResourceRequestBlock *r) {
-        r.resourceClass = [NSString class];
-        
-    } onLoad:^(id result) {
-        XCTFail(@"This not should be executed");
-        
-    } onFetch:^(id result, NSURLSessionDataTask *task) {
-        XCTFail(@"This not should be executed");
-        
-    } onError:^(NSError *error, NSURLSessionDataTask *task) {
-        NSLog(@"%@", error);
-        XCTAssertNotNil(error, @"Must return an error");
-    }]];
 }
 
 @end

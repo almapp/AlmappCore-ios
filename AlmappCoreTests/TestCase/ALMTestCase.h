@@ -10,7 +10,6 @@
 
 #import "AlmappCore.h"
 #import "ALMTestsConstants.h"
-#import "ALMController+Nested.h"
 
 @interface ALMTestCase : XCTestCase <ALMCoreDelegate>
 
@@ -21,6 +20,7 @@
 @property (readonly) NSString* testRealmPath;
 
 @property (readonly) ALMController *controller;
+@property (readonly) ALMController *controllerWithAuth;
 
 @property (readonly) NSTimeInterval timeout;
 

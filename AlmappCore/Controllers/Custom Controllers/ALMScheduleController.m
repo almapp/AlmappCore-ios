@@ -43,18 +43,14 @@
 }
 
 - (ALMController *)controller {
-    return [ALMCore controller];
+    return [ALMCore controllerWithCredential:self.credential];
 }
 
 - (PMKPromise *)promiseScheduleModulesLoaded {
     if (!self.didLoadScheduleModules) {
-        __weak __typeof(self) weakSelf = self;
-        return [self.controller GET:[ALMResourceRequest request:^(ALMResourceRequest *r) {
-            r.credential = weakSelf.credential;
-            r.resourceClass = [ALMScheduleModule class];
-            r.realmPath = weakSelf.user.realm.path;
-            
-        } delegate:nil]];
+        return [self.controller GETResources:[ALMScheduleModule class] parameters:nil].then(^(id responseObject, NSURLSessionDataTask *task){
+            return [ALMScheduleModule createOrUpdateInRealm:self.realm withJSONArray:responseObject];
+        });
     }
     else {
         return [PMKPromise instaSuccess];
@@ -62,29 +58,16 @@
 }
 
 - (PMKPromise *)promiseSectionsLoaded {
-    __weak __typeof(self) weakSelf = self;
-    return [self.controller GET:[ALMResourceRequest request:^(ALMResourceRequest *r) {
-        r.credential = weakSelf.credential;
-        r.resourceClass = [ALMSection class];
-        r.realmPath = weakSelf.user.realm.path;
-        r.customPath = @"me/sections";
-        r.parameters =  @{kAYear : @(weakSelf.year),
-                          kAPeriod : @(weakSelf.period)};;
-        
-    } delegate:nil]];
+    return [self.controller GET:@"me/sections" parameters:nil].then(^(id responseObject, NSURLSessionDataTask *task){
+        return [ALMSection createOrUpdateInRealm:self.realm withJSONArray:responseObject];
+    });
 }
 
 - (PMKPromise *)promiseCoursesLoaded {
-    __weak __typeof(self) weakSelf = self;
-    return [self.controller GET:[ALMResourceRequest request:^(ALMResourceRequest *r) {
-        r.credential = weakSelf.credential;
-        r.resourceClass = [ALMCourse class];
-        r.realmPath = weakSelf.user.realm.path;
-        r.customPath = @"me/courses";
-        r.parameters =  @{kAYear : @(weakSelf.year),
-                          kAPeriod : @(weakSelf.period)};;
-        
-    } delegate:nil]];
+    NSDictionary *params = @{kAYear : @(self.year), kAPeriod : @(self.period)};
+    return [self.controller GET:@"me/courses" parameters:params].then(^(id responseObject, NSURLSessionDataTask *task){
+        return [ALMCourse createOrUpdateInRealm:self.realm withJSONArray:responseObject];
+    });
 }
 
 
@@ -139,6 +122,10 @@
     return NO;
 }
 
+- (RLMRealm *)realm {
+    return self.user.realm;
+}
+
 - (NSObject<RLMCollection,NSFastEnumeration> *)sections {
     return [self.user sectionsInYear:self.year period:self.period];
 }
@@ -156,7 +143,7 @@
 }
 
 - (RLMResults *)allScheduleModules {
-    return [ALMScheduleModule allObjectsInRealm:self.user.realm];
+    return [ALMScheduleModule allObjectsInRealm:self.realm];
 }
 
 

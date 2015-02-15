@@ -55,6 +55,7 @@
 }
 
 - (void)testUserSchedule {
+    /*
     NSString *description = [NSString stringWithFormat:@"GET: %@", @"schedule"];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
@@ -113,10 +114,11 @@
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         NSLog(@"%@", error);
     }];
+     */
 }
 
 - (void)testSectionCourse {
-    [self resource:[ALMSection class] id:30 path:nil params:nil onSuccess:^(ALMSection* resource) {
+    [self resource:[ALMSection class] id:2365 path:nil params:nil onSuccess:^(ALMSection* resource) {
         XCTAssertNotNil(resource.course);
     }];
     /*

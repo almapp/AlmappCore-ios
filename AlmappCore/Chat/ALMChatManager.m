@@ -74,6 +74,7 @@
 
 - (PMKPromise *)doAuthedWith:(ALMCredential *)credential {
     PMKPromise *promise = [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+        /*
         [[ALMCore controller] authPromiseWithCredential:credential].then(^(NSString *token) {
             FayeCppClient *client = [self clientForCredential:credential];
             
@@ -84,6 +85,7 @@
         }).catch(^(NSError *error) {
             rejecter(error);
         });
+         */
     }];
     return promise;
 }
