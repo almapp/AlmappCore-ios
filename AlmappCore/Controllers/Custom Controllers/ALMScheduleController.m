@@ -43,14 +43,17 @@
 }
 
 - (ALMController *)controller {
-    return [ALMCore controllerWithCredential:self.credential];
+    ALMController *controller = [ALMCore controllerWithCredential:self.credential];
+    controller.saveToRealm = YES;
+    if (!controller.realm) {
+        controller.realm = self.user.realm;
+    }
+    return controller;
 }
 
 - (PMKPromise *)promiseScheduleModulesLoaded {
     if (!self.didLoadScheduleModules) {
-        return [self.controller GETResources:[ALMScheduleModule class] parameters:nil].then(^(id responseObject, NSURLSessionDataTask *task){
-            return [ALMScheduleModule createOrUpdateInRealm:self.realm withJSONArray:responseObject];
-        });
+        return [self.controller GETResources:[ALMScheduleModule class] parameters:nil];
     }
     else {
         return [PMKPromise instaSuccess];
@@ -58,16 +61,12 @@
 }
 
 - (PMKPromise *)promiseSectionsLoaded {
-    return [self.controller GET:@"me/sections" parameters:nil].then(^(id responseObject, NSURLSessionDataTask *task){
-        return [ALMSection createOrUpdateInRealm:self.realm withJSONArray:responseObject];
-    });
+    return [self.controller GET:@"me/sections" parameters:nil];
 }
 
 - (PMKPromise *)promiseCoursesLoaded {
     NSDictionary *params = @{kAYear : @(self.year), kAPeriod : @(self.period)};
-    return [self.controller GET:@"me/courses" parameters:params].then(^(id responseObject, NSURLSessionDataTask *task){
-        return [ALMCourse createOrUpdateInRealm:self.realm withJSONArray:responseObject];
-    });
+    return [self.controller GET:@"me/courses" parameters:params];
 }
 
 
@@ -77,10 +76,10 @@
         if (self.shouldUpdate) {
             [self promiseScheduleModulesLoaded].then( ^{
                 return [self promiseCoursesLoaded];
-            }).then(^(RLMResults *courses, NSURLSessionDataTask *task) {
+            }).then(^(NSArray *courses, NSURLSessionDataTask *task) {
                 [self.user hasMany:courses];
                 return [self promiseSectionsLoaded];
-            }).then(^(RLMResults *sections, NSURLSessionDataTask *task) {
+            }).then(^(NSArray *sections, NSURLSessionDataTask *task) {
                 [self.user hasMany:sections];
                 fulfiller(sections);
             }).catch( ^(NSError *error) {

@@ -217,17 +217,17 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
     [collection addObjects:newObjects];
 }
 
-- (RLMResults *)hasMany:(RLMResults *)resources {
-    NSString *nestedCollectionName = [[resources.firstObject class] performSelector:@selector(realmPluralForm)];
+- (id<NSFastEnumeration>)hasMany:(NSObject<NSFastEnumeration> *)resources {
+    NSString *nestedCollectionName = [[resources performSelector:@selector(firstObject)] performSelector:@selector(realmPluralForm)];
     return [self hasMany:resources as:nestedCollectionName];
 }
 
-- (RLMResults *)hasMany:(RLMResults *)resources as:(NSString *)collectionProperty {
+- (id<NSFastEnumeration>)hasMany:(NSObject<NSFastEnumeration> *)resources as:(NSString *)collectionProperty {
     NSString *resourceParentName = [self.class performSelector:@selector(realmSingleForm)];
     return [self hasMany:resources as:collectionProperty belongsToAs:resourceParentName];
 }
 
-- (RLMResults *)hasMany:(RLMResults *)resources as:(NSString *)collectionProperty belongsToAs:(NSString *)parentName {
+- (id<NSFastEnumeration>)hasMany:(NSObject<NSFastEnumeration> *)resources as:(NSString *)collectionProperty belongsToAs:(NSString *)parentName {
     
     SEL collectionSelector = NSSelectorFromString([NSString stringWithFormat:@"%@", collectionProperty]);
     SEL parentSelector = NSSelectorFromString([NSString stringWithFormat:@"set%@:", [parentName capitalizedString]]);

@@ -49,9 +49,9 @@ extern ALMPersistMode const kPersistModeDefault;
 
 - (NSString *)className;
 
-- (RLMResults *)hasMany:(RLMResults *)resources;
-- (RLMResults *)hasMany:(RLMResults *)resources as:(NSString *)collectionProperty;
-- (RLMResults *)hasMany:(RLMResults *)resources as:(NSString *)collectionProperty belongsToAs:(NSString *)parentName;
+- (id<NSFastEnumeration>)hasMany:(NSObject<NSFastEnumeration> *)resources;
+- (id<NSFastEnumeration>)hasMany:(NSObject<NSFastEnumeration> *)resources as:(NSString *)collectionProperty;
+- (id<NSFastEnumeration>)hasMany:(NSObject<NSFastEnumeration> *)resources as:(NSString *)collectionProperty belongsToAs:(NSString *)parentName;
 
 #pragma mark - Attributes helpers
 
