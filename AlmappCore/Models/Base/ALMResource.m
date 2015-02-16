@@ -156,21 +156,21 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
 }
 
 /*
-+ (NSString*)jatts:(NSString*)attributes, ... {
-    NSMutableString * res = [NSMutableString stringWithString:[self jsonRoot]];
-    [res appendString:attributes];
-    
-    va_list args;
-    va_start(args, attributes);
-    id arg = nil;
-    
-    while(( arg = va_arg(args, id))){
-        [res appendString:@"."];
-        [res appendString:arg];
-    }
-    va_end(args);
-    return res;
-}
+ + (NSString*)jatts:(NSString*)attributes, ... {
+ NSMutableString * res = [NSMutableString stringWithString:[self jsonRoot]];
+ [res appendString:attributes];
+ 
+ va_list args;
+ va_start(args, attributes);
+ id arg = nil;
+ 
+ while(( arg = va_arg(args, id))){
+ [res appendString:@"."];
+ [res appendString:arg];
+ }
+ va_end(args);
+ return res;
+ }
  */
 
 #pragma mark - Methods
@@ -232,10 +232,6 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
     SEL collectionSelector = NSSelectorFromString([NSString stringWithFormat:@"%@", collectionProperty]);
     SEL parentSelector = NSSelectorFromString([NSString stringWithFormat:@"set%@:", [parentName capitalizedString]]);
     
-    RLMRealm *realm = self.realm;
-    
-    [realm beginWriteTransaction];
-    
     if ([self respondsToSelector:collectionSelector]) {
         IMP imp = [self methodForSelector:collectionSelector];
         RLMArray* (*func)(id, SEL) = (void*)imp;
@@ -252,8 +248,6 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
             func(resource, parentSelector, self);
         }
     }
-    
-    [realm commitWriteTransaction];
     
     return resources;
 }
@@ -347,7 +341,7 @@ ALMPersistMode const kPersistModeDefault = ALMPersistModeMuchAsPosible;
                     func(nestedProperty, parentSelector, result);
                 }
             }
-
+            
         }
     }
     return result;

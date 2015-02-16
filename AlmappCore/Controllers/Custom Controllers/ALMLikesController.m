@@ -11,21 +11,9 @@
 
 @interface ALMLikesController ()
 
-@property (weak, nonatomic) ALMSession *session;
-
 @end
 
 @implementation ALMLikesController
-
-+ (instancetype)controllerForSession:(ALMSession *)session {
-    ALMLikesController *controller = [[ALMLikesController alloc] init];
-    controller.session = session;
-    return controller;
-}
-
-- (ALMController *)controller {
-    return [ALMCore controllerWithCredential:self.session.credential];
-}
 
 - (PMKPromise *)like:(ALMResource<ALMLikeable> *)likeable {
     NSString *path = [NSString stringWithFormat:@"%@/%lld/like", [likeable apiPluralForm], likeable.resourceID];

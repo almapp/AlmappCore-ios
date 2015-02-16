@@ -22,32 +22,14 @@
 
 @interface ALMScheduleController ()
 
-@property (strong, nonatomic) ALMUser *user;
-@property (strong, nonatomic) ALMCredential *credential;
-
 @end
 
 @implementation ALMScheduleController
 
 + (instancetype)scheduleForSession:(ALMSession *)session year:(short)year period:(short)period {
-    return [self scheduleFor:session.user withCredential:session.credential year:year period:period];
-}
-
-+ (instancetype)scheduleFor:(ALMUser *)user withCredential:(ALMCredential *)credential year:(short)year period:(short)period {
-    ALMScheduleController *controller = [[ALMScheduleController alloc] init];
+    ALMScheduleController *controller = [[ALMScheduleController alloc] initWithSession:session];
     controller.year = year;
     controller.period = period;
-    controller.user = user;
-    controller.credential = credential;
-    return controller;
-}
-
-- (ALMController *)controller {
-    ALMController *controller = [ALMCore controllerWithCredential:self.credential];
-    controller.saveToRealm = YES;
-    if (!controller.realm) {
-        controller.realm = self.user.realm;
-    }
     return controller;
 }
 
@@ -56,41 +38,54 @@
         return [self.controller GETResources:[ALMScheduleModule class] parameters:nil];
     }
     else {
-        return [PMKPromise instaSuccess];
+        return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+            fulfiller([ALMScheduleModule allObjectsInRealm:self.realm]);
+        }];
     }
 }
 
 - (PMKPromise *)promiseSectionsLoaded {
-    return [self.controller GET:@"me/sections" parameters:nil];
+    return [self.controller GET:@"me/sections" parameters:nil].then( ^(id JSONArray, NSURLSessionDataTask *task) {
+        RLMRealm *realm = self.realm;
+        [realm beginWriteTransaction];
+        NSArray *sections = [ALMSection createOrUpdateInRealm:self.realm withJSONArray:JSONArray];
+        [self.user hasMany:sections];
+        [realm commitWriteTransaction];
+        
+        return sections;
+    });
 }
 
 - (PMKPromise *)promiseCoursesLoaded {
     NSDictionary *params = @{kAYear : @(self.year), kAPeriod : @(self.period)};
-    return [self.controller GET:@"me/courses" parameters:params];
+    return [self.controller GET:@"me/courses" parameters:params].then( ^(id JSONArray, NSURLSessionDataTask *task) {
+        RLMRealm *realm = self.realm;
+        [realm beginWriteTransaction];
+        NSArray *courses = [ALMCourse createOrUpdateInRealm:self.realm withJSONArray:JSONArray];
+        [self.user hasMany:courses];
+        [realm commitWriteTransaction];
+        
+        return courses;
+    });
 }
 
 
 
 - (PMKPromise *)promiseLoaded {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        if (self.shouldUpdate) {
-            [self promiseScheduleModulesLoaded].then( ^{
-                return [self promiseCoursesLoaded];
-            }).then(^(NSArray *courses, NSURLSessionDataTask *task) {
-                [self.user hasMany:courses];
-                return [self promiseSectionsLoaded];
-            }).then(^(NSArray *sections, NSURLSessionDataTask *task) {
-                [self.user hasMany:sections];
-                fulfiller(sections);
-            }).catch( ^(NSError *error) {
-                NSLog(@"Error %@", error);
-                rejecter(error);
-            });
-        }
-        else {
+    if (self.shouldUpdate) {
+        return [self promiseScheduleModulesLoaded].then( ^{
+            return [self promiseCoursesLoaded];
+        }).then(^(NSArray *courses, NSURLSessionDataTask *task) {
+            return [self promiseSectionsLoaded];
+        }).then(^(NSArray *sections, NSURLSessionDataTask *task) {
+            return sections;
+        });
+    }
+    else {
+        return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
             fulfiller(self.sections);
-        }
-    }];
+        }];
+    }
 }
 
 - (NSArray *)scheduleItemsAtDay:(ALMScheduleDay)day {
@@ -115,14 +110,10 @@
     if (self.sections.count == 0) {
         return YES;
     }
-    if (self.courses == 0) {
+    if (self.courses.count == 0) {
         return YES;
     }
-    return NO;
-}
-
-- (RLMRealm *)realm {
-    return self.user.realm;
+    return YES; //TODO HEY!
 }
 
 - (NSObject<RLMCollection,NSFastEnumeration> *)sections {

@@ -262,7 +262,9 @@ static NSString *const kDefaultOAuthScope = @"";
         BOOL isCollection = [response isKindOfClass:[NSArray class]];
         BOOL isResource = isCollection && [((NSArray *)response).firstObject isKindOfClass:[ALMResource class]];
         if (isResource) {
+            [parent.realm beginWriteTransaction];
             [parent hasMany:response];
+            [parent.realm commitWriteTransaction];
         }
         return PMKManifold(response, task);
     });

@@ -8,8 +8,9 @@
 
 #import "ALMController.h"
 #import "ALMUser.h"
+#import "ALMCustomController.h"
 
-@interface ALMScheduleController : NSObject
+@interface ALMScheduleController : ALMCustomController
 
 @property (assign) short year;
 @property (assign) short period;
@@ -25,11 +26,6 @@
 @property (readonly) PMKPromise *promiseScheduleModulesLoaded;
 @property (readonly) PMKPromise *promiseSectionsLoaded;
 @property (readonly) PMKPromise *promiseCoursesLoaded;
-
-+ (instancetype)scheduleFor:(ALMUser *)user
-             withCredential:(ALMCredential *)credential
-                       year:(short)year
-                     period:(short)period;
 
 + (instancetype)scheduleForSession:(ALMSession *)session
                               year:(short)year

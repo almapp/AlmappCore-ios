@@ -7,12 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ALMSession.h"
-#import "ALMController.h"
+#import "ALMCustomController.h"
 
-@interface ALMLikesController : NSObject
-
-+ (instancetype)controllerForSession:(ALMSession *)session;
+@interface ALMLikesController : ALMCustomController
 
 - (PMKPromise *)like:(ALMResource<ALMLikeable> *)likeable;
 - (PMKPromise *)dislike:(ALMResource<ALMLikeable> *)likeable;

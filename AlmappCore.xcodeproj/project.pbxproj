@@ -71,6 +71,8 @@
 		F6B7267C1A86A2D700461E17 /* ALMCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7267B1A86A2D700461E17 /* ALMCategory.m */; };
 		F6B7269F1A87144F00461E17 /* RLMArray+Select.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B7269E1A87144F00461E17 /* RLMArray+Select.m */; };
 		F6B726A31A871B4200461E17 /* ALMScheduleController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6B726A21A871B4200461E17 /* ALMScheduleController.m */; };
+		F6C19A8F1A92705200FA7611 /* ALMMapController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C19A8E1A92705200FA7611 /* ALMMapController.m */; };
+		F6C19A921A9270B200FA7611 /* ALMCustomController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C19A911A9270B200FA7611 /* ALMCustomController.m */; };
 		F6C779651A8FAA4E007E3ED3 /* ALMPostTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C779641A8FAA4E007E3ED3 /* ALMPostTest.m */; };
 		F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D19BDE1A51B02800FD4715 /* ALMUser.m */; };
 		F6D652CC1A7A65FD000620A4 /* ALMController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D652CB1A7A65FD000620A4 /* ALMController.m */; };
@@ -218,6 +220,10 @@
 		F6B7269E1A87144F00461E17 /* RLMArray+Select.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RLMArray+Select.m"; sourceTree = "<group>"; };
 		F6B726A11A871B4200461E17 /* ALMScheduleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMScheduleController.h; sourceTree = "<group>"; };
 		F6B726A21A871B4200461E17 /* ALMScheduleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMScheduleController.m; sourceTree = "<group>"; };
+		F6C19A8D1A92705200FA7611 /* ALMMapController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMMapController.h; sourceTree = "<group>"; };
+		F6C19A8E1A92705200FA7611 /* ALMMapController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMMapController.m; sourceTree = "<group>"; };
+		F6C19A901A9270B200FA7611 /* ALMCustomController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCustomController.h; sourceTree = "<group>"; };
+		F6C19A911A9270B200FA7611 /* ALMCustomController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCustomController.m; sourceTree = "<group>"; };
 		F6C779641A8FAA4E007E3ED3 /* ALMPostTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMPostTest.m; sourceTree = "<group>"; };
 		F6D19BDD1A51B02800FD4715 /* ALMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMUser.h; sourceTree = "<group>"; };
 		F6D19BDE1A51B02800FD4715 /* ALMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMUser.m; sourceTree = "<group>"; };
@@ -467,6 +473,8 @@
 				F6B726A21A871B4200461E17 /* ALMScheduleController.m */,
 				F67E64671A9056EE0077AEEA /* ALMLikesController.h */,
 				F67E64681A9056EE0077AEEA /* ALMLikesController.m */,
+				F6C19A8D1A92705200FA7611 /* ALMMapController.h */,
+				F6C19A8E1A92705200FA7611 /* ALMMapController.m */,
 			);
 			path = "Custom Controllers";
 			sourceTree = "<group>";
@@ -544,6 +552,8 @@
 			children = (
 				F6D652CA1A7A65FD000620A4 /* ALMController.h */,
 				F6D652CB1A7A65FD000620A4 /* ALMController.m */,
+				F6C19A901A9270B200FA7611 /* ALMCustomController.h */,
+				F6C19A911A9270B200FA7611 /* ALMCustomController.m */,
 				F6B726A01A871B3400461E17 /* Custom Controllers */,
 			);
 			path = Controllers;
@@ -736,6 +746,7 @@
 				F6A0F45F1A7FC22E00380EE1 /* NSArray+Query.m in Sources */,
 				F6B7269F1A87144F00461E17 /* RLMArray+Select.m in Sources */,
 				F63683061A58C8D000DBCC6A /* ALMEvent.m in Sources */,
+				F6C19A8F1A92705200FA7611 /* ALMMapController.m in Sources */,
 				F6A0F45A1A7FBBE100380EE1 /* RLMResults+Select.m in Sources */,
 				F694DD561A7A9BA8005D9AE7 /* ALMError.m in Sources */,
 				F6B3582C1A796B1B00999DCE /* ALMChatManager.m in Sources */,
@@ -753,6 +764,7 @@
 				F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */,
 				F66B93471A63DF2D0048DACD /* ALMWebPage.m in Sources */,
 				F6A058B61A5481B6001A1E45 /* ALMArea.m in Sources */,
+				F6C19A921A9270B200FA7611 /* ALMCustomController.m in Sources */,
 				F6E32D571A6D94F400ED3AD0 /* ALMTeacher.m in Sources */,
 				F60F907F1A59841D002EF807 /* ALMLike.m in Sources */,
 				F65DD4BF1A505C6E006BCAF0 /* ALMUtil.m in Sources */,
