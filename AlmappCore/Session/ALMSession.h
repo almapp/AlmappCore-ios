@@ -20,6 +20,7 @@
 
 // For creating or loading if present
 + (instancetype)sessionWithEmail:(NSString *)email password:(NSString *)password inRealm:(RLMRealm *)realm;
++ (instancetype)sessionWithEmail:(NSString *)email password:(NSString *)password;
 
 // For loading
 + (instancetype)sessionWithEmail:(NSString *)email inRealm:(RLMRealm *)realm;

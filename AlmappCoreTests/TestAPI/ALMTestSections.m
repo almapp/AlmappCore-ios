@@ -31,7 +31,7 @@
     
     __block ALMSession *session = self.testSession;
     
-    ALMScheduleController *controller = [ALMScheduleController scheduleForSession:session year:2015 period:1];
+    ALMScheduleController *controller = [ALMScheduleController controllerForSession:session year:2015 period:1];
     
     XCTAssertNotNil(controller.user);
     

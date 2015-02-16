@@ -30,13 +30,14 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.email = self.password = @"";
+        self.email = self.username = self.password = @"";
     }
     return self;
 }
 
 - (void)setPassword:(NSString *)password {
     self.keyStore[self.email] = password;
+    [self save];
 }
 
 - (NSString *)password {

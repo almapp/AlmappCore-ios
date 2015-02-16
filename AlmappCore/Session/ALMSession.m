@@ -42,6 +42,10 @@
     return _credential;
 }
 
++ (instancetype)sessionWithEmail:(NSString *)email password:(NSString *)password {
+    return [self sessionWithEmail:email password:password inRealm:[RLMRealm defaultRealm]];
+}
+
 + (instancetype)sessionWithEmail:(NSString *)email password:(NSString *)password inRealm:(RLMRealm *)realm {
     ALMSession *session = [self sessionWithEmail:email inRealm:realm];
     if (session) {
@@ -50,11 +54,16 @@
     session = [[self alloc] init];
     session.email = email;
     [realm beginWriteTransaction];
-    session = [self createInRealm:realm withObject:session];
+    session = [ALMSession createInRealm:realm withObject:session];
     [realm commitWriteTransaction];
-    session.credential.email = email;
-    session.credential.password = password;
+    ALMCredential *credential = session.credential;
+    credential.email = email;
+    credential.password = password;
     return session;
+}
+
++ (instancetype)sessionWithEmail:(NSString *)email {
+    return [self sessionWithEmail:email inRealm:[RLMRealm defaultRealm]];
 }
 
 + (instancetype)sessionWithEmail:(NSString *)email inRealm:(RLMRealm *)realm{
@@ -62,10 +71,6 @@
     
     //NSString *query = [NSString stringWithFormat:@"%@ = '%@'", kREmail, email];
     //return [self objectsInRealm:realm where:query].firstObject;
-}
-
-+ (instancetype)sessionWithEmail:(NSString *)email {
-    return [self sessionWithEmail:email inRealm:[RLMRealm defaultRealm]];
 }
 
 @end

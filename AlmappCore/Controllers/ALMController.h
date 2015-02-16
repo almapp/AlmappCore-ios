@@ -51,6 +51,7 @@ extern NSString *const kControllerSearchParams;
 
 #pragma mark - Options
 
+@property (strong, nonatomic) RLMRealm *realmSearch;
 @property (strong, nonatomic) RLMRealm *realm;
 @property (assign, nonatomic) BOOL saveToRealm;
 

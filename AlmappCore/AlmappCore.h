@@ -34,6 +34,7 @@
 #import "ALMChatManagerBlock.h"
 
 #import "ALMController.h"
+#import "ALMUserController.h"
 #import "ALMScheduleController.h"
 #import "ALMLikesController.h"
 #import "ALMMapController.h"

@@ -195,13 +195,33 @@ static NSString *const kDefaultOAuthScope = @"";
 - (PMKPromise *)SEARCH:(NSString *)query ofType:(Class)resourceClass on:(ALMResource *)parent {
     NSString *path = [resourceClass performSelector:@selector(apiPluralForm)];
     path = [NSString stringWithFormat:@"%@/%lld/%@/search", parent.apiPluralForm, parent.resourceID, path];
-    return [self SEARCH:query path:path];
+    
+    return [self SEARCH:query path:path].then(^(id response, NSURLSessionDataTask *task) {
+        NSArray *saved = [ALMController commit:resourceClass datas:response inRealm:self.realmSearch];
+        
+        [self.realmSearch beginWriteTransaction];
+        
+        ALMResource *finalParent = parent;
+        if (![parent.realm.path isEqualToString:self.realmSearch.path]) {
+            finalParent = [parent.class performSelector:@selector(createOrUpdateInRealm:withObject:) withObject:self.realmSearch withObject:parent];
+        }
+        
+        [finalParent hasMany:saved];
+        
+        [self.realmSearch commitWriteTransaction];
+        
+        return PMKManifold(saved, task);
+    });
 }
 
 - (PMKPromise *)SEARCH:(NSString *)query ofType:(Class)resourceClass {
     NSString *path = [resourceClass performSelector:@selector(apiPluralForm)];
     path = [NSString stringWithFormat:@"%@/search", path];
-    return [self SEARCH:query path:path];
+    
+    return [self SEARCH:query path:path].then(^(id response, NSURLSessionDataTask *task) {
+        id saved = [ALMController commit:resourceClass datas:response inRealm:self.realmSearch];
+        return PMKManifold(saved, task);
+    });
 }
 
 - (PMKPromise *)SEARCH:(NSString *)query path:(NSString *)path {
@@ -376,6 +396,19 @@ static NSString *const kDefaultOAuthScope = @"";
 }
 
 
+#pragma mark - Realm
+
+- (BOOL)saveToRealm {
+    return (_saveToRealm && self.realm);
+}
+
+- (RLMRealm *)realmSearch {
+    if (!_realmSearch) {
+        _realmSearch = [RLMRealm inMemoryRealmWithIdentifier:@"SearchRealm"];
+    }
+    return _realmSearch;
+}
+
 
 #pragma mark - Delegate usage
 
@@ -385,10 +418,6 @@ static NSString *const kDefaultOAuthScope = @"";
 
 - (NSString *)organizationSlug {
     return [self.coreModuleDelegate organizationSlugFor:[self class]];
-}
-
-- (BOOL)saveToRealm {
-    return (_saveToRealm && self.realm);
 }
 
 - (void)setHttpRequestHeaders:(NSDictionary *)headers {

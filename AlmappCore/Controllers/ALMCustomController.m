@@ -18,7 +18,7 @@
 @implementation ALMCustomController
 
 + (instancetype)controllerForSession:(ALMSession *)session {
-    return [[self alloc] init];
+    return [[self alloc] initWithSession:session];
 }
 
 - (instancetype)initWithSession:(ALMSession *)session {
@@ -47,7 +47,7 @@
 }
 
 - (RLMRealm *)realm {
-    return self.user.realm;
+    return self.session.realm;
 }
 
 @end
