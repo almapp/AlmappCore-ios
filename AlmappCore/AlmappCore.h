@@ -32,9 +32,11 @@
 #import "ALMSessionManager.h"
 #import "ALMChatManager.h"
 #import "ALMChatManagerBlock.h"
-#import "ALMController.h"
 
+#import "ALMController.h"
 #import "ALMScheduleController.h"
+#import "ALMLikesController.h"
+#import "ALMMapController.h"
 
 #import "ALMArea.h"
 #import "ALMOrganization.h"
