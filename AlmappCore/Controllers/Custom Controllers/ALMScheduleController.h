@@ -27,9 +27,9 @@
 @property (readonly) PMKPromise *promiseSectionsLoaded;
 @property (readonly) PMKPromise *promiseCoursesLoaded;
 
-+ (instancetype)scheduleForSession:(ALMSession *)session
-                              year:(short)year
-                            period:(short)period;
++ (instancetype)controllerForSession:(ALMSession *)session
+                                year:(short)year
+                              period:(short)period;
 
 - (NSArray *)scheduleItemsAtDay:(ALMScheduleDay)day;
 

@@ -26,7 +26,11 @@
 
 @implementation ALMScheduleController
 
-+ (instancetype)scheduleForSession:(ALMSession *)session year:(short)year period:(short)period {
++ (instancetype)controllerForSession:(ALMSession *)session {
+    return [self controllerForSession:session year:[ALMCore currentAcademicYear] period:[ALMCore currentAcademicPeriod]];
+}
+
++ (instancetype)controllerForSession:(ALMSession *)session year:(short)year period:(short)period {
     ALMScheduleController *controller = [[ALMScheduleController alloc] initWithSession:session];
     controller.year = year;
     controller.period = period;
