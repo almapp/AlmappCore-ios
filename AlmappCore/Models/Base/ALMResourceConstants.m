@@ -239,9 +239,6 @@ NSString *const kRCommentsCount = @"commentsCount";
 
 #pragma mark - Academic
 
-NSString *const kACurriculumURL = @"curriculum_url";
-NSString *const kRCurriculumURL = @"curriculumUrl";
-
 NSString *const kRStudents = @"students";
 
 NSString *const kASections = @"sections";

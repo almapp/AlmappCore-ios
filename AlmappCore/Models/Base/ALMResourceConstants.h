@@ -232,9 +232,6 @@ extern NSString *const kRCommentsCount;
 
 #pragma mark - Academic
 
-extern NSString *const kACurriculumURL;
-extern NSString *const kRCurriculumURL;
-
 extern NSString *const kRStudents;
 
 extern NSString *const kASections;

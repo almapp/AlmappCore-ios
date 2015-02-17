@@ -17,7 +17,6 @@
              [self jatt:kAResourceID]   : kRResourceID,
              [self jatt:kAName]         : kRName,
              [self jatt:kAURL]          : kRURL,
-             [self jatt:kACurriculumURL]: kRCurriculumURL,
              [self jatt:kAInformation]  : kRInformation,
              [self jatt:kALikesCount]     : kRLikesCount,
              [self jatt:kADislikesCount]  : kRDislikesCount,
@@ -31,7 +30,6 @@
     return @{
              kRName                     : kRDefaultNullString,
              kRURL                      : kRDefaultNullString,
-             kRCurriculumURL            : kRDefaultNullString,
              kRInformation              : kRDefaultNullString,
              kRLikesCount                   : @0,
              kRDislikesCount                : @0,

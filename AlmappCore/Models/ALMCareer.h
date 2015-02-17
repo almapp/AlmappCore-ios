@@ -14,7 +14,6 @@
 
 @property NSString *name;
 @property NSString *url;
-@property NSString *curriculumUrl;
 @property ALMAcademicUnity *academicUnity;
 @property NSString *information;
 
