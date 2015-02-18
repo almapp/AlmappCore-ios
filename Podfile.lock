@@ -1,11 +1,11 @@
 PODS:
   - AFNetworking (2.5.1):
-    - AFNetworking/NSURLConnection
-    - AFNetworking/NSURLSession
-    - AFNetworking/Reachability
-    - AFNetworking/Security
-    - AFNetworking/Serialization
-    - AFNetworking/UIKit
+    - AFNetworking/NSURLConnection (= 2.5.1)
+    - AFNetworking/NSURLSession (= 2.5.1)
+    - AFNetworking/Reachability (= 2.5.1)
+    - AFNetworking/Security (= 2.5.1)
+    - AFNetworking/Serialization (= 2.5.1)
+    - AFNetworking/UIKit (= 2.5.1)
   - AFNetworking/NSURLConnection (2.5.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
@@ -22,25 +22,25 @@ PODS:
     - AFNetworking/NSURLSession
   - AFOAuth2Manager (2.0.0):
     - AFNetworking (~> 2.2)
-  - FayeCpp (HEAD based on 0.1.7)
+  - FayeCpp (HEAD based on 0.1.8)
   - OMGHTTPURLRQ (2.1):
-    - OMGHTTPURLRQ/RQ
+    - OMGHTTPURLRQ/RQ (= 2.1)
   - OMGHTTPURLRQ/FormURLEncode (2.1)
   - OMGHTTPURLRQ/RQ (2.1):
     - OMGHTTPURLRQ/FormURLEncode
     - OMGHTTPURLRQ/UserAgent
   - OMGHTTPURLRQ/UserAgent (2.1)
   - PromiseKit (1.2.4):
-    - PromiseKit/CALayer
-    - PromiseKit/NSNotificationCenter
-    - PromiseKit/NSURLConnection
-    - PromiseKit/Pause
-    - PromiseKit/UIActionSheet
-    - PromiseKit/UIAlertView
-    - PromiseKit/UIView
-    - PromiseKit/UIViewController
-    - PromiseKit/Until
-    - PromiseKit/When
+    - PromiseKit/CALayer (= 1.2.4)
+    - PromiseKit/NSNotificationCenter (= 1.2.4)
+    - PromiseKit/NSURLConnection (= 1.2.4)
+    - PromiseKit/Pause (= 1.2.4)
+    - PromiseKit/UIActionSheet (= 1.2.4)
+    - PromiseKit/UIAlertView (= 1.2.4)
+    - PromiseKit/UIView (= 1.2.4)
+    - PromiseKit/UIViewController (= 1.2.4)
+    - PromiseKit/Until (= 1.2.4)
+    - PromiseKit/When (= 1.2.4)
   - PromiseKit-AFNetworking (0.1.5):
     - AFNetworking (~> 2.0)
     - PromiseKit/Promise
@@ -68,11 +68,11 @@ PODS:
   - PromiseKit/When (1.2.4):
     - PromiseKit/Promise
   - Realm (0.90.5):
-    - Realm/Headers
+    - Realm/Headers (= 0.90.5)
   - Realm+JSON (0.2.5):
     - Realm (~> 0.90)
   - Realm/Headers (0.90.5)
-  - UICKeyChainStore (2.0.3)
+  - UICKeyChainStore (2.0.4)
 
 DEPENDENCIES:
   - AFNetworking
@@ -92,15 +92,24 @@ EXTERNAL SOURCES:
     :commit: 6e2b4ed0a08edcfc7a98dc6318ca0bd9372377ab
     :git: https://github.com/mrpatiwi/Realm-JSON.git
 
+CHECKOUT OPTIONS:
+  AFOAuth2Manager:
+    :commit: 7470a389ea74034923999202eedfc04f036b3d37
+    :git: https://github.com/iamcam/AFOAuth2Manager
+  Realm+JSON:
+    :branch: master
+    :commit: 6e2b4ed0a08edcfc7a98dc6318ca0bd9372377ab
+    :git: https://github.com/mrpatiwi/Realm-JSON.git
+
 SPEC CHECKSUMS:
   AFNetworking: 8bee59492a6ff15d69130efa4d0dc67e0094a52a
   AFOAuth2Manager: 6d76c16b475b707cd41aae5580c9b71123e472fd
-  FayeCpp: 8f4ac60cbcc9eb0fea16e5be2dda6b521aa2146d
+  FayeCpp: b64ffa43e90d0401c413c08f56663c9a44479eb1
   OMGHTTPURLRQ: f8c515dfd2f57a5d74c710978f600231f52afec5
   PromiseKit: 9bc78045d01a5ec119a2f8ebbfbc415ad26b674d
   PromiseKit-AFNetworking: 16db750b394dcd12aa8527eb1bb9f209a36a49f7
   Realm: aea25534b97be77995650c2339aa6ed010dfcc8a
   Realm+JSON: 0d26baf985e03db0c9e9d102887be5b9b4491e8a
-  UICKeyChainStore: 9b6ce74b89fc24e1879257eb51c002f7cc4a5b9b
+  UICKeyChainStore: 2399076d0950e20fe859b8f817548cf6ca542dd7
 
-COCOAPODS: 0.34.4
+COCOAPODS: 0.36.0.beta.2
