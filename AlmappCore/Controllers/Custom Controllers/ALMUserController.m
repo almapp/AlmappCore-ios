@@ -21,8 +21,12 @@
     
     ALMController *controller = [ALMCore controllerWithCredential:credential];
     
+    NSString *realmPath = realm.path;
+    
     return [controller GET:@"me" parameters:nil].then( ^(NSDictionary *JSON, NSURLSessionDataTask *task) {
         [credential save];
+        
+        RLMRealm *realm = [RLMRealm realmWithPath:realmPath];
         
         [realm beginWriteTransaction];
         

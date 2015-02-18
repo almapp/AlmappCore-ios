@@ -52,7 +52,7 @@
     return [self.controller GET:@"me/sections" parameters:nil].then( ^(id JSONArray, NSURLSessionDataTask *task) {
         RLMRealm *realm = self.realm;
         [realm beginWriteTransaction];
-        NSArray *sections = [ALMSection createOrUpdateInRealm:self.realm withJSONArray:JSONArray];
+        NSArray *sections = [ALMSection createOrUpdateInRealm:realm withJSONArray:JSONArray];
         [self.user hasMany:sections];
         [realm commitWriteTransaction];
         
@@ -65,7 +65,7 @@
     return [self.controller GET:@"me/courses" parameters:params].then( ^(id JSONArray, NSURLSessionDataTask *task) {
         RLMRealm *realm = self.realm;
         [realm beginWriteTransaction];
-        NSArray *courses = [ALMCourse createOrUpdateInRealm:self.realm withJSONArray:JSONArray];
+        NSArray *courses = [ALMCourse createOrUpdateInRealm:realm withJSONArray:JSONArray];
         [self.user hasMany:courses];
         [realm commitWriteTransaction];
         
