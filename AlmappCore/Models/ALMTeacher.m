@@ -20,9 +20,11 @@
              [self jatt:kAEmail]            : kREmail,
              [self jatt:kAURL]              : kRURL,
              [self jatt:kAInformation]      : kRInformation,
-             [self jatt:kALikesCount]     : kRLikesCount,
-             [self jatt:kADislikesCount]  : kRDislikesCount,
-             [self jatt:kACommentsCount]  : kRCommentsCount,
+             [self jatt:kAImagenMediumPath] : kRImagenMediumPath,
+             [self jatt:kAImagenThumbPath]  : kRImagenThumbPath,
+             [self jatt:kALikesCount]       : kRLikesCount,
+             [self jatt:kADislikesCount]    : kRDislikesCount,
+             [self jatt:kACommentsCount]    : kRCommentsCount,
              [self jatt:kAUpdatedAt]        : kRUpdatedAt,
              [self jatt:kACreatedAt]        : kRCreatedAt
              };
@@ -34,6 +36,8 @@
              kREmail                        : kRDefaultNullString,
              kRURL                          : kRDefaultNullString,
              kRInformation                  : kRDefaultNullString,
+             kRImagenMediumPath             : kRDefaultNullString,
+             kRImagenThumbPath              : kRDefaultNullString,
              kRLikesCount                   : @0,
              kRDislikesCount                : @0,
              kRCommentsCount                : @0,

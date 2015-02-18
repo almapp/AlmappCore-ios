@@ -68,6 +68,9 @@ extern NSString *const kFrameworkIdentifier;
 - (ALMController *)controllerWithCredential:(ALMCredential *)credential;
 + (ALMController *)controllerWithCredential:(ALMCredential *)credential;
 
+- (void)deallocControllerWithCredential:(ALMCredential *)credential;
++ (void)deallocControllerWithCredential:(ALMCredential *)credential;
+
 + (ALMSessionManager *)sessionManager;
 + (ALMChatManager *)chatManager;
 

@@ -28,9 +28,13 @@
 }
 
 - (instancetype)init {
+    return [self initWithEmail:@""];
+}
+
+- (instancetype)initWithEmail:(NSString *)email {
     self = [super init];
     if (self) {
-        self.email = self.username = self.password = @"";
+        self.email = email;
     }
     return self;
 }
@@ -65,8 +69,12 @@
 + (instancetype)credentialForEmail:(NSString *)email {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *encodedObject = [defaults objectForKey:email];
-    id loaded = [NSKeyedUnarchiver unarchiveObjectWithData:encodedObject];
-    return loaded;
+    if (encodedObject && encodedObject.length > 0) {
+        return [NSKeyedUnarchiver unarchiveObjectWithData:encodedObject];
+    }
+    else {
+        return [[self alloc] initWithEmail:email];
+    }
 }
 
 @end

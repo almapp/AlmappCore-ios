@@ -16,6 +16,8 @@
 
 + (instancetype)credentialForEmail:(NSString *)email;
 
+- (instancetype)initWithEmail:(NSString *)email;
+
 - (void)save;
 
 @end

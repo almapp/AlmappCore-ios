@@ -138,6 +138,12 @@ extern NSString *const kRPhone;
 extern NSString *const kAInformation;
 extern NSString *const kRInformation;
 
+extern NSString *const kAImagenMediumPath;
+extern NSString *const kRImagenMediumPath;
+
+extern NSString *const kAImagenThumbPath;
+extern NSString *const kRImagenThumbPath;
+
 #pragma mark - Users
 
 extern NSString *const kASession;

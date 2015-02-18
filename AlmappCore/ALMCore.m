@@ -163,6 +163,10 @@ static dispatch_once_t once_token;
     return controller;
 }
 
+- (void)deallocControllerWithCredential:(ALMCredential *)credential {
+    [self.controllers removeObjectForKey:credential.email];
+}
+
 - (ALMSessionManager *)sessionManager {
     if (!_sessionManager) {
         _sessionManager = [ALMSessionManager sessionManagerWithCoreDelegate:self];
@@ -183,6 +187,12 @@ static dispatch_once_t once_token;
 
 + (ALMController *)controllerWithCredential:(ALMCredential *)credential {
     return [self isAlive] ? [[self sharedInstance] controllerWithCredential:credential] : nil;
+}
+
++ (void)deallocControllerWithCredential:(ALMCredential *)credential {
+    if ([self isAlive]) {
+        [[self sharedInstance] deallocControllerWithCredential:credential];
+    }
 }
 
 + (ALMSessionManager *)sessionManager {

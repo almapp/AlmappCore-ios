@@ -10,6 +10,7 @@
 
 @interface ALMUserController : ALMCustomController
 
-- (PMKPromise *)login;
+- (PMKPromise *)login:(NSString *)email password:(NSString *)password;
+- (PMKPromise *)login:(NSString *)email password:(NSString *)password realm:(RLMRealm *)realm;
 
 @end

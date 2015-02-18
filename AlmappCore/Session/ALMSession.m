@@ -8,6 +8,7 @@
 
 #import "ALMSession.h"
 #import "ALMResourceConstants.h"
+#import "ALMTemporalCredential.h"
 
 @implementation ALMSession
 
@@ -34,10 +35,6 @@
 - (ALMCredential *)credential {
     if (!_credential) {
         _credential = [ALMCredential credentialForEmail:self.email];
-        if (!_credential) {
-            _credential = [[ALMCredential alloc] init];
-            _credential.email = self.email;
-        }
     }
     return _credential;
 }
@@ -56,9 +53,7 @@
     [realm beginWriteTransaction];
     session = [ALMSession createInRealm:realm withObject:session];
     [realm commitWriteTransaction];
-    ALMCredential *credential = session.credential;
-    credential.email = email;
-    credential.password = password;
+    session.credential = [ALMTemporalCredential credentialForEmail:email password:password];
     return session;
 }
 

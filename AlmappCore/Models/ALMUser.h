@@ -22,6 +22,8 @@
 @property NSString *email;
 @property NSString *studentID;
 @property NSString *country;
+@property NSString *imageMediumPath;
+@property NSString *imageThumbPath;
 @property BOOL isFindeable;
 @property BOOL isMale;
 @property NSDate *lastSignIn;

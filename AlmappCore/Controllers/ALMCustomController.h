@@ -18,6 +18,7 @@
 @property (readonly) RLMRealm *realm;
 
 + (instancetype)controllerForSession:(ALMSession *)session;
++ (instancetype)controller;
 
 - (instancetype)initWithSession:(ALMSession *)session;
 

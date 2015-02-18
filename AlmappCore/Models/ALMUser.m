@@ -18,18 +18,20 @@
 
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
-             [self jatt:kAResourceID]     : kRResourceID,
-             [self jatt:kAName]           : kRName,
-             [self jatt:kAUsername]       : kRUsername,
-             [self jatt:kAEmail]          : kREmail,
-             [self jatt:kAMale]           : kRMale,
-             [self jatt:kAStudentID]      : kRStudentID,
-             [self jatt:kACountry]        : kRCountry,
-             [self jatt:kAFindeable]      : kRFindeable,
-             [self jatt:kALastSignIn]     : kRLastSignIn,
-             [self jatt:kACurrentSignIn]  : kRCurrentSignIn,
-             [self jatt:kAUpdatedAt]      : kRUpdatedAt,
-             [self jatt:kACreatedAt]      : kRCreatedAt
+             [self jatt:kAResourceID]       : kRResourceID,
+             [self jatt:kAName]             : kRName,
+             [self jatt:kAUsername]         : kRUsername,
+             [self jatt:kAEmail]            : kREmail,
+             [self jatt:kAMale]             : kRMale,
+             [self jatt:kAStudentID]        : kRStudentID,
+             [self jatt:kACountry]          : kRCountry,
+             [self jatt:kAFindeable]        : kRFindeable,
+             [self jatt:kAImagenMediumPath] : kRImagenMediumPath,
+             [self jatt:kAImagenThumbPath]  : kRImagenThumbPath,
+             [self jatt:kALastSignIn]       : kRLastSignIn,
+             [self jatt:kACurrentSignIn]    : kRCurrentSignIn,
+             [self jatt:kAUpdatedAt]        : kRUpdatedAt,
+             [self jatt:kACreatedAt]        : kRCreatedAt
              };
 }
 
@@ -40,6 +42,8 @@
              kRStudentID                  : kRDefaultNullString,
              kRCountry                    : kRDefaultNullString,
              kRFindeable                  : @YES,
+             kRImagenMediumPath           : kRDefaultNullString,
+             kRImagenThumbPath            : kRDefaultNullString,
              kRLastSignIn                 : [NSDate defaultDate],
              kRCurrentSignIn              : [NSDate defaultDate],
              kRUpdatedAt                  : [NSDate defaultDate],

@@ -17,7 +17,6 @@
 @implementation ALMAuthTest
 
 - (void)testAuth {
-    
     NSString *email = nil;
     NSString *password = nil;
     XCTAssertTrue(email && password, @"Enter your data to test this method");
@@ -25,14 +24,20 @@
     NSString *description = [NSString stringWithFormat:@"LOGIN"];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
-    ALMSession *session = [ALMSession sessionWithEmail:email password:password inRealm:self.testRealm];
-    
-    ALMUserController *controller = [ALMUserController controllerForSession:session];
-    [controller login].then(^(ALMSession *session) {
+    ALMUserController *controller = [ALMUserController controller];
+    [controller login:email password:password realm:self.testRealm].then(^(ALMSession *session) {
         NSLog(@"%@", session);
         XCTAssertNotNil(session);
         XCTAssertNotNil(session.user);
+        XCTAssertNotNil(session.credential);
+        
+        XCTAssertEqual(session.realm.path, self.testRealm.path);
+        
+        NSString *password = session.credential.password;
+        XCTAssertTrue(password && password.length > 0);
+        
         XCTAssertNotNil(session.user.careers.firstObject);
+        
         [expectation fulfill];
         
     }).catch( ^(NSError *error) {

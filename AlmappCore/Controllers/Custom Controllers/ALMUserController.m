@@ -7,21 +7,36 @@
 //
 
 #import "ALMUserController.h"
+#import "ALMCore.h"
+#import "ALMTemporalCredential.h"
 
 @implementation ALMUserController
 
-- (PMKPromise *)login {
-    return [self.controller GET:@"me" parameters:nil].then( ^(NSDictionary *JSON, NSURLSessionDataTask *task) {
-        RLMRealm *realm = self.realm;
+- (PMKPromise *)login:(NSString *)email password:(NSString *)password {
+    return [self login:email password:password realm:[RLMRealm defaultRealm]];
+}
+
+- (PMKPromise *)login:(NSString *)email password:(NSString *)password realm:(RLMRealm *)realm {
+    ALMCredential *credential = [ALMTemporalCredential credentialForEmail:email password:password];
+    
+    ALMController *controller = [ALMCore controllerWithCredential:credential];
+    
+    return [controller GET:@"me" parameters:nil].then( ^(NSDictionary *JSON, NSURLSessionDataTask *task) {
+        [credential save];
         
         [realm beginWriteTransaction];
         
-        ALMUser *user = [ALMUser createOrUpdateInRealm:self.realm withJSONDictionary:JSON];
-        self.session.user = user;
+        ALMSession *session = [[ALMSession alloc] init];
+        session.email = email;
+        session.user = [ALMUser createOrUpdateInRealm:realm withJSONDictionary:JSON];
         
         [realm commitWriteTransaction];
         
-        return self.session;
+        return session;
+        
+    }).catch( ^(NSError *error) {
+        [ALMCore deallocControllerWithCredential:credential];
+        return error;
     });
 }
 

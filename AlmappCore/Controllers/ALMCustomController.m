@@ -21,6 +21,10 @@
     return [[self alloc] initWithSession:session];
 }
 
++ (instancetype)controller {
+    return [self controllerForSession:nil];
+}
+
 - (instancetype)initWithSession:(ALMSession *)session {
     self = [super init];
     if (self) {

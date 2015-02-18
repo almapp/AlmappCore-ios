@@ -145,6 +145,12 @@ NSString *const kRPhone = @"phoneString";
 NSString *const kAInformation = @"information";
 NSString *const kRInformation = @"information";
 
+NSString *const kAImagenMediumPath = @"avatar.medium";
+NSString *const kRImagenMediumPath = @"imageMediumPath";
+
+NSString *const kAImagenThumbPath = @"avatar.thumb";
+NSString *const kRImagenThumbPath = @"imageThumbPath";
+
 #pragma mark - Users
 
 NSString *const kASession = @"session";

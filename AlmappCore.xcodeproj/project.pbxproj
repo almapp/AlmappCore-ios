@@ -28,6 +28,7 @@
 		F60F907F1A59841D002EF807 /* ALMLike.m in Sources */ = {isa = PBXBuildFile; fileRef = F60F907E1A59841D002EF807 /* ALMLike.m */; };
 		F625ABD81A7C1AB800D8EA77 /* ALMApiKey.m in Sources */ = {isa = PBXBuildFile; fileRef = F625ABD71A7C1AB800D8EA77 /* ALMApiKey.m */; };
 		F63683061A58C8D000DBCC6A /* ALMEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = F63683051A58C8D000DBCC6A /* ALMEvent.m */; };
+		F63DFD971A93EAF20065A0F6 /* ALMTemporalCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = F63DFD961A93EAF20065A0F6 /* ALMTemporalCredential.m */; };
 		F64204C91A7B09B700666DBE /* ALMCredential.m in Sources */ = {isa = PBXBuildFile; fileRef = F64204C81A7B09B700666DBE /* ALMCredential.m */; };
 		F64204CD1A7BB3ED00666DBE /* ALMSession.m in Sources */ = {isa = PBXBuildFile; fileRef = F64204CC1A7BB3ED00666DBE /* ALMSession.m */; };
 		F64478131A58ECB60078FB29 /* ALMCareer.m in Sources */ = {isa = PBXBuildFile; fileRef = F64478121A58ECB60078FB29 /* ALMCareer.m */; };
@@ -134,6 +135,8 @@
 		F62B94C11A6A11EA00C1F534 /* ALMMapable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMMapable.h; sourceTree = "<group>"; };
 		F63683041A58C8D000DBCC6A /* ALMEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMEvent.h; sourceTree = "<group>"; };
 		F63683051A58C8D000DBCC6A /* ALMEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEvent.m; sourceTree = "<group>"; };
+		F63DFD951A93EAF20065A0F6 /* ALMTemporalCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMTemporalCredential.h; sourceTree = "<group>"; };
+		F63DFD961A93EAF20065A0F6 /* ALMTemporalCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMTemporalCredential.m; sourceTree = "<group>"; };
 		F64204C71A7B09B700666DBE /* ALMCredential.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMCredential.h; sourceTree = "<group>"; };
 		F64204C81A7B09B700666DBE /* ALMCredential.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMCredential.m; sourceTree = "<group>"; };
 		F64204CA1A7BABA300666DBE /* ALMChatListenerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMChatListenerDelegate.h; sourceTree = "<group>"; };
@@ -460,6 +463,8 @@
 				F6B358331A798B6F00999DCE /* ALMSessionManager.m */,
 				F64204C71A7B09B700666DBE /* ALMCredential.h */,
 				F64204C81A7B09B700666DBE /* ALMCredential.m */,
+				F63DFD951A93EAF20065A0F6 /* ALMTemporalCredential.h */,
+				F63DFD961A93EAF20065A0F6 /* ALMTemporalCredential.m */,
 			);
 			path = Session;
 			sourceTree = "<group>";
@@ -746,6 +751,7 @@
 				F6A0F45F1A7FC22E00380EE1 /* NSArray+Query.m in Sources */,
 				F6B7269F1A87144F00461E17 /* RLMArray+Select.m in Sources */,
 				F63683061A58C8D000DBCC6A /* ALMEvent.m in Sources */,
+				F63DFD971A93EAF20065A0F6 /* ALMTemporalCredential.m in Sources */,
 				F6C19A8F1A92705200FA7611 /* ALMMapController.m in Sources */,
 				F6A0F45A1A7FBBE100380EE1 /* RLMResults+Select.m in Sources */,
 				F694DD561A7A9BA8005D9AE7 /* ALMError.m in Sources */,
