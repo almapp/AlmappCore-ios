@@ -51,7 +51,7 @@
 }
 
 - (RLMRealm *)realm {
-    return self.session.realm;
+    return self.session.user.realm;
 }
 
 @end
