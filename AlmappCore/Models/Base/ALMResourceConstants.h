@@ -138,8 +138,8 @@ extern NSString *const kRPhone;
 extern NSString *const kAInformation;
 extern NSString *const kRInformation;
 
-extern NSString *const kAImagenMediumPath;
-extern NSString *const kRImagenMediumPath;
+extern NSString *const kAImagenOriginalPath;
+extern NSString *const kRImagenOriginalPath;
 
 extern NSString *const kAImagenThumbPath;
 extern NSString *const kRImagenThumbPath;

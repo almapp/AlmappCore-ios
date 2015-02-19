@@ -22,7 +22,7 @@
 @property NSString *email;
 @property NSString *studentID;
 @property NSString *country;
-@property NSString *imageMediumPath;
+@property NSString *imageOriginalPath;
 @property NSString *imageThumbPath;
 @property BOOL isFindeable;
 @property BOOL isMale;

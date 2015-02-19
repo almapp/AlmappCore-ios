@@ -15,7 +15,7 @@
 @property NSString *name;
 @property NSString *email;
 @property NSString *url;
-@property NSString *imageMediumPath;
+@property NSString *imageOriginalPath;
 @property NSString *imageThumbPath;
 @property RLMArray<ALMAcademicUnity> *academicUnities;
 @property RLMArray<ALMSection> *sections;
