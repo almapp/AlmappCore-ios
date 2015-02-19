@@ -16,22 +16,24 @@
 
 + (NSDictionary *)JSONInboundMappingDictionary {
     return @{
-             [self jatt:kAResourceID]   : kRResourceID,
-             [self jatt:kAName]         : kRName,
-             [self jatt:kAShortName]    : kRShortName,
-             [self jatt:kAAbbreviation] : kRAbbreviation,
-             [self jatt:kAAddress]      : kRAddress,
-             [self jatt:kAEmail]        : kREmail,
-             [self jatt:kAURL]          : kRURL,
-             [self jatt:kAFacebookURL]  : kRFacebookURL,
-             [self jatt:kATwitterURL]   : kRTwitterURL,
-             [self jatt:kAPhone]        : kRPhone,
-             [self jatt:kAInformation]  : kRInformation,
-             [self jatt:kALikesCount]     : kRLikesCount,
-             [self jatt:kADislikesCount]  : kRDislikesCount,
-             [self jatt:kACommentsCount]  : kRCommentsCount,
-             [self jatt:kAUpdatedAt]    : kRUpdatedAt,
-             [self jatt:kACreatedAt]    : kRCreatedAt
+             [self jatt:kAResourceID]           : kRResourceID,
+             [self jatt:kAName]                 : kRName,
+             [self jatt:kAShortName]            : kRShortName,
+             [self jatt:kAAbbreviation]         : kRAbbreviation,
+             [self jatt:kAAddress]              : kRAddress,
+             [self jatt:kABannerOriginalPath]   : kRBannerOriginalPath,
+             [self jatt:kABannerSmallPath]      : kRBannerSmallPath,
+             [self jatt:kAEmail]                : kREmail,
+             [self jatt:kAURL]                  : kRURL,
+             [self jatt:kAFacebookURL]          : kRFacebookURL,
+             [self jatt:kATwitterURL]           : kRTwitterURL,
+             [self jatt:kAPhone]                : kRPhone,
+             [self jatt:kAInformation]          : kRInformation,
+             [self jatt:kALikesCount]           : kRLikesCount,
+             [self jatt:kADislikesCount]        : kRDislikesCount,
+             [self jatt:kACommentsCount]        : kRCommentsCount,
+             [self jatt:kAUpdatedAt]            : kRUpdatedAt,
+             [self jatt:kACreatedAt]            : kRCreatedAt
              };
 }
 
@@ -41,6 +43,8 @@
              kRShortName                : kRDefaultNullString,
              kRAbbreviation             : kRDefaultNullString,
              kRAddress                  : kRDefaultNullString,
+             kRBannerOriginalPath       : kRDefaultNullString,
+             kRBannerSmallPath          : kRDefaultNullString,
              kREmail                    : kRDefaultNullString,
              kRURL                      : kRDefaultNullString,
              kRFacebookURL              : kRDefaultNullString,

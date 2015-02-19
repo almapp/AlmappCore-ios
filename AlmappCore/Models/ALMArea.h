@@ -19,6 +19,8 @@
 @property NSString *shortName;
 @property NSString *abbreviation;
 @property NSString *address;
+@property NSString *bannerOriginalPath;
+@property NSString *bannerSmallPath;
 @property RLMArray<ALMPlace> *places;
 @property NSString *email;
 @property NSString *url;

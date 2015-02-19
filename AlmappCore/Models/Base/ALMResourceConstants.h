@@ -190,6 +190,12 @@ extern NSString *const kRLongitude;
 extern NSString *const kAFloor;
 extern NSString *const kRFloor;
 
+extern NSString *const kABannerOriginalPath;
+extern NSString *const kRBannerOriginalPath;
+
+extern NSString *const kABannerSmallPath;
+extern NSString *const kRBannerSmallPath;
+
 #pragma mark - Events
 
 extern NSString *const kAEvent;

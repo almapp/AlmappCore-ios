@@ -197,6 +197,12 @@ NSString *const kRLongitude = @"longitude";
 NSString *const kAFloor = @"floor";
 NSString *const kRFloor = @"floor";
 
+NSString *const kABannerOriginalPath = @"banner.original";
+NSString *const kRBannerOriginalPath = @"bannerOriginalPath";
+
+NSString *const kABannerSmallPath = @"banner.small";
+NSString *const kRBannerSmallPath = @"bannerSmallPath";
+
 #pragma mark - Events
 
 NSString *const kAEvent = @"event";
