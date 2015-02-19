@@ -312,6 +312,12 @@ NSString *const kRLoginUrl = @"loginUrl";
 NSString *const kAHomeUrl = @"home_url";
 NSString *const kRHomeUrl = @"homeUrl";
 
+NSString *const kAIconOriginalPath = @"icon.original";
+NSString *const kRIconOriginalPath = @"iconOriginalPath";
+
+NSString *const kABackgroundOriginalPath = @"background.original";
+NSString *const kRBackgroundOriginalPath = @"backgroundOriginalPath";
+
 #pragma mark - Posts
 
 NSString *const kAContent = @"content";

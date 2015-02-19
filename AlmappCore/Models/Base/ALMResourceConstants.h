@@ -305,6 +305,12 @@ extern NSString *const kRLoginUrl;
 extern NSString *const kAHomeUrl;
 extern NSString *const kRHomeUrl;
 
+extern NSString *const kAIconOriginalPath;
+extern NSString *const kRIconOriginalPath;
+
+extern NSString *const kABackgroundOriginalPath;
+extern NSString *const kRBackgroundOriginalPath;
+
 #pragma mark - Posts
 
 extern NSString *const kAContent;

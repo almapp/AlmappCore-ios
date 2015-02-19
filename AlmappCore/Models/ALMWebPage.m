@@ -18,6 +18,8 @@
              [self jatt:kAIdentifier]               : kRIdentifier,
              [self jatt:kAName]                     : kRName,
              [self jatt:kAOwner]                    : kROwner,
+             [self jatt:kAIconOriginalPath]         : kRIconOriginalPath,
+             [self jatt:kABackgroundOriginalPath]   : kRBackgroundOriginalPath,
              [self jatt:kAPageType]                 : kRPageType,
              [self jatt:kAInformation]              : kRInformation,
              [self jatt:kAIsAvailable]              : kRIsAvailable,
@@ -46,6 +48,8 @@
              kRInformation              : kRDefaultNullString,
              kRLoginUrl                 : kRDefaultNullString,
              kRHomeUrl                  : kRDefaultNullString,
+             kRIconOriginalPath         : kRDefaultNullString,
+             kRBackgroundOriginalPath   : kRDefaultNullString,
              kRUpdatedAt                : [NSDate defaultDate],
              kRCreatedAt                : [NSDate defaultDate]
              };

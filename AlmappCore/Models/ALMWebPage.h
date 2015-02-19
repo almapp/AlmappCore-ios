@@ -22,6 +22,8 @@ typedef NS_ENUM(NSUInteger, ALMWebPageType) {
 @property NSString *identifier;
 @property NSString *name;
 @property NSString *owner;
+@property NSString *iconOriginalPath;
+@property NSString *backgroundOriginalPath;
 @property ALMOrganization *organization;
 @property NSInteger pageType;
 @property NSString *information;
