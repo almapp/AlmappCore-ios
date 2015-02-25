@@ -51,9 +51,9 @@
              kRTwitterURL               : kRDefaultNullString,
              kRPhone                    : kRDefaultNullString,
              kRInformation              : kRDefaultNullString,
-             kRLikesCount                   : @0,
-             kRDislikesCount                : @0,
-             kRCommentsCount                : @0,
+             kRLikesCount               : @0,
+             kRDislikesCount            : @0,
+             kRCommentsCount            : @0,
              kRUpdatedAt                : [NSDate defaultDate],
              kRCreatedAt                : [NSDate defaultDate]
              };
