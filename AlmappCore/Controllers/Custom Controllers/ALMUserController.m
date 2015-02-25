@@ -32,6 +32,7 @@
         
         ALMSession *session = [[ALMSession alloc] init];
         session.email = email;
+        session = [ALMSession createOrUpdateInRealm:realm withObject:session];
         session.user = [ALMUser createOrUpdateInRealm:realm withJSONDictionary:JSON];
         
         [realm commitWriteTransaction];
