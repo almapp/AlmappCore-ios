@@ -22,7 +22,7 @@ PODS:
     - AFNetworking/NSURLSession
   - AFOAuth2Manager (2.0.0):
     - AFNetworking (~> 2.2)
-  - FayeCpp (HEAD based on 0.1.8)
+  - FayeCpp (HEAD based on 0.1.9)
   - OMGHTTPURLRQ (2.1):
     - OMGHTTPURLRQ/RQ (= 2.1)
   - OMGHTTPURLRQ/FormURLEncode (2.1)
@@ -104,7 +104,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   AFNetworking: 8bee59492a6ff15d69130efa4d0dc67e0094a52a
   AFOAuth2Manager: 6d76c16b475b707cd41aae5580c9b71123e472fd
-  FayeCpp: b64ffa43e90d0401c413c08f56663c9a44479eb1
+  FayeCpp: 77eac47338e90ed9c7099faa75458042f459eb3c
   OMGHTTPURLRQ: f8c515dfd2f57a5d74c710978f600231f52afec5
   PromiseKit: 9bc78045d01a5ec119a2f8ebbfbc415ad26b674d
   PromiseKit-AFNetworking: 16db750b394dcd12aa8527eb1bb9f209a36a49f7
@@ -112,4 +112,4 @@ SPEC CHECKSUMS:
   Realm+JSON: 0d26baf985e03db0c9e9d102887be5b9b4491e8a
   UICKeyChainStore: 2399076d0950e20fe859b8f817548cf6ca542dd7
 
-COCOAPODS: 0.36.0.beta.2
+COCOAPODS: 0.35.0
