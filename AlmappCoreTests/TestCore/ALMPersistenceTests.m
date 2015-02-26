@@ -20,10 +20,7 @@
 - (void)testDatabaseDrop {
     XCTestExpectation *singleResourceExpectation = [self expectationWithDescription:@"validGetSingleResource"];
     
-    self.controller.realm = [self testRealm];
-    self.controller.saveToRealm = YES;
-    
-    [self.controller GETResource:[ALMFaculty class] id:1 parameters:nil].then(^(id responseObject, NSURLSessionDataTask *task) {
+    [self.controller GETResource:[ALMFaculty class] id:1 parameters:nil realm:self.testRealm].then(^(id jsonResponse, NSURLSessionDataTask *task, id responseObject) {
         NSLog(@"%@", responseObject);
         ALMFaculty *resource = responseObject;
         

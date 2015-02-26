@@ -35,10 +35,6 @@
 
 - (ALMController *)controller {
     ALMController *controller = [ALMCore controllerWithCredential:self.credential];
-    controller.saveToRealm = YES;
-    if (!controller.realm) {
-        controller.realm = self.realm;
-    }
     return controller;
 }
 

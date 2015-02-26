@@ -52,8 +52,6 @@ extern NSString *const kControllerSearchParams;
 #pragma mark - Options
 
 @property (strong, nonatomic) RLMRealm *realmSearch;
-@property (strong, nonatomic) RLMRealm *realm;
-@property (assign, nonatomic) BOOL saveToRealm;
 
 
 #pragma mark - Auth
@@ -69,14 +67,15 @@ extern NSString *const kControllerSearchParams;
 - (PMKPromise *)SEARCH:(NSString *)query path:(NSString *)path;
 
 - (PMKPromise *)GETResource:(ALMResource *)resource parameters:(id)parameters;
-- (PMKPromise *)GETResource:(Class)resourceClass id:(long long)resourceId parameters:(id)parameters;
-- (PMKPromise *)GETResources:(Class)resourceClass parameters:(id)parameters;
-- (PMKPromise *)GETResources:(Class)resourceClass path:(NSString *)path parameters:(id)parameters;
+- (PMKPromise *)GETResource:(Class)resourceClass id:(long long)resourceId parameters:(id)parameters realm:(RLMRealm *)realm;
+- (PMKPromise *)GETResource:(Class)resourceClass path:(NSString *)path parameters:(id)parameters realm:(RLMRealm *)realm;
+- (PMKPromise *)GETResources:(Class)resourceClass parameters:(id)parameters realm:(RLMRealm *)realm;
+- (PMKPromise *)GETResources:(Class)resourceClass path:(NSString *)path parameters:(id)parameters realm:(RLMRealm *)realm;
 - (PMKPromise *)GETResources:(Class)resourceClass on:(ALMResource *)parent parameters:(id)parameters;
 - (PMKPromise *)GET:(NSString *)urlString parameters:(id)parameters;
 
-- (PMKPromise *)POSTResource:(ALMResource *)resource;
-- (PMKPromise *)POSTResource:(ALMResource *)resource path:(NSString *)path parameters:(id)parameters;
+- (PMKPromise *)POSTResource:(ALMResource *)resource realm:(RLMRealm *)realm;
+- (PMKPromise *)POSTResource:(ALMResource *)resource path:(NSString *)path parameters:(id)parameters realm:(RLMRealm *)realm;
 - (PMKPromise *)POST:(NSString *)urlString parameters:(id)parameters;
 
 

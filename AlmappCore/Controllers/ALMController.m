@@ -233,14 +233,14 @@ static NSString *const kDefaultOAuthScope = @"";
 #pragma mark - GET
 
 - (PMKPromise *)GETResource:(ALMResource *)resource parameters:(id)parameters {
-    //return [self GETResource:resource.class id:resource.resourceID parameters:parameters];
-    
-    NSString *path = [resource performSelector:@selector(apiPluralForm)];
-    path = [NSString stringWithFormat:@"%@/%lld", path, resource.resourceID];
+    return [self GETResource:resource.class id:resource.resourceID parameters:parameters realm:resource.realm];
+}
+
+- (PMKPromise *)GETResource:(Class)resourceClass path:(NSString *)path parameters:(id)parameters realm:(RLMRealm *)realm {
     return [self GET:path parameters:parameters].then(^(id response, NSURLSessionDataTask *task) {
-        if (self.saveToRealm) {
-            id saved = [ALMController commit:resource.class data:response inRealm:self.realm];
-            return PMKManifold(saved, task);
+        if (realm) {
+            ALMResource *saved = [ALMController commit:resourceClass data:response inRealm:realm];
+            return PMKManifold(response, task, saved);
         }
         else {
             return PMKManifold(response, task);
@@ -248,26 +248,22 @@ static NSString *const kDefaultOAuthScope = @"";
     });
 }
 
-- (PMKPromise *)GETResource:(Class)resourceClass id:(long long)resourceId parameters:(id)parameters {
+- (PMKPromise *)GETResource:(Class)resourceClass id:(long long)resourceId parameters:(id)parameters realm:(RLMRealm *)realm {
     NSString *path = [resourceClass performSelector:@selector(apiPluralForm)];
     path = [NSString stringWithFormat:@"%@/%lld", path, resourceId];
-    return [self GET:path parameters:parameters].then(^(id response, NSURLSessionDataTask *task) {
-        if (self.saveToRealm) {
-            ALMResource *saved = [ALMController commit:resourceClass data:response inRealm:self.realm];
-            return PMKManifold(saved, task);
-        }
-        else {
-            return PMKManifold(response, task);
-        }
-    });
+    return [self GETResource:resourceClass path:path parameters:parameters realm:realm];
 }
 
-- (PMKPromise *)GETResources:(Class)resourceClass parameters:(id)parameters {
-    NSString *path = [resourceClass performSelector:@selector(apiPluralForm)];
-    return [self GET:path parameters:parameters].then(^(id response, NSURLSessionDataTask *task) {
-        if (self.saveToRealm) {
-            id saved = [ALMController commit:resourceClass datas:response inRealm:self.realm];
-            return PMKManifold(saved, task);
+- (PMKPromise *)GETResources:(Class)resourceClass parameters:(id)parameters realm:(RLMRealm *)realm {
+    return [self GETResources:resourceClass path:nil parameters:parameters realm:realm];
+}
+
+- (PMKPromise *)GETResources:(Class)resourceClass path:(NSString *)path parameters:(id)parameters realm:(RLMRealm *)realm {
+    NSString *finalPath = (path) ? path : [resourceClass performSelector:@selector(apiPluralForm)];
+    return [self GET:finalPath parameters:parameters].then(^(id response, NSURLSessionDataTask *task) {
+        if (realm) {
+            id saved = [ALMController commit:resourceClass datas:response inRealm:realm];
+            return PMKManifold(response, task, saved);
         }
         else {
             return PMKManifold(response, task);
@@ -278,63 +274,44 @@ static NSString *const kDefaultOAuthScope = @"";
 - (PMKPromise *)GETResources:(Class)resourceClass on:(ALMResource *)parent parameters:(id)parameters {
     NSString *path = [resourceClass performSelector:@selector(apiPluralForm)];
     path = [NSString stringWithFormat:@"%@/%lld/%@", parent.apiPluralForm, parent.resourceID, path];
-    return [self GETResources:resourceClass path:path parameters:parameters].then(^(id response, NSURLSessionDataTask *task) {
-        BOOL isCollection = [response isKindOfClass:[NSArray class]];
+    return [self GETResources:resourceClass path:path parameters:parameters realm:parent.realm].then(^(id response, id jsonResponse, NSURLSessionDataTask *task) {
+        BOOL isCollection = [response isKindOfClass:[NSArray class]] && ((NSArray *)response).count > 0;
         BOOL isResource = isCollection && [((NSArray *)response).firstObject isKindOfClass:[ALMResource class]];
         if (isResource) {
             [parent.realm beginWriteTransaction];
             [parent hasMany:response];
             [parent.realm commitWriteTransaction];
         }
-        return PMKManifold(response, task);
-    });
-}
-
-- (PMKPromise *)GETResources:(Class)resourceClass path:(NSString *)path parameters:(id)parameters {
-    return [self GET:path parameters:parameters].then(^(id response, NSURLSessionDataTask *task) {
-        if (self.saveToRealm) {
-            id saved = [ALMController commit:resourceClass datas:response inRealm:self.realm];
-            return PMKManifold(saved, task);
-        }
-        else {
-            return PMKManifold(response, task);
-        }
+        return PMKManifold(response, task, response);
     });
 }
 
 - (PMKPromise *)GET:(NSString *)urlString parameters:(id)parameters {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        [self afterAuth].then( ^(NSString *token) {
-            [super GET:urlString parameters:parameters].then(^(id responseObject, NSURLSessionDataTask *task) {
-                fulfiller(PMKManifold(responseObject, task));
-                
-            }).catch(^(NSError *error) {
-                if ([error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey] statusCode] == 401) {
-                    [self onAuthFailure:error];
-                }
-                rejecter(error);
-            });
-        }).catch(^(NSError *error) {
-            rejecter(error);
+    return [self afterAuth].then( ^(NSString *token) {
+        return [super GET:urlString parameters:parameters].catch(^(NSError *error) {
+            if ([error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey] statusCode] == 401) {
+                [self onAuthFailure:error];
+            }
+            return error;
         });
-    }];
+    });
 }
 
 
 #pragma mark - POST
 
-- (PMKPromise *)POSTResource:(ALMResource *)resource {
-    NSString *path = resource.apiPluralForm;
-    return [self POSTResource:resource path:path parameters:nil];
+- (PMKPromise *)POSTResource:(ALMResource *)resource realm:(RLMRealm *)realm {
+    return [self POSTResource:resource path:nil parameters:nil realm:realm];
 }
 
-- (PMKPromise *)POSTResource:(ALMResource *)resource path:(NSString *)path parameters:(id)parameters {
+- (PMKPromise *)POSTResource:(ALMResource *)resource path:(NSString *)path parameters:(id)parameters realm:(RLMRealm *)realm {
+    NSString *finalPath = (path) ? path : resource.apiPluralForm;
     NSDictionary *data = [resource.JSONDictionary merge:parameters];
-    return [self POST:path parameters:data].then(^(id response, NSURLSessionDataTask *task) {
-        if (self.saveToRealm) {
-            id saved = [ALMController commit:resource.class data:response inRealm:self.realm];
+    return [self POST:finalPath parameters:data].then(^(id response, NSURLSessionDataTask *task) {
+        if (realm) {
+            id saved = [ALMController commit:resource.class data:response inRealm:realm];
             
-            return PMKManifold(saved, task);
+            return PMKManifold(response, task, saved);
         }
         else {
             return PMKManifold(response, task);
@@ -344,22 +321,18 @@ static NSString *const kDefaultOAuthScope = @"";
 }
 
 - (PMKPromise *)POST:(NSString *)urlString parameters:(id)parameters {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        [self afterAuth].then( ^(NSString *token) {
-            [super POST:urlString parameters:parameters].then(^(id responseObject, NSURLSessionDataTask *task) {
-                fulfiller(PMKManifold(responseObject, task));
-                
-            }).catch(^(NSError *error) {
-                if ([error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey] statusCode] == 401) {
-                    [self onAuthFailure:error];
-                }
-                rejecter(error);
-            });
-        }).catch(^(NSError *error) {
-            rejecter(error);
+    return [self afterAuth].then( ^(NSString *token) {
+        return [super POST:urlString parameters:parameters].catch(^(NSError *error) {
+            if ([error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey] statusCode] == 401) {
+                [self onAuthFailure:error];
+            }
+            return error;
         });
-    }];
+    });
 }
+
+
+#pragma mark - Commit
 
 + (NSArray *)commit:(Class)resourceClass datas:(NSArray *)datas inRealm:(RLMRealm *)realm {
     [realm beginWriteTransaction];
@@ -397,10 +370,6 @@ static NSString *const kDefaultOAuthScope = @"";
 
 
 #pragma mark - Realm
-
-- (BOOL)saveToRealm {
-    return (_saveToRealm && self.realm);
-}
 
 - (RLMRealm *)realmSearch {
     if (!_realmSearch) {

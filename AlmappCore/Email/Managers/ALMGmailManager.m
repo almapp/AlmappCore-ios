@@ -7,6 +7,7 @@
 //
 
 #import "ALMGmailManager.h"
+#import <GTLGmail.h>
 
 @implementation ALMGmailManager
 

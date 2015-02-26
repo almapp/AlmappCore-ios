@@ -32,10 +32,7 @@
     NSString *description = [NSString stringWithFormat:@"GET: %@", resource];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
 
-    self.controller.realm = [self testRealm];
-    self.controller.saveToRealm = YES;
-    
-    [self.controller POSTResource:resource path:path parameters:nil].then(^(id result, NSURLSessionDataTask *task) {
+    [self.controllerWithAuth POSTResource:resource path:path parameters:nil realm:self.testRealm].then(^(id jsonResponse, NSURLSessionDataTask *task, id result) {
         NSLog(@"Finished with: %@", result);
         XCTAssertNotNil(result, @"Should exist");
         if (onSuccess) {
@@ -70,10 +67,7 @@
     NSString *description = [NSString stringWithFormat:@"GET: %@ - %lldll", resourceClass, resourceID];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
-    self.controller.realm = [self testRealm];
-    self.controller.saveToRealm = YES;
-    
-    [self.controller GETResource:resourceClass id:resourceID parameters:params].then(^(id result, NSURLSessionDataTask *task) {
+    [self.controller GETResource:resourceClass id:resourceID parameters:params realm:self.testRealm].then(^(id jsonResponse, NSURLSessionDataTask *task, id result) {
         NSLog(@"Finished with: %@", result);
         XCTAssertNotNil(result, @"Should exist");
         if (onSuccess) {
@@ -105,36 +99,18 @@
     NSString *description = [NSString stringWithFormat:@"GET: %@", resourcesClass];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
-    if (path) {
-        [self.controller GETResources:resourcesClass path:path parameters:params].then(^(id result, NSURLSessionDataTask *task) {
-            NSLog(@"Finished with: %@", result);
-            XCTAssertNotNil(result, @"Should exist");
-            if (onSuccess) {
-                onSuccess(result);
-            }
-            [expectation fulfill];
-        }).catch(^(NSError *error) {
-            NSLog(@"%@", error);
-            XCTFail();
-            [expectation fulfill];
-        });
-    }
-    else {
-        [self.controller GETResources:resourcesClass parameters:params].then(^(id result, NSURLSessionDataTask *task) {
-            NSLog(@"Finished with: %@", result);
-            XCTAssertNotNil(result, @"Should exist");
-            if (onSuccess) {
-                onSuccess(result);
-            }
-            [expectation fulfill];
-        }).catch(^(NSError *error) {
-            NSLog(@"%@", error);
-            XCTFail();
-            [expectation fulfill];
-        });
-    }
-    
-    
+    [self.controller GETResources:resourcesClass path:path parameters:params realm:self.testRealm].then(^(id jsonResponse, NSURLSessionDataTask *task, id result) {
+        NSLog(@"Finished with: %@", result);
+        XCTAssertNotNil(result, @"Should exist");
+        if (onSuccess) {
+            onSuccess(result);
+        }
+        [expectation fulfill];
+    }).catch(^(NSError *error) {
+        NSLog(@"%@", error);
+        XCTFail();
+        [expectation fulfill];
+    });
     
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         NSLog(@"%@", error);

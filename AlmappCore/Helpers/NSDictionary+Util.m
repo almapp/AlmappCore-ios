@@ -11,9 +11,14 @@
 @implementation NSDictionary (Util)
 
 - (NSDictionary *)merge:(NSDictionary *)dictionary {
-    NSMutableDictionary* total = [self mutableCopy];
-    [total addEntriesFromDictionary: dictionary];
-    return total;
+    if (dictionary) {
+        NSMutableDictionary* total = [self mutableCopy];
+        [total addEntriesFromDictionary: dictionary];
+        return total;
+    }
+    else {
+        return self;
+    }
 }
 
 - (NSDictionary *)invert {

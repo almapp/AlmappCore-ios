@@ -15,7 +15,7 @@
 @implementation ALMMapController
 
 - (PMKPromise *)fetchMaps {
-    return [self.controller GETResources:[ALMCampus class] parameters:nil].then( ^(id results, NSURLSessionDataTask *task) {
+    return [self.controller GETResources:[ALMCampus class] parameters:nil realm:self.realm].then( ^(id jsonResponse, NSURLSessionDataTask *task, id results) {
         return results;
         
     }).then( ^(NSArray *campuses) {

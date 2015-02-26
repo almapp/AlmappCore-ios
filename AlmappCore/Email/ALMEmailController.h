@@ -10,4 +10,6 @@
 
 @interface ALMEmailController : ALMCoreModule
 
+- (void)saveAccessToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken code:(NSString *)code expirationDate:(NSDate *)expirationDate;
+
 @end

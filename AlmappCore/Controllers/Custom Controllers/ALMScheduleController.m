@@ -39,7 +39,7 @@
 
 - (PMKPromise *)promiseScheduleModulesLoaded {
     if (!self.didLoadScheduleModules) {
-        return [self.controller GETResources:[ALMScheduleModule class] parameters:nil];
+        return [self.controller GETResources:[ALMScheduleModule class] parameters:nil realm:self.realm];
     }
     else {
         return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
@@ -50,36 +50,32 @@
 
 - (PMKPromise *)promiseSectionsLoaded {
     return [self.controller GET:@"me/sections" parameters:nil].then( ^(id JSONArray, NSURLSessionDataTask *task) {
-        RLMRealm *realm = self.realm;
-        [realm beginWriteTransaction];
-        NSArray *sections = [ALMSection createOrUpdateInRealm:realm withJSONArray:JSONArray];
-        [self.user hasMany:sections];
-        [realm commitWriteTransaction];
-        
-        return sections;
+        return [self savedPromiseResult:JSONArray];
     });
 }
 
 - (PMKPromise *)promiseCoursesLoaded {
     NSDictionary *params = @{kAYear : @(self.year), kAPeriod : @(self.period)};
     return [self.controller GET:@"me/courses" parameters:params].then( ^(id JSONArray, NSURLSessionDataTask *task) {
-        RLMRealm *realm = self.realm;
-        [realm beginWriteTransaction];
-        NSArray *courses = [ALMCourse createOrUpdateInRealm:realm withJSONArray:JSONArray];
-        [self.user hasMany:courses];
-        [realm commitWriteTransaction];
-        
-        return courses;
+        return [self savedPromiseResult:JSONArray];
     });
 }
 
-
+- (id)savedPromiseResult:(id)JSONArray {
+    RLMRealm *realm = self.realm;
+    [realm beginWriteTransaction];
+    NSArray *result = [ALMCourse createOrUpdateInRealm:realm withJSONArray:JSONArray];
+    [self.user hasMany:result];
+    [realm commitWriteTransaction];
+    
+    return result;
+}
 
 - (PMKPromise *)promiseLoaded {
     if (self.shouldUpdate) {
         return [self promiseScheduleModulesLoaded].then( ^{
             return [self promiseCoursesLoaded];
-        }).then(^(NSArray *courses, NSURLSessionDataTask *task) {
+        }).then( ^{
             return [self promiseSectionsLoaded];
         }).then(^(NSArray *sections, NSURLSessionDataTask *task) {
             return sections;

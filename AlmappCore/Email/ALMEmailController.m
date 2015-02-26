@@ -7,7 +7,12 @@
 //
 
 #import "ALMEmailController.h"
+#import "ALMController.h"
 
 @implementation ALMEmailController
+
+- (void)saveAccessToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken code:(NSString *)code expirationDate:(NSDate *)expirationDate {
+    
+}
 
 @end
