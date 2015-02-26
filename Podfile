@@ -9,6 +9,8 @@ target 'AlmappCore' do
         
     pod 'FayeCpp', :head
     
+    pod 'Google-API-Client/Gmail', '~> 1.0.422'
+    
     pod 'UICKeyChainStore'
     
     pod 'AFOAuth2Manager',

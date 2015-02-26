@@ -23,6 +23,16 @@ PODS:
   - AFOAuth2Manager (2.0.0):
     - AFNetworking (~> 2.2)
   - FayeCpp (HEAD based on 0.1.9)
+  - Google-API-Client/Common (1.0.422):
+    - gtm-http-fetcher (~> 1.0.141)
+    - gtm-oauth2 (~> 1.0.125)
+  - Google-API-Client/Gmail (1.0.422):
+    - Google-API-Client/Common
+    - gtm-http-fetcher (~> 1.0.141)
+    - gtm-oauth2 (~> 1.0.125)
+  - gtm-http-fetcher (1.0.141)
+  - gtm-oauth2 (1.0.126):
+    - gtm-http-fetcher (~> 1.0.141)
   - OMGHTTPURLRQ (2.1):
     - OMGHTTPURLRQ/RQ (= 2.1)
   - OMGHTTPURLRQ/FormURLEncode (2.1)
@@ -78,6 +88,7 @@ DEPENDENCIES:
   - AFNetworking
   - AFOAuth2Manager (from `https://github.com/iamcam/AFOAuth2Manager`, commit `7470a389ea74034923999202eedfc04f036b3d37`)
   - FayeCpp (HEAD)
+  - Google-API-Client/Gmail (~> 1.0.422)
   - PromiseKit
   - PromiseKit-AFNetworking
   - Realm+JSON (from `https://github.com/mrpatiwi/Realm-JSON.git`, commit `6e2b4ed0a08edcfc7a98dc6318ca0bd9372377ab`, branch `master`)
@@ -105,6 +116,9 @@ SPEC CHECKSUMS:
   AFNetworking: 8bee59492a6ff15d69130efa4d0dc67e0094a52a
   AFOAuth2Manager: 6d76c16b475b707cd41aae5580c9b71123e472fd
   FayeCpp: 77eac47338e90ed9c7099faa75458042f459eb3c
+  Google-API-Client: 94e15390b2f5507e81a9a8c0edd58a02d2ab464b
+  gtm-http-fetcher: 6d4617e7d343b6e4c082b777541c334eb6f5d81e
+  gtm-oauth2: 60651b37376fa8fa5d1b92c9a631bd36ba093fd3
   OMGHTTPURLRQ: f8c515dfd2f57a5d74c710978f600231f52afec5
   PromiseKit: 9bc78045d01a5ec119a2f8ebbfbc415ad26b674d
   PromiseKit-AFNetworking: 16db750b394dcd12aa8527eb1bb9f209a36a49f7
