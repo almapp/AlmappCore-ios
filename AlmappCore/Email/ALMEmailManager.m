@@ -8,6 +8,32 @@
 
 #import "ALMEmailManager.h"
 
+@interface ALMEmailManager ()
+
+@property (strong, nonatomic) ALMSession *session;
+@property (strong, nonatomic) ALMEmailController *emailController_;
+
+@end
+
 @implementation ALMEmailManager
+
++ (instancetype)emailManager:(ALMSession *)session {
+    return [[self alloc] initWithSession:session];
+}
+
+- (instancetype)initWithSession:(ALMSession *)session {
+    self = [super init];
+    if (self) {
+        self.session = session;
+    }
+    return self;
+}
+
+- (ALMEmailController *)emailController {
+    if (!_emailController_) {
+        _emailController_ = [ALMEmailController controllerForSession:self.session];
+    }
+    return _emailController_;
+}
 
 @end

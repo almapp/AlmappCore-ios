@@ -7,7 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ALMEmailController.h"
 
 @interface ALMEmailManager : NSObject
+
++ (instancetype)emailManager:(ALMSession *)session;
+
+@property (readonly) ALMSession *session;
+@property (readonly) ALMEmailController *emailController;
 
 @end

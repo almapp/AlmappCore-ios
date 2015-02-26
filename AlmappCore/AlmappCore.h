@@ -33,6 +33,11 @@
 #import "ALMChatManager.h"
 #import "ALMChatManagerBlock.h"
 
+#import "ALMEmailController.h"
+#import "ALMEmailManager.h"
+#import "ALMGmailManager.h"
+#import "ALMEmail.h"
+
 #import "ALMController.h"
 #import "ALMUserController.h"
 #import "ALMScheduleController.h"
