@@ -224,6 +224,13 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
     return [self.emailController folder:kGmailLabelTRASH];
 }
 
+- (NSString *)scope {
+    if (!_scope) {
+        _scope = [GTMOAuth2Authentication scopeWithStrings:kGTLAuthScopeGmailCompose, kGTLAuthScopeGmailModify, nil];
+    }
+    return _scope;
+}
+
 
 #pragma mark - Authentication
 
@@ -234,16 +241,16 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 
 - (PMKPromise *)getAccessToken {
     return self.emailController.getValidAccessToken.then( ^(ALMEmailToken *token) {
-        ALMApiKey *apiKey = [self.delegate gmailApiKey:self];
-        
         if (!self.service.authorizer) {
             self.service.authorizer = [[GTMOAuth2Authentication alloc] init];
         }
         
+        NSAssert(self.apiKey != nil, @"Must set an apikey, see ALMGmalManager");
+        
         GTMOAuth2Authentication *auth = self.service.authorizer;
-        auth.clientID = apiKey.clientID;
-        auth.clientSecret = apiKey.clientSecret;
-        auth.scope = [self.delegate gmailScope:self];
+        auth.clientID = self.apiKey.clientID;
+        auth.clientSecret = self.apiKey.clientSecret;
+        auth.scope = self.scope;
         auth.redirectURI = @"urn:ietf:wg:oauth:2.0:oob";
         auth.tokenURL = [NSURL URLWithString:@"https://accounts.google.com/o/oauth2/token"];
         auth.serviceProvider = @"Google";

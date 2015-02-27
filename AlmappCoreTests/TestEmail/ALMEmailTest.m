@@ -10,7 +10,7 @@
 #import <XCTest/XCTest.h>
 #import "ALMTestCase.h"
 
-@interface ALMEmailTest : ALMTestCase <ALMGmailDelegate>
+@interface ALMEmailTest : ALMTestCase
 
 @property (strong, nonatomic) ALMGmailManager *manager;
 
@@ -21,7 +21,8 @@
 - (void)setUp {
     [super setUp];
     self.manager = [ALMGmailManager emailManager:self.testSession];
-    self.manager.delegate = self;
+    self.manager.scope = @"";
+    // self.manager.apiKey = [ALMApiKey apiKeyWithClient:@"" secret:@""];
 }
 
 - (void)testTokenSending {
@@ -68,23 +69,6 @@
     [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
         NSLog(@"%@", error);
     }];
-}
-
-+ (GTMOAuth2Authentication *)auth {
-    return nil;
-}
-
-- (GTMOAuth2Authentication *)gmailAuthenticationFor:(ALMGmailManager *)manager {
-    return [ALMEmailTest auth];
-}
-
-- (ALMApiKey *)gmailApiKey:(ALMGmailManager *)manager {
-    NSAssert(2 + 2 == 5, @"Missing api key");
-    return nil;
-}
-
-- (NSString *)gmailScope:(ALMGmailManager *)manager {
-    return [GTMOAuth2Authentication scopeWithStrings:kGTLAuthScopeGmailCompose, kGTLAuthScopeGmailModify, nil];
 }
 
 

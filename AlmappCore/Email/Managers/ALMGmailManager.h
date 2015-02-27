@@ -22,22 +22,10 @@ extern NSString *const kGmailLabelUNREAD;
 extern NSString *const kGmailLabelSTARRED;
 extern NSString *const kGmailLabelIMPORTANT;
 
-@class ALMGmailManager;
-
-@protocol ALMGmailDelegate <NSObject>
-
-@required
-- (GTMOAuth2Authentication *)gmailAuthenticationFor:(ALMGmailManager *)manager;
-- (ALMApiKey *)gmailApiKey:(ALMGmailManager *)manager;
-- (NSString *)gmailScope:(ALMGmailManager *)manager;
-
-@end
-
-
 @interface ALMGmailManager : ALMEmailManager
 
-
-@property (weak, nonatomic) id<ALMGmailDelegate> delegate;
+@property (strong, nonatomic) NSString *scope;
+@property (strong, nonatomic) ALMApiKey *apiKey;
 
 @property (readonly) ALMEmailFolder *inboxFolder;
 @property (readonly) ALMEmailFolder *sentFolder;
