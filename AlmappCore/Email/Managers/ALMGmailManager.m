@@ -284,7 +284,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
             
             [realm commitWriteTransaction];
             
-            return folder;
+            return folder.threads;
         });
     });
 }

@@ -18,6 +18,18 @@
     return @"identifier";
 }
 
+- (RLMResults *)sortedThreads {
+    return [self threadsSortedAscending:NO];
+}
+
+- (ALMEmailThread *)newestThread {
+    return [self threadsSortedAscending:YES].firstObject;
+}
+
+- (ALMEmailThread *)oldestThread {
+    return [self threadsSortedAscending:NO].firstObject;
+}
+
 - (NSArray *)threadsSortedAscending:(BOOL)ascending first:(NSUInteger)count {
     return [[self threadsSortedAscending:ascending] subarrayLast:count];
 }

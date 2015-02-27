@@ -15,6 +15,9 @@
 @property RLMArray<ALMEmail> *emails;
 
 @property (readonly) NSArray *folders;
+@property (readonly) ALMEmail *newestEmail;
+@property (readonly) ALMEmail *oldetsEmail;
+@property (readonly) RLMResults *sortedEmails;
 
 - (RLMResults *)emailsSortedAscending:(BOOL)ascending;
 - (NSArray *)emailsSortedAscending:(BOOL)ascending first:(NSUInteger)count;

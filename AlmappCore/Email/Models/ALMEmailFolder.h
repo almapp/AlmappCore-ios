@@ -13,6 +13,10 @@
 @property NSString *identifier;
 @property RLMArray<ALMEmailThread> *threads;
 
+@property (readonly) ALMEmailThread *newestThread;
+@property (readonly) ALMEmailThread *oldestThread;
+@property (readonly) RLMResults *sortedThreads;
+
 - (RLMResults *)threadsSortedAscending:(BOOL)ascending;
 - (NSArray *)threadsSortedAscending:(BOOL)ascending first:(NSUInteger)count;
 

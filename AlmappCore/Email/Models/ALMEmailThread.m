@@ -24,6 +24,18 @@
     return [self linkingObjectsOfClass:[ALMEmailFolder className] forProperty:@"threads"];
 }
 
+- (RLMResults *)sortedEmails {
+    return [self emailsSortedAscending:NO];
+}
+
+- (ALMEmail *)newestEmail {
+    return [self emailsSortedAscending:YES].firstObject;
+}
+
+- (ALMEmail *)oldetsEmail {
+    return [self emailsSortedAscending:NO].firstObject;
+}
+
 - (NSArray *)emailsSortedAscending:(BOOL)ascending first:(NSUInteger)count {
     return [[self emailsSortedAscending:ascending] subarrayLast:count];
 }
