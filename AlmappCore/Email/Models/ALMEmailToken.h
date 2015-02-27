@@ -1,5 +1,5 @@
 //
-//  ALMAccessToken.h
+//  ALMEmailToken.h
 //  AlmappCore
 //
 //  Created by Patricio López on 26-02-15.
@@ -8,10 +8,15 @@
 
 #import "RLMObject.h"
 
-@interface ALMAccessToken : RLMObject
+@interface ALMEmailToken : RLMObject
 
+@property NSString *email;
+@property NSString *provider;
 @property NSString *accessToken;
-@property NSDate *expiresIn;
+@property NSDate *expiresAt;
+
+@property NSDate *updatedAt;
+@property NSDate *createdAt;
 
 @property (readonly) BOOL isExpired;
 

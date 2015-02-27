@@ -19,8 +19,8 @@
 + (NSDictionary *)defaultPropertyValues {
     return @{
              kREmail                    : kRDefaultNullString,
-             @"lastIP"                       : kRDefaultNullString,
-             @"currentIP"                       : kRDefaultNullString,
+             @"lastIP"                  : kRDefaultNullString,
+             @"currentIP"               : kRDefaultNullString,
              };
 }
 
@@ -48,11 +48,15 @@
     if (session) {
         return session;
     }
+    
+    [realm beginWriteTransaction];
+    
     session = [[self alloc] init];
     session.email = email;
-    [realm beginWriteTransaction];
     session = [ALMSession createInRealm:realm withObject:session];
+
     [realm commitWriteTransaction];
+    
     session.credential = [ALMTemporalCredential credentialForEmail:email password:password];
     return session;
 }

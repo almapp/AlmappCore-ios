@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 almapp. All rights reserved.
 //
 
-#import <Realm+JSON/RLMObject+Copying.h>
-
 #import "ALMResource.h"
 #import "ALMResourceConstants.h"
 #import "ALMResourceIndex.h"

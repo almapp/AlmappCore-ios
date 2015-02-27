@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 almapp. All rights reserved.
 //
 
-#import "RLMObject.h"
-#import "RLMObject+JSON.h"
+#import <Realm+JSON/RLMObject+JSON.h>
+#import <Realm+JSON/RLMObject+Copying.h>
 #import "RLMResults+Select.h"
 #import "RLMArray+Select.h"
 #import "NSArray+Query.h"

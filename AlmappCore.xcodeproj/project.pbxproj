@@ -94,7 +94,10 @@
 		F6FB88CA1A76815C0076C8F4 /* ALMScheduleItemTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FB88C91A76815C0076C8F4 /* ALMScheduleItemTest.m */; };
 		F6FB88CC1A76905F0076C8F4 /* ALMTestSections.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FB88CB1A76905F0076C8F4 /* ALMTestSections.m */; };
 		F6FEEDCC1A9F703D0033464A /* ALMEmail.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEDCB1A9F703D0033464A /* ALMEmail.m */; };
-		F6FEEDFE1A9FBD9B0033464A /* ALMAccessToken.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEDFD1A9FBD9B0033464A /* ALMAccessToken.m */; };
+		F6FEEDFE1A9FBD9B0033464A /* ALMEmailToken.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEDFD1A9FBD9B0033464A /* ALMEmailToken.m */; };
+		F6FEEE011A9FE0180033464A /* ALMEmailTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEE001A9FE0180033464A /* ALMEmailTest.m */; };
+		F6FEEE041AA01E730033464A /* ALMEmailThread.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEE031AA01E730033464A /* ALMEmailThread.m */; };
+		F6FEEE071AA02AE50033464A /* ALMEmailLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEE061AA02AE50033464A /* ALMEmailLabel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -267,8 +270,13 @@
 		F6FB88CB1A76905F0076C8F4 /* ALMTestSections.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMTestSections.m; sourceTree = "<group>"; };
 		F6FEEDCA1A9F703D0033464A /* ALMEmail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMEmail.h; sourceTree = "<group>"; };
 		F6FEEDCB1A9F703D0033464A /* ALMEmail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEmail.m; sourceTree = "<group>"; };
-		F6FEEDFC1A9FBD9B0033464A /* ALMAccessToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMAccessToken.h; sourceTree = "<group>"; };
-		F6FEEDFD1A9FBD9B0033464A /* ALMAccessToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMAccessToken.m; sourceTree = "<group>"; };
+		F6FEEDFC1A9FBD9B0033464A /* ALMEmailToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMEmailToken.h; sourceTree = "<group>"; };
+		F6FEEDFD1A9FBD9B0033464A /* ALMEmailToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEmailToken.m; sourceTree = "<group>"; };
+		F6FEEE001A9FE0180033464A /* ALMEmailTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEmailTest.m; sourceTree = "<group>"; };
+		F6FEEE021AA01E730033464A /* ALMEmailThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMEmailThread.h; sourceTree = "<group>"; };
+		F6FEEE031AA01E730033464A /* ALMEmailThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEmailThread.m; sourceTree = "<group>"; };
+		F6FEEE051AA02AE50033464A /* ALMEmailLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMEmailLabel.h; sourceTree = "<group>"; };
+		F6FEEE061AA02AE50033464A /* ALMEmailLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEmailLabel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -396,6 +404,7 @@
 		F65DD4AC1A50405D006BCAF0 /* AlmappCoreTests */ = {
 			isa = PBXGroup;
 			children = (
+				F6FEEDFF1A9FE0030033464A /* TestEmail */,
 				F6568C311A8540E600BB7415 /* TestSearch */,
 				F6E72E611A7D91C9004988C9 /* TestModels */,
 				F6B3582D1A79722900999DCE /* TestChat */,
@@ -645,12 +654,24 @@
 		F6FEEDC91A9F70290033464A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F6FEEE051AA02AE50033464A /* ALMEmailLabel.h */,
+				F6FEEE061AA02AE50033464A /* ALMEmailLabel.m */,
+				F6FEEE021AA01E730033464A /* ALMEmailThread.h */,
+				F6FEEE031AA01E730033464A /* ALMEmailThread.m */,
 				F6FEEDCA1A9F703D0033464A /* ALMEmail.h */,
 				F6FEEDCB1A9F703D0033464A /* ALMEmail.m */,
-				F6FEEDFC1A9FBD9B0033464A /* ALMAccessToken.h */,
-				F6FEEDFD1A9FBD9B0033464A /* ALMAccessToken.m */,
+				F6FEEDFC1A9FBD9B0033464A /* ALMEmailToken.h */,
+				F6FEEDFD1A9FBD9B0033464A /* ALMEmailToken.m */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		F6FEEDFF1A9FE0030033464A /* TestEmail */ = {
+			isa = PBXGroup;
+			children = (
+				F6FEEE001A9FE0180033464A /* ALMEmailTest.m */,
+			);
+			path = TestEmail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -811,7 +832,7 @@
 				F6B726A31A871B4200461E17 /* ALMScheduleController.m in Sources */,
 				F69C66A81A6BEA47006F1C0E /* ALMCourse.m in Sources */,
 				F6647B5E1A56ED6A00D8C814 /* ALMOrganization.m in Sources */,
-				F6FEEDFE1A9FBD9B0033464A /* ALMAccessToken.m in Sources */,
+				F6FEEDFE1A9FBD9B0033464A /* ALMEmailToken.m in Sources */,
 				F649C7AE1A66C5A200CF64AA /* ALMResourceIndex.m in Sources */,
 				F6FEEDCC1A9F703D0033464A /* ALMEmail.m in Sources */,
 				F67E64691A9056EE0077AEEA /* ALMLikesController.m in Sources */,
@@ -821,7 +842,9 @@
 				F6A058AC1A54523C001A1E45 /* ALMCampus.m in Sources */,
 				F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */,
 				F66B93471A63DF2D0048DACD /* ALMWebPage.m in Sources */,
+				F6FEEE071AA02AE50033464A /* ALMEmailLabel.m in Sources */,
 				F6A058B61A5481B6001A1E45 /* ALMArea.m in Sources */,
+				F6FEEE041AA01E730033464A /* ALMEmailThread.m in Sources */,
 				F6C19A921A9270B200FA7611 /* ALMCustomController.m in Sources */,
 				F6E32D571A6D94F400ED3AD0 /* ALMTeacher.m in Sources */,
 				F60F907F1A59841D002EF807 /* ALMLike.m in Sources */,
@@ -859,6 +882,7 @@
 				F6C779651A8FAA4E007E3ED3 /* ALMPostTest.m in Sources */,
 				F6FB88CC1A76905F0076C8F4 /* ALMTestSections.m in Sources */,
 				F6E72E631A7D91D7004988C9 /* ALMChatMessageTest.m in Sources */,
+				F6FEEE011A9FE0180033464A /* ALMEmailTest.m in Sources */,
 				F6B0CEA81A745EE70004B570 /* ALMResourceTest.m in Sources */,
 				F6F573DA1A741C4900D19FC4 /* ALMPersistenceTests.m in Sources */,
 				F6B0CEA71A745EE70004B570 /* ALMAreaTest.m in Sources */,

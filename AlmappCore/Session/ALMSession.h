@@ -8,6 +8,7 @@
 
 #import "ALMUser.h"
 #import "ALMCredential.h"
+#import "ALMEmailToken.h"
 
 @interface ALMSession : RLMObject
 
@@ -16,6 +17,7 @@
 @property ALMUser *user;
 @property NSString *lastIP;
 @property NSString *currentIP;
+@property ALMEmailToken *emailToken;
 @property (strong, nonatomic) ALMCredential *credential;
 
 // For creating or loading if present

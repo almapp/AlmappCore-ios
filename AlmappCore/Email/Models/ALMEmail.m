@@ -10,4 +10,25 @@
 
 @implementation ALMEmail
 
++ (NSDictionary *)defaultPropertyValues {
+    return @{@"messageID" : @"",
+             @"subject" : @"",
+             @"to" : @"",
+             @"from" : @"",
+             @"replyTo" : @"",
+             //@"toName" : @"",
+             //@"toEmail" : @"",
+             //@"fromName" : @"",
+             //@"fromEmail" : @"",
+             //@"replyToName" : @"",
+             //@"replyToEmail" : @"",
+             @"snippet" : @"",
+             @"date" : [NSDate date]
+             };
+}
+
++ (NSString *)primaryKey {
+    return @"messageID";
+}
+
 @end

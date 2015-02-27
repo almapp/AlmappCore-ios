@@ -6,16 +6,22 @@
 //  Copyright (c) 2015 almapp. All rights reserved.
 //
 
-#import "ALMCustomController.h"
-#import "ALMAccessToken.h"
 #import <PromiseKit/Promise.h>
+
+#import "ALMCustomController.h"
+#import "ALMEmailToken.h"
+#import "ALMEmailLabel.h"
+#import "ALMEmailThread.h"
+#import "ALMEmail.h"
 
 @interface ALMEmailController : ALMCustomController
 
-@property (strong, nonatomic) ALMAccessToken *accessToken;
+@property (readonly) ALMEmailToken *emailToken;
 
-- (PMKPromise *)saveAccessToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken code:(NSString *)code expirationDate:(NSDate *)expirationDate;
+- (PMKPromise *)saveAccessToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken code:(NSString *)code expirationDate:(NSDate *)expirationDate provider:(NSString *)provider;
 - (PMKPromise *)getForceAccessToken;
 - (PMKPromise *)getValidAccessToken;
+
+- (ALMEmailLabel *)label:(NSString *)identifier;
 
 @end
