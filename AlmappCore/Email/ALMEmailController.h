@@ -10,7 +10,7 @@
 
 #import "ALMCustomController.h"
 #import "ALMEmailToken.h"
-#import "ALMEmailLabel.h"
+#import "ALMEmailFolder.h"
 #import "ALMEmailThread.h"
 #import "ALMEmail.h"
 
@@ -22,6 +22,7 @@
 - (PMKPromise *)getForceAccessToken;
 - (PMKPromise *)getValidAccessToken;
 
-- (ALMEmailLabel *)label:(NSString *)identifier;
+- (ALMEmailFolder *)folder:(NSString *)identifier;
+- (void)saveLastMails:(NSInteger)count on:(ALMEmailFolder *)folder;
 
 @end

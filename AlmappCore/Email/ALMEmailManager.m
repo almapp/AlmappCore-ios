@@ -29,6 +29,10 @@
     return self;
 }
 
+- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder {
+    return nil;
+}
+
 - (ALMEmailController *)emailController {
     if (!_emailController_) {
         _emailController_ = [ALMEmailController controllerForSession:self.session];

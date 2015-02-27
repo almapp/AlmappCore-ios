@@ -14,5 +14,13 @@
 @property NSString *snippet;
 @property RLMArray<ALMEmail> *emails;
 
+@property (readonly) NSArray *folders;
+
+- (RLMResults *)emailsSortedAscending:(BOOL)ascending;
+- (NSArray *)emailsSortedAscending:(BOOL)ascending first:(NSUInteger)count;
+
+- (void)deleteEmail:(ALMEmail *)email force:(BOOL)force;
+- (void)deleteEmailsForced:(BOOL)force;
+
 @end
 RLM_ARRAY_TYPE(ALMEmailThread)

@@ -7,6 +7,7 @@
 //
 
 #import "ALMEmail.h"
+#import "ALMEmailThread.h"
 
 @implementation ALMEmail
 
@@ -29,6 +30,10 @@
 
 + (NSString *)primaryKey {
     return @"messageID";
+}
+
+- (NSArray *)threads {
+    return [self linkingObjectsOfClass:[ALMEmailThread className] forProperty:@"emails"];
 }
 
 @end

@@ -48,6 +48,7 @@
 		F66B93471A63DF2D0048DACD /* ALMWebPage.m in Sources */ = {isa = PBXBuildFile; fileRef = F66B93461A63DF2D0048DACD /* ALMWebPage.m */; };
 		F67E64691A9056EE0077AEEA /* ALMLikesController.m in Sources */ = {isa = PBXBuildFile; fileRef = F67E64681A9056EE0077AEEA /* ALMLikesController.m */; };
 		F67F80041A82CD3A00E20802 /* ALMScheduleModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F67F80031A82CD3A00E20802 /* ALMScheduleModuleTest.m */; };
+		F68DB1561AA0B0BF0052FC15 /* NSDate+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = F68DB1551AA0B0BF0052FC15 /* NSDate+JSON.m */; };
 		F694DD561A7A9BA8005D9AE7 /* ALMError.m in Sources */ = {isa = PBXBuildFile; fileRef = F694DD551A7A9BA8005D9AE7 /* ALMError.m */; };
 		F69C66A51A6BEA37006F1C0E /* ALMScheduleItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F69C66A41A6BEA37006F1C0E /* ALMScheduleItem.m */; };
 		F69C66A81A6BEA47006F1C0E /* ALMCourse.m in Sources */ = {isa = PBXBuildFile; fileRef = F69C66A71A6BEA47006F1C0E /* ALMCourse.m */; };
@@ -97,7 +98,7 @@
 		F6FEEDFE1A9FBD9B0033464A /* ALMEmailToken.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEDFD1A9FBD9B0033464A /* ALMEmailToken.m */; };
 		F6FEEE011A9FE0180033464A /* ALMEmailTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEE001A9FE0180033464A /* ALMEmailTest.m */; };
 		F6FEEE041AA01E730033464A /* ALMEmailThread.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEE031AA01E730033464A /* ALMEmailThread.m */; };
-		F6FEEE071AA02AE50033464A /* ALMEmailLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEE061AA02AE50033464A /* ALMEmailLabel.m */; };
+		F6FEEE071AA02AE50033464A /* ALMEmailFolder.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEE061AA02AE50033464A /* ALMEmailFolder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,6 +185,8 @@
 		F67E64671A9056EE0077AEEA /* ALMLikesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMLikesController.h; sourceTree = "<group>"; };
 		F67E64681A9056EE0077AEEA /* ALMLikesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMLikesController.m; sourceTree = "<group>"; };
 		F67F80031A82CD3A00E20802 /* ALMScheduleModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMScheduleModuleTest.m; sourceTree = "<group>"; };
+		F68DB1541AA0B0BF0052FC15 /* NSDate+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+JSON.h"; sourceTree = "<group>"; };
+		F68DB1551AA0B0BF0052FC15 /* NSDate+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+JSON.m"; sourceTree = "<group>"; };
 		F694DD541A7A9BA8005D9AE7 /* ALMError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMError.h; sourceTree = "<group>"; };
 		F694DD551A7A9BA8005D9AE7 /* ALMError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMError.m; sourceTree = "<group>"; };
 		F69C66A31A6BEA37006F1C0E /* ALMScheduleItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMScheduleItem.h; sourceTree = "<group>"; };
@@ -275,8 +278,8 @@
 		F6FEEE001A9FE0180033464A /* ALMEmailTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEmailTest.m; sourceTree = "<group>"; };
 		F6FEEE021AA01E730033464A /* ALMEmailThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMEmailThread.h; sourceTree = "<group>"; };
 		F6FEEE031AA01E730033464A /* ALMEmailThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEmailThread.m; sourceTree = "<group>"; };
-		F6FEEE051AA02AE50033464A /* ALMEmailLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMEmailLabel.h; sourceTree = "<group>"; };
-		F6FEEE061AA02AE50033464A /* ALMEmailLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEmailLabel.m; sourceTree = "<group>"; };
+		F6FEEE051AA02AE50033464A /* ALMEmailFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMEmailFolder.h; sourceTree = "<group>"; };
+		F6FEEE061AA02AE50033464A /* ALMEmailFolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEmailFolder.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -637,6 +640,8 @@
 				F6E72E661A7DA954004988C9 /* ALMConstants.m */,
 				F6568C2E1A853ACB00BB7415 /* NSDictionary+Util.h */,
 				F6568C2F1A853ACB00BB7415 /* NSDictionary+Util.m */,
+				F68DB1541AA0B0BF0052FC15 /* NSDate+JSON.h */,
+				F68DB1551AA0B0BF0052FC15 /* NSDate+JSON.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -654,8 +659,8 @@
 		F6FEEDC91A9F70290033464A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F6FEEE051AA02AE50033464A /* ALMEmailLabel.h */,
-				F6FEEE061AA02AE50033464A /* ALMEmailLabel.m */,
+				F6FEEE051AA02AE50033464A /* ALMEmailFolder.h */,
+				F6FEEE061AA02AE50033464A /* ALMEmailFolder.m */,
 				F6FEEE021AA01E730033464A /* ALMEmailThread.h */,
 				F6FEEE031AA01E730033464A /* ALMEmailThread.m */,
 				F6FEEDCA1A9F703D0033464A /* ALMEmail.h */,
@@ -842,7 +847,7 @@
 				F6A058AC1A54523C001A1E45 /* ALMCampus.m in Sources */,
 				F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */,
 				F66B93471A63DF2D0048DACD /* ALMWebPage.m in Sources */,
-				F6FEEE071AA02AE50033464A /* ALMEmailLabel.m in Sources */,
+				F6FEEE071AA02AE50033464A /* ALMEmailFolder.m in Sources */,
 				F6A058B61A5481B6001A1E45 /* ALMArea.m in Sources */,
 				F6FEEE041AA01E730033464A /* ALMEmailThread.m in Sources */,
 				F6C19A921A9270B200FA7611 /* ALMCustomController.m in Sources */,
@@ -852,6 +857,7 @@
 				F6E72E6D1A7DC342004988C9 /* ALMChatManagerBlock.m in Sources */,
 				F6B358271A79664700999DCE /* ALMChatMessage.m in Sources */,
 				F6D652CC1A7A65FD000620A4 /* ALMController.m in Sources */,
+				F68DB1561AA0B0BF0052FC15 /* NSDate+JSON.m in Sources */,
 				F69C66AB1A6BEA4E006F1C0E /* ALMSection.m in Sources */,
 				F6B7267C1A86A2D700461E17 /* ALMCategory.m in Sources */,
 				F64478171A58EE820078FB29 /* ALMResourceConstants.m in Sources */,

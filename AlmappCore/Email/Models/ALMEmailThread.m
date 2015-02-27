@@ -7,6 +7,7 @@
 //
 
 #import "ALMEmailThread.h"
+#import "ALMEmailFolder.h"
 
 @implementation ALMEmailThread
 
@@ -17,6 +18,32 @@
 
 + (NSString *)primaryKey {
     return @"threadID";
+}
+
+- (NSArray *)folders {
+    return [self linkingObjectsOfClass:[ALMEmailFolder className] forProperty:@"threads"];
+}
+
+- (NSArray *)emailsSortedAscending:(BOOL)ascending first:(NSUInteger)count {
+    return [[self emailsSortedAscending:ascending] subarrayLast:count];
+}
+
+- (RLMResults *)emailsSortedAscending:(BOOL)ascending {
+    return [self.emails sortedResultsUsingProperty:@"messageID" ascending:ascending];
+}
+
+- (void)deleteEmailsForced:(BOOL)force {
+    for (NSUInteger i = 0; i < self.emails.count; i++) {
+        [self deleteEmail:self.emails[i] force:force];
+    }
+}
+
+- (void)deleteEmail:(ALMEmail *)email force:(BOOL)force {
+    if (force || email.threads.count <= 1) {
+        NSUInteger i = [self.emails indexOfObject:email];
+        [self.emails removeObjectAtIndex:i];
+        [email removeFromRealm];
+    }
 }
 
 @end

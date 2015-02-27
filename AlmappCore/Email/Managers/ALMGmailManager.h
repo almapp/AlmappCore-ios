@@ -39,13 +39,13 @@ extern NSString *const kGmailLabelIMPORTANT;
 
 @property (weak, nonatomic) id<ALMGmailDelegate> delegate;
 
-@property (readonly) ALMEmailLabel *inboxLabel;
-@property (readonly) ALMEmailLabel *sentLabel;
-@property (readonly) ALMEmailLabel *starredLabel;
-@property (readonly) ALMEmailLabel *spamLabel;
-@property (readonly) ALMEmailLabel *threadLabel;
+@property (readonly) ALMEmailFolder *inboxFolder;
+@property (readonly) ALMEmailFolder *sentFolder;
+@property (readonly) ALMEmailFolder *starredFolder;
+@property (readonly) ALMEmailFolder *spamFolder;
+@property (readonly) ALMEmailFolder *threadFolder;
 
 - (PMKPromise *)setFirstAuthentication:(GTMOAuth2Authentication *)auth;
-- (PMKPromise *)fetchEmailsWithLabel:(ALMEmailLabel *)label;
+- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder;
 
 @end

@@ -16,5 +16,9 @@
 - (NSArray *)select:(NSString *)column ascending:(BOOL)ascending;
 - (NSArray *)select:(NSString *)column ascending:(BOOL)ascending distinct:(BOOL)distinct;
 
+- (NSArray *)subarrayFirst:(NSUInteger)items;
+- (NSArray *)subarrayLast:(NSUInteger)items;
+- (NSArray *)subarrayWithRange:(NSRange)range;
+
 @end
 

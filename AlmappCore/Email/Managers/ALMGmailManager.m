@@ -21,6 +21,53 @@ NSString *const kGmailLabelSTARRED = @"STARRED";
 NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 
 
+@implementation GTLServiceGmail (Promise)
+
+- (PMKPromise *)executeQuery:(id<GTLQueryProtocol>)query {
+    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+        [self executeQuery:query completionHandler:^(GTLServiceTicket *ticket, id response, NSError *error) {
+            if (error) {
+                NSLog(@"%@", error);
+                rejecter(error);
+            }
+            else {
+                fulfiller(response);
+            }
+        }];
+    }];
+}
+
+@end
+
+
+
+@implementation GTLGmailListThreadsResponse (Identifiers)
+
+- (NSArray *)identifiers {
+    NSMutableArray *identifiers = [NSMutableArray array];
+    for (GTLGmailThread *item in self.threads) {
+        [identifiers addObject:item.identifier];
+    }
+    return identifiers;
+}
+
+@end
+
+
+
+@implementation GTLGmailListMessagesResponse (Identifiers)
+
+- (NSArray *)identifiers {
+    NSMutableArray *identifiers = [NSMutableArray array];
+    for (GTLGmailThread *item in self.messages) {
+        [identifiers addObject:item.identifier];
+    }
+    return identifiers;
+}
+
+@end
+
+
 
 @implementation GTLGmailMessage (Realm)
 
@@ -120,6 +167,30 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 
 
 
+@implementation GTLBatchResult (Results)
+
+- (NSArray *)successesArray {
+    NSDictionary *results = self.successes;
+    NSMutableArray *gmailObjects = [NSMutableArray arrayWithCapacity:results.count];
+    for (NSString *requestID in results) {
+        [gmailObjects addObject:[results objectForKey:requestID]];
+    }
+    return gmailObjects;
+}
+
+- (NSArray *)failuresArray {
+    NSDictionary *results = self.failures;
+    NSMutableArray *gmailObjects = [NSMutableArray arrayWithCapacity:results.count];
+    for (NSString *requestID in results) {
+        [gmailObjects addObject:[results objectForKey:requestID]];
+    }
+    return gmailObjects;
+}
+
+@end
+
+
+
 @interface ALMGmailManager ()
 
 @property (strong, nonatomic) GTLServiceGmail *service;
@@ -131,32 +202,33 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 @implementation ALMGmailManager
 
 
-#pragma mark - Labels
+#pragma mark - Folders
 
-- (ALMEmailLabel *)inboxLabel {
-    return [self.emailController label:kGmailLabelINBOX];
+- (ALMEmailFolder *)inboxFolder {
+    return [self.emailController folder:kGmailLabelINBOX];
 }
 
-- (ALMEmailLabel *)sentLabel {
-    return [self.emailController label:nil];
+- (ALMEmailFolder *)sentFolder {
+    return [self.emailController folder:nil];
 }
 
-- (ALMEmailLabel *)starredLabel {
-    return [self.emailController label:kGmailLabelSTARRED];
+- (ALMEmailFolder *)starredFolder {
+    return [self.emailController folder:kGmailLabelSTARRED];
 }
 
-- (ALMEmailLabel *)spamLabel {
-    return [self.emailController label:kGmailLabelSPAM];
+- (ALMEmailFolder *)spamFolder {
+    return [self.emailController folder:kGmailLabelSPAM];
 }
 
-- (ALMEmailLabel *)threadLabel {
-    return [self.emailController label:kGmailLabelTRASH];
+- (ALMEmailFolder *)threadFolder {
+    return [self.emailController folder:kGmailLabelTRASH];
 }
 
 
 #pragma mark - Authentication
 
 - (PMKPromise *)setFirstAuthentication:(GTMOAuth2Authentication *)auth {
+    self.service.authorizer = auth;
     return [self.emailController saveAccessToken:auth.accessToken refreshToken:auth.refreshToken code:auth.code expirationDate:auth.expirationDate provider:kGmailProvider];
 }
 
@@ -164,7 +236,11 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
     return self.emailController.getValidAccessToken.then( ^(ALMEmailToken *token) {
         ALMApiKey *apiKey = [self.delegate gmailApiKey:self];
         
-        GTMOAuth2Authentication *auth = [[GTMOAuth2Authentication alloc] init];
+        if (!self.service.authorizer) {
+            self.service.authorizer = [[GTMOAuth2Authentication alloc] init];
+        }
+        
+        GTMOAuth2Authentication *auth = self.service.authorizer;
         auth.clientID = apiKey.clientID;
         auth.clientSecret = apiKey.clientSecret;
         auth.scope = [self.delegate gmailScope:self];
@@ -174,122 +250,73 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
         auth.tokenType = @"Bearer";
         auth.accessToken = token.accessToken;
         auth.expirationDate = token.expiresAt;
-        
-        self.service.authorizer = auth;
     });
 }
 
 
 #pragma mark - Fetching
 
-- (PMKPromise *)fetchEmailsWithLabel:(ALMEmailLabel *)label {
+- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder {
     return self.getAccessToken.then ( ^{
-        return [self fetchMessagesWithLabels:@[label.identifier]].then( ^(NSArray *gmailObjects, NSArray *errorObjets) {
+        return [self fetchMessagesWithLabels:@[folder.identifier]].then( ^(NSArray *gmailObjects, NSArray *errorObjets) {
             
-            RLMRealm *realm = label.realm;
+            RLMRealm *realm = folder.realm;
             [realm beginWriteTransaction];
             
             for (GTLGmailThread *thread in gmailObjects) {
                 ALMEmailThread *realmThread = [thread toSavedRealm:realm];
-                [label.threads addObject:realmThread];
+                [folder.threads addObject:realmThread];
             }
             
             [realm commitWriteTransaction];
             
-            return label;
+            return folder;
         });
     });
 }
 
-
 - (PMKPromise *)fetchMessagesWithLabels:(NSArray *)labels {
     return [self fetchThreadWithLabels:labels].then( ^(GTLGmailListThreadsResponse *response) {
-        NSMutableArray *threadIdentifiers = [NSMutableArray array];
-        for (GTLGmailThread *thread in response.threads) {
-            [threadIdentifiers addObject:thread.identifier];
-        }
-        return [self fetchThreadsWithIdentifiers:threadIdentifiers];
+        return [self fetchThreadsWithIdentifiers:response.identifiers];
         
     }).then( ^(GTLBatchResult *results) {
-        NSDictionary *successes = results.successes;
-        NSMutableArray *gmailObjects = [NSMutableArray arrayWithCapacity:successes.count];
-        for (NSString *requestID in successes) {
-            GTLGmailThread *thread = [successes objectForKey:requestID];
-            [gmailObjects addObject:thread];
-        }
-        
-        NSDictionary *failures = results.failures;
-        NSMutableArray *errorObjets = [NSMutableArray arrayWithCapacity:failures.count];
-        for (NSString *requestID in failures) {
-            GTLErrorObject *errorObject = [failures objectForKey:requestID];
-            [errorObjets addObject:errorObject];
-        }
-        return PMKManifold(gmailObjects, errorObjets);
+        return PMKManifold(results.successesArray, results.failuresArray);
     });
-}
-
-- (PMKPromise *)fetchThreadsWithIdentifiers:(NSArray *)identifiers {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        GTLBatchQuery *batch = [GTLBatchQuery batchQuery];
-        for (NSString *identifier in identifiers) {
-            GTLQueryGmail *query = [GTLQueryGmail queryForUsersThreadsGet];
-            query.identifier = identifier;
-            [batch addQuery:query];
-        }
-        
-        [self.service executeQuery:batch completionHandler:^(GTLServiceTicket *ticket, id object, NSError *error) {
-            if (error) {
-                NSLog(@"%@", error);
-                rejecter(error);
-            }
-            else {
-                GTLBatchResult *batchResult = object;
-                fulfiller(batchResult);
-            }
-        }];
-    }];
 }
 
 - (PMKPromise *)fetchThreadWithLabels:(NSArray *)labels; {
     GTLQueryGmail *query = [GTLQueryGmail queryForUsersThreadsList];
     query.labelIds = labels;
     query.maxResults = 20;
-    // query.userId = @"me";
     
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        [self.service executeQuery:query completionHandler:^(GTLServiceTicket *ticket, id object, NSError *error) {
-            if (error) {
-                NSLog(@"%@", error);
-                rejecter(error);
-            }
-            else {
-                GTLGmailListThreadsResponse *response = object;
-                fulfiller(response);
-            }
-        }];
-    }];
+    return [self.service executeQuery:query];
+}
+
+
+#pragma mark - Batch requests
+
+- (PMKPromise *)fetchThreadsWithIdentifiers:(NSArray *)identifiers {
+    GTLBatchQuery *batch = [GTLBatchQuery batchQuery];
+    for (NSString *identifier in identifiers) {
+        GTLQueryGmail *query = [GTLQueryGmail queryForUsersThreadsGet];
+        query.identifier = identifier;
+        [batch addQuery:query];
+    }
+    return [self batchRequestWith:batch];
 }
 
 - (PMKPromise *)fetchMessagesWithIdentifiers:(NSArray *)identifiers {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        GTLBatchQuery *batch = [GTLBatchQuery batchQuery];
-        for (NSString *identifier in identifiers) {
-            GTLQueryGmail *query = [GTLQueryGmail queryForUsersMessagesGet];
-            query.identifier = identifier;
-            [batch addQuery:query];
-        }
-        
-        [self.service executeQuery:batch completionHandler:^(GTLServiceTicket *ticket, id object, NSError *error) {
-            if (error) {
-                NSLog(@"%@", error);
-                rejecter(error);
-            }
-            else {
-                GTLBatchResult *batchResult = object;
-                fulfiller(batchResult);
-            }
-        }];
-    }];
+    GTLBatchQuery *batch = [GTLBatchQuery batchQuery];
+    for (NSString *identifier in identifiers) {
+        GTLQueryGmail *query = [GTLQueryGmail queryForUsersMessagesGet];
+        query.identifier = identifier;
+        [batch addQuery:query];
+    }
+    return [self batchRequestWith:batch];
+}
+
+- (PMKPromise *)batchRequestWith:(GTLBatchQuery *)batch {
+    return [self.service executeQuery:batch];
 }
 
 
@@ -305,10 +332,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 }
 
 - (BOOL)isSignedIn {
-    if (!self.service.authorizer) {
-        self.service.authorizer = [self.delegate gmailAuthenticationFor:self];
-    }
-    return self.service.authorizer.canAuthorize;
+    return self.service.authorizer && self.service.authorizer.canAuthorize;
 }
 
 - (void)signOut {

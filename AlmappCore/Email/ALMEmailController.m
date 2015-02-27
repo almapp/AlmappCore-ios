@@ -8,20 +8,21 @@
 
 #import "ALMEmailController.h"
 #import "ALMController.h"
+#import "NSDate+JSON.h"
 
 @implementation ALMEmailController
 
-- (ALMEmailLabel *)label:(NSString *)identifier {
+- (ALMEmailFolder *)folder:(NSString *)identifier {
     RLMRealm *realm = self.realm;
-    ALMEmailLabel *label = [ALMEmailLabel objectsInRealm:realm where:[NSString stringWithFormat:@"identifier = '%@'", identifier]].firstObject;
-    if (!label) {
+    ALMEmailFolder *folder = [ALMEmailFolder objectsInRealm:realm where:[NSString stringWithFormat:@"identifier = '%@'", identifier]].firstObject;
+    if (!folder) {
         [realm beginWriteTransaction];
-        label = [[ALMEmailLabel alloc] init];
-        label.identifier = identifier;
-        label = [ALMEmailLabel createInRealm:realm withObject:label];
+        folder = [[ALMEmailFolder alloc] init];
+        folder.identifier = identifier;
+        folder = [ALMEmailFolder createInRealm:realm withObject:folder];
         [realm commitWriteTransaction];
     }
-    return label;
+    return folder;
 }
 
 - (ALMEmailToken *)emailToken {
@@ -34,9 +35,9 @@
                                               @"access_token" : accessToken,
                                               @"refresh_token" : refreshToken,
                                               @"code" : code,
-                                              @"expires_in" : expirationDate}};
+                                              @"expires_at" : expirationDate.JSON}};
     
-    return [self.controller POST:@"me/email_client/email_tokens" parameters:token].then( ^(id response, NSURLSessionDataTask *task) {
+    return [self.controller POST:@"me/email_client/token" parameters:token].then( ^(id response, NSURLSessionDataTask *task) {
         return [self saveAccessTokenFromResponse:response];
     });
 }
@@ -62,24 +63,32 @@
     RLMRealm *realm = self.session.realm;
     [realm beginWriteTransaction];
     
-    //NSString *root = @"email_token";
-    
-    //ALMEmailToken *token = [[ALMEmailToken alloc] init];
-    
-    //token.provider = response[root][@""];
-    //token.accessToken = response[root][@""];
-    //token.expiresIn =
-    // ALMEmailToken *token = [ALMEmailToken createOrUpdateInRealm:realm withJSONDictionary:response];
     ALMEmailToken *token = [[ALMEmailToken alloc] initWithJSONDictionary:response];
     token.email = self.session.email;
     
     token = [ALMEmailToken createOrUpdateInRealm:realm withObject:token];
-    
-    //[self.session.emailToken removeFromRealm];
-    //self.session.emailToken = token;
+    self.session.emailToken = token;
     
     [realm commitWriteTransaction];
     return token;
+}
+
+- (void)saveLastMails:(NSInteger)count on:(ALMEmailFolder *)folder {
+    if (folder.threads.count <= count) {
+        return;
+    }
+    
+    RLMRealm *realm = self.realm;
+    [realm beginWriteTransaction];
+    
+    RLMResults *orderedThreads = [folder threadsSortedAscending:NO];
+    
+    for (NSUInteger i = 0; i < orderedThreads.count; i++) {
+        if (i >= count) {
+            [folder deleteThread:orderedThreads[i] force:NO];
+        }
+    }
+    [realm commitWriteTransaction];
 }
 
 @end

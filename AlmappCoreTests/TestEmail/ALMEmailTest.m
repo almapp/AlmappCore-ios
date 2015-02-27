@@ -24,12 +24,39 @@
     self.manager.delegate = self;
 }
 
+- (void)testTokenSending {
+    NSString *description = [NSString stringWithFormat:@"Token_sending"];
+    XCTestExpectation *expectation = [self expectationWithDescription:description];
+    
+    [self.manager.emailController saveAccessToken:@"ACCESS_TOKEN" refreshToken:@"REFRESH_TOKEN" code:@"CODE" expirationDate:[NSDate distantFuture] provider:@"GMAIL"].then( ^(ALMEmailToken *token) {
+        XCTAssertNotNil(token, @"null token");
+        XCTAssertNotNil(self.testSession.emailToken, @"null token");
+        XCTAssertEqual([ALMEmailToken allObjectsInRealm:self.testRealm].count, 1);
+        
+        return [self.manager.emailController saveAccessToken:@"ACCESS_TOKEN" refreshToken:@"REFRESH_TOKEN" code:@"CODE" expirationDate:[NSDate distantFuture] provider:@"GMAIL"].then( ^(ALMEmailToken *newToken) {
+            XCTAssertNotNil(newToken, @"null token");
+            XCTAssertNotNil(self.testSession.emailToken, @"null token");
+            XCTAssertEqual([ALMEmailToken allObjectsInRealm:self.testRealm].count, 1);
+            
+            [expectation fulfill];
+        });
+        
+    }).catch( ^(NSError *error) {
+        NSLog(@"%@", error);
+        XCTFail();
+        [expectation fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:self.timeout handler:^(NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
 - (void)testEmail {
     NSString *description = [NSString stringWithFormat:@"Gmail"];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
-    
-    [self.manager fetchEmailsWithLabel:self.manager.inboxLabel].then( ^(ALMEmailLabel *label) {
+    [self.manager fetchEmailsInFolder:self.manager.inboxFolder].then( ^(ALMEmailFolder *label) {
         NSLog(@"%@", label);
         [expectation fulfill];
     }).catch(^(NSError *error) {
@@ -52,7 +79,7 @@
 }
 
 - (ALMApiKey *)gmailApiKey:(ALMGmailManager *)manager {
-    NSAssert(2+2 == 5, @"Missing api key");
+    NSAssert(2 + 2 == 5, @"Missing api key");
     return nil;
 }
 

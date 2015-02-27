@@ -16,4 +16,6 @@
 @property (readonly) ALMSession *session;
 @property (readonly) ALMEmailController *emailController;
 
+- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder;
+
 @end

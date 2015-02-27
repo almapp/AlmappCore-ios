@@ -8,6 +8,8 @@
 
 #import "RLMObject.h"
 
+@class ALMSession;
+
 @interface ALMEmailToken : RLMObject
 
 @property NSString *email;
@@ -19,5 +21,6 @@
 @property NSDate *createdAt;
 
 @property (readonly) BOOL isExpired;
+@property (readonly) ALMSession *session;
 
 @end

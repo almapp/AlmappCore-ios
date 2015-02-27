@@ -7,6 +7,7 @@
 //
 
 #import "ALMEmailToken.h"
+#import "ALMSession.h"
 
 @implementation ALMEmailToken
 
@@ -35,6 +36,10 @@
 
 - (BOOL)isExpired {
     return [self.expiresAt compare:[NSDate date]] == NSOrderedAscending;
+}
+
+- (ALMSession *)session {
+    return [ALMSession sessionWithEmail:self.email];
 }
 
 @end

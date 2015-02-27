@@ -43,4 +43,23 @@
     return [sorted select:column distinct:distinct];
 }
 
+- (NSArray *)subarrayFirst:(NSUInteger)items {
+    return [self subarrayWithRange:NSMakeRange(0, items)];
+}
+
+- (NSArray *)subarrayLast:(NSUInteger)items {
+    NSUInteger start = MAX(0, self.count - items);
+    return [self subarrayWithRange:NSMakeRange(start, items)];
+}
+
+- (NSArray *)subarrayWithRange:(NSRange)range {
+    NSMutableArray *values = [NSMutableArray arrayWithCapacity:range.length];
+    
+    NSUInteger end = MIN(self.count, range.location + range.length);
+    for (NSUInteger i = range.location; i < end; i++) {
+        [values addObject:self[i]];
+    }
+    return values;
+}
+
 @end
