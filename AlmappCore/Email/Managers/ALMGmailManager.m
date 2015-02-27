@@ -257,6 +257,13 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
         auth.tokenType = @"Bearer";
         auth.accessToken = token.accessToken;
         auth.expirationDate = token.expiresAt;
+    }).catch ( ^(NSError *error) {
+        if ([error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey] statusCode] == 404) {
+            if (self.delegate && [self.delegate respondsToSelector:@selector(gmailManager:tokenNotFound:)]) {
+                [self.delegate gmailManager:self tokenNotFound:error];
+            }
+        }
+        return error;
     });
 }
 

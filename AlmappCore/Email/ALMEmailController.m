@@ -43,7 +43,7 @@
 }
 
 - (PMKPromise *)getValidAccessToken {
-    if (self.emailToken && !self.emailToken.isExpired) {
+    if (self.isAccessTokenValid) {
         return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
             fulfiller(self.emailToken);
         }];
@@ -89,6 +89,10 @@
         }
     }
     [realm commitWriteTransaction];
+}
+
+- (BOOL)isAccessTokenValid {
+    return self.emailToken && !self.emailToken.isExpired;
 }
 
 @end

@@ -22,8 +22,17 @@ extern NSString *const kGmailLabelUNREAD;
 extern NSString *const kGmailLabelSTARRED;
 extern NSString *const kGmailLabelIMPORTANT;
 
+@class ALMGmailManager;
+
+@protocol ALMGmailDelegate <NSObject>
+
+- (void)gmailManager:(ALMGmailManager *)manager tokenNotFound:(NSError *)error;
+
+@end
+
 @interface ALMGmailManager : ALMEmailManager
 
+@property (weak, nonatomic) id<ALMGmailDelegate> delegate;
 @property (strong, nonatomic) NSString *scope;
 @property (strong, nonatomic) ALMApiKey *apiKey;
 
@@ -35,5 +44,8 @@ extern NSString *const kGmailLabelIMPORTANT;
 
 - (PMKPromise *)setFirstAuthentication:(GTMOAuth2Authentication *)auth;
 - (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder;
+
+- (void)signOut;
+- (BOOL)isSignedIn;
 
 @end

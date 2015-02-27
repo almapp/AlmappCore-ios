@@ -21,6 +21,7 @@
 - (PMKPromise *)saveAccessToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken code:(NSString *)code expirationDate:(NSDate *)expirationDate provider:(NSString *)provider;
 - (PMKPromise *)getForceAccessToken;
 - (PMKPromise *)getValidAccessToken;
+- (BOOL)isAccessTokenValid;
 
 - (ALMEmailFolder *)folder:(NSString *)identifier;
 - (void)saveLastMails:(NSInteger)count on:(ALMEmailFolder *)folder;
