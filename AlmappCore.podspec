@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "AlmappCore"
-  s.version      = "0.5"
+  s.version      = "0.6"
   s.summary      = "Mobile backend for Almapp REST API."
 
   s.description  = <<-DESC
@@ -130,9 +130,10 @@ Pod::Spec.new do |s|
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
 
-  s.dependency "AFNetworking", "~> 2.5"
-  s.dependency "FayeCpp", "~> 0.1.5"
+  s.dependency "AFNetworking", "~> 2.5.1"
+  s.dependency "FayeCpp", "~> 0.1.9"
   s.dependency "UICKeyChainStore"
   s.dependency "PromiseKit-AFNetworking"
-  s.dependency "PromiseKit", "~> 1.2.2"
+  s.dependency "PromiseKit", "~> 1.3"
+  s.dependency "Google-API-Client/Gmail", "~> 1.0.422"
 end
