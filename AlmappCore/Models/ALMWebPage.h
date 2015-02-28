@@ -10,7 +10,7 @@
 
 @class ALMOrganization;
 
-typedef NS_ENUM(NSUInteger, ALMWebPageType) {
+typedef NS_ENUM(NSInteger, ALMWebPageType) {
     ALMWebPageTypeCommunity,
     ALMWebPageTypeOfficial,
     ALMWebPageTypePoliticalParty,

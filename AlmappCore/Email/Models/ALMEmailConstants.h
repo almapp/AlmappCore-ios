@@ -21,6 +21,10 @@ extern NSString *const kEmailFrom;
 extern NSString *const kEmailReplyTo;
 extern NSString *const kEmailSnippet;
 extern NSString *const kEmailDate;
+extern NSString *const kEmailLabels;
+
+extern NSString *const kEmailBodyHTML;
+extern NSString *const kEmailBodyPlain;
 
 extern NSString *const kEmailThreadID;
 

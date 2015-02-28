@@ -21,7 +21,6 @@
 - (void)setUp {
     [super setUp];
     self.manager = [ALMGmailManager emailManager:self.testSession];
-    self.manager.scope = @"";
     // self.manager.apiKey = [ALMApiKey apiKeyWithClient:@"" secret:@""];
 }
 
@@ -57,8 +56,8 @@
     NSString *description = [NSString stringWithFormat:@"Gmail"];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
-    [self.manager fetchEmailsInFolder:self.manager.inboxFolder].then( ^(ALMEmailFolder *label) {
-        NSLog(@"%@", label);
+    [self.manager fetchEmailsInFolder:self.manager.inboxFolder].then( ^(id result) {
+        NSLog(@"%@", result);
         [expectation fulfill];
     }).catch(^(NSError *error) {
         NSLog(@"%@", error);

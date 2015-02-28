@@ -21,6 +21,11 @@ NSString *const kEmailFrom = @"from";
 NSString *const kEmailReplyTo = @"replyTo";
 NSString *const kEmailSnippet = @"snippet";
 NSString *const kEmailDate = @"date";
+NSString *const kEmailLabels = @"labels";
+
+NSString *const kEmailBodyHTML = @"bodyHTML";
+NSString *const kEmailBodyPlain = @"bodyPlain";
+
 
 NSString *const kEmailThreadID = @"threadID";
 

@@ -11,6 +11,8 @@
 #import "ALMEmailConstants.h"
 #import "ALMResourceConstants.h"
 
+ALMEmailLabel const kEmailDefaultLabel = 0;
+
 @implementation ALMEmail
 
 + (NSDictionary *)defaultPropertyValues {
@@ -26,6 +28,9 @@
              //@"replyToName" : @"",
              //@"replyToEmail" : @"",
              kEmailSnippet : kRDefaultNullString,
+             kEmailLabels : @(kEmailDefaultLabel),
+             kEmailBodyHTML : kRDefaultNullString,
+             kEmailBodyPlain : kRDefaultNullString,
              kEmailDate : [NSDate date]
              };
 }

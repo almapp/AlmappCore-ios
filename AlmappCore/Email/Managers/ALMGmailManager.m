@@ -7,6 +7,7 @@
 //
 
 #import <GTLGmail.h>
+#import <GTLBase64.h>
 
 #import "ALMGmailManager.h"
 
@@ -69,6 +70,32 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 
 
 
+@implementation GTLGmailMessagePart (MimeType)
+
+- (BOOL)isHTML {
+    return [self.mimeType isEqualToString:@"text/html"];
+}
+
+- (BOOL)isPlainText {
+    return [self.mimeType isEqualToString:@"text/plain"];
+}
+
+@end
+
+
+
+@implementation GTLGmailMessagePartBody (MimeType)
+
+- (NSString *)text {
+    NSData *data = GTLDecodeWebSafeBase64(self.data);
+    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    // [NSString stringWithUTF8String:[data bytes]];
+}
+
+@end
+
+
+
 @implementation GTLGmailMessage (Realm)
 
 + (NSDateFormatter *)dateFormatter {
@@ -78,6 +105,21 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
         dateFormat.dateFormat = @"EEE, dd MMM yyyy HH:mm:ss Z";
     }
     return dateFormat;
+}
+
++ (NSDictionary *)labels {
+    static NSDictionary *labelsHash = nil;
+    if (!labelsHash) {
+        labelsHash = @{@"INBOX" : @(ALMEmailLabelInbox),
+                       @"IMPORTANT" : @(ALMEmailLabelImportant),
+                       @"UNREAD" : @(ALMEmailLabelUnread),
+                       @"SPAM" : @(ALMEmailLabelSpam),
+                       @"TRASH" : @(ALMEmailLabelTrash),
+                       @"STARRED" : @(ALMEmailLabelStarred),
+                       @"SENT" : @(ALMEmailLabelSent),
+                       @"DRAFT" : @(ALMEmailLabelDraft)};
+    }
+    return labelsHash;
 }
 
 - (ALMEmail *)toSavedRealm:(RLMRealm *)realm {
@@ -90,9 +132,31 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
     ALMEmail *email = [[ALMEmail alloc] init];
     email.snippet = self.snippet;
     
+    email.labels = kEmailDefaultLabel;
+    for (NSString *labelString in self.labelIds) {
+        NSNumber *labelValue = [GTLGmailMessage labels][labelString];
+        if (labelValue) {
+            ALMEmailLabel label = [labelValue integerValue];
+            email.labels |= label;
+        }
+    }
+    
+    if (self.payload.isPlainText) {
+        GTLGmailMessagePartBody *body = self.payload.body;
+        email.bodyPlain = body.text;
+    }
+    else {
+        for (GTLGmailMessagePart *part in self.payload.parts) {
+            if (part.isPlainText) {
+                email.bodyPlain = part.body.text;
+            }
+            else if (part.isHTML) {
+                email.bodyHTML = part.body.text;
+            }
+        }
+    }
+    
     for (GTLGmailMessagePartHeader *header in self.payload.headers) {
-        // NSLog(@"%@ : %@", header.name, header.value);
-        
         if ([header.name isEqualToString:@"Message-ID"]) {
             email.messageID = header.value;
             messageID = YES;
