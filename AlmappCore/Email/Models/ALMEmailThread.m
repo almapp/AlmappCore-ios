@@ -8,16 +8,18 @@
 
 #import "ALMEmailThread.h"
 #import "ALMEmailFolder.h"
+#import "ALMEmailConstants.h"
+#import "ALMResourceConstants.h"
 
 @implementation ALMEmailThread
 
 + (NSDictionary *)defaultPropertyValues {
-    return @{@"threadID" : @"",
-             @"snippet" : @""};
+    return @{kEmailThreadID : kRDefaultNullString,
+             kEmailSnippet : kRDefaultNullString};
 }
 
 + (NSString *)primaryKey {
-    return @"threadID";
+    return kEmailThreadID;
 }
 
 - (NSArray *)folders {
@@ -41,7 +43,7 @@
 }
 
 - (RLMResults *)emailsSortedAscending:(BOOL)ascending {
-    return [self.emails sortedResultsUsingProperty:@"messageID" ascending:ascending];
+    return [self.emails sortedResultsUsingProperty:kEmailMessageID ascending:ascending];
 }
 
 - (void)deleteEmailsForced:(BOOL)force {

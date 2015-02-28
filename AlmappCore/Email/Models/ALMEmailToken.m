@@ -8,30 +8,32 @@
 
 #import "ALMEmailToken.h"
 #import "ALMSession.h"
+#import "ALMEmailConstants.h"
+#import "ALMResourceConstants.h"
 
 @implementation ALMEmailToken
 
 + (NSDictionary *)JSONInboundMappingDictionary {
-    return @{@"email_token.provider" : @"provider",
-             @"email_token.access_token" : @"accessToken",
-             @"email_token.expires_at" : @"expiresAt",
-             @"email_token.created_at" : @"updatedAt",
-             @"email_token.updated_at" : @"createdAt"
+    return @{@"email_token.provider" : kEmailProvider,
+             @"email_token.access_token" : kEmailAccessToken,
+             @"email_token.expires_at" : kEmailExpiresAt,
+             @"email_token.created_at" : kRCreatedAt,
+             @"email_token.updated_at" : kRUpdatedAt
              };
 }
 
 + (NSDictionary *)defaultPropertyValues {
-    return @{@"email" : @"",
-             @"provider" : @"",
-             @"accessToken" : @"",
-             @"expiresAt" : [NSDate distantPast],
-             @"updatedAt" : [NSDate distantPast],
-             @"createdAt" : [NSDate distantPast]
+    return @{kEmailEmail: kRDefaultNullString,
+             kEmailProvider : kRDefaultNullString,
+             kEmailAccessToken : kRDefaultNullString,
+             kEmailExpiresAt : [NSDate distantPast],
+             kRCreatedAt : [NSDate distantPast],
+             kRUpdatedAt : [NSDate distantPast]
              };
 }
 
 + (NSString *)primaryKey {
-    return @"email";
+    return kEmailEmail;
 }
 
 - (BOOL)isExpired {

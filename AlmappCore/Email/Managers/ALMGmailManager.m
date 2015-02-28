@@ -279,7 +279,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
             
             for (GTLGmailThread *thread in gmailObjects) {
                 ALMEmailThread *realmThread = [thread toSavedRealm:realm];
-                [folder.threads addObject:realmThread];
+                [folder.threads addObject:realmThread allowDuplicates:NO];
             }
             
             [realm commitWriteTransaction];

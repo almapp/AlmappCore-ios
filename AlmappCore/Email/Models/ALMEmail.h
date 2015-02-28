@@ -8,8 +8,8 @@
 
 #import <Realm+JSON/RLMObject+JSON.h>
 #import <Realm+JSON/RLMObject+Copying.h>
-#import "RLMArray+Select.h"
-#import "RLMResults+Select.h"
+#import "RLMArray+Extras.h"
+#import "RLMResults+Extras.h"
 
 @interface ALMEmail : RLMObject
 
@@ -18,14 +18,15 @@
 @property NSString *to;
 @property NSString *from;
 @property NSString *replyTo;
+@property NSString *snippet;
+@property NSDate *date;
+
 //@property NSString *toName;
 //@property NSString *toEmail;
 //@property NSString *fromName;
 //@property NSString *fromEmail;
 //@property NSString *replyToName;
 //@property NSString *replyToEmail;
-@property NSString *snippet;
-@property NSDate *date;
 
 @property (readonly) NSArray *threads;
 

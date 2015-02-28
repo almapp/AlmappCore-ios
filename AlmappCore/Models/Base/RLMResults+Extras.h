@@ -1,14 +1,14 @@
 //
-//  RLMArray+Select.h
+//  RLMResults+Select.h
 //  AlmappCore
 //
-//  Created by Patricio López on 08-02-15.
+//  Created by Patricio López on 02-02-15.
 //  Copyright (c) 2015 almapp. All rights reserved.
 //
 
-#import "RLMArray.h"
+#import "RLMResults.h"
 
-@interface RLMArray (Select)
+@interface RLMResults (Extras)
 
 - (NSArray *)select:(NSString *)column;
 - (NSArray *)select:(NSString *)column distinct:(BOOL)distinct;
@@ -21,3 +21,4 @@
 - (NSArray *)subarrayWithRange:(NSRange)range;
 
 @end
+

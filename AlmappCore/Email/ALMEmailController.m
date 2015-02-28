@@ -9,12 +9,14 @@
 #import "ALMEmailController.h"
 #import "ALMController.h"
 #import "NSDate+JSON.h"
+#import "ALMEmailConstants.h"
+#import "ALMResourceConstants.h"
 
 @implementation ALMEmailController
 
 - (ALMEmailFolder *)folder:(NSString *)identifier {
     RLMRealm *realm = self.realm;
-    ALMEmailFolder *folder = [ALMEmailFolder objectsInRealm:realm where:[NSString stringWithFormat:@"identifier = '%@'", identifier]].firstObject;
+    ALMEmailFolder *folder = [ALMEmailFolder objectsInRealm:realm where:[NSString stringWithFormat:@"%@ = '%@'", kRIdentifier, identifier]].firstObject;
     if (!folder) {
         [realm beginWriteTransaction];
         folder = [[ALMEmailFolder alloc] init];

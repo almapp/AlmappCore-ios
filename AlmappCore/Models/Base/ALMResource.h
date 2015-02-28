@@ -8,8 +8,8 @@
 
 #import <Realm+JSON/RLMObject+JSON.h>
 #import <Realm+JSON/RLMObject+Copying.h>
-#import "RLMResults+Select.h"
-#import "RLMArray+Select.h"
+#import "RLMResults+Extras.h"
+#import "RLMArray+Extras.h"
 #import "NSArray+Query.h"
 #import "NSDictionary+Util.h"
 

@@ -1,15 +1,16 @@
 //
-//  RLMResults+Select.m
+//  RLMArray+Select.m
 //  AlmappCore
 //
-//  Created by Patricio López on 02-02-15.
+//  Created by Patricio López on 08-02-15.
 //  Copyright (c) 2015 almapp. All rights reserved.
 //
 
-#import "RLMResults+Select.h"
+#import "RLMArray+Extras.h"
+#import "RLMResults+Extras.h"
 #import <Realm+JSON/RLMObject+JSON.h>
 
-@implementation RLMResults (Select)
+@implementation RLMArray (Extras)
 
 - (NSArray *)select:(NSString *)column {
     return [self select:column distinct:NO];
@@ -30,6 +31,18 @@
         }
     }
     return array;
+}
+
+- (void)addObjects:(id<NSFastEnumeration>)objects allowDuplicates:(BOOL)allowDuplicates {
+    for (RLMObject *object in objects) {
+        [self addObject:object allowDuplicates:allowDuplicates];
+    }
+}
+
+- (void)addObject:(RLMObject *)object allowDuplicates:(BOOL)allowDuplicates {
+    if (allowDuplicates || [self indexOfObject:object] == NSNotFound) {
+        [self addObject:object];
+    }
 }
 
 - (NSArray *)select:(NSString *)column ascending:(BOOL)ascending {
@@ -62,5 +75,3 @@
 }
 
 @end
-
-

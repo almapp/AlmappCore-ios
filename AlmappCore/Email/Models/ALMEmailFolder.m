@@ -7,15 +7,17 @@
 //
 
 #import "ALMEmailFolder.h"
+#import "ALMEmailConstants.h"
+#import "ALMResourceConstants.h"
 
 @implementation ALMEmailFolder
 
 + (NSDictionary *)defaultPropertyValues {
-    return @{@"identifier" : @""};
+    return @{kRIdentifier : kRDefaultNullString};
 }
 
 + (NSString *)primaryKey {
-    return @"identifier";
+    return kRIdentifier;
 }
 
 - (RLMResults *)sortedThreads {
@@ -35,7 +37,7 @@
 }
 
 - (RLMResults *)threadsSortedAscending:(BOOL)ascending {
-    return [self.threads sortedResultsUsingProperty:@"threadID" ascending:ascending];
+    return [self.threads sortedResultsUsingProperty:kEmailThreadID ascending:ascending];
 }
 
 - (void)deleteThreadsForced:(BOOL)force {
