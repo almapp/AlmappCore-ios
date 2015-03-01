@@ -45,7 +45,8 @@ extern NSString *const kGmailLabelIMPORTANT;
 @property (readonly) ALMEmailFolder *threadFolder;
 
 - (PMKPromise *)setFirstAuthentication:(GTMOAuth2Authentication *)auth;
-- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder;
+- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count;
+- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count pageToken:(NSString *)pageToken;;
 
 - (void)signOut;
 - (BOOL)isSignedIn;

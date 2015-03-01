@@ -505,38 +505,45 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 
 #pragma mark - Fetching
 
-- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder {
+- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count {
+    return [self fetchEmailsInFolder:folder count:count pageToken:nil];
+}
+
+- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count pageToken:(NSString *)pageToken {
     return self.getAccessToken.then ( ^{
-        return [self fetchMessagesWithLabels:@[folder.identifier]].then( ^(NSArray *gmailObjects, NSArray *errorObjets) {
+        return [self fetchMessagesWithLabels:@[folder.identifier] count:count pageToken:pageToken].then( ^(NSArray *gmailObjects, NSArray *errorObjets, GTLGmailListThreadsResponse *response) {
             
             RLMRealm *realm = folder.realm;
             [realm beginWriteTransaction];
             
+            NSMutableArray *newThreads = [NSMutableArray arrayWithCapacity:gmailObjects.count];
             for (GTLGmailThread *thread in gmailObjects) {
                 ALMEmailThread *realmThread = [thread toSavedRealm:realm];
-                [folder.threads addObject:realmThread allowDuplicates:NO];
+                if ([folder.threads addObject:realmThread allowDuplicates:NO]) {
+                    [newThreads addObject:realmThread];
+                }
             }
             
             [realm commitWriteTransaction];
             
-            return folder.threads;
+            return PMKManifold(newThreads, response.nextPageToken, response.resultSizeEstimate);
         });
     });
 }
 
-- (PMKPromise *)fetchMessagesWithLabels:(NSArray *)labels {
-    return [self fetchThreadWithLabels:labels].then( ^(GTLGmailListThreadsResponse *response) {
-        return [self fetchThreadsWithIdentifiers:response.identifiers];
-        
-    }).then( ^(GTLBatchResult *results) {
-        return PMKManifold(results.successesArray, results.failuresArray);
+- (PMKPromise *)fetchMessagesWithLabels:(NSArray *)labels count:(NSInteger)count pageToken:(NSString *)pageToken {
+    return [self fetchThreadWithLabels:labels count:count pageToken:pageToken].then( ^(GTLGmailListThreadsResponse *response) {
+        return [self fetchThreadsWithIdentifiers:response.identifiers].then( ^(GTLBatchResult *results) {
+            return PMKManifold(results.successesArray, results.failuresArray, response);
+        });
     });
 }
 
-- (PMKPromise *)fetchThreadWithLabels:(NSArray *)labels; {
+- (PMKPromise *)fetchThreadWithLabels:(NSArray *)labels count:(NSInteger)count pageToken:(NSString *)pageToken  {
     GTLQueryGmail *query = [GTLQueryGmail queryForUsersThreadsList];
     query.labelIds = labels;
-    query.maxResults = 20;
+    query.maxResults = count;
+    query.pageToken = pageToken;
     
     return [self.service executeQuery:query];
 }
@@ -574,7 +581,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 - (GTLServiceGmail *)service {
     if (!_service) {
         _service = [[GTLServiceGmail alloc] init];
-        //_service.shouldFetchNextPages = YES;
+        _service.shouldFetchNextPages = YES;
         _service.retryEnabled = YES;
     }
     return _service;

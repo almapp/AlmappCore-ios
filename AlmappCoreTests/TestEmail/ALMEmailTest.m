@@ -21,7 +21,7 @@
 - (void)setUp {
     [super setUp];
     self.manager = [ALMGmailManager emailManager:self.testSession];
-    
+    // self.manager.apiKey = [ALMApiKey apiKeyWithClient:@"" secret:@""];
 }
 
 - (void)testTokenSending {
@@ -56,20 +56,30 @@
     NSString *description = [NSString stringWithFormat:@"Gmail"];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
-    [self.manager fetchEmailsInFolder:self.manager.inboxFolder].then( ^(id threads) {
+    [self.manager fetchEmailsInFolder:self.manager.inboxFolder count:10].then( ^(id threads, NSString *nextPageToken, NSInteger resultCount) {
         for (ALMEmailThread *thread in threads) {
             for (ALMEmail *email in thread.emails) {
                 for (NSDictionary *address in @[email.from, email.to]) {
                     //NSLog(@"%@", address);
                     XCTAssertNotEqual(address.count, 0);
                 }
-                for (NSDictionary *address in @[email.cc, email.cco]) {
+                //for (NSDictionary *address in @[email.cc, email.cco]) {
                     //NSLog(@"%@", address);
-                }
+                //}
             }
         }
         
-        [expectation fulfill];
+        return PMKManifold(threads, nextPageToken);
+        
+    }).then( ^(id threads, NSString *pageToken) {
+        [self.manager fetchEmailsInFolder:self.manager.inboxFolder count:10 pageToken:pageToken].then( ^(id newThreads, NSString *nextPageToken, NSInteger resultCount) {
+            for (ALMEmailThread *thread in threads) {
+                for (ALMEmailThread *newThread in newThreads) {
+                    XCTAssertNotEqualObjects(thread.threadID, newThread.threadID);
+                }
+            }
+            [expectation fulfill];
+        });
         
     }).catch(^(NSError *error) {
         NSLog(@"%@", error);
