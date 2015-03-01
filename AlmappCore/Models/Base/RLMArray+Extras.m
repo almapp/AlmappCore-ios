@@ -33,16 +33,22 @@
     return array;
 }
 
-- (void)addObjects:(id<NSFastEnumeration>)objects allowDuplicates:(BOOL)allowDuplicates {
+- (NSArray *)addObjects:(id<NSFastEnumeration>)objects allowDuplicates:(BOOL)allowDuplicates {
+    NSMutableArray *newObjects = [NSMutableArray array];
     for (RLMObject *object in objects) {
-        [self addObject:object allowDuplicates:allowDuplicates];
+        if ([self addObject:object allowDuplicates:allowDuplicates]) {
+            [newObjects addObject:object];
+        }
     }
+    return newObjects;
 }
 
-- (void)addObject:(RLMObject *)object allowDuplicates:(BOOL)allowDuplicates {
+- (BOOL)addObject:(RLMObject *)object allowDuplicates:(BOOL)allowDuplicates {
     if (allowDuplicates || [self indexOfObject:object] == NSNotFound) {
         [self addObject:object];
+        return YES;
     }
+    return NO;
 }
 
 - (NSArray *)select:(NSString *)column ascending:(BOOL)ascending {

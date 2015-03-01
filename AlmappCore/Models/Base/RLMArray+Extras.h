@@ -16,8 +16,8 @@
 - (NSArray *)select:(NSString *)column ascending:(BOOL)ascending;
 - (NSArray *)select:(NSString *)column ascending:(BOOL)ascending distinct:(BOOL)distinct;
 
-- (void)addObjects:(id<NSFastEnumeration>)objects allowDuplicates:(BOOL)allowDuplicates;
-- (void)addObject:(RLMObject *)object allowDuplicates:(BOOL)allowDuplicates;
+- (NSArray *)addObjects:(id<NSFastEnumeration>)objects allowDuplicates:(BOOL)allowDuplicates;
+- (BOOL)addObject:(RLMObject *)object allowDuplicates:(BOOL)allowDuplicates;
 
 - (NSArray *)subarrayFirst:(NSUInteger)items;
 - (NSArray *)subarrayLast:(NSUInteger)items;
