@@ -13,6 +13,7 @@
 #import <gtm-oauth2/GTMOAuth2Authentication.h>
 #import <GTLGmailConstants.h>
 
+extern NSInteger const kGmailDefaultResultsPerPage;
 extern NSString *const kGmailProvider;
 
 extern NSString *const kGmailLabelINBOX;

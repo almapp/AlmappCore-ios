@@ -13,6 +13,7 @@
 
 
 NSString *const kGmailProvider = @"GMAIL";
+NSInteger const kGmailDefaultResultsPerPage = 20;
 
 NSString *const kGmailLabelINBOX = @"INBOX";
 NSString *const kGmailLabelSENT = @"SENT";
@@ -327,13 +328,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
             }
         }
         else if ([header.name isEqualToString:@"Date"]) {
-            NSString *dateString = header.value;
-            //NSDate *dateD = [[GTLGmailMessage dateFormatter] dateFromString:dateString];
-            NSDate *dateD = [NSDate fuckingDate:dateString];
-            
-            NSLog(@"%@ => %@", dateString, dateD);
-            
-            email.date = dateD;
+            email.date = [NSDate fuckingDate:header.value];
             date = YES;
             if (messageID && subject && from && to && cc && cco && date && replyTo) {
                 break;
@@ -504,6 +499,10 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 
 
 #pragma mark - Fetching
+
+- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder {
+    return [self fetchEmailsInFolder:folder count:kGmailDefaultResultsPerPage];
+}
 
 - (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count {
     return [self fetchEmailsInFolder:folder count:count pageToken:nil];
