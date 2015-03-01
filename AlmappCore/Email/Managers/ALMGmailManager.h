@@ -16,6 +16,8 @@
 extern NSString *const kGmailProvider;
 
 extern NSString *const kGmailLabelINBOX;
+extern NSString *const kGmailLabelSENT;
+extern NSString *const kGmailLabelDRAFT;
 extern NSString *const kGmailLabelSPAM;
 extern NSString *const kGmailLabelTRASH;
 extern NSString *const kGmailLabelUNREAD;

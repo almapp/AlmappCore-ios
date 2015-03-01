@@ -15,11 +15,15 @@
 NSString *const kGmailProvider = @"GMAIL";
 
 NSString *const kGmailLabelINBOX = @"INBOX";
+NSString *const kGmailLabelSENT = @"SENT";
+NSString *const kGmailLabelDRAFT = @"DRAFT";
 NSString *const kGmailLabelSPAM = @"SPAM";
 NSString *const kGmailLabelTRASH = @"TRASH";
 NSString *const kGmailLabelUNREAD = @"UNREAD";
 NSString *const kGmailLabelSTARRED = @"STARRED";
 NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
+
+
 
 @implementation NSString (NSAddition)
 
@@ -223,14 +227,14 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 + (NSDictionary *)labels {
     static NSDictionary *labelsHash = nil;
     if (!labelsHash) {
-        labelsHash = @{@"INBOX" : @(ALMEmailLabelInbox),
-                       @"IMPORTANT" : @(ALMEmailLabelImportant),
-                       @"UNREAD" : @(ALMEmailLabelUnread),
-                       @"SPAM" : @(ALMEmailLabelSpam),
-                       @"TRASH" : @(ALMEmailLabelTrash),
-                       @"STARRED" : @(ALMEmailLabelStarred),
-                       @"SENT" : @(ALMEmailLabelSent),
-                       @"DRAFT" : @(ALMEmailLabelDraft)};
+        labelsHash = @{kGmailLabelINBOX : @(ALMEmailLabelInbox),
+                       kGmailLabelIMPORTANT : @(ALMEmailLabelImportant),
+                       kGmailLabelUNREAD : @(ALMEmailLabelUnread),
+                       kGmailLabelSPAM : @(ALMEmailLabelSpam),
+                       kGmailLabelTRASH : @(ALMEmailLabelTrash),
+                       kGmailLabelSTARRED : @(ALMEmailLabelStarred),
+                       kGmailLabelSENT : @(ALMEmailLabelSent),
+                       kGmailLabelDRAFT : @(ALMEmailLabelDraft)};
     }
     return labelsHash;
 }
@@ -440,7 +444,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 }
 
 - (ALMEmailFolder *)sentFolder {
-    return [self.emailController folder:nil];
+    return [self.emailController folder:kGmailLabelSENT];
 }
 
 - (ALMEmailFolder *)starredFolder {
