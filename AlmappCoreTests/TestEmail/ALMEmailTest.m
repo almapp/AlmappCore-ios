@@ -21,7 +21,7 @@
 - (void)setUp {
     [super setUp];
     self.manager = [ALMGmailManager emailManager:self.testSession];
-    // self.manager.apiKey = [ALMApiKey apiKeyWithClient:@"" secret:@""];
+    
 }
 
 - (void)testTokenSending {
@@ -56,9 +56,21 @@
     NSString *description = [NSString stringWithFormat:@"Gmail"];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
-    [self.manager fetchEmailsInFolder:self.manager.inboxFolder].then( ^(id result) {
-        NSLog(@"%@", result);
+    [self.manager fetchEmailsInFolder:self.manager.inboxFolder].then( ^(id threads) {
+        for (ALMEmailThread *thread in threads) {
+            for (ALMEmail *email in thread.emails) {
+                for (NSDictionary *address in @[email.from, email.to]) {
+                    //NSLog(@"%@", address);
+                    XCTAssertNotEqual(address.count, 0);
+                }
+                for (NSDictionary *address in @[email.cc, email.cco]) {
+                    //NSLog(@"%@", address);
+                }
+            }
+        }
+        
         [expectation fulfill];
+        
     }).catch(^(NSError *error) {
         NSLog(@"%@", error);
         XCTFail();

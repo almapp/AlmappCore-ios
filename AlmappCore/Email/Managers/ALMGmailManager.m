@@ -21,6 +21,64 @@ NSString *const kGmailLabelUNREAD = @"UNREAD";
 NSString *const kGmailLabelSTARRED = @"STARRED";
 NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 
+@implementation NSString (NSAddition)
+
+- (NSString*) stringBetweenString:(NSString*)start andString:(NSString*)end {
+    NSRange startRange = [self rangeOfString:start];
+    if (startRange.location != NSNotFound) {
+        NSRange targetRange;
+        targetRange.location = startRange.location + startRange.length;
+        targetRange.length = [self length] - targetRange.location;
+        NSRange endRange = [self rangeOfString:end options:0 range:targetRange];
+        if (endRange.location != NSNotFound) {
+            targetRange.length = endRange.location - targetRange.location;
+            return [self substringWithRange:targetRange];
+        }
+    }
+    return nil;
+}
+
+- (NSString *)removeFirstChar {
+    return (self.length > 0) ? [self substringFromIndex:1] : self;
+}
+
+- (NSString *)removeLastChar {
+    return (self.length > 0) ? [self substringToIndex:[self length] - 1] : self;
+}
+
+- (BOOL)hasPrefixes:(NSArray *)prefixes {
+    for (NSString *prefix in prefixes) {
+        if ([self hasPrefix:prefix]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)hasSuffixes:(NSArray *)suffixes {
+    for (NSString *suffix in suffixes) {
+        if ([self hasSuffix:suffix]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (NSString *)cleanChars:(NSArray *)charsToRemove {
+    if ([self hasPrefixes:charsToRemove]) {
+        return [[self removeFirstChar] cleanChars:charsToRemove];
+    }
+    else if ([self hasSuffixes:charsToRemove]) {
+        return [[self removeLastChar] cleanChars:charsToRemove];
+    }
+    else {
+        return self;
+    }
+}
+
+@end
+
+
 
 @implementation GTLServiceGmail (Promise)
 
@@ -96,13 +154,68 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 
 
 
+@implementation NSDate (Util)
+
++ (NSArray *)formats {
+    static NSArray *formats = nil;
+    if (!formats) {
+        formats = @[@"EEE, dd MMM yyyy HH:mm:ss Z"
+                    ];
+    }
+    return formats;
+}
+
++ (NSDateFormatter*)dateFormater {
+    static NSDateFormatter *formatter = nil;
+    if (formatter == nil)  {
+        formatter = [[NSDateFormatter alloc] init];
+        NSLocale *enUS = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
+        [formatter setLocale:enUS];
+        //[formatter setDateFormat:@"EEE, dd MMM yyyy HH:mm:ss ZZ"];
+    }
+    return formatter;
+}
+
++ (NSDate*)fuckingDate:(NSString *)string {
+    NSDateFormatter *formatter = [self dateFormater];
+    
+    NSString *timezone = [string stringBetweenString:@"(" andString:@")"];
+    if (timezone && timezone.length > 0) {
+        formatter.timeZone = [NSTimeZone timeZoneWithName:timezone];
+    }
+    else {
+        formatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    }
+    
+    NSString *cleanString = [[string stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"(%@)", timezone] withString:@""] cleanChars:@[@" "]];
+    
+    for (NSString *format in self.formats) {
+        formatter.dateFormat = format;
+        NSDate *result = [formatter dateFromString:cleanString];
+        if (result) {
+            return result;
+        }
+    }
+    return nil;
+}
+
+
+@end
+
+
+
+
 @implementation GTLGmailMessage (Realm)
 
 + (NSDateFormatter *)dateFormatter {
     static NSDateFormatter *dateFormat = nil;
     if (!dateFormat) {
         dateFormat = [[NSDateFormatter alloc] init];
-        dateFormat.dateFormat = @"EEE, dd MMM yyyy HH:mm:ss Z";
+        dateFormat.dateStyle = NSDateFormatterFullStyle;
+        dateFormat.timeStyle = NSDateFormatterFullStyle;
+        dateFormat.lenient = YES;
+        //dateFormat.dateFormat = @"EEE, dd MMM yyyy HH:mm:ss Z";
+        //dateFormat.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     }
     return dateFormat;
 }
@@ -127,7 +240,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 }
 
 - (ALMEmail *)toUnsavedRealm {
-    BOOL messageID = NO, subject = NO, to = NO, from = NO, date = NO, replyTo = NO;
+    BOOL messageID = NO, subject = NO, from = NO, to = NO, cc = NO, cco = NO, date = NO, replyTo = NO;
     
     ALMEmail *email = [[ALMEmail alloc] init];
     email.snippet = self.snippet;
@@ -156,52 +269,106 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
         }
     }
     
-    for (GTLGmailMessagePartHeader *header in self.payload.headers) {
+    id headers = self.payload.headers;
+    //NSLog(@"%@", headers);
+    
+    for (GTLGmailMessagePartHeader *header in headers) {
         if ([header.name isEqualToString:@"Message-ID"]) {
             email.messageID = header.value;
             messageID = YES;
-            if (messageID && subject && to && from && date && replyTo) {
+            if (messageID && subject && from && to && cc && cco && date && replyTo) {
                 break;
             }
         }
         else if ([header.name isEqualToString:@"Subject"]) {
             email.subject = header.value;
             subject = YES;
-            if (messageID && subject && to && from && date && replyTo) {
-                break;
-            }
-        }
-        else if ([header.name isEqualToString:@"To"]) {
-            email.to = header.value;
-            to = YES;
-            if (messageID && subject && to && from && date && replyTo) {
+            if (messageID && subject && from && to && cc && cco && date && replyTo) {
                 break;
             }
         }
         else if ([header.name isEqualToString:@"From"]) {
-            email.from = header.value;
+            email.from = [GTLGmailMessage getAddresses:header.value];
             from = YES;
-            if (messageID && subject && to && from && date && replyTo) {
+            if (messageID && subject && from && to && cc && cco && date && replyTo) {
+                break;
+            }
+        }
+        else if ([header.name isEqualToString:@"To"]) {
+            email.to = [GTLGmailMessage getAddresses:header.value];
+            to = YES;
+            if (messageID && subject && from && to && cc && cco && date && replyTo) {
+                break;
+            }
+        }
+        else if ([header.name isEqualToString:@"Cc"]) {
+            email.cc = [GTLGmailMessage getAddresses:header.value];
+            cc = YES;
+            if (messageID && subject && from && to && cc && cco && date && replyTo) {
+                break;
+            }
+        }
+        else if ([header.name isEqualToString:@"Cco"]) {
+            email.cco = [GTLGmailMessage getAddresses:header.value];
+            cco = YES;
+            if (messageID && subject && from && to && cc && cco && date && replyTo) {
                 break;
             }
         }
         else if ([header.name isEqualToString:@"Reply-To"]) {
-            email.replyTo = header.value;
+            //email.replyTo = header.value;
             replyTo = YES;
-            if (messageID && subject && to && from && date && replyTo) {
+            if (messageID && subject && from && to && cc && cco && date && replyTo) {
                 break;
             }
         }
         else if ([header.name isEqualToString:@"Date"]) {
-            email.date = [[GTLGmailMessage dateFormatter] dateFromString:header.value];
+            NSString *dateString = header.value;
+            //NSDate *dateD = [[GTLGmailMessage dateFormatter] dateFromString:dateString];
+            NSDate *dateD = [NSDate fuckingDate:dateString];
+            
+            NSLog(@"%@ => %@", dateString, dateD);
+            
+            email.date = dateD;
             date = YES;
-            if (messageID && subject && to && from && date && replyTo) {
+            if (messageID && subject && from && to && cc && cco && date && replyTo) {
                 break;
             }
         }
     }
     
     return email;
+}
+
++ (NSDictionary *)getAddresses:(NSString *)string {
+    NSArray *parts = [string componentsSeparatedByString:@","];
+    NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:parts.count];
+    
+    for (NSString *part in parts) {
+        NSDictionary *asd = [self getAddress:part];
+        [result addEntriesFromDictionary:asd];
+    }
+    return result;
+}
+
++ (NSDictionary *)getAddress:(NSString *)string {
+    static NSArray *charsToRemove = nil;
+    if (!charsToRemove) {
+        charsToRemove = @[@",", @" ", @"\""];
+    }
+    
+    NSString *cleanedString = [string cleanChars:charsToRemove];
+    
+    if ([ALMEmail validateEmailAddress:cleanedString]) {
+        return @{cleanedString : [NSNull null]};
+    }
+    else {
+        NSString *email = [cleanedString stringBetweenString:@"<" andString:@">"];
+        NSString *name = [cleanedString stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"<%@>", email] withString:@""];
+        name = [name cleanChars:charsToRemove];
+
+        return @{email : name};
+    }
 }
 
 @end

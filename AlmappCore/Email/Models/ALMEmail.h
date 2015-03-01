@@ -28,23 +28,31 @@ extern ALMEmailLabel const kEmailDefaultLabel;
 
 @property NSString *messageID;
 @property NSString *subject;
-@property NSString *to;
-@property NSString *from;
-@property NSString *replyTo;
+
+@property NSData *fromData;
+@property NSData *toData;
+@property NSData *ccData;
+@property NSData *ccoData;
+
 @property NSString *snippet;
 @property NSString *bodyHTML;
 @property NSString *bodyPlain;
 @property NSInteger labels;
 @property NSDate *date;
 
-//@property NSString *toName;
-//@property NSString *toEmail;
-//@property NSString *fromName;
-//@property NSString *fromEmail;
-//@property NSString *replyToName;
-//@property NSString *replyToEmail;
-
 @property (readonly) NSArray *threads;
+
+- (NSDictionary *)from;
+- (NSDictionary *)to;
+- (NSDictionary *)cc;
+- (NSDictionary *)cco;
+
+- (void)setFrom:(NSDictionary *)values;
+- (void)setTo:(NSDictionary *)values;
+- (void)setCc:(NSDictionary *)values;
+- (void)setCco:(NSDictionary *)values;
+
++ (BOOL)validateEmailAddress:(NSString *)email;
 
 @end
 RLM_ARRAY_TYPE(ALMEmail)

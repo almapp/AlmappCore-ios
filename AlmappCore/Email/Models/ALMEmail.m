@@ -13,20 +13,31 @@
 
 ALMEmailLabel const kEmailDefaultLabel = 0;
 
+@implementation NSData (Convertion)
+
+- (NSDictionary *)toDictionary {
+    return (self.length > 0) ? [NSKeyedUnarchiver unarchiveObjectWithData:self] : @{};
+}
+
+@end
+
+@implementation NSDictionary (Convertion)
+
+- (NSData *)toData {
+    return [NSKeyedArchiver archivedDataWithRootObject:self];
+}
+
+@end
+
 @implementation ALMEmail
 
 + (NSDictionary *)defaultPropertyValues {
     return @{kEmailMessageID : kRDefaultNullString,
              kEmailSubject : kRDefaultNullString,
-             kEmailTo : kRDefaultNullString,
-             kEmailFrom : kRDefaultNullString,
-             kEmailReplyTo : kRDefaultNullString,
-             //@"toName" : @"",
-             //@"toEmail" : @"",
-             //@"fromName" : @"",
-             //@"fromEmail" : @"",
-             //@"replyToName" : @"",
-             //@"replyToEmail" : @"",
+             @"toData" : [NSData data],
+             @"fromData" : [NSData data],
+             @"ccData" : [NSData data],
+             @"ccoData" : [NSData data],
              kEmailSnippet : kRDefaultNullString,
              kEmailLabels : @(kEmailDefaultLabel),
              kEmailBodyHTML : kRDefaultNullString,
@@ -41,6 +52,63 @@ ALMEmailLabel const kEmailDefaultLabel = 0;
 
 - (NSArray *)threads {
     return [self linkingObjectsOfClass:[ALMEmailThread className] forProperty:@"emails"];
+}
+
+
+- (NSDictionary *)from {
+    return self.fromData.toDictionary;
+}
+
+- (NSDictionary *)to {
+    return self.toData.toDictionary;
+}
+
+- (NSDictionary *)cc {
+    return self.ccData.toDictionary;
+}
+
+- (NSDictionary *)cco {
+    return self.ccoData.toDictionary;
+}
+
+- (void)setFrom:(NSDictionary *)values {
+    self.fromData = (values) ? values.toData : [NSData data];
+}
+
+- (void)setTo:(NSDictionary *)values {
+    self.toData = (values) ? values.toData : [NSData data];
+}
+
+- (void)setCc:(NSDictionary *)values {
+    self.ccData = (values) ? values.toData : [NSData data];
+}
+
+- (void)setCco:(NSDictionary *)values {
+    self.ccoData = (values) ? values.toData : [NSData data];
+}
+
+
++ (BOOL)validateEmailAddress:(NSString *)email {
+    NSString *emailRegEx =
+    @"(?:[a-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[a-z0-9!#$%\\&'*+/=?\\^_`{|}"
+    @"~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\"
+    @"x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-"
+    @"z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5"
+    @"]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-"
+    @"9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21"
+    @"-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+    
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:emailRegEx
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    if (error != nil)
+        return NO;
+    
+    NSRange stringRange = NSMakeRange(0, email.length);
+    NSRange matchRange = [regex rangeOfFirstMatchInString:email options:0 range:stringRange];
+    
+    return NSEqualRanges(matchRange, stringRange);
 }
 
 @end
