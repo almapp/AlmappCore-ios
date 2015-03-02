@@ -240,16 +240,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
     return labelsHash;
 }
 
-- (ALMEmail *)toSavedRealm:(RLMRealm *)realm {
-    return [ALMEmail createOrUpdateInRealm:realm withObject:self.toUnsavedRealm];
-}
-
-- (ALMEmail *)toUnsavedRealm {
-    BOOL messageID = NO, subject = NO, from = NO, to = NO, cc = NO, cco = NO, date = NO, replyTo = NO;
-    
-    ALMEmail *email = [[ALMEmail alloc] init];
-    email.snippet = self.snippet;
-    
+- (ALMEmailLabel)setupLabelsOn:(ALMEmail *)email {
     email.labels = kEmailDefaultLabel;
     for (NSString *labelString in self.labelIds) {
         NSNumber *labelValue = [GTLGmailMessage labels][labelString];
@@ -258,6 +249,20 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
             email.labels |= label;
         }
     }
+    return email.labels;
+}
+
+- (ALMEmail *)toSavedRealm:(RLMRealm *)realm {
+    return [ALMEmail createOrUpdateInRealm:realm withObject:self.toUnsavedRealm];
+}
+
+- (ALMEmail *)toUnsavedRealm {
+    BOOL messageID = NO, subject = NO, from = NO, to = NO, cc = NO, cco = NO, date = NO, replyTo = NO;
+    
+    ALMEmail *email = [ALMEmail createWithIdentifier:self.identifier];
+    email.snippet = self.snippet;
+    
+    [self setupLabelsOn:email];
     
     if (self.payload.isPlainText) {
         GTLGmailMessagePartBody *body = self.payload.body;
@@ -279,7 +284,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
     
     for (GTLGmailMessagePartHeader *header in headers) {
         if ([header.name isEqualToString:@"Message-ID"]) {
-            email.messageID = header.value;
+            // email.messageID = header.value;
             messageID = YES;
             if (messageID && subject && from && to && cc && cco && date && replyTo) {
                 break;
@@ -388,7 +393,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 
 - (ALMEmailThread *)toUnsavedRealm {
     ALMEmailThread *thread = [[ALMEmailThread alloc] init];
-    thread.threadID = self.identifier;
+    thread.identifier = self.identifier;
     thread.snippet = self.snippet;
     return thread;
 }
@@ -402,7 +407,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 - (NSArray *)successesArray {
     NSDictionary *results = self.successes;
     NSMutableArray *gmailObjects = [NSMutableArray arrayWithCapacity:results.count];
-    for (NSString *requestID in results) {
+    for (NSString *requestID in results.allKeys) {
         [gmailObjects addObject:[results objectForKey:requestID]];
     }
     return gmailObjects;
@@ -411,7 +416,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 - (NSArray *)failuresArray {
     NSDictionary *results = self.failures;
     NSMutableArray *gmailObjects = [NSMutableArray arrayWithCapacity:results.count];
-    for (NSString *requestID in results) {
+    for (NSString *requestID in results.allKeys) {
         [gmailObjects addObject:[results objectForKey:requestID]];
     }
     return gmailObjects;
@@ -487,6 +492,8 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
         auth.tokenType = @"Bearer";
         auth.accessToken = token.accessToken;
         auth.expirationDate = token.expiresAt;
+        return auth;
+        
     }).catch ( ^(NSError *error) {
         if ([error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey] statusCode] == 404) {
             if (self.delegate && [self.delegate respondsToSelector:@selector(gmailManager:tokenNotFound:)]) {
@@ -500,15 +507,15 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 
 #pragma mark - Fetching
 
-- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder {
-    return [self fetchEmailsInFolder:folder count:kGmailDefaultResultsPerPage];
+- (PMKPromise *)fetchThreadsWithEmailsInFolder:(ALMEmailFolder *)folder {
+    return [self fetchThreadsWithEmailsInFolder:folder count:kGmailDefaultResultsPerPage];
 }
 
-- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count {
-    return [self fetchEmailsInFolder:folder count:count pageToken:nil];
+- (PMKPromise *)fetchThreadsWithEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count {
+    return [self fetchThreadsWithEmailsInFolder:folder count:count pageToken:nil];
 }
 
-- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count pageToken:(NSString *)pageToken {
+- (PMKPromise *)fetchThreadsWithEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count pageToken:(NSString *)pageToken {
     return self.getAccessToken.then ( ^{
         return [self fetchMessagesWithLabels:@[folder.identifier] count:count pageToken:pageToken].then( ^(NSArray *gmailObjects, NSArray *errorObjets, GTLGmailListThreadsResponse *response) {
             
@@ -525,7 +532,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
             
             [realm commitWriteTransaction];
             
-            return PMKManifold(newThreads, response.nextPageToken, response.resultSizeEstimate);
+            return PMKManifold(newThreads, errorObjets, [ALMGmailListResponse gmailListResponse:response.nextPageToken size:response.resultSizeEstimate.integerValue]);
         });
     });
 }
@@ -545,6 +552,122 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
     query.pageToken = pageToken;
     
     return [self.service executeQuery:query];
+}
+
+
+#pragma mark - Modify
+
+- (PMKPromise *)markThreadAsReaded:(ALMEmailThread *)thread readed:(BOOL)readed {
+    return [self markThreadsAsReaded:@[thread] readed:readed];
+}
+
+- (PMKPromise *)markThreadsAsReaded:(NSArray *)threads readed:(BOOL)readed {
+    NSMutableArray *emails = [NSMutableArray array];
+    for (ALMEmailThread *thread in threads) {
+        for (ALMEmail *email in thread.emails) {
+            [emails addObject:email];
+        }
+    }
+    return [self markEmailsAsReaded:emails readed:readed];
+}
+
+- (PMKPromise *)markEmailAsReaded:(ALMEmail *)email readed:(BOOL)readed {
+    return [self markEmailsAsReaded:@[email] readed:readed];
+}
+
+- (PMKPromise *)markEmailsAsReaded:(NSArray *)emails readed:(BOOL)readed {
+    if (readed) {
+        return [self modifyEmails:emails addLabels:nil removeLabels:@[kGmailLabelUNREAD]];
+    }
+    else {
+        return [self modifyEmails:emails addLabels:@[kGmailLabelUNREAD] removeLabels:nil];
+    }
+}
+
+
+- (PMKPromise *)starThread:(ALMEmailThread *)thread starred:(BOOL)starred {
+    return [self starThreads:@[thread] starred:starred];
+}
+
+- (PMKPromise *)starThreads:(NSArray *)threads starred:(BOOL)starred {
+    NSMutableArray *emails = [NSMutableArray array];
+    for (ALMEmailThread *thread in threads) {
+        for (ALMEmail *email in thread.emails) {
+            [emails addObject:email];
+        }
+    }
+    return [self starEmails:emails starred:starred];
+}
+
+- (PMKPromise *)starEmail:(ALMEmail *)email starred:(BOOL)starred {
+    return [self starEmails:@[email] starred:starred];
+}
+
+- (PMKPromise *)starEmails:(NSArray *)emails starred:(BOOL)starred {
+    if (starred) {
+        return [self modifyEmails:emails addLabels:@[kGmailLabelSTARRED] removeLabels:nil];
+    }
+    else {
+        return [self modifyEmails:emails addLabels:nil removeLabels:@[kGmailLabelSTARRED]];
+    }
+}
+
+
+- (PMKPromise *)deleteThread:(ALMEmailThread *)thread markAsReaded:(BOOL)markAsReaded {
+    return [self deleteThreads:@[thread] markAsReaded:markAsReaded];
+}
+
+- (PMKPromise *)deleteThreads:(NSArray *)threads markAsReaded:(BOOL)markAsReaded {
+    NSMutableArray *emails = [NSMutableArray array];
+    for (ALMEmailThread *thread in threads) {
+        for (ALMEmail *email in thread.emails) {
+            [emails addObject:email];
+        }
+    }
+    return [self deleteEmails:emails markAsReaded:markAsReaded];
+}
+
+- (PMKPromise *)deleteEmail:(ALMEmail *)email markAsReaded:(BOOL)markAsReaded {
+    return [self deleteEmails:@[email] markAsReaded:markAsReaded];
+}
+
+- (PMKPromise *)deleteEmails:(NSArray *)emails markAsReaded:(BOOL)markAsReaded {
+    NSArray *removeLabels = (markAsReaded) ? @[kGmailLabelUNREAD] : nil;
+    return [self modifyEmails:emails addLabels:@[kGmailLabelTRASH] removeLabels:removeLabels];
+}
+
+
+
+- (PMKPromise *)modifyEmails:(NSArray *)emails addLabels:(NSArray *)addLabels removeLabels:(NSArray *)removeLabels {
+    NSMutableDictionary *identifiers = [NSMutableDictionary dictionaryWithCapacity:emails.count];
+    for (ALMEmail *email in emails) {
+        identifiers[email.identifier] = email;
+    }
+    
+    GTLBatchQuery *batch = [GTLBatchQuery batchQuery];
+    for (NSString *identifier in identifiers.allKeys) {
+        GTLQueryGmail *query = [GTLQueryGmail queryForUsersMessagesModify];
+        query.identifier = identifier;
+        query.addLabelIds = addLabels;
+        query.removeLabelIds = removeLabels;
+        [batch addQuery:query];
+    }
+    
+    return [self batchRequestWith:batch].then( ^(GTLBatchResult *results) {
+        
+        RLMRealm *realm = ([emails.firstObject realm]) ? (RLMRealm *)[emails.firstObject realm] : self.session.realm;
+        
+        [realm beginWriteTransaction];
+        
+        for (GTLGmailMessage *success in results.successesArray) {
+            ALMEmail *email = identifiers[[success identifier]];
+            [success setupLabelsOn:email];
+        }
+        
+        [realm commitWriteTransaction];
+        
+        return PMKManifold(emails, results.failuresArray);
+    });
 }
 
 
@@ -571,7 +694,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 }
 
 - (PMKPromise *)batchRequestWith:(GTLBatchQuery *)batch {
-    return [self.service executeQuery:batch];
+    return [self.service executeQuery:batch]; // On success returns GTLBatchResult
 }
 
 
@@ -580,7 +703,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 - (GTLServiceGmail *)service {
     if (!_service) {
         _service = [[GTLServiceGmail alloc] init];
-        _service.shouldFetchNextPages = YES;
+        // _service.shouldFetchNextPages = YES;
         _service.retryEnabled = YES;
     }
     return _service;

@@ -14,7 +14,7 @@ NSString *const kEmailAccessToken = @"accessToken";
 NSString *const kEmailRefreshToken = @"refreshToken";
 NSString *const kEmailExpiresAt = @"expiresAt";
 
-NSString *const kEmailMessageID = @"messageID";
+// NSString *const kEmailMessageID = @"messageID";
 NSString *const kEmailSubject = @"subject";
 NSString *const kEmailToEmail = @"toEmail";
 NSString *const kEmailToName = @"toName";
@@ -30,7 +30,7 @@ NSString *const kEmailBodyHTML = @"bodyHTML";
 NSString *const kEmailBodyPlain = @"bodyPlain";
 
 
-NSString *const kEmailThreadID = @"threadID";
+NSString *const kEmailIdentifier = @"identifier";
 
 @implementation ALMEmailConstants
 

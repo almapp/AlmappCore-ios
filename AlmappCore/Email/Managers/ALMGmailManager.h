@@ -9,6 +9,7 @@
 #import "ALMEmailManager.h"
 #import "ALMEmail.h"
 #import "ALMApiKey.h"
+#import "ALMGmailListResponse.h"
 
 #import <gtm-oauth2/GTMOAuth2Authentication.h>
 #import <GTLGmailConstants.h>
@@ -46,8 +47,33 @@ extern NSString *const kGmailLabelIMPORTANT;
 @property (readonly) ALMEmailFolder *threadFolder;
 
 - (PMKPromise *)setFirstAuthentication:(GTMOAuth2Authentication *)auth;
-- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count;
-- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count pageToken:(NSString *)pageToken;;
+
+- (PMKPromise *)fetchThreadsWithEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count;
+- (PMKPromise *)fetchThreadsWithEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count pageToken:(NSString *)pageToken;;
+
+
+- (PMKPromise *)markThreadAsReaded:(ALMEmailThread *)thread readed:(BOOL)readed;
+- (PMKPromise *)markThreadsAsReaded:(NSArray *)threads readed:(BOOL)readed;
+
+- (PMKPromise *)markEmailAsReaded:(ALMEmail *)email readed:(BOOL)readed;
+- (PMKPromise *)markEmailsAsReaded:(NSArray *)emails readed:(BOOL)readed;
+
+
+- (PMKPromise *)starThread:(ALMEmailThread *)thread starred:(BOOL)starred;
+- (PMKPromise *)starThreads:(NSArray *)threads starred:(BOOL)starred;
+
+- (PMKPromise *)starEmail:(ALMEmail *)email starred:(BOOL)starred;
+- (PMKPromise *)starEmails:(NSArray *)emails starred:(BOOL)starred;
+
+
+- (PMKPromise *)deleteThread:(ALMEmailThread *)thread markAsReaded:(BOOL)markAsReaded;
+- (PMKPromise *)deleteThreads:(NSArray *)threads markAsReaded:(BOOL)markAsReaded;
+
+- (PMKPromise *)deleteEmail:(ALMEmail *)email markAsReaded:(BOOL)markAsReaded;
+- (PMKPromise *)deleteEmails:(NSArray *)emails markAsReaded:(BOOL)markAsReaded;
+
+
+- (PMKPromise *)modifyEmails:(NSArray *)emails addLabels:(NSArray *)addLabels removeLabels:(NSArray *)removeLabels;
 
 - (void)signOut;
 - (BOOL)isSignedIn;

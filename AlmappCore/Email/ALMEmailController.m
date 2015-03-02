@@ -85,11 +85,10 @@
     
     RLMResults *orderedThreads = [folder threadsSortedAscending:NO];
     
-    for (NSUInteger i = 0; i < orderedThreads.count; i++) {
-        if (i >= count) {
-            [folder deleteThread:orderedThreads[i] force:NO];
-        }
+    for (NSInteger i = folder.threads.count - 1; i >= 0 && folder.threads.count > count; i--) {
+        [folder deleteThread:orderedThreads[i] force:NO];
     }
+    
     [realm commitWriteTransaction];
 }
 

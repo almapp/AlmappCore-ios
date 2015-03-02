@@ -37,21 +37,21 @@
 }
 
 - (RLMResults *)threadsSortedAscending:(BOOL)ascending {
-    return [self.threads sortedResultsUsingProperty:kEmailThreadID ascending:ascending];
+    return [self.threads sortedResultsUsingProperty:kEmailIdentifier ascending:ascending];
 }
 
 - (void)deleteThreadsForced:(BOOL)force {
-    for (NSUInteger i = 0; i < self.threads.count; i++) {
+    for (NSInteger i = self.threads.count - 1; i >= 0; i--) {
         [self deleteThread:self.threads[i] force:force];
     }
 }
 
 - (void)deleteThread:(ALMEmailThread *)thread force:(BOOL)force {
     if (force || thread.folders.count <= 1) {
-        NSUInteger i = [self.threads indexOfObject:thread];
+        NSInteger i = [self.threads indexOfObject:thread];
         [self.threads removeObjectAtIndex:i];
         [thread deleteEmailsForced:NO];
-        [thread removeFromRealm];
+        [self.realm deleteObject:thread];
     }
 }
 

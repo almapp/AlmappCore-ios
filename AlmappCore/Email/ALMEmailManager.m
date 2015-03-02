@@ -29,7 +29,7 @@
     return self;
 }
 
-- (PMKPromise *)fetchEmailsInFolder:(ALMEmailFolder *)folder {
+- (PMKPromise *)fetchThreadsWithEmailsInFolder:(ALMEmailFolder *)folder {
     return nil;
 }
 

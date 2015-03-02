@@ -10,7 +10,7 @@
 
 @interface ALMEmailThread : RLMObject
 
-@property NSString *threadID;
+@property NSString *identifier;
 @property NSString *snippet;
 @property RLMArray<ALMEmail> *emails;
 

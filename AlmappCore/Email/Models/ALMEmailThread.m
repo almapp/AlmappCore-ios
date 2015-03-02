@@ -14,12 +14,12 @@
 @implementation ALMEmailThread
 
 + (NSDictionary *)defaultPropertyValues {
-    return @{kEmailThreadID : kRDefaultNullString,
+    return @{kEmailIdentifier : kRDefaultNullString,
              kEmailSnippet : kRDefaultNullString};
 }
 
 + (NSString *)primaryKey {
-    return kEmailThreadID;
+    return kEmailIdentifier;
 }
 
 - (NSArray *)folders {
@@ -43,20 +43,20 @@
 }
 
 - (RLMResults *)emailsSortedAscending:(BOOL)ascending {
-    return [self.emails sortedResultsUsingProperty:kEmailMessageID ascending:ascending];
+    return [self.emails sortedResultsUsingProperty:kEmailIdentifier ascending:ascending];
 }
 
 - (void)deleteEmailsForced:(BOOL)force {
-    for (NSUInteger i = 0; i < self.emails.count; i++) {
+    for (NSInteger i = self.emails.count - 1; i >= 0; i--) {
         [self deleteEmail:self.emails[i] force:force];
     }
 }
 
 - (void)deleteEmail:(ALMEmail *)email force:(BOOL)force {
     if (force || email.threads.count <= 1) {
-        NSUInteger i = [self.emails indexOfObject:email];
+        NSInteger i = [self.emails indexOfObject:email];
         [self.emails removeObjectAtIndex:i];
-        [email removeFromRealm];
+        [self.realm deleteObject:email];
     }
 }
 

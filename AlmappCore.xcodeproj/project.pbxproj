@@ -48,6 +48,7 @@
 		F66B93471A63DF2D0048DACD /* ALMWebPage.m in Sources */ = {isa = PBXBuildFile; fileRef = F66B93461A63DF2D0048DACD /* ALMWebPage.m */; };
 		F67E64691A9056EE0077AEEA /* ALMLikesController.m in Sources */ = {isa = PBXBuildFile; fileRef = F67E64681A9056EE0077AEEA /* ALMLikesController.m */; };
 		F67F80041A82CD3A00E20802 /* ALMScheduleModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F67F80031A82CD3A00E20802 /* ALMScheduleModuleTest.m */; };
+		F68940311AA3ECDF00D30AAA /* ALMGmailListResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F68940301AA3ECDF00D30AAA /* ALMGmailListResponse.m */; };
 		F68DB1561AA0B0BF0052FC15 /* NSDate+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = F68DB1551AA0B0BF0052FC15 /* NSDate+JSON.m */; };
 		F694DD561A7A9BA8005D9AE7 /* ALMError.m in Sources */ = {isa = PBXBuildFile; fileRef = F694DD551A7A9BA8005D9AE7 /* ALMError.m */; };
 		F69C66A51A6BEA37006F1C0E /* ALMScheduleItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F69C66A41A6BEA37006F1C0E /* ALMScheduleItem.m */; };
@@ -186,6 +187,8 @@
 		F67E64671A9056EE0077AEEA /* ALMLikesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMLikesController.h; sourceTree = "<group>"; };
 		F67E64681A9056EE0077AEEA /* ALMLikesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMLikesController.m; sourceTree = "<group>"; };
 		F67F80031A82CD3A00E20802 /* ALMScheduleModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMScheduleModuleTest.m; sourceTree = "<group>"; };
+		F689402F1AA3ECDF00D30AAA /* ALMGmailListResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMGmailListResponse.h; sourceTree = "<group>"; };
+		F68940301AA3ECDF00D30AAA /* ALMGmailListResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMGmailListResponse.m; sourceTree = "<group>"; };
 		F68DB1541AA0B0BF0052FC15 /* NSDate+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+JSON.h"; sourceTree = "<group>"; };
 		F68DB1551AA0B0BF0052FC15 /* NSDate+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+JSON.m"; sourceTree = "<group>"; };
 		F694DD541A7A9BA8005D9AE7 /* ALMError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMError.h; sourceTree = "<group>"; };
@@ -469,6 +472,8 @@
 			children = (
 				F6AEF1C61A9F58A600FCA20F /* ALMGmailManager.h */,
 				F6AEF1C71A9F58A600FCA20F /* ALMGmailManager.m */,
+				F689402F1AA3ECDF00D30AAA /* ALMGmailListResponse.h */,
+				F68940301AA3ECDF00D30AAA /* ALMGmailListResponse.m */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -833,6 +838,7 @@
 				F6B7269F1A87144F00461E17 /* RLMArray+Extras.m in Sources */,
 				F63683061A58C8D000DBCC6A /* ALMEvent.m in Sources */,
 				F63DFD971A93EAF20065A0F6 /* ALMTemporalCredential.m in Sources */,
+				F68940311AA3ECDF00D30AAA /* ALMGmailListResponse.m in Sources */,
 				F6C19A8F1A92705200FA7611 /* ALMMapController.m in Sources */,
 				F6A0F45A1A7FBBE100380EE1 /* RLMResults+Extras.m in Sources */,
 				F694DD561A7A9BA8005D9AE7 /* ALMError.m in Sources */,

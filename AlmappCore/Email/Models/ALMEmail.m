@@ -32,7 +32,7 @@ ALMEmailLabel const kEmailDefaultLabel = 0;
 @implementation ALMEmail
 
 + (NSDictionary *)defaultPropertyValues {
-    return @{kEmailMessageID : kRDefaultNullString,
+    return @{kEmailIdentifier : kRDefaultNullString,
              kEmailSubject : kRDefaultNullString,
              @"toData" : [NSData data],
              @"fromData" : [NSData data],
@@ -47,13 +47,18 @@ ALMEmailLabel const kEmailDefaultLabel = 0;
 }
 
 + (NSString *)primaryKey {
-    return kEmailMessageID;
+    return kEmailIdentifier;
 }
 
 - (NSArray *)threads {
     return [self linkingObjectsOfClass:[ALMEmailThread className] forProperty:@"emails"];
 }
 
++ (instancetype)createWithIdentifier:(NSString *)identifier {
+    ALMEmail *email = [[ALMEmail alloc] init];
+    email.identifier = identifier;
+    return email;
+}
 
 - (NSDictionary *)from {
     return self.fromData.toDictionary;

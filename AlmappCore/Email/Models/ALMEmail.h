@@ -26,7 +26,8 @@ extern ALMEmailLabel const kEmailDefaultLabel;
 
 @interface ALMEmail : RLMObject
 
-@property NSString *messageID;
+@property NSString *identifier;
+// @property NSString *messageID;
 @property NSString *subject;
 
 @property NSData *fromData;
@@ -41,6 +42,8 @@ extern ALMEmailLabel const kEmailDefaultLabel;
 @property NSDate *date;
 
 @property (readonly) NSArray *threads;
+
++ (instancetype)createWithIdentifier:(NSString *)identifier;
 
 - (NSDictionary *)from;
 - (NSDictionary *)to;

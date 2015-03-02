@@ -56,7 +56,7 @@
     NSString *description = [NSString stringWithFormat:@"Gmail"];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
-    [self.manager fetchEmailsInFolder:self.manager.inboxFolder count:10].then( ^(id threads, NSString *nextPageToken, NSInteger resultCount) {
+    [self.manager fetchThreadsWithEmailsInFolder:self.manager.inboxFolder count:10].then( ^(NSArray *threads, NSArray *errorObjets, ALMGmailListResponse *response) {
         for (ALMEmailThread *thread in threads) {
             for (ALMEmail *email in thread.emails) {
                 for (NSDictionary *address in @[email.from, email.to]) {
@@ -69,17 +69,52 @@
             }
         }
         
-        return PMKManifold(threads, nextPageToken);
+        return PMKManifold(threads, response.nextPageToken);
         
     }).then( ^(id threads, NSString *pageToken) {
-        [self.manager fetchEmailsInFolder:self.manager.inboxFolder count:10 pageToken:pageToken].then( ^(id newThreads, NSString *nextPageToken, NSInteger resultCount) {
+        return [self.manager fetchThreadsWithEmailsInFolder:self.manager.inboxFolder count:10 pageToken:pageToken].then( ^(NSArray *newThreads, NSArray *errorObjets, ALMGmailListResponse *response) {
+            
+            XCTAssertEqual(self.manager.inboxFolder.threads.count, 20);
+            
             for (ALMEmailThread *thread in threads) {
                 for (ALMEmailThread *newThread in newThreads) {
-                    XCTAssertNotEqualObjects(thread.threadID, newThread.threadID);
+                    XCTAssertNotEqualObjects(thread.identifier, newThread.identifier);
                 }
             }
-            [expectation fulfill];
+            return self.manager.inboxFolder.threads;
         });
+        
+    }).then( ^(RLMArray<ALMEmailThread> *threads) {
+        ALMEmailThread *thread = threads.lastObject;
+        return [self.manager markThreadAsReaded:thread readed:YES].then( ^(NSArray *emails, NSArray *errorObjets) {
+            XCTAssertEqual(emails.count, 1);
+            XCTAssertEqual(errorObjets.count, 0);
+            
+            ALMEmail *email = emails.firstObject;
+            
+            XCTAssertFalse((email.labels & ALMEmailLabelUnread) == ALMEmailLabelUnread);
+            
+            return [self.manager markThreadAsReaded:thread readed:NO].then( ^(NSArray *newEmails, NSArray *errorObjets) {
+                XCTAssertEqual(newEmails.count, 1);
+                XCTAssertEqual(errorObjets.count, 0);
+                
+                ALMEmail *email = newEmails.firstObject;
+                XCTAssertTrue((email.labels & ALMEmailLabelUnread) == ALMEmailLabelUnread);
+                
+                return newEmails;
+            });
+        });
+        
+    }).then( ^{
+        [self.manager.emailController saveLastMails:5 on:self.manager.inboxFolder];
+        
+        ALMEmailThread *newest = self.manager.inboxFolder.newestThread;
+        
+        XCTAssertEqual(self.manager.inboxFolder.threads.count, 5);
+        
+        XCTAssertEqualObjects(newest.identifier, self.manager.inboxFolder.newestThread.identifier);
+        
+        [expectation fulfill];
         
     }).catch(^(NSError *error) {
         NSLog(@"%@", error);
