@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "AlmappCore"
-  s.version      = "0.6"
+  s.version      = "0.6.1"
   s.summary      = "Mobile backend for Almapp REST API."
 
   s.description  = <<-DESC
@@ -136,4 +136,5 @@ Pod::Spec.new do |s|
   s.dependency "PromiseKit-AFNetworking"
   s.dependency "PromiseKit", "~> 1.3"
   s.dependency "Google-API-Client/Gmail", "~> 1.0.422"
+  s.dependency "AFOAuth2Manager", "~> 2.1.0"
 end
