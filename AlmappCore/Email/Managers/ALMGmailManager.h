@@ -9,7 +9,6 @@
 #import "ALMEmailManager.h"
 #import "ALMEmail.h"
 #import "ALMApiKey.h"
-#import "ALMGmailListResponse.h"
 
 #import <gtm-oauth2/GTMOAuth2Authentication.h>
 #import <GTLGmailConstants.h>

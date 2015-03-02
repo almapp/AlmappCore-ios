@@ -56,7 +56,7 @@
     NSString *description = [NSString stringWithFormat:@"Gmail"];
     XCTestExpectation *expectation = [self expectationWithDescription:description];
     
-    [self.manager fetchThreadsWithEmailsInFolder:self.manager.inboxFolder count:10].then( ^(NSArray *threads, NSArray *errorObjets, ALMGmailListResponse *response) {
+    [self.manager fetchThreadsWithEmailsInFolder:self.manager.inboxFolder count:10].then( ^(NSArray *threads, NSArray *errorObjets, NSString *nextPageToken) {
         for (ALMEmailThread *thread in threads) {
             for (ALMEmail *email in thread.emails) {
                 for (NSDictionary *address in @[email.from, email.to]) {
@@ -69,10 +69,10 @@
             }
         }
         
-        return PMKManifold(threads, response.nextPageToken);
+        return PMKManifold(threads, nextPageToken);
         
     }).then( ^(id threads, NSString *pageToken) {
-        return [self.manager fetchThreadsWithEmailsInFolder:self.manager.inboxFolder count:10 pageToken:pageToken].then( ^(NSArray *newThreads, NSArray *errorObjets, ALMGmailListResponse *response) {
+        return [self.manager fetchThreadsWithEmailsInFolder:self.manager.inboxFolder count:10 pageToken:pageToken].then( ^(NSArray *newThreads, NSArray *errorObjets, NSString *nextPageToken) {
             
             XCTAssertEqual(self.manager.inboxFolder.threads.count, 20);
             

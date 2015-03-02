@@ -532,7 +532,7 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
             
             [realm commitWriteTransaction];
             
-            return PMKManifold(newThreads, errorObjets, [ALMGmailListResponse gmailListResponse:response.nextPageToken size:response.resultSizeEstimate.integerValue]);
+            return PMKManifold(newThreads, errorObjets, response.nextPageToken);
         });
     });
 }
