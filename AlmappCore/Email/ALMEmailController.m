@@ -14,13 +14,14 @@
 
 @implementation ALMEmailController
 
-- (id)threadsLabeled:(ALMEmailLabel)labels {
-    return [self threadsLabeled:labels inRealm:self.session.realm];
+- (NSArray *)threadsLabeled:(ALMEmailLabel)labels ascending:(BOOL)ascending;{
+    return [self threadsLabeled:labels inRealm:self.session.realm ascending:ascending];
 }
 
-- (id)threadsLabeled:(ALMEmailLabel)labels inRealm:(RLMRealm *)realm {
+- (NSArray *)threadsLabeled:(ALMEmailLabel)labels inRealm:(RLMRealm *)realm ascending:(BOOL)ascending;{
     NSMutableArray *threads = [NSMutableArray array];
-    for (ALMEmailThread *thread in [ALMEmailThread allObjectsInRealm:realm]) {
+    id iterable = [ALMEmailThread threadsSortedAscending:ascending realm:realm];
+    for (ALMEmailThread *thread in iterable) {
         for (ALMEmail *email in thread.emails) {
             if (email.labels & labels) {
                 [threads addObject:thread];

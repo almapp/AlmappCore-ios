@@ -22,8 +22,8 @@
 - (PMKPromise *)getValidAccessToken;
 - (BOOL)isAccessTokenValid;
 
-- (id)threadsLabeled:(ALMEmailLabel)labels;
-- (id)threadsLabeled:(ALMEmailLabel)labels inRealm:(RLMRealm *)realm;
+- (NSArray *)threadsLabeled:(ALMEmailLabel)labels ascending:(BOOL)ascending;
+- (NSArray *)threadsLabeled:(ALMEmailLabel)labels inRealm:(RLMRealm *)realm ascending:(BOOL)ascending;
 - (void)saveLastThreads:(NSInteger)count labeled:(ALMEmailLabel)labels;
 - (void)saveLastThreads:(NSInteger)count labeled:(ALMEmailLabel)labels inRealm:(RLMRealm *)realm;
 

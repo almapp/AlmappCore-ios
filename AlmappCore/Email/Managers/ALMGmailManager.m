@@ -440,23 +440,23 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 #pragma mark - Folders
 
 - (NSArray *)inboxFolder {
-    return [self.emailController threadsLabeled:ALMEmailLabelInbox inRealm:self.realm];
+    return [self.emailController threadsLabeled:ALMEmailLabelInbox inRealm:self.realm ascending:NO];
 }
 
 - (NSArray *)sentFolder {
-    return [self.emailController threadsLabeled:ALMEmailLabelSent inRealm:self.realm];
+    return [self.emailController threadsLabeled:ALMEmailLabelSent inRealm:self.realm ascending:NO];
 }
 
 - (NSArray *)starredFolder {
-    return [self.emailController threadsLabeled:ALMEmailLabelStarred inRealm:self.realm];
+    return [self.emailController threadsLabeled:ALMEmailLabelStarred inRealm:self.realm ascending:NO];
 }
 
 - (NSArray *)spamFolder {
-    return [self.emailController threadsLabeled:ALMEmailLabelSpam inRealm:self.realm];
+    return [self.emailController threadsLabeled:ALMEmailLabelSpam inRealm:self.realm ascending:NO];
 }
 
 - (NSArray *)trashFolder {
-    return [self.emailController threadsLabeled:ALMEmailLabelTrash inRealm:self.realm];
+    return [self.emailController threadsLabeled:ALMEmailLabelTrash inRealm:self.realm ascending:NO];
 }
 
 
