@@ -29,7 +29,7 @@
     return self;
 }
 
-- (PMKPromise *)fetchThreadsWithEmailsInFolder:(ALMEmailFolder *)folder {
+- (PMKPromise *)fetchThreadsWithEmails:(ALMEmailLabel)labels {
     return nil;
 }
 

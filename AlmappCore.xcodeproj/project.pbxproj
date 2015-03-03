@@ -99,7 +99,6 @@
 		F6FEEDFE1A9FBD9B0033464A /* ALMEmailToken.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEDFD1A9FBD9B0033464A /* ALMEmailToken.m */; };
 		F6FEEE011A9FE0180033464A /* ALMEmailTest.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEE001A9FE0180033464A /* ALMEmailTest.m */; };
 		F6FEEE041AA01E730033464A /* ALMEmailThread.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEE031AA01E730033464A /* ALMEmailThread.m */; };
-		F6FEEE071AA02AE50033464A /* ALMEmailFolder.m in Sources */ = {isa = PBXBuildFile; fileRef = F6FEEE061AA02AE50033464A /* ALMEmailFolder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -281,8 +280,6 @@
 		F6FEEE001A9FE0180033464A /* ALMEmailTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEmailTest.m; sourceTree = "<group>"; };
 		F6FEEE021AA01E730033464A /* ALMEmailThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMEmailThread.h; sourceTree = "<group>"; };
 		F6FEEE031AA01E730033464A /* ALMEmailThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEmailThread.m; sourceTree = "<group>"; };
-		F6FEEE051AA02AE50033464A /* ALMEmailFolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALMEmailFolder.h; sourceTree = "<group>"; };
-		F6FEEE061AA02AE50033464A /* ALMEmailFolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALMEmailFolder.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -662,8 +659,6 @@
 		F6FEEDC91A9F70290033464A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F6FEEE051AA02AE50033464A /* ALMEmailFolder.h */,
-				F6FEEE061AA02AE50033464A /* ALMEmailFolder.m */,
 				F6FEEE021AA01E730033464A /* ALMEmailThread.h */,
 				F6FEEE031AA01E730033464A /* ALMEmailThread.m */,
 				F6FEEDCA1A9F703D0033464A /* ALMEmail.h */,
@@ -853,7 +848,6 @@
 				F6D19BDF1A51B02800FD4715 /* ALMUser.m in Sources */,
 				F6B4FA581AA1FE13004B0242 /* ALMEmailConstants.m in Sources */,
 				F66B93471A63DF2D0048DACD /* ALMWebPage.m in Sources */,
-				F6FEEE071AA02AE50033464A /* ALMEmailFolder.m in Sources */,
 				F6A058B61A5481B6001A1E45 /* ALMArea.m in Sources */,
 				F6FEEE041AA01E730033464A /* ALMEmailThread.m in Sources */,
 				F6C19A921A9270B200FA7611 /* ALMCustomController.m in Sources */,

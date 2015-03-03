@@ -35,20 +35,22 @@ extern NSString *const kGmailLabelIMPORTANT;
 
 @interface ALMGmailManager : ALMEmailManager
 
+@property (strong, nonatomic) RLMRealm *realm;
+
 @property (weak, nonatomic) id<ALMGmailDelegate> delegate;
 @property (strong, nonatomic) NSString *scope;
 @property (strong, nonatomic) ALMApiKey *apiKey;
 
-@property (readonly) ALMEmailFolder *inboxFolder;
-@property (readonly) ALMEmailFolder *sentFolder;
-@property (readonly) ALMEmailFolder *starredFolder;
-@property (readonly) ALMEmailFolder *spamFolder;
-@property (readonly) ALMEmailFolder *threadFolder;
+@property (readonly) NSArray *inboxFolder;
+@property (readonly) NSArray *sentFolder;
+@property (readonly) NSArray *starredFolder;
+@property (readonly) NSArray *spamFolder;
+@property (readonly) NSArray *trashFolder;
 
 - (PMKPromise *)setFirstAuthentication:(GTMOAuth2Authentication *)auth;
 
-- (PMKPromise *)fetchThreadsWithEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count;
-- (PMKPromise *)fetchThreadsWithEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count pageToken:(NSString *)pageToken;;
+- (PMKPromise *)fetchThreadsWithEmailsLabeled:(ALMEmailLabel)labels count:(NSInteger)count;
+- (PMKPromise *)fetchThreadsWithEmailsLabeled:(ALMEmailLabel)labels count:(NSInteger)count pageToken:(NSString *)pageToken;;
 
 
 - (PMKPromise *)markThreadAsReaded:(ALMEmailThread *)thread readed:(BOOL)readed;

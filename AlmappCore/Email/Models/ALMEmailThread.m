@@ -7,7 +7,6 @@
 //
 
 #import "ALMEmailThread.h"
-#import "ALMEmailFolder.h"
 #import "ALMEmailConstants.h"
 #import "ALMResourceConstants.h"
 
@@ -22,9 +21,52 @@
     return kEmailIdentifier;
 }
 
-- (NSArray *)folders {
-    return [self linkingObjectsOfClass:[ALMEmailFolder className] forProperty:@"threads"];
+
++ (RLMResults *)sortedThreads {
+    return [self sortedThreadsInRealm:[RLMRealm defaultRealm]];
 }
+
++ (RLMResults *)sortedThreadsInRealm:(RLMRealm *)realm {
+    return [self threadsSortedAscending:NO realm:realm];
+}
+
+
++ (ALMEmailThread *)newestThread {
+    return [self newestThreadInRealm:[RLMRealm defaultRealm]];
+}
+
++ (ALMEmailThread *)newestThreadInRealm:(RLMRealm *)realm {
+    return [self threadsSortedAscending:YES realm:realm].firstObject;
+}
+
+
++ (ALMEmailThread *)oldestThread {
+    return [self oldestThreadInRealm:[RLMRealm defaultRealm]];
+}
+
++ (ALMEmailThread *)oldestThreadInRealm:(RLMRealm *)realm {
+    return [self threadsSortedAscending:NO realm:realm].firstObject;
+}
+
+
++ (NSArray *)threadsSortedAscending:(BOOL)ascending first:(NSUInteger)count {
+    return [self threadsSortedAscending:ascending realm:[RLMRealm defaultRealm] first:count];
+}
+
++ (NSArray *)threadsSortedAscending:(BOOL)ascending realm:(RLMRealm *)realm first:(NSUInteger)count {
+    return [[self threadsSortedAscending:ascending] subarrayLast:count];
+}
+
+
++ (RLMResults *)threadsSortedAscending:(BOOL)ascending {
+    return [self threadsSortedAscending:ascending realm:[RLMRealm defaultRealm]];
+}
+
++ (RLMResults *)threadsSortedAscending:(BOOL)ascending realm:(RLMRealm *)realm {
+    return [[self allObjectsInRealm:realm] sortedResultsUsingProperty:kEmailIdentifier ascending:ascending];
+}
+
+
 
 - (RLMResults *)sortedEmails {
     return [self emailsSortedAscending:NO];

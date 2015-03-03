@@ -439,24 +439,57 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 
 #pragma mark - Folders
 
-- (ALMEmailFolder *)inboxFolder {
-    return [self.emailController folder:kGmailLabelINBOX];
+- (NSArray *)inboxFolder {
+    return [self.emailController threadsLabeled:ALMEmailLabelInbox inRealm:self.realm];
 }
 
-- (ALMEmailFolder *)sentFolder {
-    return [self.emailController folder:kGmailLabelSENT];
+- (NSArray *)sentFolder {
+    return [self.emailController threadsLabeled:ALMEmailLabelSent inRealm:self.realm];
 }
 
-- (ALMEmailFolder *)starredFolder {
-    return [self.emailController folder:kGmailLabelSTARRED];
+- (NSArray *)starredFolder {
+    return [self.emailController threadsLabeled:ALMEmailLabelStarred inRealm:self.realm];
 }
 
-- (ALMEmailFolder *)spamFolder {
-    return [self.emailController folder:kGmailLabelSPAM];
+- (NSArray *)spamFolder {
+    return [self.emailController threadsLabeled:ALMEmailLabelSpam inRealm:self.realm];
 }
 
-- (ALMEmailFolder *)threadFolder {
-    return [self.emailController folder:kGmailLabelTRASH];
+- (NSArray *)trashFolder {
+    return [self.emailController threadsLabeled:ALMEmailLabelTrash inRealm:self.realm];
+}
+
+
+#pragma mark - Others
+
++ (NSArray *)identifiersForLabels:(ALMEmailLabel)labels {
+    NSMutableArray *array = [NSMutableArray array];
+    
+    if (labels & ALMEmailLabelInbox) {
+        [array addObject:kGmailLabelINBOX];
+    }
+    else if (labels & ALMEmailLabelSent) {
+        [array addObject:kGmailLabelSENT];
+    }
+    else if (labels & ALMEmailLabelDraft) {
+        [array addObject:kGmailLabelDRAFT];
+    }
+    else if (labels & ALMEmailLabelSpam) {
+        [array addObject:kGmailLabelSPAM];
+    }
+    else if (labels & ALMEmailLabelTrash) {
+        [array addObject:kGmailLabelTRASH];
+    }
+    else if (labels & ALMEmailLabelUnread) {
+        [array addObject:kGmailLabelUNREAD];
+    }
+    else if (labels & ALMEmailLabelStarred) {
+        [array addObject:kGmailLabelSTARRED];
+    }
+    else if (labels & ALMEmailLabelImportant) {
+        [array addObject:kGmailLabelIMPORTANT];
+    }
+    return array;
 }
 
 - (NSString *)scope {
@@ -464,6 +497,13 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
         _scope = [GTMOAuth2Authentication scopeWithStrings:kGTLAuthScopeGmailCompose, kGTLAuthScopeGmailModify, nil];
     }
     return _scope;
+}
+
+- (RLMRealm *)realm {
+    if (!_realm) {
+        _realm = self.session.realm;
+    }
+    return _realm;
 }
 
 
@@ -507,27 +547,26 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
 
 #pragma mark - Fetching
 
-- (PMKPromise *)fetchThreadsWithEmailsInFolder:(ALMEmailFolder *)folder {
-    return [self fetchThreadsWithEmailsInFolder:folder count:kGmailDefaultResultsPerPage];
+- (PMKPromise *)fetchThreadsWithEmails:(ALMEmailLabel)labels {
+    return [self fetchThreadsWithEmailsLabeled:labels count:kGmailDefaultResultsPerPage];
 }
 
-- (PMKPromise *)fetchThreadsWithEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count {
-    return [self fetchThreadsWithEmailsInFolder:folder count:count pageToken:nil];
+- (PMKPromise *)fetchThreadsWithEmailsLabeled:(ALMEmailLabel)labels count:(NSInteger)count {
+    return [self fetchThreadsWithEmailsLabeled:labels count:count pageToken:nil];
 }
 
-- (PMKPromise *)fetchThreadsWithEmailsInFolder:(ALMEmailFolder *)folder count:(NSInteger)count pageToken:(NSString *)pageToken {
+- (PMKPromise *)fetchThreadsWithEmailsLabeled:(ALMEmailLabel)labels count:(NSInteger)count pageToken:(NSString *)pageToken {
     return self.getAccessToken.then ( ^{
-        return [self fetchMessagesWithLabels:@[folder.identifier] count:count pageToken:pageToken].then( ^(NSArray *gmailObjects, NSArray *errorObjets, GTLGmailListThreadsResponse *response) {
+        NSArray *identifiers = [self.class identifiersForLabels:labels];
+        return [self fetchMessagesWithLabels:identifiers count:count pageToken:pageToken].then( ^(NSArray *gmailObjects, NSArray *errorObjets, GTLGmailListThreadsResponse *response) {
             
-            RLMRealm *realm = folder.realm;
+            RLMRealm *realm = self.realm;
             [realm beginWriteTransaction];
             
             NSMutableArray *newThreads = [NSMutableArray arrayWithCapacity:gmailObjects.count];
             for (GTLGmailThread *thread in gmailObjects) {
                 ALMEmailThread *realmThread = [thread toSavedRealm:realm];
-                if ([folder.threads addObject:realmThread allowDuplicates:NO]) {
-                    [newThreads addObject:realmThread];
-                }
+                [newThreads addObject:realmThread];
             }
             
             [realm commitWriteTransaction];

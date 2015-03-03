@@ -35,7 +35,6 @@
 
 #import "ALMEmailController.h"
 #import "ALMEmailManager.h"
-#import "ALMEmailFolder.h"
 #import "ALMEmailThread.h"
 #import "ALMEmailToken.h"
 #import "ALMEmail.h"
