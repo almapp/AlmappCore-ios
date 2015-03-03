@@ -571,7 +571,10 @@ NSString *const kGmailLabelIMPORTANT = @"IMPORTANT";
             
             [realm commitWriteTransaction];
             
-            return PMKManifold(newThreads, errorObjets, response.nextPageToken);
+            NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"identifier" ascending:NO];
+            NSArray *sortedArray = [newThreads sortedArrayUsingDescriptors:@[valueDescriptor]];
+            
+            return PMKManifold(sortedArray, errorObjets, response.nextPageToken);
         });
     });
 }
