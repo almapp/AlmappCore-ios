@@ -20,7 +20,7 @@ PODS:
   - AFNetworking/UIKit (2.5.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - AFOAuth2Manager (2.1.0):
+  - AFOAuth2Manager (2.2.0):
     - AFNetworking/NSURLConnection (~> 2.2)
   - FayeCpp (HEAD based on 0.1.9)
   - Google-API-Client/Common (1.0.422):
@@ -86,7 +86,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
-  - AFOAuth2Manager (~> 2.1.0)
+  - AFOAuth2Manager (~> 2.2.0)
   - FayeCpp (HEAD)
   - Google-API-Client/Gmail (~> 1.0.422)
   - PromiseKit
@@ -108,7 +108,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AFNetworking: 8bee59492a6ff15d69130efa4d0dc67e0094a52a
-  AFOAuth2Manager: 3b15750b04a1349a30f82c8ca21828ba90a96771
+  AFOAuth2Manager: 5e05a890dbe51d3e84091a01560f0534eb1dd7d2
   FayeCpp: 77eac47338e90ed9c7099faa75458042f459eb3c
   Google-API-Client: 94e15390b2f5507e81a9a8c0edd58a02d2ab464b
   gtm-http-fetcher: 6d4617e7d343b6e4c082b777541c334eb6f5d81e

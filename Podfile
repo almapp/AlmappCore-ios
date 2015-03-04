@@ -17,7 +17,7 @@ target 'AlmappCore' do
     #    :git => 'https://github.com/iamcam/AFOAuth2Manager',
     #    :commit => '7470a389ea74034923999202eedfc04f036b3d37'
     
-    pod 'AFOAuth2Manager', '~> 2.1.0'
+    pod 'AFOAuth2Manager', '~> 2.2.0'
     
     pod 'PromiseKit'
     pod 'PromiseKit-AFNetworking'

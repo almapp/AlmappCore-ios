@@ -136,5 +136,5 @@ Pod::Spec.new do |s|
   s.dependency "PromiseKit-AFNetworking"
   s.dependency "PromiseKit", "~> 1.3"
   s.dependency "Google-API-Client/Gmail", "~> 1.0.422"
-  s.dependency "AFOAuth2Manager", "~> 2.1.0"
+  s.dependency "AFOAuth2Manager", "~> 2.2.0"
 end
