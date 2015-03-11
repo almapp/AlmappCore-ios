@@ -22,7 +22,7 @@ PODS:
     - AFNetworking/NSURLSession
   - AFOAuth2Manager (2.2.0):
     - AFNetworking/NSURLConnection (~> 2.2)
-  - FayeCpp (HEAD based on 0.1.9)
+  - FayeCpp (HEAD based on 0.1.10)
   - Google-API-Client/Common (1.0.422):
     - gtm-http-fetcher (~> 1.0.141)
     - gtm-oauth2 (~> 1.0.125)
@@ -77,47 +77,47 @@ PODS:
     - PromiseKit/When
   - PromiseKit/When (1.3.0):
     - PromiseKit/Promise
-  - Realm (0.90.6):
-    - Realm/Headers (= 0.90.6)
-  - Realm+JSON (0.2.5):
-    - Realm (~> 0.90)
-  - Realm/Headers (0.90.6)
+  - Realm (0.91.0):
+    - Realm/Headers (= 0.91.0)
+  - Realm+JSON (0.2.6):
+    - Realm (~> 0.91)
+  - Realm/Headers (0.91.0)
   - UICKeyChainStore (2.0.4)
 
 DEPENDENCIES:
-  - AFNetworking
+  - AFNetworking (~> 2.5.1)
   - AFOAuth2Manager (~> 2.2.0)
   - FayeCpp (HEAD)
   - Google-API-Client/Gmail (~> 1.0.422)
-  - PromiseKit
+  - PromiseKit (~> 1.3.0)
   - PromiseKit-AFNetworking
-  - Realm+JSON (from `https://github.com/mrpatiwi/Realm-JSON.git`, commit `6e2b4ed0a08edcfc7a98dc6318ca0bd9372377ab`, branch `master`)
+  - Realm+JSON (from `https://github.com/mrpatiwi/Realm-JSON.git`, commit `6bcd653252015b5f496aacc2490d6b0ab62da01e`, branch `master`)
   - UICKeyChainStore
 
 EXTERNAL SOURCES:
   Realm+JSON:
     :branch: master
-    :commit: 6e2b4ed0a08edcfc7a98dc6318ca0bd9372377ab
+    :commit: 6bcd653252015b5f496aacc2490d6b0ab62da01e
     :git: https://github.com/mrpatiwi/Realm-JSON.git
 
 CHECKOUT OPTIONS:
   Realm+JSON:
     :branch: master
-    :commit: 6e2b4ed0a08edcfc7a98dc6318ca0bd9372377ab
+    :commit: 6bcd653252015b5f496aacc2490d6b0ab62da01e
     :git: https://github.com/mrpatiwi/Realm-JSON.git
 
 SPEC CHECKSUMS:
   AFNetworking: 8bee59492a6ff15d69130efa4d0dc67e0094a52a
   AFOAuth2Manager: 5e05a890dbe51d3e84091a01560f0534eb1dd7d2
-  FayeCpp: 77eac47338e90ed9c7099faa75458042f459eb3c
+  FayeCpp: 945c55a11a7e545d8e5a9d42613204a8f0c26929
   Google-API-Client: 94e15390b2f5507e81a9a8c0edd58a02d2ab464b
   gtm-http-fetcher: 6d4617e7d343b6e4c082b777541c334eb6f5d81e
   gtm-oauth2: 60651b37376fa8fa5d1b92c9a631bd36ba093fd3
   OMGHTTPURLRQ: f8c515dfd2f57a5d74c710978f600231f52afec5
   PromiseKit: 4844db4448b4e387845e702b738cd87433fc02fd
   PromiseKit-AFNetworking: 16db750b394dcd12aa8527eb1bb9f209a36a49f7
-  Realm: 6c3facc11964ab9f828f47de6d0e9bf9c4d9c818
-  Realm+JSON: 0d26baf985e03db0c9e9d102887be5b9b4491e8a
+  Realm: 42c178744c5a7f610b8dae3ca5f0995d46c4ac01
+  Realm+JSON: 4076fb2365919e3a489420758e352d28a5224a0b
   UICKeyChainStore: 2399076d0950e20fe859b8f817548cf6ca542dd7
 
 COCOAPODS: 0.35.0

@@ -122,24 +122,31 @@ static NSString *const kDefaultOAuthScope = @"";
 }
 
 - (PMKPromise *)afterAuth {
-    if (_authPromise.pending) {
+    if (_authPromise && _authPromise.pending) {
         return _authPromise;
     }
-    BOOL present = self.OAuthCredential != nil;
-    BOOL expired = present && self.OAuthCredential.isExpired;
+    
+    AFOAuthCredential * oauthCredential = self.OAuthCredential;
+    
+    BOOL present = oauthCredential != nil;
+    BOOL expired = present && oauthCredential.isExpired;
     if (present && !expired) {
         return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-            fulfiller(self.OAuthCredential.accessToken);
+            fulfiller(oauthCredential.accessToken);
         }];
     }
     else  {
         [self publishWillGetTokensWith:self.credential];
-        _authPromise = [self AUTH];
+        _authPromise = [self AUTH:oauthCredential];
         return _authPromise;
     }
 }
 
 - (PMKPromise *)AUTH {
+    return [self AUTH:nil];
+}
+
+- (PMKPromise *)AUTH:(AFOAuthCredential *)oauthCredential {
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         __weak __typeof(self) weakSelf = self;
         
@@ -168,12 +175,25 @@ static NSString *const kDefaultOAuthScope = @"";
             rejecter(error);
         };
         
-        if (self.credential) {
-            [self.OAuth2Manager authenticateUsingOAuthWithURLString:self.OAuthPath username:self.credential.email password:self.credential.password scope:self.OAuthScope success:success failure:fail];
+        if (oauthCredential && oauthCredential.refreshToken && oauthCredential.refreshToken.length > 0) {
+            [self.OAuth2Manager authenticateUsingOAuthWithURLString:self.OAuthPath
+                                                       refreshToken:oauthCredential.refreshToken
+                                                            success:success
+                                                            failure:fail];
         }
-        
+        else if (self.credential) {
+            [self.OAuth2Manager authenticateUsingOAuthWithURLString:self.OAuthPath
+                                                           username:self.credential.email
+                                                           password:self.credential.password
+                                                              scope:self.OAuthScope
+                                                            success:success
+                                                            failure:fail];
+        }
         else {
-            [self.OAuth2Manager authenticateUsingOAuthWithURLString:self.OAuthPath parameters:@{@"grant_type" : @"client_credentials"} success:success failure:fail];
+            [self.OAuth2Manager authenticateUsingOAuthWithURLString:self.OAuthPath
+                                                         parameters:@{@"grant_type" : @"client_credentials"}
+                                                            success:success
+                                                            failure:fail];
         }
     }];
 }

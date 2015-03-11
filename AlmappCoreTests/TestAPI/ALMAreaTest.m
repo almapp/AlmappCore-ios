@@ -81,8 +81,6 @@
         
         XCTAssertNotNil(resource.categories);
         XCTAssertNotEqual(resource.categories.count, 0);
-        
-        
     }];
 }
 

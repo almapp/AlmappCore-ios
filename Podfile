@@ -1,11 +1,11 @@
 platform :ios, '7.0'
 
 target 'AlmappCore' do
-    pod 'AFNetworking'
+    pod 'AFNetworking', '~> 2.5.1'
     pod 'Realm+JSON',
         :git => 'https://github.com/mrpatiwi/Realm-JSON.git',
         :branch => 'master',
-        :commit => '6e2b4ed0a08edcfc7a98dc6318ca0bd9372377ab'
+        :commit => '6bcd653252015b5f496aacc2490d6b0ab62da01e'
         
     pod 'FayeCpp', :head
     
@@ -19,7 +19,7 @@ target 'AlmappCore' do
     
     pod 'AFOAuth2Manager', '~> 2.2.0'
     
-    pod 'PromiseKit'
+    pod 'PromiseKit', '~> 1.3.0'
     pod 'PromiseKit-AFNetworking'
     
 end
